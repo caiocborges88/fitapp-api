@@ -176,7 +176,7 @@ const stickersDB = [
 const FitApp = (() => {
     let totalSets = 0, checkedSets = 0, audioEnabled = false, restTimer = null, currentRestTime = 60;
     let todayLog = [];
-    let currentRoutine = []; // Armazena a rotina atual para permitir a troca sem alterar o banco
+    let currentRoutine = []; 
     const els = {};
 
     const safeSet = (k, v) => { try { localStorage.setItem(k, v); return true; } catch(e) { return false; } };
@@ -207,30 +207,68 @@ const FitApp = (() => {
         const f = (focus || "").toLowerCase();
         if (f.includes("peit")) return "peito";
         if (f.includes("tríceps") || f.includes("triceps")) return "triceps";
-        if (f.includes("cost") || f.includes("dorsal")) return "costas";
+        if (f.includes("cost") || f.includes("dorsal") || f.includes("lombar")) return "costas";
         if (f.includes("bíc") || f.includes("bic") || f.includes("antebraço")) return "biceps";
         if (f.includes("ombro") || f.includes("delt") || f.includes("trapézio")) return "ombros";
         if (f.includes("pern") || f.includes("quadr") || f.includes("post") || f.includes("glút") || f.includes("adut") || f.includes("abdut") || f.includes("pant")) return "pernas";
-        if (f.includes("core") || f.includes("oblíq") || f.includes("lomb") || f.includes("abd")) return "core";
+        if (f.includes("core") || f.includes("oblíq") || f.includes("abd")) return "core";
         return "outros";
     }
 
-    function swapExercise(bIndex, eIndex) {
+    // --- NOVO SISTEMA DE MENU DE SUBSTITUIÇÃO (SUGESTÕES) ---
+    function openSwapModal(bIndex, eIndex) {
         const ex = currentRoutine[bIndex].exercises[eIndex];
         const currentName = ex.name;
         const currentDict = dictionaryData.find(d => d.name === currentName);
         const currentGroup = getMuscleGroup(currentDict ? currentDict.focus : "");
 
+        // Filtra o banco de dados buscando exercícios do mesmo grupo muscular (excluindo o atual)
         const pool = dictionaryData.filter(d => getMuscleGroup(d.focus) === currentGroup && d.name !== currentName);
 
-        if (pool.length > 0) {
-            const randomEx = pool[Math.floor(Math.random() * pool.length)];
-            ex.name = randomEx.name;
-            renderCurrentRoutine(); 
-            if(audioEnabled) speak("Exercício substituído.");
-        } else {
-            showToast("Sem variações disponíveis para este músculo.");
+        // Cria a janela modal dinamicamente se ela não existir
+        let modal = document.getElementById('swapModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'swapModal';
+            modal.className = 'swap-modal-overlay';
+            document.body.appendChild(modal);
         }
+
+        // Constrói o HTML interno da janela com a lista de sugestões
+        let html = `
+            <div class="swap-modal-content">
+                <div class="swap-modal-header">
+                    <h3>Trocar: ${currentName}</h3>
+                    <button class="btn-close-modal" onclick="document.getElementById('swapModal').style.display='none'">&times;</button>
+                </div>
+                <p style="color: #bbb; font-size: 13px; margin-bottom: 15px;">Sugestões compatíveis com este músculo:</p>
+                <div class="swap-list">
+        `;
+
+        if (pool.length === 0) {
+            html += `<div style="color: #ff4444; text-align: center; padding: 20px;">Nenhuma variação cadastrada para este músculo.</div>`;
+        } else {
+            pool.forEach(item => {
+                html += `
+                    <div class="swap-item" onclick="FitApp.confirmSwap(${bIndex}, ${eIndex}, '${item.name}')">
+                        <div class="swap-item-name">${item.name}</div>
+                        <div class="swap-item-focus">${item.focus}</div>
+                    </div>
+                `;
+            });
+        }
+
+        html += `</div></div>`;
+        modal.innerHTML = html;
+        modal.style.display = 'flex';
+    }
+
+    // Função que aplica a troca após o usuário escolher
+    function confirmSwap(bIndex, eIndex, newName) {
+        currentRoutine[bIndex].exercises[eIndex].name = newName;
+        document.getElementById('swapModal').style.display = 'none';
+        renderCurrentRoutine(); 
+        if(audioEnabled) speak("Exercício atualizado.");
     }
 
     function loadWorkout() {
@@ -238,7 +276,6 @@ const FitApp = (() => {
         els.workoutArea.style.display = type ? 'block' : 'none'; els.btnFinishArea.style.display = type ? 'block' : 'none';
         if (!type) { stopRestTimer(); return; }
 
-        // Cria uma cópia profunda da rotina para permitir a troca de exercícios sem alterar a base
         currentRoutine = JSON.parse(JSON.stringify(dbWorkouts[level][type] || dbWorkouts['intermediario']['A']));
         renderCurrentRoutine();
     }
@@ -252,16 +289,15 @@ const FitApp = (() => {
             
             bloco.exercises.forEach((ex, eIndex) => {
                 const blockDiv = document.createElement('div'); blockDiv.className = 'exercise-block';
-                
                 const linkIcon = (bloco.exercises.length > 1 && eIndex < bloco.exercises.length - 1) ? ' 🔗' : '';
                 
-                // Cabeçalho atualizado com o Botão de Swap
+                // O botão agora chama o menu modal openSwapModal
                 blockDiv.innerHTML = `
                     <div class="exercise-header">
                         <span class="ex-name" onclick="FitApp.openDict('${ex.name}')">${ex.name}${linkIcon}</span>
                         <div class="ex-controls">
                             <span class="target-reps">${ex.target}</span>
-                            <button class="btn-swap" onclick="FitApp.swapExercise(${bIndex}, ${eIndex})" title="Substituir Exercício">🔄</button>
+                            <button class="btn-swap" onclick="FitApp.openSwapModal(${bIndex}, ${eIndex})" title="Substituir Exercício">🔄</button>
                         </div>
                     </div>`;
                 
@@ -449,7 +485,8 @@ const FitApp = (() => {
     return { 
         init, 
         filterLibrary,
-        swapExercise, // <--- Nova função exposta para a interface gráfica!
+        openSwapModal, // Expondo a função de abrir o menu
+        confirmSwap,   // Expondo a função de confirmar a escolha
         openDict: (name) => { 
             switchTab('tab-biblioteca', 'nav-biblioteca'); 
             const searchInp = document.getElementById('searchInput');
