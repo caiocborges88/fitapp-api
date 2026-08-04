@@ -1,5 +1,5 @@
-import sqlite3
 import os
+import psycopg2
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -9,9 +9,48 @@ from typing import List
 from dotenv import load_dotenv
 import google.generativeai as genai
 
-# Carrega a chave do arquivo .env e configura o Gemini
+# 1. Carrega as chaves do .env
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# 2. Conecta no Supabase e cria as tabelas caso não existam
+def iniciar_banco_nuvem():
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cursor = conn.cursor()
+        
+        # Cria a tabela de Treinos
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS treinos (
+                id SERIAL PRIMARY KEY,
+                data_treino TEXT,
+                treino_tipo TEXT,
+                exercicio TEXT,
+                serie INTEGER,
+                peso REAL,
+                reps INTEGER
+            )
+        ''')
+        
+        # Cria a tabela do Álbum (já deixamos pronta!)
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS album (
+                id SERIAL PRIMARY KEY,
+                sticker_id INTEGER UNIQUE,
+                data_desbloqueio TEXT
+            )
+        ''')
+        
+        conn.commit()
+        cursor.close()
+        conn.close()
+        print("✅ Conectado ao Supabase! Tabelas verificadas e prontas.")
+    except Exception as e:
+        print(f"❌ Erro ao conectar no Supabase: {e}")
+
+# Executa a verificação do banco ao ligar o app
+iniciar_banco_nuvem()
 
 # Inicializa o aplicativo
 app = FastAPI(title="FitApp API")
@@ -36,46 +75,47 @@ async def read_root(request: Request):
 
 @app.post("/api/salvar-treino")
 async def salvar_treino(treino: TreinoLog):
-    conn = sqlite3.connect("fitapp.db")
+    conn = psycopg2.connect(DATABASE_URL)
     cursor = conn.cursor()
     for item in treino.data:
+        # PostgreSQL usa %s em vez de ?
         cursor.execute('''
             INSERT INTO treinos (data_treino, treino_tipo, exercicio, serie, peso, reps)
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (%s, %s, %s, %s, %s, %s)
         ''', (treino.date, treino.tipo, item.exercise, item.set, item.kg, item.reps))
     conn.commit()
+    cursor.close()
     conn.close()
-    return {"status": "sucesso", "mensagem": f"Treino {treino.tipo} salvo!"}
+    return {"status": "sucesso", "mensagem": f"Treino {treino.tipo} salvo com segurança nas nuvens!"}
 
 @app.get("/api/coach")
 async def consultar_coach():
-    """Lê os últimos treinos do SQLite e pede uma análise ao Gemini."""
-    conn = sqlite3.connect("fitapp.db")
+    conn = psycopg2.connect(DATABASE_URL)
     cursor = conn.cursor()
-    # Pega os últimos 20 registros de exercícios feitos
+    # Busca os últimos 20 registros
     cursor.execute("SELECT data_treino, treino_tipo, exercicio, serie, peso, reps FROM treinos ORDER BY id DESC LIMIT 20")
     registros = cursor.fetchall()
+    cursor.close()
     conn.close()
 
     if not registros:
-        return {"feedback": "Você ainda não tem treinos salvos no banco de dados para eu analisar, capitão. Vá treinar!"}
+        return {"feedback": "Banco de dados em nuvem vazio. Salve um treino primeiro, capitão!"}
 
-    # Formata os dados para o prompt da IA
     historico_texto = "\n".join([f"Data: {r[0]} | Treino {r[1]} | {r[2]} - Série {r[3]}: {r[4]}kg x {r[5]}reps" for r in registros])
     
     prompt = f"""
     Você é um treinador pessoal de elite, focado em hipertrofia e biomecânica.
-    Aqui está o extrato recente do banco de dados do meu aplicativo de treino:
+    Aqui está o extrato do meu histórico recente:
     {historico_texto}
     
-    Faça uma análise rápida e incisiva (máximo 3 frases curtas). 
-    Destaque algo sobre o volume ou carga executada e sugira um pequeno ajuste para a próxima sessão.
-    Seja direto e use o tom de um treinador rigoroso, mas encorajador.
+    Faça uma análise rápida (máximo 3 frases). Destaque o volume/carga e sugira um ajuste.
+    Tom: rigoroso, mas encorajador.
     """
 
     try:
-        model = genai.GenerativeModel("models/gemini-2.0-flash")
+        # Lembrando de usar o modelo definido na etapa anterior (ex: gemma-4-31b-it ou o modelo atual válido)
+        model = genai.GenerativeModel("models/gemma-4-31b-it") 
         response = model.generate_content(prompt)
         return {"feedback": response.text}
     except Exception as e:
-        return {"feedback": f"Erro de comunicação com a base de IA: {str(e)}"}
+        return {"feedback": f"Erro na IA: {str(e)}"}
