@@ -1,0 +1,33 @@
+<main id="tab-treino" class="tab-content active">
+    <div id="timerContainer" class="timer-container">
+        <div id="timerDisplay" class="timer-display">01:00</div>
+        <div class="timer-controls">
+            <button class="time-btn active" data-time="60">60s</button>
+            <button class="time-btn" data-time="90">90s</button>
+            <button class="time-btn" data-time="120">120s</button>
+        </div>
+    </div>
+    
+    <div class="controls-group">
+        <select id="levelSelector" class="select-level">
+            <option value="iniciante">🟢 Iniciante</option>
+            <option value="intermediario" selected>🟡 Intermediário</option>
+            <option value="avancado">🔴 Avançado</option>
+        </select>
+        <select id="workoutSelector" class="select-workout">
+            <option value="">Selecione o Treino...</option>
+            <option value="A" id="opt-A">Treino A: Peito, Tríceps</option>
+            <option value="B" id="opt-B">Treino B: Costas, Bíceps</option>
+            <option value="C" id="opt-C">Treino C: Pernas, Ombros</option>
+        </select>
+    </div>
+
+    <div id="workoutArea" style="display: none;">
+        <div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
+        <div id="exerciseList"></div>
+    </div>
+    
+    <div class="btn-finish-area" id="btnFinishArea">
+        <button id="btnFinishAction" class="btn-action btn-warning">⚠️ Encerrar Incompleto</button>
+    </div>
+</main>
