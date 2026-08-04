@@ -182,3 +182,34 @@ select { width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #444;
     transform: rotate(180deg);
     background: rgba(0, 255, 136, 0.15);
 }
+/* --- SISTEMA DE SWAPPING (TROCA INTELIGENTE) --- */
+.exercise-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ex-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-swap {
+    background: none;
+    border: none;
+    color: #00ff88;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    transition: transform 0.4s ease, background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-swap:hover {
+    transform: rotate(180deg);
+    background: rgba(0, 255, 136, 0.15);
+}
