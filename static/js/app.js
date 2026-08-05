@@ -232,6 +232,20 @@ function renderWeeklyCalendar() {
         if (display) display.textContent = `${h}:${m}:${s}`;
     }
 
+function saveWorkoutState() {
+        if (!isWorkoutActive) return;
+        const state = { 
+            currentRoutine, 
+            currentWorkoutType, 
+            workoutStartTime 
+        };
+        safeSet('fitapp_active_state', JSON.stringify(state));
+    }
+
+    function clearWorkoutState() {
+        localStorage.removeItem('fitapp_active_state');
+    }
+
     function renderPreviewList() {
         const listEl = document.getElementById('previewList');
         const btnStart = document.getElementById('btnStartWorkout');
@@ -406,7 +420,7 @@ function removeExercise(bIndex, eIndex) {
     }
 
     function beginWorkoutExecution() {
-        isWorkoutActive = true; // Trava o estado para modo Ativo
+        isWorkoutActive = true; 
         
         document.getElementById('workoutPreview').style.display = 'none';
         els.workoutArea.style.display = 'block'; 
@@ -417,12 +431,15 @@ function removeExercise(bIndex, eIndex) {
         globalTimer = setInterval(updateGlobalTimer, 1000);
         updateGlobalTimer(); 
 
-        // Renderiza as caixas de check baseadas na lista que você acabou de customizar
         renderCurrentRoutine();
+        saveWorkoutState(); // <-- Gatilho inicial do Autosave
     }
 
     function renderCurrentRoutine() {
-        els.exerciseList.innerHTML = ''; totalSets = 0; checkedSets = 0; todayLog = [];
+        els.exerciseList.innerHTML = ''; 
+        totalSets = 0; 
+        checkedSets = 0; 
+        todayLog = [];
         
         currentRoutine.forEach((bloco, bIndex) => {
             const isBiset = bloco.exercises.length > 1;
@@ -446,17 +463,43 @@ function removeExercise(bIndex, eIndex) {
                         </div>
                     </div>`;
                 
+                if (!ex.setsData) ex.setsData = []; // Prepara a memória individual do exercício
+                
                 for(let s = 1; s <= ex.sets; s++) {
-                    totalSets++; const row = document.createElement('div'); row.className = 'set-row';
-                    row.innerHTML = `<div class="set-label">S${s}</div><input type="number" class="kg-val" placeholder="Kg"><input type="number" class="rp-val" placeholder="Reps"><input type="checkbox" class="chk-set">`;
+                    totalSets++; 
+                    const data = ex.setsData[s-1] || { kg: '', reps: '', checked: false };
+                    
+                    if (data.checked) {
+                        checkedSets++;
+                        todayLog.push({ exercise: ex.name, set: s, kg: data.kg || 0, reps: data.reps || 0 });
+                    }
+
+                    const row = document.createElement('div'); row.className = 'set-row';
+                    row.innerHTML = `<div class="set-label">S${s}</div><input type="number" class="kg-val" placeholder="Kg" value="${data.kg}"><input type="number" class="rp-val" placeholder="Reps" value="${data.reps}"><input type="checkbox" class="chk-set" ${data.checked ? 'checked' : ''}>`;
                     
                     const chk = row.querySelector('.chk-set');
+                    const kgInp = row.querySelector('.kg-val');
+                    const rpInp = row.querySelector('.rp-val');
+
+                    const updateState = () => {
+                        ex.setsData[s-1] = { kg: kgInp.value, reps: rpInp.value, checked: chk.checked };
+                        saveWorkoutState(); // Dispara o save automático
+                    };
+
+                    kgInp.addEventListener('input', updateState);
+                    rpInp.addEventListener('input', updateState);
+
                     chk.addEventListener('change', () => {
                         if (chk.checked) { 
                             checkedSets++; 
                             if(checkedSets < totalSets) startRestTimer();
-                            todayLog.push({ exercise: ex.name, set: s, kg: row.querySelector('.kg-val').value || 0, reps: row.querySelector('.rp-val').value || 0 });
-                        } else { checkedSets--; stopRestTimer(); }
+                            todayLog.push({ exercise: ex.name, set: s, kg: kgInp.value || 0, reps: rpInp.value || 0 });
+                        } else { 
+                            checkedSets--; 
+                            stopRestTimer(); 
+                            todayLog = todayLog.filter(log => !(log.exercise === ex.name && log.set === s));
+                        }
+                        updateState();
                         updateProgress();
                     });
                     blockDiv.appendChild(row);
@@ -481,7 +524,6 @@ function removeExercise(bIndex, eIndex) {
         const tipoTreino = currentWorkoutType; 
         const dataHoje = new Date().toISOString().split('T')[0];
         
-        // Pára o relógio e calcula a duração total em segundos
         let totalTimeSecs = 0;
         if (workoutStartTime) {
             totalTimeSecs = Math.floor((Date.now() - workoutStartTime) / 1000);
@@ -489,7 +531,6 @@ function removeExercise(bIndex, eIndex) {
             workoutStartTime = null;
         }
 
-        // Injeta a duração no pacote de dados para o AI Coach
         const payload = { date: dataHoje, tipo: tipoTreino, duration_secs: totalTimeSecs, data: todayLog };
 
         try {
@@ -499,12 +540,14 @@ function removeExercise(bIndex, eIndex) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            if (!response.ok) console.error("Erro ao salvar no servidor Python.");
+            if (!response.ok) console.error("Erro ao salvar no servidor.");
         } catch (error) { showToast("Modo offline: Servidor não encontrado."); }
 
         let weekLog = JSON.parse(safeGet('fitapp_week_log') || '[]');
         weekLog.push(payload);
         safeSet('fitapp_week_log', JSON.stringify(weekLog));
+
+        clearWorkoutState(); // <-- Limpa a memória de treino ativo
 
         els.workoutArea.style.display = 'none'; 
         els.btnFinishArea.style.display = 'none';
@@ -514,7 +557,7 @@ function removeExercise(bIndex, eIndex) {
 
         currentWorkoutType = '';
         checkSequence(); 
-        renderWeeklyCalendar(); // <-- Atualiza a UI imediatamente
+        renderWeeklyCalendar(); 
 
         if(isComplete) { showPackModal(); } else { showToast('Treino salvo no sistema.'); switchTab('tab-calendario', 'nav-calendario'); }
     }
@@ -666,7 +709,30 @@ function removeExercise(bIndex, eIndex) {
         
         checkSequence(); 
         renderAlbum();
-        renderWeeklyCalendar(); // <-- Aciona o mini calendário
+        renderWeeklyCalendar(); 
+        
+        // --- INTERCEPTADOR DE TREINO ATIVO ---
+        const savedState = safeGet('fitapp_active_state');
+        if (savedState) {
+            const state = JSON.parse(savedState);
+            currentRoutine = state.currentRoutine;
+            currentWorkoutType = state.currentWorkoutType;
+            workoutStartTime = state.workoutStartTime;
+            isWorkoutActive = true;
+            
+            document.getElementById('workoutCards').style.display = 'none';
+            const header = document.querySelector('.dashboard-header');
+            if (header) header.style.display = 'none';
+            els.workoutArea.style.display = 'block'; 
+            els.btnFinishArea.style.display = 'block';
+            
+            if (globalTimer) clearInterval(globalTimer);
+            globalTimer = setInterval(updateGlobalTimer, 1000);
+            updateGlobalTimer();
+            
+            renderCurrentRoutine(); // Desenha a tela restaurando as caixas preenchidas
+            showToast('Treino em andamento restaurado.');
+        }
     }
     
     return { 
