@@ -1152,6 +1152,86 @@ function removeExercise(bIndex, eIndex) {
         container.appendChild(grid);
     }
 
+// --- SISTEMA DE IMPORTAÇÃO COM INTELIGÊNCIA ARTIFICIAL (GEMINI) ---
+    function openImportAiModal() {
+        document.getElementById('importAiModal').style.display = 'flex';
+        const nameInput = document.getElementById('aiWorkoutName');
+        const textInput = document.getElementById('aiWorkoutText');
+        if (nameInput) nameInput.value = '';
+        if (textInput) textInput.value = '';
+    }
+
+    async function processWorkoutWithAI() {
+        const nameInput = document.getElementById('aiWorkoutName').value.trim();
+        const textInput = document.getElementById('aiWorkoutText').value.trim();
+        
+        if (!nameInput || !textInput) {
+            showToast("Alerta: Preencha o nome e cole o texto do treino.");
+            return;
+        }
+
+        const btn = document.getElementById('btnProcessAi');
+        const loader = document.getElementById('aiImportLoader');
+        
+        btn.style.display = 'none';
+        loader.style.display = 'block';
+
+        try {
+            // Nota Tática: O backend precisa ter esta rota configurada para bater na API do Gemini
+            const response = await fetch('/api/importar-treino-ia', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ texto: textInput })
+            });
+
+            if (!response.ok) throw new Error("Erro na comunicação com o servidor.");
+
+            const data = await response.json();
+            
+            // MANOBRA DE SANITIZAÇÃO (Regex): 
+            // Ignora conversas e formatações markdown, extraindo apenas o Array JSON bruto
+            const jsonMatch = data.resultado.match(/\[[\s\S]*\]/);
+            
+            if (!jsonMatch) throw new Error("A IA não retornou um formato de dados válido.");
+            
+            const exerciciosIA = JSON.parse(jsonMatch[0]);
+
+            // Tradução do JSON da IA para a arquitetura do motor (currentRoutine)
+            const rotina = [{
+                title: "Treino Personalizado",
+                exercises: exerciciosIA.map(ex => ({
+                    name: ex.nome || "Exercício Desconhecido",
+                    sets: parseInt(ex.series) || 4,
+                    target: ex.repeticoes || "10-15"
+                }))
+            }];
+
+            // Injeção direta no banco de dados CRUD
+            let savedCustoms = JSON.parse(safeGet('fitapp_custom_workouts') || '[]');
+            const customId = Date.now();
+            
+            savedCustoms.push({
+                id: customId,
+                name: nameInput,
+                routine: rotina
+            });
+            
+            safeSet('fitapp_custom_workouts', JSON.stringify(savedCustoms));
+            
+            renderCustomWorkouts();
+            document.getElementById('importAiModal').style.display = 'none';
+            showToast(`Template "${nameInput}" importado via IA!`);
+            if(audioEnabled) speak("Treino importado e estruturado com sucesso.");
+
+        } catch (error) {
+            console.error(error);
+            showToast("Falha no processamento. Verifique o console.");
+        } finally {
+            btn.style.display = 'block';
+            loader.style.display = 'none';
+        }
+    }
+
     function init() {
         els.styleSelector = document.getElementById('styleSelector');
         els.levelSelector = document.getElementById('levelSelector'); 
@@ -1241,7 +1321,8 @@ function removeExercise(bIndex, eIndex) {
         beginWorkoutExecution, cancelWorkoutPreview, 
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter, craftSticker,
         openHistoryModal, switchHistoryTab,
-        saveCustomWorkout, deleteCustomWorkout, // <-- Adicionadas aqui
+        saveCustomWorkout, deleteCustomWorkout,
+        openImportAiModal, processWorkoutWithAI,
         openDict: (name) => { 
             switchTab('tab-biblioteca', 'nav-biblioteca'); 
             const searchInp = document.getElementById('searchInput');

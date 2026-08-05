@@ -63,7 +63,10 @@
         <div style="margin-top: 20px; border-top: 1px dashed #444; padding-top: 15px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                 <h3 style="color: #a64dff; font-size: 14px; text-transform: uppercase;">Meus Treinos</h3>
-                <button onclick="FitApp.startWorkout('Livre')" style="background: #a64dff; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px; box-shadow: 0 2px 5px rgba(166, 77, 255, 0.4);">➕ Criar Novo</button>
+                <div style="display: flex; gap: 8px;">
+                    <button onclick="FitApp.openImportAiModal()" style="background: #111; color: #00ff88; border: 1px solid #00ff88; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">🤖 Importar IA</button>
+                    <button onclick="FitApp.startWorkout('Livre')" style="background: #a64dff; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px; box-shadow: 0 2px 5px rgba(166, 77, 255, 0.4);">➕ Criar Novo</button>
+                </div>
             </div>
             <div id="customWorkoutsList" style="display: flex; flex-direction: column; gap: 10px;">
                 <!-- Lista injetada via JS -->
@@ -183,6 +186,25 @@
             <div id="historyCalendarView" style="flex: 1; overflow-y: auto; display: none; padding-right: 5px;">
                 <!-- Calendário injetado via JS -->
             </div>
+        </div>
+    </div>
+
+    <!-- NOVO: Modal de Importação via IA -->
+    <div id="importAiModal" class="swap-modal-overlay">
+        <div class="swap-modal-content" style="display: flex; flex-direction: column; width: 95%; max-width: 500px;">
+            <div class="swap-modal-header">
+                <h3 style="color: #00ff88;">🤖 Importar Treino (IA)</h3>
+                <button class="btn-close-modal" onclick="document.getElementById('importAiModal').style.display='none'" style="display: block;">&times;</button>
+            </div>
+            
+            <p style="font-size: 13px; color: #aaa; margin-bottom: 15px;">Cole a mensagem do WhatsApp (ou texto livre) com o treino passado pelo seu personal. O Gemini fará o resto.</p>
+            
+            <input type="text" id="aiWorkoutName" placeholder="Nomeie este treino (Ex: Peito e Tríceps)" style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 15px; font-size: 14px;">
+            
+            <textarea id="aiWorkoutText" rows="6" placeholder="Cole o texto aqui..." style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 15px; font-size: 14px; resize: vertical;"></textarea>
+            
+            <button id="btnProcessAi" class="btn-action" onclick="FitApp.processWorkoutWithAI()" style="background: #00ff88; color: #000; font-weight: bold; margin-bottom: 10px;">⚡ Processar com Gemini</button>
+            <div id="aiImportLoader" class="loader" style="color: #00ff88; display: none;">Analisando com IA...</div>
         </div>
     </div>
 </main>
