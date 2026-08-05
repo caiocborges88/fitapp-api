@@ -63,7 +63,32 @@ select { width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #444;
 .album-header h2 { color: #fff; margin-bottom: 5px; }
 .album-progress { font-size: 1.2em; font-weight: bold; color: var(--gold-color); }
 .album-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; }
-.sticker-slot { background-color: #111; border: 2px dashed #444; border-radius: 8px; aspect-ratio: 3/4; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #555; font-weight: bold; font-size: 1.5em; overflow: hidden; }
+.sticker-slot {
+    background-color: #111;
+    border: 2px dashed #444;
+    width: 100px !important;
+    height: 135px !important;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 8px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    color: #555;
+    font-weight: bold;
+    font-size: 1.5em;
+    overflow: hidden;
+}
+
+.sticker-slot div:last-child {
+    font-size: 11px;
+    line-height: 1.2;
+    margin-top: 6px;
+    word-wrap: break-word; 
+}
 .sticker-slot.filled { border: 2px solid #666; background-color: #222; color: #fff; font-size: 0.9em; text-align: center; padding: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.4); }
 .sticker-slot.filled .sticker-icon { font-size: 2.5em; margin-bottom: 5px; }
 .sticker-slot.prata { border-color: #c0c0c0; background: linear-gradient(135deg, #2a2a2a, #4a4a4a); }
