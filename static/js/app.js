@@ -148,6 +148,61 @@ const FitApp = (() => {
         if (nextCard) nextCard.classList.remove('locked');
     }
 
+function renderWeeklyCalendar() {
+        const grid = document.getElementById('weeklyGrid');
+        if (!grid) return;
+        grid.innerHTML = '';
+        
+        const history = JSON.parse(safeGet('fitapp_week_log') || '[]');
+        
+        // Gera os últimos 7 dias (incluindo hoje)
+        for (let i = 6; i >= 0; i--) {
+            const d = new Date();
+            d.setDate(d.getDate() - i);
+            
+            // Corrige o fuso horário para bater com o padrão YYYY-MM-DD local
+            const offset = d.getTimezoneOffset() * 60000;
+            const localISOTime = (new Date(d.getTime() - offset)).toISOString().slice(0, 10);
+            
+            let dayName = d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '');
+            dayName = dayName.substring(0, 3);
+            
+            const workedOut = history.find(h => h.date === localISOTime);
+            
+            const dayEl = document.createElement('div');
+            dayEl.style.display = 'flex';
+            dayEl.style.flexDirection = 'column';
+            dayEl.style.alignItems = 'center';
+            dayEl.style.gap = '8px';
+            
+            let dotColor = '#2a2a2a';
+            let textColor = '#555';
+            let typeLabel = '';
+            let shadow = 'none';
+            
+            if (workedOut) {
+                // Se foi treino livre, pinta de roxo. Se não, verde.
+                dotColor = workedOut.tipo === 'Livre' ? '#a64dff' : '#00ff88';
+                textColor = '#000';
+                typeLabel = workedOut.tipo === 'Livre' ? 'L' : workedOut.tipo;
+                shadow = `0 0 10px ${dotColor}80`;
+            }
+            
+            // Destaca o dia de hoje
+            const isToday = i === 0;
+            const dayLabelColor = isToday ? '#fff' : '#aaa';
+            const fontWeight = isToday ? 'bold' : 'normal';
+            
+            dayEl.innerHTML = `
+                <span style="font-size: 11px; color: ${dayLabelColor}; font-weight: ${fontWeight}; text-transform: capitalize;">${dayName}</span>
+                <div style="width: 34px; height: 34px; border-radius: 50%; background: ${dotColor}; display: flex; justify-content: center; align-items: center; font-size: 14px; font-weight: bold; color: ${textColor}; box-shadow: ${shadow}; border: 1px solid #444;">
+                    ${typeLabel}
+                </div>
+            `;
+            grid.appendChild(dayEl);
+        }
+    }
+
     function unlockAll() {
         ['A', 'B', 'C'].forEach(t => {
             const card = document.getElementById('card-' + t);
@@ -459,6 +514,7 @@ function removeExercise(bIndex, eIndex) {
 
         currentWorkoutType = '';
         checkSequence(); 
+        renderWeeklyCalendar(); // <-- Atualiza a UI imediatamente
 
         if(isComplete) { showPackModal(); } else { showToast('Treino salvo no sistema.'); switchTab('tab-calendario', 'nav-calendario'); }
     }
@@ -610,6 +666,7 @@ function removeExercise(bIndex, eIndex) {
         
         checkSequence(); 
         renderAlbum();
+        renderWeeklyCalendar(); // <-- Aciona o mini calendário
     }
     
     return { 
