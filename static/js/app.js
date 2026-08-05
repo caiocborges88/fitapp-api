@@ -5,6 +5,10 @@ const FitApp = (() => {
     let todayLog = [];
     let currentRoutine = []; 
     let currentWorkoutType = ''; 
+    
+    // Novas variáveis do Relógio Global
+    let globalTimer = null;
+    let workoutStartTime = null; 
     const els = {};
 
     const safeSet = (k, v) => { try { localStorage.setItem(k, v); return true; } catch(e) { return false; } };
@@ -154,18 +158,61 @@ const FitApp = (() => {
         loadWorkout();
     }
 
+    function updateGlobalTimer() {
+        if (!workoutStartTime) return;
+        const now = Date.now();
+        const diffInSeconds = Math.floor((now - workoutStartTime) / 1000);
+        const h = Math.floor(diffInSeconds / 3600).toString().padStart(2, '0');
+        const m = Math.floor((diffInSeconds % 3600) / 60).toString().padStart(2, '0');
+        const s = (diffInSeconds % 60).toString().padStart(2, '0');
+        const display = document.getElementById('globalTimerDisplay');
+        if (display) display.textContent = `${h}:${m}:${s}`;
+    }
+
     function loadWorkout() {
         const style = els.styleSelector ? els.styleSelector.value : 'biset';
         const level = els.levelSelector ? els.levelSelector.value : 'intermediario';
         const type = currentWorkoutType;
         if (!type) return;
 
+        // Oculta Dashboard principal
         document.getElementById('workoutCards').style.display = 'none';
         const header = document.querySelector('.dashboard-header');
         if (header) header.style.display = 'none';
         
+        // Exibe a nova Sala de Preparação (Preview)
+        const preview = document.getElementById('workoutPreview');
+        if (preview) {
+            document.getElementById('previewTitle').textContent = `Treino ${type}`;
+            const styleName = style === 'biset' ? 'Modo Bi-set' : 'Modo Tradicional';
+            document.getElementById('previewDesc').textContent = `${styleName} - Nível ${level.charAt(0).toUpperCase() + level.slice(1)}`;
+            preview.style.display = 'block';
+        }
+    }
+
+    function cancelWorkoutPreview() {
+        document.getElementById('workoutPreview').style.display = 'none';
+        document.getElementById('workoutCards').style.display = 'flex';
+        const header = document.querySelector('.dashboard-header');
+        if (header) header.style.display = 'block';
+        currentWorkoutType = '';
+    }
+
+    function beginWorkoutExecution() {
+        const style = els.styleSelector ? els.styleSelector.value : 'biset';
+        const level = els.levelSelector ? els.levelSelector.value : 'intermediario';
+        const type = currentWorkoutType;
+
+        // Oculta Preparação, Mostra Área de Ação
+        document.getElementById('workoutPreview').style.display = 'none';
         els.workoutArea.style.display = 'block'; 
         els.btnFinishArea.style.display = 'block';
+
+        // Trava a hora inicial e liga o cronômetro
+        workoutStartTime = Date.now();
+        if (globalTimer) clearInterval(globalTimer);
+        globalTimer = setInterval(updateGlobalTimer, 1000);
+        updateGlobalTimer(); // Força renderização imediata de 00:00:00
 
         currentRoutine = JSON.parse(JSON.stringify(dbWorkouts[style][level][type] || dbWorkouts['biset']['intermediario']['A']));
         renderCurrentRoutine();
@@ -230,7 +277,17 @@ const FitApp = (() => {
         const isComplete = checkedSets === totalSets;
         const tipoTreino = currentWorkoutType; 
         const dataHoje = new Date().toISOString().split('T')[0];
-        const payload = { date: dataHoje, tipo: tipoTreino, data: todayLog };
+        
+        // Pára o relógio e calcula a duração total em segundos
+        let totalTimeSecs = 0;
+        if (workoutStartTime) {
+            totalTimeSecs = Math.floor((Date.now() - workoutStartTime) / 1000);
+            clearInterval(globalTimer);
+            workoutStartTime = null;
+        }
+
+        // Injeta a duração no pacote de dados para o AI Coach
+        const payload = { date: dataHoje, tipo: tipoTreino, duration_secs: totalTimeSecs, data: todayLog };
 
         try {
             document.getElementById('btnFinishAction').textContent = "⏳ Salvando...";
@@ -409,6 +466,7 @@ const FitApp = (() => {
     
     return { 
         init, filterLibrary, openSwapModal, confirmSwap, unlockAll, startWorkout,
+        beginWorkoutExecution, cancelWorkoutPreview, // <- Novas funções adicionadas aqui
         openDict: (name) => { 
             switchTab('tab-biblioteca', 'nav-biblioteca'); 
             const searchInp = document.getElementById('searchInput');
