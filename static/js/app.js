@@ -768,20 +768,76 @@ function removeExercise(bIndex, eIndex) {
         const grid = document.getElementById('libraryGrid');
         if (!grid) return;
         grid.innerHTML = '';
+
+        // Agrupa os dados usando a inteligência da função getMuscleGroup
+        const groups = {};
         dictionaryData.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'library-card';
-            card.innerHTML = `<div class="lib-name">${item.name}</div><div class="lib-focus">${item.focus}</div><div class="lib-desc">${item.desc}</div>`;
-            grid.appendChild(card);
+            const groupName = getMuscleGroup(item.focus);
+            if (!groups[groupName]) groups[groupName] = [];
+            groups[groupName].push(item);
         });
+
+        // Define a ordem desejada de exibição e os títulos bonitos
+        const groupTitles = {
+            'peito': '🟦 Peito',
+            'costas': '🟩 Costas',
+            'pernas': '🟨 Pernas',
+            'ombros': '🟪 Ombros',
+            'triceps': '🟦 Tríceps',
+            'biceps': '🟩 Bíceps',
+            'core': '🟧 Core',
+            'outros': '⬜ Outros'
+        };
+
+        // Renderiza cada grupo
+        for (const [key, title] of Object.entries(groupTitles)) {
+            if (!groups[key] || groups[key].length === 0) continue;
+
+            const categorySection = document.createElement('div');
+            categorySection.className = 'library-category-section';
+            
+            const header = document.createElement('h3');
+            header.style.color = '#fff';
+            header.style.marginTop = '20px';
+            header.style.marginBottom = '10px';
+            header.style.borderBottom = '1px solid #333';
+            header.style.paddingBottom = '5px';
+            header.style.textTransform = 'uppercase';
+            header.textContent = title;
+            categorySection.appendChild(header);
+
+            const cardContainer = document.createElement('div');
+            cardContainer.className = 'library-card-container';
+            cardContainer.style.display = 'grid';
+            cardContainer.style.gap = '15px';
+
+            groups[key].forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'library-card';
+                card.innerHTML = `<div class="lib-name">${item.name}</div><div class="lib-focus">${item.focus}</div><div class="lib-desc">${item.desc}</div>`;
+                cardContainer.appendChild(card);
+            });
+
+            categorySection.appendChild(cardContainer);
+            grid.appendChild(categorySection);
+        }
     }
 
     function filterLibrary() {
         const query = document.getElementById('searchInput').value.toLowerCase();
+        
+        // Primeiro, filtra os cartões individuais
         const cards = document.querySelectorAll('.library-card');
         cards.forEach(card => {
             const text = card.textContent.toLowerCase();
             card.style.display = text.includes(query) ? 'block' : 'none';
+        });
+
+        // Segundo, oculta categorias inteiras se todos os cartões dentro dela estiverem ocultos
+        const sections = document.querySelectorAll('.library-category-section');
+        sections.forEach(section => {
+            const visibleCards = Array.from(section.querySelectorAll('.library-card')).filter(c => c.style.display === 'block');
+            section.style.display = visibleCards.length > 0 ? 'block' : 'none';
         });
     }
 
