@@ -216,13 +216,18 @@ const FitApp = (() => {
         return "outros";
     }
 
-    // --- MENU DE SUBSTITUIÇÃO (SUGESTÕES) ---
+// --- MENU DE SUBSTITUIÇÃO (SUGESTÕES) E RESTAURAÇÃO ---
     function openSwapModal(bIndex, eIndex) {
         const ex = currentRoutine[bIndex].exercises[eIndex];
         const currentName = ex.name;
         const currentDict = dictionaryData.find(d => d.name === currentName);
         const currentGroup = getMuscleGroup(currentDict ? currentDict.focus : "");
         const pool = dictionaryData.filter(d => getMuscleGroup(d.focus) === currentGroup && d.name !== currentName);
+
+        // Identifica o exercício original planejado na base de dados mestre
+        const level = els.levelSelector ? els.levelSelector.value : 'intermediario';
+        const type = currentWorkoutType;
+        const originalName = dbWorkouts[level][type][bIndex].exercises[eIndex].name;
 
         let modal = document.getElementById('swapModal');
         if (!modal) {
@@ -238,9 +243,20 @@ const FitApp = (() => {
                     <h3>Trocar: ${currentName}</h3>
                     <button class="btn-close-modal" onclick="document.getElementById('swapModal').style.display='none'">&times;</button>
                 </div>
-                <p style="color: #bbb; font-size: 13px; margin-bottom: 15px;">Sugestões compatíveis com este músculo:</p>
                 <div class="swap-list">
         `;
+
+        // Botão de Restauração (só aparece se o exercício atual for diferente do original)
+        if (currentName !== originalName) {
+            html += `
+                <div class="swap-item" style="border-left: 4px solid #ffaa00; background: rgba(255, 170, 0, 0.1);" onclick="FitApp.confirmSwap(${bIndex}, ${eIndex}, '${originalName}')">
+                    <div class="swap-item-name">↩️ Restaurar Original</div>
+                    <div class="swap-item-focus">${originalName}</div>
+                </div>
+            `;
+        }
+
+        html += `<p style="color: #bbb; font-size: 13px; margin: 15px 0 10px 0;">Sugestões compatíveis com este músculo:</p>`;
 
         if (pool.length === 0) {
             html += `<div style="color: #ff4444; text-align: center; padding: 20px;">Nenhuma variação cadastrada para este músculo.</div>`;
@@ -254,7 +270,14 @@ const FitApp = (() => {
                 `;
             });
         }
-        html += `</div></div>`;
+        
+        // Botão explícito de Cancelamento
+        html += `
+                </div>
+                <button onclick="document.getElementById('swapModal').style.display='none'" style="width: 100%; padding: 12px; margin-top: 15px; background: #333; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Cancelar</button>
+            </div>
+        `;
+        
         modal.innerHTML = html;
         modal.style.display = 'flex';
     }
