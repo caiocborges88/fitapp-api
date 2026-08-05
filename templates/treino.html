@@ -19,9 +19,9 @@
     <!-- Painel de Estatísticas -->
     <div class="dashboard-header">
         <div class="stats-panel">
-            <div class="stat-box">
+            <div class="stat-box" onclick="FitApp.openHistoryModal()" style="cursor: pointer; border: 1px solid #00ff88; background: rgba(0, 255, 136, 0.05); transition: background 0.3s;">
                 <span id="statTotal" class="stat-value">0</span>
-                <span class="stat-label">Treinos Salvos</span>
+                <span class="stat-label">Treinos Salvos 🔍</span>
             </div>
             <div class="stat-box">
                 <span id="statLast" class="stat-value">-</span>
@@ -142,6 +142,32 @@
             
             <!-- Novo Botão de Cancelar -->
             <button onclick="document.getElementById('addExerciseModal').style.display='none'" style="width: 100%; padding: 12px; background: #333; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- NOVO: Modal de Histórico e Calendário Mensal -->
+    <div id="historyModal" class="swap-modal-overlay">
+        <div class="swap-modal-content" style="max-height: 90vh; display: flex; flex-direction: column; width: 95%; max-width: 500px;">
+            <div class="swap-modal-header">
+                <h3>📖 Histórico de Treinos</h3>
+                <button class="btn-close-modal" onclick="document.getElementById('historyModal').style.display='none'" style="display: block;">&times;</button>
+            </div>
+            
+            <!-- Controle de Visão (Tabs Internas) -->
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <button id="btnTabList" class="time-btn active" onclick="FitApp.switchHistoryTab('list')">📋 Lista</button>
+                <button id="btnTabCalendar" class="time-btn" onclick="FitApp.switchHistoryTab('calendar')">📅 Mensal</button>
+            </div>
+            
+            <!-- Visão 1: Lista Sanfonada -->
+            <div id="historyListView" style="flex: 1; overflow-y: auto; display: block; padding-right: 5px;">
+                <!-- Lista injetada via JS -->
+            </div>
+            
+            <!-- Visão 2: Calendário Mensal -->
+            <div id="historyCalendarView" style="flex: 1; overflow-y: auto; display: none; padding-right: 5px;">
+                <!-- Calendário injetado via JS -->
+            </div>
         </div>
     </div>
 </main>

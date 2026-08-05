@@ -174,6 +174,11 @@ function renderWeeklyCalendar() {
             dayEl.style.flexDirection = 'column';
             dayEl.style.alignItems = 'center';
             dayEl.style.gap = '8px';
+            dayEl.style.cursor = 'pointer'; // Adicionado
+            dayEl.onclick = () => {         // Adicionado
+                FitApp.openHistoryModal();
+                FitApp.switchHistoryTab('calendar');
+            };
             
             let dotColor = '#2a2a2a';
             let textColor = '#555';
@@ -798,6 +803,184 @@ function removeExercise(bIndex, eIndex) {
             }
         }
     }
+// --- SISTEMA DE HISTÓRICO E CALENDÁRIO MENSAL ---
+    function openHistoryModal() {
+        document.getElementById('historyModal').style.display = 'flex';
+        switchHistoryTab('list'); // Abre na aba lista por padrão
+    }
+
+    function switchHistoryTab(tab) {
+        const btnList = document.getElementById('btnTabList');
+        const btnCalendar = document.getElementById('btnTabCalendar');
+        const viewList = document.getElementById('historyListView');
+        const viewCalendar = document.getElementById('historyCalendarView');
+
+        if (tab === 'list') {
+            btnList.classList.add('active'); 
+            btnCalendar.classList.remove('active');
+            viewList.style.display = 'block';
+            viewCalendar.style.display = 'none';
+            renderHistoryList();
+        } else {
+            btnCalendar.classList.add('active'); 
+            btnList.classList.remove('active');
+            viewList.style.display = 'none';
+            viewCalendar.style.display = 'block';
+            renderMonthlyCalendar();
+        }
+    }
+
+    function renderHistoryList() {
+        const container = document.getElementById('historyListView');
+        container.innerHTML = '';
+        let history = JSON.parse(safeGet('fitapp_week_log') || '[]');
+        
+        if (history.length === 0) {
+            container.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">Nenhum treino salvo ainda.</div>';
+            return;
+        }
+
+        // Clona e inverte o array para mostrar os mais recentes no topo
+        history.slice().reverse().forEach((log) => {
+            // Corrige o fuso horário para exibição correta
+            const dateObj = new Date(log.date + 'T12:00:00'); 
+            const dateStr = dateObj.toLocaleDateString('pt-BR');
+            const durationStr = log.duration_secs ? Math.floor(log.duration_secs / 60) + ' min' : '--';
+            
+            const block = document.createElement('div');
+            block.style.background = '#2a2a2a';
+            block.style.borderRadius = '8px';
+            block.style.marginBottom = '10px';
+            block.style.border = '1px solid #333';
+
+            // Cabeçalho do Accordion (Sanfona)
+            const header = document.createElement('div');
+            header.style.padding = '12px';
+            header.style.display = 'flex';
+            header.style.justifyContent = 'space-between';
+            header.style.alignItems = 'center';
+            header.style.cursor = 'pointer';
+            header.style.borderLeft = log.tipo === 'Livre' ? '4px solid #a64dff' : '4px solid #00ff88';
+            
+            header.innerHTML = `
+                <div>
+                    <div style="font-weight: bold; color: #fff;">Treino ${log.tipo}</div>
+                    <div style="font-size: 12px; color: #aaa;">${dateStr} • ⏱️ ${durationStr}</div>
+                </div>
+                <div style="color: #888; font-size: 12px; transition: transform 0.3s;">▼</div>
+            `;
+
+            // Corpo do Accordion (Oculto por padrão)
+            const body = document.createElement('div');
+            body.style.padding = '0 12px 12px 12px';
+            body.style.display = 'none';
+            body.style.borderTop = '1px dashed #444';
+            body.style.marginTop = '5px';
+            body.style.paddingTop = '10px';
+            
+            if (log.data && log.data.length > 0) {
+                const exMap = {};
+                log.data.forEach(item => {
+                    if (!exMap[item.exercise]) exMap[item.exercise] = [];
+                    exMap[item.exercise].push(item);
+                });
+                
+                for (const [exName, sets] of Object.entries(exMap)) {
+                    const exDiv = document.createElement('div');
+                    exDiv.style.marginBottom = '8px';
+                    exDiv.innerHTML = `<div style="color: #4da3ff; font-size: 13px; font-weight: bold;">${exName}</div>`;
+                    
+                    const setStr = sets.map(s => `<span style="font-size: 11px; color: #ccc; background: #111; padding: 2px 6px; border-radius: 4px; margin-right: 4px; border: 1px solid #333;">S${s.set}: ${s.kg}kg x ${s.reps}</span>`).join('');
+                    exDiv.innerHTML += `<div style="margin-top: 4px; line-height: 1.8;">${setStr}</div>`;
+                    body.appendChild(exDiv);
+                }
+            } else {
+                body.innerHTML = '<div style="font-size: 12px; color: #666;">Sem dados detalhados.</div>';
+            }
+
+            header.onclick = () => {
+                const isVisible = body.style.display === 'block';
+                body.style.display = isVisible ? 'none' : 'block';
+                header.querySelector('div:last-child').style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
+            };
+
+            block.appendChild(header);
+            block.appendChild(body);
+            container.appendChild(block);
+        });
+    }
+
+    function renderMonthlyCalendar() {
+        const container = document.getElementById('historyCalendarView');
+        container.innerHTML = '';
+        
+        const history = JSON.parse(safeGet('fitapp_week_log') || '[]');
+        const historyDates = history.map(h => h.date); 
+        
+        const today = new Date();
+        const month = today.getMonth();
+        const year = today.getFullYear();
+        
+        // Matemática do calendário
+        const firstDay = new Date(year, month, 1).getDay(); 
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        
+        const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+        
+        const header = document.createElement('div');
+        header.style.textAlign = 'center';
+        header.style.fontWeight = 'bold';
+        header.style.color = '#fff';
+        header.style.marginBottom = '15px';
+        header.style.fontSize = '16px';
+        header.textContent = `${monthNames[month]} ${year}`;
+        container.appendChild(header);
+        
+        const grid = document.createElement('div');
+        grid.style.display = 'grid';
+        grid.style.gridTemplateColumns = 'repeat(7, 1fr)';
+        grid.style.gap = '5px';
+        grid.style.textAlign = 'center';
+        
+        const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+        weekDays.forEach(d => {
+            const dayLabel = document.createElement('div');
+            dayLabel.style.color = '#aaa';
+            dayLabel.style.fontSize = '12px';
+            dayLabel.style.fontWeight = 'bold';
+            dayLabel.style.marginBottom = '5px';
+            dayLabel.textContent = d;
+            grid.appendChild(dayLabel);
+        });
+        
+        for (let i = 0; i < firstDay; i++) {
+            grid.appendChild(document.createElement('div'));
+        }
+        
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const isWorkoutDay = historyDates.includes(dateStr);
+            const isToday = day === today.getDate();
+            
+            const dayCell = document.createElement('div');
+            dayCell.style.padding = '10px 0';
+            dayCell.style.borderRadius = '6px';
+            dayCell.style.fontSize = '14px';
+            dayCell.style.background = isWorkoutDay ? 'rgba(0, 255, 136, 0.2)' : '#1e1e1e';
+            dayCell.style.color = isWorkoutDay ? '#00ff88' : '#fff';
+            dayCell.style.border = isWorkoutDay ? '1px solid #00ff88' : '1px solid #333';
+            dayCell.style.fontWeight = isWorkoutDay ? 'bold' : 'normal';
+            
+            if (isToday) {
+                dayCell.style.boxShadow = 'inset 0 0 0 2px #a64dff'; // Destaque visual para HOJE
+            }
+            
+            dayCell.textContent = day;
+            grid.appendChild(dayCell);
+        }
+        
+        container.appendChild(grid);
+    }
 
     function init() {
         els.styleSelector = document.getElementById('styleSelector');
@@ -886,6 +1069,7 @@ function removeExercise(bIndex, eIndex) {
         init, filterLibrary, openSwapModal, confirmSwap, unlockAll, startWorkout,
         beginWorkoutExecution, cancelWorkoutPreview, 
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter, craftSticker,
+        openHistoryModal, switchHistoryTab, // <-- Adicionadas aqui
         openDict: (name) => { 
             switchTab('tab-biblioteca', 'nav-biblioteca'); 
             const searchInp = document.getElementById('searchInput');
