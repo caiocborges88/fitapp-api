@@ -635,9 +635,14 @@ function removeExercise(bIndex, eIndex) {
         if(audioEnabled) speak(isRepeated ? "Conquista repetida detectada." : "Nova conquista revelada.");
     }
 
+    let currentAlbumPage = 1; // Memória da aba atual
+
     function renderAlbum() {
         const grid = document.getElementById('albumGrid'); 
         if (!grid) return;
+        
+        // Neutraliza o conflito do CSS antigo
+        grid.style.display = 'block';
         grid.innerHTML = '';
         
         let savedCollection = JSON.parse(safeGet('fitapp_album') || '[]');
@@ -646,46 +651,80 @@ function removeExercise(bIndex, eIndex) {
         const progressEl = document.getElementById('albumProgress');
         if (progressEl) progressEl.textContent = `${savedCollection.length} / ${stickersDB.length} Conquistas`;
 
-        // Engenharia de Páginas Dinâmicas
         const pages = [...new Set(stickersDB.map(s => s.page))].sort((a,b) => a - b);
         const pageNames = ["Seleção Base", "Campo de Batalha", "Titãs do Movimento", "Escudos de Elite"];
         
+        // 1. Construtor da Faixa de Abas (Navegação)
+        const navContainer = document.createElement('div');
+        navContainer.style.display = 'flex';
+        navContainer.style.gap = '10px';
+        navContainer.style.overflowX = 'auto';
+        navContainer.style.marginBottom = '20px';
+        navContainer.style.paddingBottom = '5px';
+        navContainer.style.scrollbarWidth = 'none'; // Oculta barra de rolagem
+
         pages.forEach(pageNum => {
-            const title = document.createElement('div');
-            title.className = 'album-page-title';
-            title.textContent = `Página ${pageNum} - ${pageNames[pageNum-1] || 'Expansão'}`;
-            grid.appendChild(title);
+            const btn = document.createElement('button');
+            const isActive = pageNum === currentAlbumPage;
             
-            const pageGrid = document.createElement('div');
-            pageGrid.style.display = 'grid';
-            pageGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
-            pageGrid.style.gap = '10px';
-            pageGrid.style.marginBottom = '20px';
+            btn.textContent = `Página ${pageNum}`;
+            btn.style.padding = '8px 16px';
+            btn.style.borderRadius = '20px';
+            btn.style.border = isActive ? '1px solid #a64dff' : '1px solid #444';
+            btn.style.background = isActive ? 'rgba(166, 77, 255, 0.2)' : '#2a2a2a';
+            btn.style.color = isActive ? '#a64dff' : '#aaa';
+            btn.style.cursor = 'pointer';
+            btn.style.whiteSpace = 'nowrap';
+            btn.style.fontWeight = isActive ? 'bold' : 'normal';
+            btn.style.transition = 'all 0.2s';
             
-            const pageStickers = stickersDB.filter(s => s.page === pageNum);
-            
-            pageStickers.forEach(sticker => {
-                const div = document.createElement('div');
-                if (savedCollection.includes(sticker.id)) { 
-                    div.className = `sticker-slot filled ${sticker.rarity}`; 
-                    div.innerHTML = `<div class="sticker-icon">${sticker.icon}</div><div>${sticker.name}</div>`; 
-                } else { 
-                    div.className = 'sticker-slot missing'; 
-                    div.innerHTML = `<div class="sticker-icon">${sticker.icon}</div><div style="font-size: 11px; margin-top: 5px;">?</div>`; 
-                }
-                pageGrid.appendChild(div);
-            });
-            
-            grid.appendChild(pageGrid);
+            btn.onclick = () => {
+                currentAlbumPage = pageNum;
+                renderAlbum(); // Recarrega a tela com a nova aba
+            };
+            navContainer.appendChild(btn);
+        });
+        grid.appendChild(navContainer);
+
+        // 2. Título da Página Atual
+        const title = document.createElement('div');
+        title.className = 'album-page-title';
+        title.style.textAlign = 'center';
+        title.style.borderBottom = 'none';
+        title.textContent = pageNames[currentAlbumPage-1] || 'Expansão';
+        grid.appendChild(title);
+
+        // 3. Renderização do Grid Exclusivo da Aba
+        const pageGrid = document.createElement('div');
+        pageGrid.style.display = 'grid';
+        pageGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        pageGrid.style.gap = '15px';
+        pageGrid.style.justifyItems = 'center';
+        pageGrid.style.marginBottom = '30px';
+        
+        const pageStickers = stickersDB.filter(s => s.page === currentAlbumPage);
+        
+        pageStickers.forEach(sticker => {
+            const div = document.createElement('div');
+            if (savedCollection.includes(sticker.id)) { 
+                div.className = `sticker-slot filled ${sticker.rarity}`; 
+                div.innerHTML = `<div class="sticker-icon">${sticker.icon}</div><div>${sticker.name}</div>`; 
+            } else { 
+                div.className = 'sticker-slot missing'; 
+                div.innerHTML = `<div class="sticker-icon">${sticker.icon}</div><div style="font-size: 11px; margin-top: 5px;">?</div>`; 
+            }
+            pageGrid.appendChild(div);
         });
         
-        // Renderização do Painel de Forja
+        grid.appendChild(pageGrid);
+        
+        // 4. Renderização do Painel da Forja
         const forge = document.createElement('div');
         forge.className = 'forge-panel';
         forge.innerHTML = `
             <h4 style="color: #ffaa00; margin-bottom: 10px;">🔥 Forja de Conquistas</h4>
             <p style="font-size: 13px; color: #aaa; margin-bottom: 15px;">Pontos de Suor (Repetidas): <strong style="color: #fff; font-size: 16px;">${repetidas}</strong></p>
-            <button id="btnForge" class="btn-action" style="background: ${repetidas >= 3 ? '#ffaa00' : '#444'}; color: ${repetidas >= 3 ? '#000' : '#888'}; pointer-events: ${repetidas >= 3 ? 'auto' : 'none'}; border: none;">Forjar Nova Peça (Custa 3)</button>
+            <button id="btnForge" class="btn-action" style="background: ${repetidas >= 3 ? '#ffaa00' : '#444'}; color: ${repetidas >= 3 ? '#000' : '#888'}; pointer-events: ${repetidas >= 3 ? 'auto' : 'none'}; border: none; width: 100%;">Forjar Nova Peça (Custa 3)</button>
         `;
         grid.appendChild(forge);
         
