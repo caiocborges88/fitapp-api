@@ -273,7 +273,7 @@ const FitApp = (() => {
         
         // Botão explícito de Cancelamento
         html += `
-                </div>
+                </
                 <button onclick="document.getElementById('swapModal').style.display='none'" style="width: 100%; padding: 12px; margin-top: 15px; background: #333; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Cancelar</button>
             </div>
         `;
