@@ -98,8 +98,20 @@
                 <button class="btn-close-modal" onclick="document.getElementById('addExerciseModal').style.display='none'">&times;</button>
             </div>
             
-            <input type="text" id="searchAddInput" placeholder="Buscar exercício..." onkeyup="FitApp.filterAddModal()" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #121212; color: #fff; margin-bottom: 15px;">
+            <input type="text" id="searchAddInput" placeholder="Buscar exercício..." onkeyup="FitApp.filterAddModal()" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #121212; color: #fff; margin-bottom: 10px;">
             
+            <!-- Nova Faixa de Filtros (Chips) -->
+            <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 10px; scrollbar-width: none; flex-shrink: 0;">
+                <button class="filter-chip" onclick="FitApp.setCategoryFilter('todos', this)" style="background: rgba(166, 77, 255, 0.2); color: #a64dff; border: 1px solid #a64dff; padding: 6px 12px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer;">Todos</button>
+                <button class="filter-chip" onclick="FitApp.setCategoryFilter('peito', this)" style="background: #2a2a2a; color: #aaa; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer;">Peito</button>
+                <button class="filter-chip" onclick="FitApp.setCategoryFilter('costas', this)" style="background: #2a2a2a; color: #aaa; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer;">Costas</button>
+                <button class="filter-chip" onclick="FitApp.setCategoryFilter('pernas', this)" style="background: #2a2a2a; color: #aaa; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer;">Pernas</button>
+                <button class="filter-chip" onclick="FitApp.setCategoryFilter('ombros', this)" style="background: #2a2a2a; color: #aaa; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer;">Ombros</button>
+                <button class="filter-chip" onclick="FitApp.setCategoryFilter('triceps', this)" style="background: #2a2a2a; color: #aaa; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer;">Tríceps</button>
+                <button class="filter-chip" onclick="FitApp.setCategoryFilter('biceps', this)" style="background: #2a2a2a; color: #aaa; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer;">Bíceps</button>
+                <button class="filter-chip" onclick="FitApp.setCategoryFilter('core', this)" style="background: #2a2a2a; color: #aaa; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer;">Core</button>
+            </div>
+
             <div id="addExerciseList" class="swap-list" style="flex: 1; overflow-y: auto; margin-bottom: 15px;">
                 <!-- Lista injetada via JS -->
             </div>

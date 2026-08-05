@@ -237,12 +237,42 @@ function removeExercise(bIndex, eIndex) {
         filterAddModal();
     }
 
+    let currentCategoryFilter = 'todos';
+
+    function setCategoryFilter(category, btnElement) {
+        currentCategoryFilter = category;
+        
+        // Remove destaque de todos os chips da interface
+        const chips = document.querySelectorAll('.filter-chip');
+        chips.forEach(chip => {
+            chip.style.background = '#2a2a2a';
+            chip.style.color = '#aaa';
+            chip.style.borderColor = '#444';
+        });
+        
+        // Aplica destaque brilhante ao chip clicado
+        btnElement.style.background = 'rgba(166, 77, 255, 0.2)';
+        btnElement.style.color = '#a64dff';
+        btnElement.style.borderColor = '#a64dff';
+
+        filterAddModal(); // Força a re-filtragem imediata
+    }
+
     function filterAddModal() {
         const query = document.getElementById('searchAddInput').value.toLowerCase();
         const list = document.getElementById('addExerciseList');
         list.innerHTML = '';
         
-        const filtered = dictionaryData.filter(d => d.name.toLowerCase().includes(query) || d.focus.toLowerCase().includes(query));
+        const filtered = dictionaryData.filter(d => {
+            // Regra 1: Valida o texto digitado na busca
+            const matchesText = d.name.toLowerCase().includes(query) || d.focus.toLowerCase().includes(query);
+            
+            // Regra 2: Cruzamento com a categoria utilizando a inteligência do motor base
+            const muscleGroup = getMuscleGroup(d.focus);
+            const matchesCategory = currentCategoryFilter === 'todos' || muscleGroup === currentCategoryFilter;
+            
+            return matchesText && matchesCategory;
+        });
         
         filtered.forEach(item => {
             const div = document.createElement('div');
@@ -585,7 +615,7 @@ function removeExercise(bIndex, eIndex) {
     return { 
         init, filterLibrary, openSwapModal, confirmSwap, unlockAll, startWorkout,
         beginWorkoutExecution, cancelWorkoutPreview, 
-        openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise,
+        openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,
         openDict: (name) => { 
             switchTab('tab-biblioteca', 'nav-biblioteca'); 
             const searchInp = document.getElementById('searchInput');
