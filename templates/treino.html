@@ -58,9 +58,15 @@
     </div>
 
     <!-- Nova Tela de Preparação (Staging Area) -->
-    <div id="workoutPreview" style="display: none; text-align: center; padding: 20px; background: #2a2a2a; border-radius: 8px; margin-top: 20px;">
-        <h2 id="previewTitle" style="color: #00ff88; margin-bottom: 5px;">Treino Selecionado</h2>
-        <p id="previewDesc" style="color: #aaa; margin-bottom: 20px; font-size: 14px;">Prepare sua água e equipamentos.</p>
+    <div id="workoutPreview" style="display: none; padding: 15px; background: #2a2a2a; border-radius: 8px; margin-bottom: 20px;">
+        <div style="text-align: center; margin-bottom: 15px;">
+            <h2 id="previewTitle" style="color: #00ff88; margin-bottom: 5px;">Treino Selecionado</h2>
+            <p id="previewDesc" style="color: #aaa; margin-bottom: 15px; font-size: 14px;">Revise seu plano e adapte movimentos, se necessário.</p>
+        </div>
+        
+        <!-- Lista de Prévia do Treino -->
+        <div id="previewList" style="max-height: 45vh; overflow-y: auto; margin-bottom: 20px; padding-right: 5px; border-top: 1px solid #444; padding-top: 15px;"></div>
+        
         <button class="btn-action btn-success" onclick="FitApp.beginWorkoutExecution()" style="margin-bottom: 10px;">▶️ Iniciar Treino</button>
         <button class="btn-action" onclick="FitApp.cancelWorkoutPreview()" style="background: #555;">⬅️ Voltar ao Painel</button>
     </div>

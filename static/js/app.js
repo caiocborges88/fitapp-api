@@ -8,7 +8,8 @@ const FitApp = (() => {
     
     // Novas variáveis do Relógio Global
     let globalTimer = null;
-    let workoutStartTime = null; 
+    let workoutStartTime = null;
+    let isWorkoutActive = false; 
     const els = {};
 
     const safeSet = (k, v) => { try { localStorage.setItem(k, v); return true; } catch(e) { return false; } };
@@ -112,7 +113,14 @@ const FitApp = (() => {
     function confirmSwap(bIndex, eIndex, newName) {
         currentRoutine[bIndex].exercises[eIndex].name = newName;
         document.getElementById('swapModal').style.display = 'none';
-        renderCurrentRoutine(); 
+        
+        // Verifica se atualiza as caixas de execução ou a lista de preparação
+        if (isWorkoutActive) {
+            renderCurrentRoutine(); 
+        } else {
+            renderPreviewList();
+        }
+        
         if(audioEnabled) speak("Exercício atualizado.");
     }
 
@@ -169,23 +177,62 @@ const FitApp = (() => {
         if (display) display.textContent = `${h}:${m}:${s}`;
     }
 
+    function renderPreviewList() {
+        const listEl = document.getElementById('previewList');
+        if (!listEl) return;
+        listEl.innerHTML = '';
+        
+        currentRoutine.forEach((bloco, bIndex) => {
+            const blockDiv = document.createElement('div');
+            blockDiv.style.marginBottom = '12px';
+            blockDiv.style.textAlign = 'left';
+            blockDiv.innerHTML = `<div style="color: #4da3ff; font-weight: bold; font-size: 13px; margin-bottom: 5px;">${bloco.title}</div>`;
+            
+            bloco.exercises.forEach((ex, eIndex) => {
+                const row = document.createElement('div');
+                row.style.display = 'flex';
+                row.style.justifyContent = 'space-between';
+                row.style.alignItems = 'center';
+                row.style.background = '#1e1e1e';
+                row.style.padding = '8px 10px';
+                row.style.borderRadius = '6px';
+                row.style.marginBottom = '4px';
+                
+                row.innerHTML = `
+                    <div style="font-size: 14px; color: #fff; line-height: 1.2;">${ex.name}</div>
+                    <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
+                        <span style="font-size: 12px; color: #aaa; background: #111; padding: 2px 6px; border-radius: 4px; white-space: nowrap;">${ex.sets}x ${ex.target}</span>
+                        <button class="btn-swap" onclick="FitApp.openSwapModal(${bIndex}, ${eIndex})" title="Substituir Exercício" style="font-size: 14px; padding: 4px;">🔄</button>
+                    </div>
+                `;
+                blockDiv.appendChild(row);
+            });
+            listEl.appendChild(blockDiv);
+        });
+    }
+
     function loadWorkout() {
         const style = els.styleSelector ? els.styleSelector.value : 'biset';
         const level = els.levelSelector ? els.levelSelector.value : 'intermediario';
         const type = currentWorkoutType;
         if (!type) return;
 
-        // Oculta Dashboard principal
         document.getElementById('workoutCards').style.display = 'none';
         const header = document.querySelector('.dashboard-header');
         if (header) header.style.display = 'none';
         
-        // Exibe a nova Sala de Preparação (Preview)
+        isWorkoutActive = false; // Garante o modo de Preparação
+        
+        // Puxa a rotina e aloca na memória ANTES de exibir
+        currentRoutine = JSON.parse(JSON.stringify(dbWorkouts[style][level][type] || dbWorkouts['biset']['intermediario']['A']));
+        
         const preview = document.getElementById('workoutPreview');
         if (preview) {
             document.getElementById('previewTitle').textContent = `Treino ${type}`;
             const styleName = style === 'biset' ? 'Modo Bi-set' : 'Modo Tradicional';
             document.getElementById('previewDesc').textContent = `${styleName} - Nível ${level.charAt(0).toUpperCase() + level.slice(1)}`;
+            
+            renderPreviewList(); // Constrói a lista visual
             preview.style.display = 'block';
         }
     }
@@ -196,25 +243,22 @@ const FitApp = (() => {
         const header = document.querySelector('.dashboard-header');
         if (header) header.style.display = 'block';
         currentWorkoutType = '';
+        currentRoutine = [];
     }
 
     function beginWorkoutExecution() {
-        const style = els.styleSelector ? els.styleSelector.value : 'biset';
-        const level = els.levelSelector ? els.levelSelector.value : 'intermediario';
-        const type = currentWorkoutType;
-
-        // Oculta Preparação, Mostra Área de Ação
+        isWorkoutActive = true; // Trava o estado para modo Ativo
+        
         document.getElementById('workoutPreview').style.display = 'none';
         els.workoutArea.style.display = 'block'; 
         els.btnFinishArea.style.display = 'block';
 
-        // Trava a hora inicial e liga o cronômetro
         workoutStartTime = Date.now();
         if (globalTimer) clearInterval(globalTimer);
         globalTimer = setInterval(updateGlobalTimer, 1000);
-        updateGlobalTimer(); // Força renderização imediata de 00:00:00
+        updateGlobalTimer(); 
 
-        currentRoutine = JSON.parse(JSON.stringify(dbWorkouts[style][level][type] || dbWorkouts['biset']['intermediario']['A']));
+        // Renderiza as caixas de check baseadas na lista que você acabou de customizar
         renderCurrentRoutine();
     }
 
