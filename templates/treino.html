@@ -8,18 +8,47 @@
         </div>
     </div>
     
-    <div class="controls-group">
+    <!-- Painel de Estatísticas -->
+    <div class="dashboard-header">
+        <div class="stats-panel">
+            <div class="stat-box">
+                <span id="statTotal" class="stat-value">0</span>
+                <span class="stat-label">Treinos Salvos</span>
+            </div>
+            <div class="stat-box">
+                <span id="statLast" class="stat-value">-</span>
+                <span class="stat-label">Último Treino</span>
+            </div>
+        </div>
         <select id="levelSelector" class="select-level">
             <option value="iniciante">🟢 Iniciante</option>
             <option value="intermediario" selected>🟡 Intermediário</option>
             <option value="avancado">🔴 Avançado</option>
         </select>
-        <select id="workoutSelector" class="select-workout">
-            <option value="">Selecione o Treino...</option>
-            <option value="A" id="opt-A">Treino A: Peito, Tríceps</option>
-            <option value="B" id="opt-B">Treino B: Costas, Bíceps</option>
-            <option value="C" id="opt-C">Treino C: Pernas, Ombros</option>
-        </select>
+    </div>
+
+    <!-- Cartões de Sequência Lógica -->
+    <div class="workout-cards" id="workoutCards">
+        <div class="card-treino" id="card-A" onclick="FitApp.startWorkout('A')">
+            <h3>Treino A</h3>
+            <p>Peito & Tríceps</p>
+            <div class="lock-overlay" id="lock-A">🔒</div>
+        </div>
+        <div class="card-treino" id="card-B" onclick="FitApp.startWorkout('B')">
+            <h3>Treino B</h3>
+            <p>Costas & Bíceps</p>
+            <div class="lock-overlay" id="lock-B">🔒</div>
+        </div>
+        <div class="card-treino" id="card-C" onclick="FitApp.startWorkout('C')">
+            <h3>Treino C</h3>
+            <p>Pernas & Ombros</p>
+            <div class="lock-overlay" id="lock-C">🔒</div>
+        </div>
+    </div>
+    
+    <!-- Botão de Override (Discreto) -->
+    <div style="text-align: center; margin-bottom: 20px;">
+        <button class="btn-text" onclick="FitApp.unlockAll()" style="color: #666; background: none; border: none; text-decoration: underline; cursor: pointer; font-size: 12px;">Desbloquear todos (Override)</button>
     </div>
 
     <div id="workoutArea" style="display: none;">

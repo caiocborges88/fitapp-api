@@ -177,6 +177,7 @@ const FitApp = (() => {
     let totalSets = 0, checkedSets = 0, audioEnabled = false, restTimer = null, currentRestTime = 60;
     let todayLog = [];
     let currentRoutine = []; 
+    let currentWorkoutType = ''; // Armazena o treino em andamento
     const els = {};
 
     const safeSet = (k, v) => { try { localStorage.setItem(k, v); return true; } catch(e) { return false; } };
@@ -215,17 +216,14 @@ const FitApp = (() => {
         return "outros";
     }
 
-    // --- NOVO SISTEMA DE MENU DE SUBSTITUIÇÃO (SUGESTÕES) ---
+    // --- MENU DE SUBSTITUIÇÃO (SUGESTÕES) ---
     function openSwapModal(bIndex, eIndex) {
         const ex = currentRoutine[bIndex].exercises[eIndex];
         const currentName = ex.name;
         const currentDict = dictionaryData.find(d => d.name === currentName);
         const currentGroup = getMuscleGroup(currentDict ? currentDict.focus : "");
-
-        // Filtra o banco de dados buscando exercícios do mesmo grupo muscular (excluindo o atual)
         const pool = dictionaryData.filter(d => getMuscleGroup(d.focus) === currentGroup && d.name !== currentName);
 
-        // Cria a janela modal dinamicamente se ela não existir
         let modal = document.getElementById('swapModal');
         if (!modal) {
             modal = document.createElement('div');
@@ -234,7 +232,6 @@ const FitApp = (() => {
             document.body.appendChild(modal);
         }
 
-        // Constrói o HTML interno da janela com a lista de sugestões
         let html = `
             <div class="swap-modal-content">
                 <div class="swap-modal-header">
@@ -257,13 +254,11 @@ const FitApp = (() => {
                 `;
             });
         }
-
         html += `</div></div>`;
         modal.innerHTML = html;
         modal.style.display = 'flex';
     }
 
-    // Função que aplica a troca após o usuário escolher
     function confirmSwap(bIndex, eIndex, newName) {
         currentRoutine[bIndex].exercises[eIndex].name = newName;
         document.getElementById('swapModal').style.display = 'none';
@@ -271,10 +266,63 @@ const FitApp = (() => {
         if(audioEnabled) speak("Exercício atualizado.");
     }
 
+    // --- NOVO: MOTOR DO DASHBOARD SEQUENCIAL ---
+    function checkSequence() {
+        let history = JSON.parse(safeGet('fitapp_week_log') || '[]');
+        let total = history.length;
+        let lastType = total > 0 ? history[total - 1].tipo : null;
+
+        const statTotal = document.getElementById('statTotal');
+        const statLast = document.getElementById('statLast');
+        if(statTotal) statTotal.textContent = total;
+        if(statLast) statLast.textContent = lastType ? 'Treino ' + lastType : 'Nenhum';
+
+        // Trava os cartões preventivamente
+        ['A', 'B', 'C'].forEach(t => {
+            const card = document.getElementById('card-' + t);
+            if(card) card.classList.add('locked');
+        });
+
+        // Libera o próximo treino correto
+        let nextType = 'A'; 
+        if (lastType === 'A') nextType = 'B';
+        if (lastType === 'B') nextType = 'C';
+        if (lastType === 'C') nextType = 'A';
+
+        const nextCard = document.getElementById('card-' + nextType);
+        if (nextCard) nextCard.classList.remove('locked');
+    }
+
+    function unlockAll() {
+        ['A', 'B', 'C'].forEach(t => {
+            const card = document.getElementById('card-' + t);
+            if(card) card.classList.remove('locked');
+        });
+        showToast("Travas manuais liberadas.");
+    }
+
+    function startWorkout(type) {
+        const card = document.getElementById('card-' + type);
+        if (card && card.classList.contains('locked')) {
+            showToast("Sequência bloqueada. Conclua o treino anterior.");
+            return;
+        }
+        currentWorkoutType = type;
+        loadWorkout();
+    }
+
     function loadWorkout() {
-        const level = els.levelSelector.value || 'intermediario', type = els.workoutSelector.value;
-        els.workoutArea.style.display = type ? 'block' : 'none'; els.btnFinishArea.style.display = type ? 'block' : 'none';
-        if (!type) { stopRestTimer(); return; }
+        const level = els.levelSelector ? els.levelSelector.value : 'intermediario';
+        const type = currentWorkoutType;
+        if (!type) return;
+
+        // Oculta o painel de comando e mostra o treino
+        document.getElementById('workoutCards').style.display = 'none';
+        const header = document.querySelector('.dashboard-header');
+        if (header) header.style.display = 'none';
+        
+        els.workoutArea.style.display = 'block'; 
+        els.btnFinishArea.style.display = 'block';
 
         currentRoutine = JSON.parse(JSON.stringify(dbWorkouts[level][type] || dbWorkouts['intermediario']['A']));
         renderCurrentRoutine();
@@ -291,7 +339,6 @@ const FitApp = (() => {
                 const blockDiv = document.createElement('div'); blockDiv.className = 'exercise-block';
                 const linkIcon = (bloco.exercises.length > 1 && eIndex < bloco.exercises.length - 1) ? ' 🔗' : '';
                 
-                // O botão agora chama o menu modal openSwapModal
                 blockDiv.innerHTML = `
                     <div class="exercise-header">
                         <span class="ex-name" onclick="FitApp.openDict('${ex.name}')">${ex.name}${linkIcon}</span>
@@ -333,9 +380,8 @@ const FitApp = (() => {
 
     async function finishWorkout() {
         const isComplete = checkedSets === totalSets;
-        const tipoTreino = els.workoutSelector.value; 
+        const tipoTreino = currentWorkoutType; 
         const dataHoje = new Date().toISOString().split('T')[0];
-
         const payload = { date: dataHoje, tipo: tipoTreino, data: todayLog };
 
         try {
@@ -352,7 +398,16 @@ const FitApp = (() => {
         weekLog.push(payload);
         safeSet('fitapp_week_log', JSON.stringify(weekLog));
 
-        els.workoutSelector.value = ''; els.workoutArea.style.display = 'none'; els.btnFinishArea.style.display = 'none';
+        // Restaura a interface
+        els.workoutArea.style.display = 'none'; 
+        els.btnFinishArea.style.display = 'none';
+        document.getElementById('workoutCards').style.display = 'flex';
+        const header = document.querySelector('.dashboard-header');
+        if (header) header.style.display = 'block';
+
+        currentWorkoutType = '';
+        checkSequence(); // Atualiza o placar imediatamente
+
         if(isComplete) { showPackModal(); } else { showToast('Treino salvo no sistema.'); switchTab('tab-calendario', 'nav-calendario'); }
     }
 
@@ -369,7 +424,6 @@ const FitApp = (() => {
             document.getElementById('aiResponse').innerHTML = `<strong>Feedback do Coach:</strong><br>${data.feedback}`;
             document.getElementById('aiResponse').style.display = 'block';
             if(audioEnabled) speak("Análise concluída.");
-
         } catch (error) { showToast("Erro ao contatar o servidor."); } 
         finally { document.getElementById('aiLoader').style.display = 'none'; document.getElementById('btnAnalyzeAI').disabled = false; }
     }
@@ -432,26 +486,37 @@ const FitApp = (() => {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
         document.getElementById(tabId).classList.add('active'); document.getElementById(navId).classList.add('active');
+        
         if (tabId === 'tab-calendario') renderAlbum();
         if (tabId === 'tab-biblioteca') renderLibrary(); 
+        if (tabId === 'tab-treino') {
+            if (!currentWorkoutType) {
+                document.getElementById('workoutCards').style.display = 'flex';
+                const header = document.querySelector('.dashboard-header');
+                if (header) header.style.display = 'block';
+                els.workoutArea.style.display = 'none';
+                els.btnFinishArea.style.display = 'none';
+                checkSequence();
+            }
+        }
     }
 
     function init() {
-        els.levelSelector = document.getElementById('levelSelector'); els.workoutSelector = document.getElementById('workoutSelector');
-        els.workoutArea = document.getElementById('workoutArea'); els.exerciseList = document.getElementById('exerciseList');
-        els.progressBar = document.getElementById('progressBar'); els.btnFinishArea = document.getElementById('btnFinishArea');
+        els.levelSelector = document.getElementById('levelSelector'); 
+        els.workoutArea = document.getElementById('workoutArea'); 
+        els.exerciseList = document.getElementById('exerciseList');
+        els.progressBar = document.getElementById('progressBar'); 
+        els.btnFinishArea = document.getElementById('btnFinishArea');
         els.toast = document.getElementById('toast');
-
-        const savedKey = safeGet('fitapp_gemini_key'); 
-        if(savedKey && document.getElementById('apiKeyInput')) document.getElementById('apiKeyInput').value = savedKey;
 
         ['treino', 'calendario', 'biblioteca'].forEach(tab => { 
             const navBtn = document.getElementById(`nav-${tab}`);
             if (navBtn) navBtn.addEventListener('click', () => switchTab(`tab-${tab}`, `nav-${tab}`)); 
         });
         
-        if (els.levelSelector) els.levelSelector.addEventListener('change', loadWorkout); 
-        if (els.workoutSelector) els.workoutSelector.addEventListener('change', loadWorkout);
+        if (els.levelSelector) els.levelSelector.addEventListener('change', () => {
+            if(currentWorkoutType) loadWorkout(); // Recarrega se alterar a dificuldade no meio
+        }); 
         
         const btnAudio = document.getElementById('btnAudio');
         if (btnAudio) btnAudio.addEventListener('click', toggleAudio);
@@ -479,14 +544,12 @@ const FitApp = (() => {
             switchTab('tab-calendario', 'nav-calendario'); 
         });
         
+        checkSequence(); // Executa a leitura inicial do Dashboard
         renderAlbum();
     }
     
     return { 
-        init, 
-        filterLibrary,
-        openSwapModal, // Expondo a função de abrir o menu
-        confirmSwap,   // Expondo a função de confirmar a escolha
+        init, filterLibrary, openSwapModal, confirmSwap, unlockAll, startWorkout,
         openDict: (name) => { 
             switchTab('tab-biblioteca', 'nav-biblioteca'); 
             const searchInp = document.getElementById('searchInput');
