@@ -20,11 +20,17 @@
                 <span class="stat-label">Último Treino</span>
             </div>
         </div>
-        <select id="levelSelector" class="select-level">
-            <option value="iniciante">🟢 Iniciante</option>
-            <option value="intermediario" selected>🟡 Intermediário</option>
-            <option value="avancado">🔴 Avançado</option>
-        </select>
+        <div style="display: flex; gap: 10px;">
+            <select id="styleSelector" class="select-level" style="flex: 1;">
+                <option value="biset" selected>🔗 Modo Bi-set</option>
+                <option value="tradicional">🏋️ Modo Tradicional</option>
+            </select>
+            <select id="levelSelector" class="select-level" style="flex: 1;">
+                <option value="iniciante">🟢 Iniciante</option>
+                <option value="intermediario" selected>🟡 Intermediário</option>
+                <option value="avancado">🔴 Avançado</option>
+            </select>
+        </div>
     </div>
 
     <!-- Cartões de Sequência Lógica -->
