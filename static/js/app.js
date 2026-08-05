@@ -390,14 +390,33 @@ function removeExercise(bIndex, eIndex) {
         isWorkoutActive = false; 
         
         const preview = document.getElementById('workoutPreview');
-        const btnAdd = document.getElementById('btnAddExercise');
+        const customControls = document.getElementById('customWorkoutControls');
+        const nameContainer = document.getElementById('customWorkoutNameContainer');
+        const nameInput = document.getElementById('customWorkoutName');
 
         if (type === 'Livre') {
-            currentRoutine = [{ title: "Meu Treino Livre", exercises: [] }];
+            currentRoutine = [{ title: "Treino Personalizado", exercises: [] }];
             if(preview) {
-                document.getElementById('previewTitle').textContent = `🛠️ Treino Livre`;
-                document.getElementById('previewDesc').textContent = `Monte sua rotina personalizada do zero.`;
-                if(btnAdd) btnAdd.style.display = 'block';
+                document.getElementById('previewTitle').textContent = `🛠️ Novo Treino`;
+                document.getElementById('previewDesc').textContent = `Monte sua rotina do zero e salve o template.`;
+                if(customControls) customControls.style.display = 'flex';
+                if(nameContainer) nameContainer.style.display = 'block';
+                if(nameInput) nameInput.value = ''; // Inicia em branco
+            }
+        } else if (type.startsWith('custom_')) {
+            const customId = type.split('_')[1];
+            const savedCustoms = JSON.parse(safeGet('fitapp_custom_workouts') || '[]');
+            const customWorkout = savedCustoms.find(w => w.id == customId);
+            
+            if (customWorkout) {
+                currentRoutine = JSON.parse(JSON.stringify(customWorkout.routine));
+                if(preview) {
+                    document.getElementById('previewTitle').textContent = `🛠️ Editando Treino`;
+                    document.getElementById('previewDesc').textContent = `Altere os exercícios ou renomeie seu template.`;
+                    if(customControls) customControls.style.display = 'flex';
+                    if(nameContainer) nameContainer.style.display = 'block';
+                    if(nameInput) nameInput.value = customWorkout.name;
+                }
             }
         } else {
             currentRoutine = JSON.parse(JSON.stringify(dbWorkouts[style][level][type] || dbWorkouts['biset']['intermediario']['A']));
@@ -405,7 +424,8 @@ function removeExercise(bIndex, eIndex) {
                 document.getElementById('previewTitle').textContent = `Treino ${type}`;
                 const styleName = style === 'biset' ? 'Modo Bi-set' : 'Modo Tradicional';
                 document.getElementById('previewDesc').textContent = `${styleName} - Nível ${level.charAt(0).toUpperCase() + level.slice(1)}`;
-                if(btnAdd) btnAdd.style.display = 'none';
+                if(customControls) customControls.style.display = 'none';
+                if(nameContainer) nameContainer.style.display = 'none';
             }
         }
         
@@ -859,6 +879,100 @@ function removeExercise(bIndex, eIndex) {
             }
         }
     }
+
+// --- SISTEMA CRUD DE TREINOS CUSTOMIZADOS ---
+    function renderCustomWorkouts() {
+        const listEl = document.getElementById('customWorkoutsList');
+        if (!listEl) return;
+        listEl.innerHTML = '';
+        
+        const savedCustoms = JSON.parse(safeGet('fitapp_custom_workouts') || '[]');
+        
+        if (savedCustoms.length === 0) {
+            listEl.innerHTML = '<div style="color: #666; font-size: 13px; text-align: center; padding: 10px; border: 1px dashed #333; border-radius: 8px;">Nenhum treino criado.</div>';
+            return;
+        }
+        
+        savedCustoms.forEach(workout => {
+            const div = document.createElement('div');
+            div.className = 'card-treino';
+            div.style.borderLeftColor = '#a64dff';
+            div.style.display = 'flex';
+            div.style.justifyContent = 'space-between';
+            div.style.alignItems = 'center';
+            div.style.padding = '15px';
+            
+            div.innerHTML = `
+                <div style="flex: 1;" onclick="FitApp.startWorkout('custom_${workout.id}')">
+                    <h3 style="margin: 0; color: #fff; font-size: 16px;">${workout.name}</h3>
+                    <p style="margin: 0; color: #aaa; font-size: 12px; margin-top: 5px;">${workout.routine[0].exercises.length} exercícios estruturados</p>
+                </div>
+                <button onclick="FitApp.deleteCustomWorkout(${workout.id}, event)" style="background: none; border: none; color: #ff4444; font-size: 18px; cursor: pointer; padding: 5px; margin-left: 10px;" title="Excluir">🗑️</button>
+            `;
+            listEl.appendChild(div);
+        });
+    }
+
+    function saveCustomWorkout() {
+        const nameInput = document.getElementById('customWorkoutName');
+        const name = nameInput ? nameInput.value.trim() : '';
+        
+        if (!name) {
+            showToast('Alerta: Dê um nome ao seu treino.');
+            if(nameInput) nameInput.focus();
+            return;
+        }
+        
+        if (currentRoutine.length === 0 || currentRoutine[0].exercises.length === 0) {
+            showToast('Alerta: Adicione pelo menos um exercício.');
+            return;
+        }
+
+        let savedCustoms = JSON.parse(safeGet('fitapp_custom_workouts') || '[]');
+        
+        let customId = null;
+        if (currentWorkoutType.startsWith('custom_')) {
+            // Atualiza o template existente
+            customId = parseInt(currentWorkoutType.split('_')[1]);
+        } else {
+            // Cria um template totalmente novo
+            customId = Date.now(); 
+            currentWorkoutType = 'custom_' + customId; 
+        }
+        
+        const existingIndex = savedCustoms.findIndex(w => w.id === customId);
+        
+        const workoutData = {
+            id: customId,
+            name: name,
+            routine: currentRoutine
+        };
+        
+        if (existingIndex >= 0) {
+            savedCustoms[existingIndex] = workoutData; // Update
+        } else {
+            savedCustoms.push(workoutData); // Create
+        }
+        
+        safeSet('fitapp_custom_workouts', JSON.stringify(savedCustoms));
+        
+        renderCustomWorkouts();
+        showToast(`Template "${name}" salvo.`);
+        if(audioEnabled) speak("Template customizado salvo no sistema.");
+    }
+
+    function deleteCustomWorkout(id, event) {
+        event.stopPropagation(); // Evita que o clique abra o treino acidentalmente
+        if(!confirm('Atenção: Tem certeza que deseja excluir este template?')) return;
+        
+        let savedCustoms = JSON.parse(safeGet('fitapp_custom_workouts') || '[]');
+        savedCustoms = savedCustoms.filter(w => w.id !== id);
+        safeSet('fitapp_custom_workouts', JSON.stringify(savedCustoms));
+        
+        renderCustomWorkouts();
+        showToast('Template excluído da base.');
+    }
+
 // --- SISTEMA DE HISTÓRICO E CALENDÁRIO MENSAL ---
     function openHistoryModal() {
         document.getElementById('historyModal').style.display = 'flex';
@@ -1096,6 +1210,7 @@ function removeExercise(bIndex, eIndex) {
         checkSequence(); 
         renderAlbum();
         renderWeeklyCalendar(); 
+        renderCustomWorkouts(); // <-- Renderiza a estante 
         
         // --- INTERCEPTADOR DE TREINO ATIVO ---
         const savedState = safeGet('fitapp_active_state');
@@ -1125,7 +1240,8 @@ function removeExercise(bIndex, eIndex) {
         init, filterLibrary, openSwapModal, confirmSwap, unlockAll, startWorkout,
         beginWorkoutExecution, cancelWorkoutPreview, 
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter, craftSticker,
-        openHistoryModal, switchHistoryTab, // <-- Adicionadas aqui
+        openHistoryModal, switchHistoryTab,
+        saveCustomWorkout, deleteCustomWorkout, // <-- Adicionadas aqui
         openDict: (name) => { 
             switchTab('tab-biblioteca', 'nav-biblioteca'); 
             const searchInp = document.getElementById('searchInput');
