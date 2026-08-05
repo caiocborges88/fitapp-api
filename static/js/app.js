@@ -582,34 +582,142 @@ function removeExercise(bIndex, eIndex) {
     function showPackModal() { document.getElementById('packEnvelope').style.display = 'flex'; document.getElementById('packRevealArea').style.display = 'none'; document.getElementById('btnClosePack').style.display = 'none'; document.getElementById('packModal').style.display = 'flex'; }
     
     function openPack() {
-        document.getElementById('packEnvelope').style.display = 'none'; const revealArea = document.getElementById('packRevealArea'); revealArea.innerHTML = ''; revealArea.style.display = 'flex';
-        let savedCollection = JSON.parse(safeGet('fitapp_album') || '[]');
+        document.getElementById('packEnvelope').style.display = 'none'; 
+        const revealArea = document.getElementById('packRevealArea'); 
+        revealArea.innerHTML = ''; 
+        revealArea.style.display = 'flex';
+        revealArea.style.flexDirection = 'column';
         
-        for(let i=0; i<2; i++) {
-            const roll = Math.random(); let pool = stickersDB.filter(s => s.rarity === 'comum');
-            if(roll > 0.90) pool = stickersDB.filter(s => s.rarity === 'brilhante'); else if(roll > 0.60) pool = stickersDB.filter(s => s.rarity === 'prata');
-            const drawn = pool[Math.floor(Math.random() * pool.length)];
-            if(!savedCollection.includes(drawn.id)) savedCollection.push(drawn.id);
-            const div = document.createElement('div'); div.className = `sticker-slot filled ${drawn.rarity}`; div.innerHTML = `<div class="sticker-icon">${drawn.icon}</div><div>${drawn.name}</div>`; revealArea.appendChild(div);
+        let savedCollection = JSON.parse(safeGet('fitapp_album') || '[]');
+        let repetidas = parseInt(safeGet('fitapp_repetidas') || '0');
+        
+        const roll = Math.random(); 
+        let pool = stickersDB.filter(s => s.rarity === 'comum');
+        
+        // Distribuição Tática de Raridades
+        // 5% Holográfico, 15% Ouro, 30% Prata, 50% Comum
+        if (roll > 0.95) pool = stickersDB.filter(s => s.rarity === 'holografico'); 
+        else if (roll > 0.80) pool = stickersDB.filter(s => s.rarity === 'ouro'); 
+        else if (roll > 0.50) pool = stickersDB.filter(s => s.rarity === 'prata');
+        
+        if (pool.length === 0) pool = stickersDB.filter(s => s.rarity === 'comum'); // Failsafe
+        
+        const drawn = pool[Math.floor(Math.random() * pool.length)];
+        let isRepeated = false;
+        
+        if (!savedCollection.includes(drawn.id)) {
+            savedCollection.push(drawn.id);
+        } else {
+            isRepeated = true;
+            repetidas++;
         }
+        
+        const div = document.createElement('div'); 
+        div.className = `sticker-slot filled ${drawn.rarity}`; 
+        div.innerHTML = `<div class="sticker-icon">${drawn.icon}</div><div>${drawn.name}</div>`; 
+        revealArea.appendChild(div);
+        
+        if (isRepeated) {
+            const repMsg = document.createElement('div');
+            repMsg.style.color = '#ffaa00';
+            repMsg.style.marginTop = '15px';
+            repMsg.style.fontSize = '14px';
+            repMsg.style.fontWeight = 'bold';
+            repMsg.style.textAlign = 'center';
+            repMsg.textContent = "⚠️ Conquista Repetida! (+1 Ponto de Suor)";
+            revealArea.appendChild(repMsg);
+        }
+        
         safeSet('fitapp_album', JSON.stringify(savedCollection));
-        document.getElementById('btnClosePack').style.display = 'block'; if(audioEnabled) speak("Figurinhas reveladas.");
+        safeSet('fitapp_repetidas', repetidas.toString());
+        
+        document.getElementById('btnClosePack').style.display = 'block'; 
+        if(audioEnabled) speak(isRepeated ? "Conquista repetida detectada." : "Nova conquista revelada.");
     }
 
     function renderAlbum() {
-        const grid = document.getElementById('albumGrid'); grid.innerHTML = '';
+        const grid = document.getElementById('albumGrid'); 
+        if (!grid) return;
+        grid.innerHTML = '';
+        
         let savedCollection = JSON.parse(safeGet('fitapp_album') || '[]');
+        let repetidas = parseInt(safeGet('fitapp_repetidas') || '0');
+        
         const progressEl = document.getElementById('albumProgress');
-        if (progressEl) progressEl.textContent = `${savedCollection.length} / 9 Figurinhas`;
+        if (progressEl) progressEl.textContent = `${savedCollection.length} / ${stickersDB.length} Conquistas`;
 
-        if (grid) {
-            stickersDB.forEach(sticker => {
+        // Engenharia de Páginas Dinâmicas
+        const pages = [...new Set(stickersDB.map(s => s.page))].sort((a,b) => a - b);
+        const pageNames = ["Seleção Base", "Campo de Batalha", "Titãs do Movimento", "Escudos de Elite"];
+        
+        pages.forEach(pageNum => {
+            const title = document.createElement('div');
+            title.className = 'album-page-title';
+            title.textContent = `Página ${pageNum} - ${pageNames[pageNum-1] || 'Expansão'}`;
+            grid.appendChild(title);
+            
+            const pageGrid = document.createElement('div');
+            pageGrid.style.display = 'grid';
+            pageGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+            pageGrid.style.gap = '10px';
+            pageGrid.style.marginBottom = '20px';
+            
+            const pageStickers = stickersDB.filter(s => s.page === pageNum);
+            
+            pageStickers.forEach(sticker => {
                 const div = document.createElement('div');
-                if(savedCollection.includes(sticker.id)) { div.className = `sticker-slot filled ${sticker.rarity}`; div.innerHTML = `<div class="sticker-icon">${sticker.icon}</div><div>${sticker.name}</div>`; } 
-                else { div.className = 'sticker-slot'; div.innerHTML = `<span>${sticker.id}</span>`; }
-                grid.appendChild(div);
+                if (savedCollection.includes(sticker.id)) { 
+                    div.className = `sticker-slot filled ${sticker.rarity}`; 
+                    div.innerHTML = `<div class="sticker-icon">${sticker.icon}</div><div>${sticker.name}</div>`; 
+                } else { 
+                    div.className = 'sticker-slot missing'; 
+                    div.innerHTML = `<div class="sticker-icon">${sticker.icon}</div><div style="font-size: 11px; margin-top: 5px;">?</div>`; 
+                }
+                pageGrid.appendChild(div);
             });
+            
+            grid.appendChild(pageGrid);
+        });
+        
+        // Renderização do Painel de Forja
+        const forge = document.createElement('div');
+        forge.className = 'forge-panel';
+        forge.innerHTML = `
+            <h4 style="color: #ffaa00; margin-bottom: 10px;">🔥 Forja de Conquistas</h4>
+            <p style="font-size: 13px; color: #aaa; margin-bottom: 15px;">Pontos de Suor (Repetidas): <strong style="color: #fff; font-size: 16px;">${repetidas}</strong></p>
+            <button id="btnForge" class="btn-action" style="background: ${repetidas >= 3 ? '#ffaa00' : '#444'}; color: ${repetidas >= 3 ? '#000' : '#888'}; pointer-events: ${repetidas >= 3 ? 'auto' : 'none'}; border: none;">Forjar Nova Peça (Custa 3)</button>
+        `;
+        grid.appendChild(forge);
+        
+        const btnForge = document.getElementById('btnForge');
+        if (btnForge && repetidas >= 3) {
+            btnForge.onclick = () => FitApp.craftSticker();
         }
+    }
+
+    // Função Executora da Forja
+    function craftSticker() {
+        let savedCollection = JSON.parse(safeGet('fitapp_album') || '[]');
+        let repetidas = parseInt(safeGet('fitapp_repetidas') || '0');
+        
+        if (repetidas < 3) return;
+        
+        const faltantes = stickersDB.filter(s => !savedCollection.includes(s.id));
+        if (faltantes.length === 0) {
+            showToast("Sua galeria já está completa!");
+            return;
+        }
+        
+        const nova = faltantes[Math.floor(Math.random() * faltantes.length)];
+        savedCollection.push(nova.id);
+        repetidas -= 3;
+        
+        safeSet('fitapp_album', JSON.stringify(savedCollection));
+        safeSet('fitapp_repetidas', repetidas.toString());
+        
+        renderAlbum();
+        showToast(`Forja concluída: ${nova.name} desbloqueada!`);
+        if(audioEnabled) speak("Conquista forjada com sucesso.");
     }
 
     function renderLibrary() {
@@ -738,7 +846,7 @@ function removeExercise(bIndex, eIndex) {
     return { 
         init, filterLibrary, openSwapModal, confirmSwap, unlockAll, startWorkout,
         beginWorkoutExecution, cancelWorkoutPreview, 
-        openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,
+        openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter, craftSticker,
         openDict: (name) => { 
             switchTab('tab-biblioteca', 'nav-biblioteca'); 
             const searchInp = document.getElementById('searchInput');
