@@ -179,16 +179,23 @@ const FitApp = (() => {
 
     function renderPreviewList() {
         const listEl = document.getElementById('previewList');
+        const btnStart = document.getElementById('btnStartWorkout');
         if (!listEl) return;
         listEl.innerHTML = '';
         
+        let totalExercises = 0;
+
         currentRoutine.forEach((bloco, bIndex) => {
             const blockDiv = document.createElement('div');
             blockDiv.style.marginBottom = '12px';
             blockDiv.style.textAlign = 'left';
-            blockDiv.innerHTML = `<div style="color: #4da3ff; font-weight: bold; font-size: 13px; margin-bottom: 5px;">${bloco.title}</div>`;
+            
+            if (currentWorkoutType !== 'Livre') {
+                blockDiv.innerHTML = `<div style="color: #4da3ff; font-weight: bold; font-size: 13px; margin-bottom: 5px;">${bloco.title}</div>`;
+            }
             
             bloco.exercises.forEach((ex, eIndex) => {
+                totalExercises++;
                 const row = document.createElement('div');
                 row.style.display = 'flex';
                 row.style.justifyContent = 'space-between';
@@ -202,13 +209,68 @@ const FitApp = (() => {
                     <div style="font-size: 14px; color: #fff; line-height: 1.2;">${ex.name}</div>
                     <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
                         <span style="font-size: 12px; color: #aaa; background: #111; padding: 2px 6px; border-radius: 4px; white-space: nowrap;">${ex.sets}x ${ex.target}</span>
-                        <button class="btn-swap" onclick="FitApp.openSwapModal(${bIndex}, ${eIndex})" title="Substituir Exercício" style="font-size: 14px; padding: 4px;">🔄</button>
+                        <button class="btn-swap" onclick="FitApp.openSwapModal(${bIndex}, ${eIndex})" title="Substituir" style="font-size: 14px; padding: 4px;">🔄</button>
+                        <button class="btn-swap" onclick="FitApp.removeExercise(${bIndex}, ${eIndex})" title="Remover" style="font-size: 14px; padding: 4px; color: #ff4444;">❌</button>
                     </div>
                 `;
                 blockDiv.appendChild(row);
             });
             listEl.appendChild(blockDiv);
         });
+
+        if (totalExercises === 0) {
+            listEl.innerHTML = `<div style="text-align: center; color: #666; padding: 20px; font-size: 13px;">Nenhum exercício adicionado.<br><br>Que tal iniciar puxando um Peck Deck na Polia ou uma Variação de Mesa Flexora da biblioteca?</div>`;
+            if(btnStart) { btnStart.style.opacity = '0.3'; btnStart.style.pointerEvents = 'none'; }
+        } else {
+            if(btnStart) { btnStart.style.opacity = '1'; btnStart.style.pointerEvents = 'auto'; }
+        }
+    }
+function removeExercise(bIndex, eIndex) {
+        currentRoutine[bIndex].exercises.splice(eIndex, 1);
+        renderPreviewList();
+    }
+
+    function openAddExerciseModal() {
+        document.getElementById('addExerciseModal').style.display = 'flex';
+        document.getElementById('searchAddInput').value = '';
+        document.getElementById('addExerciseConfig').style.display = 'none';
+        filterAddModal();
+    }
+
+    function filterAddModal() {
+        const query = document.getElementById('searchAddInput').value.toLowerCase();
+        const list = document.getElementById('addExerciseList');
+        list.innerHTML = '';
+        
+        const filtered = dictionaryData.filter(d => d.name.toLowerCase().includes(query) || d.focus.toLowerCase().includes(query));
+        
+        filtered.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'swap-item';
+            div.innerHTML = `<div class="swap-item-name">${item.name}</div><div class="swap-item-focus">${item.focus}</div>`;
+            div.onclick = () => {
+                document.getElementById('selectedExerciseName').textContent = item.name;
+                document.getElementById('addExerciseConfig').style.display = 'block';
+                document.getElementById('addExerciseModal').querySelector('.swap-modal-content').scrollTop = 1000;
+            };
+            list.appendChild(div);
+        });
+    }
+
+    function confirmAddExercise() {
+        const name = document.getElementById('selectedExerciseName').textContent;
+        const sets = document.getElementById('customSets').value;
+        const target = document.getElementById('customReps').value;
+        
+        if (currentRoutine.length === 0) {
+            currentRoutine.push({ title: "Meu Treino Livre", exercises: [] });
+        }
+        
+        currentRoutine[0].exercises.push({ name, sets: parseInt(sets), target });
+        
+        document.getElementById('addExerciseModal').style.display = 'none';
+        renderPreviewList();
+        if(audioEnabled) speak("Exercício adicionado.");
     }
 
     function loadWorkout() {
@@ -221,18 +283,30 @@ const FitApp = (() => {
         const header = document.querySelector('.dashboard-header');
         if (header) header.style.display = 'none';
         
-        isWorkoutActive = false; // Garante o modo de Preparação
-        
-        // Puxa a rotina e aloca na memória ANTES de exibir
-        currentRoutine = JSON.parse(JSON.stringify(dbWorkouts[style][level][type] || dbWorkouts['biset']['intermediario']['A']));
+        isWorkoutActive = false; 
         
         const preview = document.getElementById('workoutPreview');
+        const btnAdd = document.getElementById('btnAddExercise');
+
+        if (type === 'Livre') {
+            currentRoutine = [{ title: "Meu Treino Livre", exercises: [] }];
+            if(preview) {
+                document.getElementById('previewTitle').textContent = `🛠️ Treino Livre`;
+                document.getElementById('previewDesc').textContent = `Monte sua rotina personalizada do zero.`;
+                if(btnAdd) btnAdd.style.display = 'block';
+            }
+        } else {
+            currentRoutine = JSON.parse(JSON.stringify(dbWorkouts[style][level][type] || dbWorkouts['biset']['intermediario']['A']));
+            if(preview) {
+                document.getElementById('previewTitle').textContent = `Treino ${type}`;
+                const styleName = style === 'biset' ? 'Modo Bi-set' : 'Modo Tradicional';
+                document.getElementById('previewDesc').textContent = `${styleName} - Nível ${level.charAt(0).toUpperCase() + level.slice(1)}`;
+                if(btnAdd) btnAdd.style.display = 'none';
+            }
+        }
+        
         if (preview) {
-            document.getElementById('previewTitle').textContent = `Treino ${type}`;
-            const styleName = style === 'biset' ? 'Modo Bi-set' : 'Modo Tradicional';
-            document.getElementById('previewDesc').textContent = `${styleName} - Nível ${level.charAt(0).toUpperCase() + level.slice(1)}`;
-            
-            renderPreviewList(); // Constrói a lista visual
+            renderPreviewList();
             preview.style.display = 'block';
         }
     }
@@ -510,7 +584,8 @@ const FitApp = (() => {
     
     return { 
         init, filterLibrary, openSwapModal, confirmSwap, unlockAll, startWorkout,
-        beginWorkoutExecution, cancelWorkoutPreview, // <- Novas funções adicionadas aqui
+        beginWorkoutExecution, cancelWorkoutPreview, 
+        openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise,
         openDict: (name) => { 
             switchTab('tab-biblioteca', 'nav-biblioteca'); 
             const searchInp = document.getElementById('searchInput');

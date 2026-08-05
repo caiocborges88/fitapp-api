@@ -50,6 +50,10 @@
             <p>Pernas & Ombros</p>
             <div class="lock-overlay" id="lock-C">🔒</div>
         </div>
+        <div class="card-treino" id="card-Livre" onclick="FitApp.startWorkout('Livre')" style="border-left-color: #a64dff; margin-top: 10px;">
+            <h3>🛠️ Treino Livre</h3>
+            <p>Monte seu próprio treino</p>
+        </div>
     </div>
     
     <!-- Botão de Override (Discreto) -->
@@ -67,7 +71,10 @@
         <!-- Lista de Prévia do Treino -->
         <div id="previewList" style="max-height: 45vh; overflow-y: auto; margin-bottom: 20px; padding-right: 5px; border-top: 1px solid #444; padding-top: 15px;"></div>
         
-        <button class="btn-action btn-success" onclick="FitApp.beginWorkoutExecution()" style="margin-bottom: 10px;">▶️ Iniciar Treino</button>
+        <!-- Botão Dinâmico (Só aparece no Treino Livre) -->
+        <button id="btnAddExercise" class="btn-action" onclick="FitApp.openAddExerciseModal()" style="background: #111; border: 1px dashed #a64dff; color: #a64dff; margin-bottom: 15px; display: none;">➕ Adicionar Exercício</button>
+
+        <button id="btnStartWorkout" class="btn-action btn-success" onclick="FitApp.beginWorkoutExecution()" style="margin-bottom: 10px;">▶️ Iniciar Treino</button>
         <button class="btn-action" onclick="FitApp.cancelWorkoutPreview()" style="background: #555;">⬅️ Voltar ao Painel</button>
     </div>
 
@@ -81,5 +88,36 @@
     
     <div class="btn-finish-area" id="btnFinishArea">
         <button id="btnFinishAction" class="btn-action btn-warning">⚠️ Encerrar Incompleto</button>
+    </div>
+
+    <!-- Modal de Inserção de Exercício (Treino Livre) -->
+    <div id="addExerciseModal" class="swap-modal-overlay">
+        <div class="swap-modal-content" style="max-height: 90vh; display: flex; flex-direction: column;">
+            <div class="swap-modal-header">
+                <h3>Adicionar Exercício</h3>
+                <button class="btn-close-modal" onclick="document.getElementById('addExerciseModal').style.display='none'">&times;</button>
+            </div>
+            
+            <input type="text" id="searchAddInput" placeholder="Buscar exercício..." onkeyup="FitApp.filterAddModal()" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #121212; color: #fff; margin-bottom: 15px;">
+            
+            <div id="addExerciseList" class="swap-list" style="flex: 1; overflow-y: auto; margin-bottom: 15px;">
+                <!-- Lista injetada via JS -->
+            </div>
+            
+            <div id="addExerciseConfig" style="display: none; background: #2a2a2a; padding: 15px; border-radius: 8px; border-left: 4px solid #a64dff; margin-bottom: 15px;">
+                <h4 id="selectedExerciseName" style="color: #fff; margin-bottom: 10px;">Nome do Exercicio</h4>
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex: 1;">
+                        <label style="color: #aaa; font-size: 12px;">Séries</label>
+                        <input type="number" id="customSets" value="4" style="width: 100%; padding: 8px; background: #111; border: 1px solid #444; color: #fff; border-radius: 4px; text-align: center;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="color: #aaa; font-size: 12px;">Repetições</label>
+                        <input type="text" id="customReps" value="10-12" style="width: 100%; padding: 8px; background: #111; border: 1px solid #444; color: #fff; border-radius: 4px; text-align: center;">
+                    </div>
+                </div>
+                <button onclick="FitApp.confirmAddExercise()" style="width: 100%; padding: 10px; margin-top: 15px; background: #a64dff; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">✅ Adicionar ao Treino</button>
+            </div>
+        </div>
     </div>
 </main>
