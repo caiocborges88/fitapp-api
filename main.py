@@ -69,6 +69,10 @@ class TreinoLog(BaseModel):
     tipo: str
     data: List[ExercicioLog]
 
+# NOVO: Classe para receber a string bruta do front-end
+class ImportarTreinoRequest(BaseModel):
+    texto: str
+
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     return templates.TemplateResponse(request=request, name="base.html")
@@ -119,3 +123,25 @@ async def consultar_coach():
         return {"feedback": response.text}
     except Exception as e:
         return {"feedback": f"Erro na IA: {str(e)}"}
+
+# --- NOVO SISTEMA DE IMPORTAÇÃO (FASE 4) ---
+@app.post("/api/importar-treino-ia")
+async def importar_treino_ia(req: ImportarTreinoRequest):
+    prompt = f"""
+    Você é um analisador JSON de treinos de academia. Extraia os exercícios do texto do usuário.
+    Retorne APENAS um array JSON válido contendo objetos com as chaves exatas: 'nome', 'series' e 'repeticoes'.
+    Não use crases de formatação markdown. Não adicione nenhum outro texto, saudação ou explicação.
+    
+    Texto do usuário:
+    {req.texto}
+    """
+    
+    try:
+        # gemini-1.5-flash possui a menor latência para extração de dados
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        response = model.generate_content(prompt)
+        # O front-end espera um objeto com a chave "resultado" para aplicar o Regex
+        return {"resultado": response.text}
+    except Exception as e:
+        print(f"Erro na extração IA: {e}")
+        return {"resultado": "[]", "erro": str(e)}

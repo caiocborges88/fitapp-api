@@ -403,6 +403,23 @@ function removeExercise(bIndex, eIndex) {
                 if(nameContainer) nameContainer.style.display = 'block';
                 if(nameInput) nameInput.value = ''; // Inicia em branco
             }
+        } else if (type === 'Casa') {
+            currentRoutine = [{
+                title: "Circuito Corporal",
+                exercises: [
+                    { name: "Polichinelo (Aquecimento)", sets: 3, target: "1 min" },
+                    { name: "Flexão de Braço", sets: 4, target: "Máx" },
+                    { name: "Agachamento Livre", sets: 4, target: "15-20" },
+                    { name: "Afundo Alternado", sets: 3, target: "12/perna" },
+                    { name: "Prancha Isométrica", sets: 3, target: "45s" }
+                ]
+            }];
+            if(preview) {
+                document.getElementById('previewTitle').textContent = `🏠 Treino em Casa`;
+                document.getElementById('previewDesc').textContent = `Rotina FullBody de contingência. Sem desculpas.`;
+                if(customControls) customControls.style.display = 'none';
+                if(nameContainer) nameContainer.style.display = 'none';
+            }
         } else if (type.startsWith('custom_')) {
             const customId = type.split('_')[1];
             const savedCustoms = JSON.parse(safeGet('fitapp_custom_workouts') || '[]');

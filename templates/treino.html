@@ -58,6 +58,12 @@
             <p>Pernas & Ombros</p>
             <div class="lock-overlay" id="lock-C">🔒</div>
         </div>
+
+        <!-- NOVO: Contingência - Treino em Casa -->
+        <div class="card-treino" id="card-Casa" onclick="FitApp.startWorkout('Casa')" style="border-left-color: #00ff88; margin-top: 10px; background: rgba(0, 255, 136, 0.05);">
+            <h3 style="color: #00ff88;">🏠 Treino em Casa</h3>
+            <p>FullBody Sem Equipamentos</p>
+        </div>
         
         <!-- NOVO: Seção de Treinos Customizados -->
         <div style="margin-top: 20px; border-top: 1px dashed #444; padding-top: 15px;">
@@ -199,6 +205,12 @@
             
             <p style="font-size: 13px; color: #aaa; margin-bottom: 15px;">Cole a mensagem do WhatsApp (ou texto livre) com o treino passado pelo seu personal. O Gemini fará o resto.</p>
             
+            <!-- Botões de Inteligência Artificial Rápidos -->
+            <div style="display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none;">
+                <button onclick="document.getElementById('aiWorkoutName').value='Casa (IA)'; document.getElementById('aiWorkoutText').value='Monte um treino em casa para o corpo todo, apenas com peso do corpo.';" style="background: #2a2a2a; border: 1px solid #00ff88; color: #00ff88; padding: 6px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; white-space: nowrap;">🏠 Sugerir Treino em Casa</button>
+                <button onclick="document.getElementById('aiWorkoutName').value='Mobilidade (IA)'; document.getElementById('aiWorkoutText').value='Monte uma rotina de alongamento e mobilidade de 10 minutos.';" style="background: #2a2a2a; border: 1px solid #a64dff; color: #a64dff; padding: 6px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; white-space: nowrap;">🧘 Mobilidade</button>
+            </div>
+
             <input type="text" id="aiWorkoutName" placeholder="Nomeie este treino (Ex: Peito e Tríceps)" style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 15px; font-size: 14px;">
             
             <textarea id="aiWorkoutText" rows="6" placeholder="Cole o texto aqui..." style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 15px; font-size: 14px; resize: vertical;"></textarea>
