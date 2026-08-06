@@ -88,7 +88,38 @@ const dictionaryData = [
     { name: "Tríceps Máquina", focus: "Tríceps", desc: "Sentado no aparelho. Empurre o peso para baixo usando apenas a extensão dos cotovelos." },
     { name: "Tríceps Pulley", focus: "Tríceps Base", desc: "Incline o tronco levemente. Cole cotovelos na costela. Empurre a barra para baixo até estender o braço." },
     { name: "Tríceps Testa", focus: "Tríceps Isolado", desc: "Deitado, desça a barra em direção à testa e estenda os braços para cima." },
-    { name: "Voador (Peck Deck)", focus: "Peitoral Isolado", desc: "Feche os braços na frente do peito focando em 'esmagar' o peitoral. Retorne devagar." }
+    { name: "Voador (Peck Deck)", focus: "Peitoral Isolado", desc: "Feche os braços na frente do peito focando em 'esmagar' o peitoral. Retorne devagar." },
+
+    // --- NOVO: MOBILIDADE CORPORAL ---
+    { name: "Cócoras Profundas", focus: "Pernas (Mobilidade)", desc: "Ficar agachado o mais baixo possível, mantendo os calcanhares no chão e o peito aberto. Excelente para tornozelos e quadris." },
+    { name: "Gato-Vaca (Cat-Cow)", focus: "Costas (Mobilidade)", desc: "Em quatro apoios, alternar entre curvar a coluna para cima (gato) e estender a barriga para o chão (vaca)." },
+    { name: "Mobilidade 90/90", focus: "Pernas (Mobilidade)", desc: "Sentado, pernas flexionadas a 90 graus (frente e lateral). Rotacionar o tronco sobre a perna da frente para destravar o quadril." },
+    { name: "Maior Alongamento do Mundo", focus: "Pernas (Mobilidade)", desc: "Avanço profundo, uma mão no chão, enquanto o outro braço gira apontando para o teto." },
+    { name: "Rotação Torácica", focus: "Costas e Ombros", desc: "Em quatro apoios, mão na nuca, girar o cotovelo em direção ao outro braço e depois abrir apontando para o teto." },
+    { name: "Deslocamento de Ombros", focus: "Ombros (Mobilidade)", desc: "Segurar um cabo de vassoura (ou toalha) bem aberto e passar por cima da cabeça até as costas sem dobrar os cotovelos." },
+    { name: "Dorsiflexão de Tornozelo", focus: "Pernas (Mobilidade)", desc: "Em pé, ponta do pé próxima à parede, tentar encostar o joelho na parede sem tirar o calcanhar do chão." },
+    
+    // --- NOVO: AERÓBICOS E HIIT ---
+    { name: "Polichinelos (Jumping Jacks)", focus: "Cardio", desc: "Clássico aeróbico. Braços e pernas abrem e fecham em velocidade." },
+    { name: "Corrida Estacionária", focus: "Cardio", desc: "Correr no lugar elevando os joelhos até a altura do quadril." },
+    { name: "Corrida Calcanhar no Glúteo", focus: "Cardio", desc: "Correr no lugar chutando os calcanhares em direção aos glúteos." },
+    { name: "Burpees", focus: "Cardio", desc: "Do chão ao teto. Prancha, salto trazendo os pés para as mãos e salto vertical." },
+    { name: "Saltos Laterais (Skater Jumps)", focus: "Cardio", desc: "Saltar lateralmente de um pé para o outro, imitando um patinador de velocidade." },
+    { name: "Pular Corda", focus: "Cardio", desc: "Saltos curtos mantendo o abdômen contraído (com ou sem corda real)." },
+    { name: "Sprawl (Meio Burpee)", focus: "Core/Cardio", desc: "Posição de prancha alta, salto trazendo os pés para perto das mãos e levantar rapidamente." },
+    
+    // --- NOVO: FORÇA INFERIORES (CALISTENIA) ---
+    { name: "Agachamento com Salto", focus: "Pernas Explosão", desc: "Agachamento tradicional seguido de salto vertical para adicionar potência." },
+    { name: "Afundo / Avanço", focus: "Pernas", desc: "Passada larga à frente ou para trás, descendo o joelho de trás em direção ao chão." },
+    { name: "Pistol Squat", focus: "Pernas Avançado", desc: "Agachamento de uma perna só. Pode usar cadeira como apoio para iniciar." },
+    
+    // --- NOVO: FORÇA SUPERIORES (CALISTENIA) ---
+    { name: "Flexão de Braço Tradicional", focus: "Peito e Tríceps", desc: "Sem joelhos no chão. Corpo rígido, desce e empurra o solo com potência." },
+    { name: "Flexão Declinada", focus: "Peitoral Superior", desc: "Pés apoiados no sofá/cadeira, mãos no chão. Aumenta a carga sobre a porção superior do peito." },
+    { name: "Flexão Pike (Pike Push-up)", focus: "Ombros", desc: "Corpo em formato de 'V' invertido, cabeça desce em direção ao chão focado nos ombros." },
+    { name: "Mergulho no Banco", focus: "Tríceps", desc: "Mãos apoiadas na beirada de uma cadeira, flexionando os cotovelos para trás." },
+    { name: "Prancha Sobe-Desce", focus: "Ombros e Core", desc: "Alternar entre prancha com antebraços apoiados e prancha alta (mãos apoiadas)." },
+    { name: "Remada na Porta/Lençol", focus: "Costas Base", desc: "Usar um lençol preso na porta para puxar o peso do corpo para trás." }
 ];
 
 // // 1. BANCO DE DADOS EXPANDIDO (Modo Bi-set e Modo Tradicional)
