@@ -980,23 +980,18 @@ function removeExercise(bIndex, eIndex) {
 
         // --- INÍCIO DA MANOBRA: CARROSSEL DA IA ---
         if (typeof filaDeTreinosIA !== 'undefined' && filaDeTreinosIA.length > 0) {
-            // Prepara a variável para criar um treino totalmente novo no próximo ciclo
             currentWorkoutType = 'novo_customizado';
             carregarProximoTreinoIA(); // Puxa o próximo treino da fila
         } else {
             // Se a fila acabou, restaura os botões e fecha a tela
             const botoes = document.querySelectorAll('button');
             botoes.forEach(btn => { 
-                if(btn.innerText.includes('Salvar e Revisar')) {
-                    // Restaura o texto original do botão dependendo de como ele é no seu app
+                if(btn.innerText.includes('Salvar e Revisar') || btn.innerText.includes('Salvar Template Final')) {
                     btn.innerText = 'Salvar Template'; 
                 }
             });
-            // Fecha a tela de edição
-            if (typeof closeModal === "function") {
-                // Coloque o ID correto do seu modal aqui (ex: 'workout-modal' ou 'edit-modal')
-                closeModal('workout-modal'); 
-            }
+            // Usa a sua função nativa para fechar o editor
+            cancelWorkoutPreview(); 
         }
         // --- FIM DA MANOBRA ---
     }
@@ -1238,7 +1233,7 @@ function removeExercise(bIndex, eIndex) {
             // Verifica se é a nova estrutura de múltiplos treinos (Periodização)
             if (parsedData[0].nome_treino && parsedData[0].exercicios) {
                 filaDeTreinosIA = parsedData; // Coloca todos na fila
-                document.getElementById('ia-import-modal').style.display = 'none'; // Fecha a tela de texto
+                document.getElementById('importAiModal').style.display = 'none'; // ID corrigido
                 carregarProximoTreinoIA(); // Inicia o carrossel
             } else {
                 throw new Error("A estrutura do JSON não corresponde à periodização de treinos.");
@@ -1360,30 +1355,47 @@ document.addEventListener('DOMContentLoaded', FitApp.init);
 function carregarProximoTreinoIA() {
     if (filaDeTreinosIA.length === 0) {
         showToast("Periodização importada e salva com sucesso!");
-        closeModal('workout-modal');
-        // Se você tiver uma função que atualiza a tela inicial (como renderCustomWorkouts), chame-a aqui:
-        // renderCustomWorkouts(); 
+        cancelWorkoutPreview(); // Usa a função nativa do seu app para voltar à tela inicial
+        renderCustomWorkouts();
         return;
     }
 
-    // Retira o primeiro treino da fila
     const treinoAtual = filaDeTreinosIA.shift(); 
 
-    // Alimenta o título do modal
-    const inputNome = document.getElementById('workout-name');
-    if (inputNome) inputNome.value = treinoAtual.nome_treino;
+    // Prepara a tela de edição nativa do seu app
+    document.getElementById('workoutCards').style.display = 'none';
+    const header = document.querySelector('.dashboard-header');
+    if (header) header.style.display = 'none';
+    
+    const preview = document.getElementById('workoutPreview');
+    const customControls = document.getElementById('customWorkoutControls');
+    const nameContainer = document.getElementById('customWorkoutNameContainer');
+    const nameInput = document.getElementById('customWorkoutName');
 
-    // Traduz para a arquitetura do motor
-    currentRoutine = treinoAtual.exercicios.map(ex => ({
-        name: ex.nome,
-        sets: ex.series || "4",
-        target: ex.repeticoes || "10"
-    }));
+    if(customControls) customControls.style.display = 'flex';
+    if(nameContainer) nameContainer.style.display = 'block';
 
-    renderWorkoutList(); // Renderiza os exercícios com os botões 🔄
+    if (nameInput) nameInput.value = treinoAtual.nome_treino;
+    document.getElementById('previewTitle').textContent = `Revisando IA`;
+    document.getElementById('previewDesc').textContent = `Ajuste os exercícios e salve para puxar o próximo dia.`;
+
+    // Garante que será salvo como um novo treino no banco
+    currentWorkoutType = 'novo_customizado';
+
+    // Traduz para a arquitetura de blocos do seu motor
+    currentRoutine = [{
+        title: "Treino Importado",
+        exercises: treinoAtual.exercicios.map(ex => ({
+            name: ex.nome,
+            sets: parseInt(ex.series) || 4,
+            target: ex.repeticoes || "10"
+        }))
+    }];
+
+    renderPreviewList(); // Renderiza os exercícios usando sua função oficial
     
     // Altera o texto do botão de salvar temporariamente
-    const botoes = document.querySelectorAll('#workout-modal button');
+    const botoes = document.querySelectorAll('button');
     botoes.forEach(btn => {
         if (btn.innerText.includes('Salvar Template') || btn.innerText.includes('Salvar e Revisar')) {
             if (filaDeTreinosIA.length > 0) {
@@ -1394,5 +1406,5 @@ function carregarProximoTreinoIA() {
         }
     });
 
-    document.getElementById('workout-modal').style.display = 'flex';
+    if (preview) preview.style.display = 'block';
 }
