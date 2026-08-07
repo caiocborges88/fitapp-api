@@ -5,6 +5,7 @@ const FitApp = (() => {
     let todayLog = [];
     let currentRoutine = []; 
     let currentWorkoutType = ''; 
+    let filaDeTreinosIA = [];
     
     // Novas variáveis do Relógio Global
     let globalTimer = null;
@@ -976,6 +977,28 @@ function removeExercise(bIndex, eIndex) {
         renderCustomWorkouts();
         showToast(`Template "${name}" salvo.`);
         if(audioEnabled) speak("Template customizado salvo no sistema.");
+
+        // --- INÍCIO DA MANOBRA: CARROSSEL DA IA ---
+        if (typeof filaDeTreinosIA !== 'undefined' && filaDeTreinosIA.length > 0) {
+            // Prepara a variável para criar um treino totalmente novo no próximo ciclo
+            currentWorkoutType = 'novo_customizado';
+            carregarProximoTreinoIA(); // Puxa o próximo treino da fila
+        } else {
+            // Se a fila acabou, restaura os botões e fecha a tela
+            const botoes = document.querySelectorAll('button');
+            botoes.forEach(btn => { 
+                if(btn.innerText.includes('Salvar e Revisar')) {
+                    // Restaura o texto original do botão dependendo de como ele é no seu app
+                    btn.innerText = 'Salvar Template'; 
+                }
+            });
+            // Fecha a tela de edição
+            if (typeof closeModal === "function") {
+                // Coloque o ID correto do seu modal aqui (ex: 'workout-modal' ou 'edit-modal')
+                closeModal('workout-modal'); 
+            }
+        }
+        // --- FIM DA MANOBRA ---
     }
 
     function deleteCustomWorkout(id, event) {
@@ -1194,61 +1217,32 @@ function removeExercise(bIndex, eIndex) {
         loader.style.display = 'block';
 
         try {
-            // Nota Tática: O backend precisa ter esta rota configurada para bater na API do Gemini
             const response = await fetch('/api/importar-treino-ia', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ texto: textInput })
+                body: JSON.stringify({ texto: textoIA })
             });
-
-            if (!response.ok) throw new Error("Erro na comunicação com o servidor.");
 
             const data = await response.json();
             
-            // NOVO: Verifica se o backend Python relatou falha na API do Gemini
             if (data.erro) {
                 throw new Error("Servidor Python: " + data.erro);
             }
             
-            // MANOBRA DE SANITIZAÇÃO (Regex): 
-            // Ignora conversas e formatações markdown, extraindo apenas o Array JSON bruto
             const jsonMatch = data.resultado.match(/\[[\s\S]*\]/);
-            
             if (!jsonMatch) throw new Error("A IA não retornou um formato de dados válido.");
             
-            const exerciciosIA = JSON.parse(jsonMatch[0]);
-            
-            // NOVO: Impede a criação de um treino fantasma
-            if (exerciciosIA.length === 0) {
-                throw new Error("A IA não identificou nenhum exercício no texto.");
+            const parsedData = JSON.parse(jsonMatch[0]);
+            if (parsedData.length === 0) throw new Error("A IA não identificou nenhum exercício.");
+
+            // Verifica se é a nova estrutura de múltiplos treinos (Periodização)
+            if (parsedData[0].nome_treino && parsedData[0].exercicios) {
+                filaDeTreinosIA = parsedData; // Coloca todos na fila
+                document.getElementById('ia-import-modal').style.display = 'none'; // Fecha a tela de texto
+                carregarProximoTreinoIA(); // Inicia o carrossel
+            } else {
+                throw new Error("A estrutura do JSON não corresponde à periodização de treinos.");
             }
-
-            // Tradução do JSON da IA para a arquitetura do motor (currentRoutine)
-            const rotina = [{
-                title: "Treino Personalizado",
-                exercises: exerciciosIA.map(ex => ({
-                    name: ex.nome || "Exercício Desconhecido",
-                    sets: parseInt(ex.series) || 4,
-                    target: ex.repeticoes || "10-15"
-                }))
-            }];
-
-            // Injeção direta no banco de dados CRUD
-            let savedCustoms = JSON.parse(safeGet('fitapp_custom_workouts') || '[]');
-            const customId = Date.now();
-            
-            savedCustoms.push({
-                id: customId,
-                name: nameInput,
-                routine: rotina
-            });
-            
-            safeSet('fitapp_custom_workouts', JSON.stringify(savedCustoms));
-            
-            renderCustomWorkouts();
-            document.getElementById('importAiModal').style.display = 'none';
-            showToast(`Template "${nameInput}" importado via IA!`);
-            if(audioEnabled) speak("Treino importado e estruturado com sucesso.");
 
         } catch (error) {
             console.error(error);
@@ -1363,3 +1357,42 @@ function removeExercise(bIndex, eIndex) {
 })();
 
 document.addEventListener('DOMContentLoaded', FitApp.init);
+function carregarProximoTreinoIA() {
+    if (filaDeTreinosIA.length === 0) {
+        showToast("Periodização importada e salva com sucesso!");
+        closeModal('workout-modal');
+        // Se você tiver uma função que atualiza a tela inicial (como renderCustomWorkouts), chame-a aqui:
+        // renderCustomWorkouts(); 
+        return;
+    }
+
+    // Retira o primeiro treino da fila
+    const treinoAtual = filaDeTreinosIA.shift(); 
+
+    // Alimenta o título do modal
+    const inputNome = document.getElementById('workout-name');
+    if (inputNome) inputNome.value = treinoAtual.nome_treino;
+
+    // Traduz para a arquitetura do motor
+    currentRoutine = treinoAtual.exercicios.map(ex => ({
+        name: ex.nome,
+        sets: ex.series || "4",
+        target: ex.repeticoes || "10"
+    }));
+
+    renderWorkoutList(); // Renderiza os exercícios com os botões 🔄
+    
+    // Altera o texto do botão de salvar temporariamente
+    const botoes = document.querySelectorAll('#workout-modal button');
+    botoes.forEach(btn => {
+        if (btn.innerText.includes('Salvar Template') || btn.innerText.includes('Salvar e Revisar')) {
+            if (filaDeTreinosIA.length > 0) {
+                btn.innerText = `Salvar e Revisar Próximo (${filaDeTreinosIA.length} restantes)`;
+            } else {
+                btn.innerText = "Salvar Template Final";
+            }
+        }
+    });
+
+    document.getElementById('workout-modal').style.display = 'flex';
+}

@@ -131,9 +131,26 @@ async def consultar_coach():
 @app.post("/api/importar-treino-ia")
 async def importar_treino_ia(req: ImportarTreinoRequest):
     prompt = f"""
-    Você é um analisador JSON de treinos de academia. Extraia os exercícios do texto do usuário.
-    Retorne APENAS um array JSON válido contendo objetos com as chaves exatas: 'nome', 'series' e 'repeticoes'.
-    Não use crases de formatação markdown. Não adicione nenhum outro texto, saudação ou explicação.
+    Você é um analisador JSON de periodização de treinos. O usuário enviará um texto contendo uma rotina completa (múltiplos dias ou letras).
+    Sua missão é fatiar esse texto em treinos individuais e extrair os exercícios de cada um.
+    Cardios e abdominais descritos soltos no final (ex: "20 min cardio") devem ser inseridos como o último exercício daquele treino, com séries = 1 e repetições = o tempo ou instrução.
+
+    Retorne APENAS um array JSON válido estruturado exatamente assim:
+    [
+      {{
+        "nome_treino": "Segunda - Peito e Tríceps",
+        "exercicios": [
+          {{"nome": "Supino reto", "series": "4", "repeticoes": "8-10"}},
+          {{"nome": "Tríceps corda", "series": "3", "repeticoes": "12-15"}}
+        ]
+      }},
+      {{
+        "nome_treino": "Terça - Costas e Bíceps",
+        "exercicios": [ ... ]
+      }}
+    ]
+
+    Não use crases de formatação markdown. Não adicione texto, saudação ou explicação.
     
     Texto do usuário:
     {req.texto}
