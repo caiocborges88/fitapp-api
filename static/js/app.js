@@ -1249,6 +1249,59 @@ function removeExercise(bIndex, eIndex) {
         }
     }
 
+function carregarProximoTreinoIA() {
+        if (filaDeTreinosIA.length === 0) {
+            showToast("Periodização importada e salva com sucesso!");
+            cancelWorkoutPreview(); 
+            renderCustomWorkouts();
+            return;
+        }
+
+        const treinoAtual = filaDeTreinosIA.shift(); 
+
+        document.getElementById('workoutCards').style.display = 'none';
+        const header = document.querySelector('.dashboard-header');
+        if (header) header.style.display = 'none';
+        
+        const preview = document.getElementById('workoutPreview');
+        const customControls = document.getElementById('customWorkoutControls');
+        const nameContainer = document.getElementById('customWorkoutNameContainer');
+        const nameInput = document.getElementById('customWorkoutName');
+
+        if(customControls) customControls.style.display = 'flex';
+        if(nameContainer) nameContainer.style.display = 'block';
+
+        if (nameInput) nameInput.value = treinoAtual.nome_treino;
+        document.getElementById('previewTitle').textContent = `Revisando IA`;
+        document.getElementById('previewDesc').textContent = `Ajuste os exercícios e salve para puxar o próximo dia.`;
+
+        currentWorkoutType = 'novo_customizado';
+
+        currentRoutine = [{
+            title: "Treino Importado",
+            exercises: treinoAtual.exercicios.map(ex => ({
+                name: ex.nome,
+                sets: parseInt(ex.series) || 4,
+                target: ex.repeticoes || "10"
+            }))
+        }];
+
+        renderPreviewList(); 
+        
+        const botoes = document.querySelectorAll('button');
+        botoes.forEach(btn => {
+            if (btn.innerText.includes('Salvar Template') || btn.innerText.includes('Salvar e Revisar')) {
+                if (filaDeTreinosIA.length > 0) {
+                    btn.innerText = `Salvar e Revisar Próximo (${filaDeTreinosIA.length} restantes)`;
+                } else {
+                    btn.innerText = "Salvar Template Final";
+                }
+            }
+        });
+
+        if (preview) preview.style.display = 'block';
+    }
+
     function init() {
         els.styleSelector = document.getElementById('styleSelector');
         els.levelSelector = document.getElementById('levelSelector'); 
@@ -1352,59 +1405,3 @@ function removeExercise(bIndex, eIndex) {
 })();
 
 document.addEventListener('DOMContentLoaded', FitApp.init);
-function carregarProximoTreinoIA() {
-    if (filaDeTreinosIA.length === 0) {
-        showToast("Periodização importada e salva com sucesso!");
-        cancelWorkoutPreview(); // Usa a função nativa do seu app para voltar à tela inicial
-        renderCustomWorkouts();
-        return;
-    }
-
-    const treinoAtual = filaDeTreinosIA.shift(); 
-
-    // Prepara a tela de edição nativa do seu app
-    document.getElementById('workoutCards').style.display = 'none';
-    const header = document.querySelector('.dashboard-header');
-    if (header) header.style.display = 'none';
-    
-    const preview = document.getElementById('workoutPreview');
-    const customControls = document.getElementById('customWorkoutControls');
-    const nameContainer = document.getElementById('customWorkoutNameContainer');
-    const nameInput = document.getElementById('customWorkoutName');
-
-    if(customControls) customControls.style.display = 'flex';
-    if(nameContainer) nameContainer.style.display = 'block';
-
-    if (nameInput) nameInput.value = treinoAtual.nome_treino;
-    document.getElementById('previewTitle').textContent = `Revisando IA`;
-    document.getElementById('previewDesc').textContent = `Ajuste os exercícios e salve para puxar o próximo dia.`;
-
-    // Garante que será salvo como um novo treino no banco
-    currentWorkoutType = 'novo_customizado';
-
-    // Traduz para a arquitetura de blocos do seu motor
-    currentRoutine = [{
-        title: "Treino Importado",
-        exercises: treinoAtual.exercicios.map(ex => ({
-            name: ex.nome,
-            sets: parseInt(ex.series) || 4,
-            target: ex.repeticoes || "10"
-        }))
-    }];
-
-    renderPreviewList(); // Renderiza os exercícios usando sua função oficial
-    
-    // Altera o texto do botão de salvar temporariamente
-    const botoes = document.querySelectorAll('button');
-    botoes.forEach(btn => {
-        if (btn.innerText.includes('Salvar Template') || btn.innerText.includes('Salvar e Revisar')) {
-            if (filaDeTreinosIA.length > 0) {
-                btn.innerText = `Salvar e Revisar Próximo (${filaDeTreinosIA.length} restantes)`;
-            } else {
-                btn.innerText = "Salvar Template Final";
-            }
-        }
-    });
-
-    if (preview) preview.style.display = 'block';
-}
