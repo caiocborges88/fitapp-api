@@ -1252,7 +1252,8 @@ function removeExercise(bIndex, eIndex) {
 
         } catch (error) {
             console.error(error);
-            showToast("Falha no processamento. Verifique o console.");
+            // Exibe o erro real na interface para facilitar a depuração
+            showToast("Falha: " + error.message);
         } finally {
             btn.style.display = 'block';
             loader.style.display = 'none';
