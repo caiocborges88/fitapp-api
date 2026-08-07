@@ -1220,7 +1220,7 @@ function removeExercise(bIndex, eIndex) {
             const response = await fetch('/api/importar-treino-ia', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ texto: textoIA })
+                body: JSON.stringify({ texto: textInput })
             });
 
             const data = await response.json();
