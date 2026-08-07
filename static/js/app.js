@@ -1205,6 +1205,11 @@ function removeExercise(bIndex, eIndex) {
 
             const data = await response.json();
             
+            // NOVO: Verifica se o backend Python relatou falha na API do Gemini
+            if (data.erro) {
+                throw new Error("Servidor Python: " + data.erro);
+            }
+            
             // MANOBRA DE SANITIZAÇÃO (Regex): 
             // Ignora conversas e formatações markdown, extraindo apenas o Array JSON bruto
             const jsonMatch = data.resultado.match(/\[[\s\S]*\]/);
@@ -1212,6 +1217,11 @@ function removeExercise(bIndex, eIndex) {
             if (!jsonMatch) throw new Error("A IA não retornou um formato de dados válido.");
             
             const exerciciosIA = JSON.parse(jsonMatch[0]);
+            
+            // NOVO: Impede a criação de um treino fantasma
+            if (exerciciosIA.length === 0) {
+                throw new Error("A IA não identificou nenhum exercício no texto.");
+            }
 
             // Tradução do JSON da IA para a arquitetura do motor (currentRoutine)
             const rotina = [{
