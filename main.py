@@ -138,7 +138,7 @@ async def importar_treino_ia(req: ImportarTreinoRequest):
     
     try:
         # gemini-1.5-flash possui a menor latência para extração de dados
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-2.5-flash")
         response = model.generate_content(prompt)
         # O front-end espera um objeto com a chave "resultado" para aplicar o Regex
         return {"resultado": response.text}
