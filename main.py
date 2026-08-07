@@ -7,11 +7,12 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from typing import List
 from dotenv import load_dotenv
-import google.generativeai as genai
+from google import genai
 
 # 1. Carrega as chaves do .env
 load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+# Inicialização do novo cliente oficial
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 # 2. Conecta no Supabase e cria as tabelas caso não existam
@@ -117,9 +118,11 @@ async def consultar_coach():
     """
 
     try:
-        # Lembrando de usar o modelo definido na etapa anterior (ex: gemma-4-31b-it ou o modelo atual válido)
-        model = genai.GenerativeModel("models/gemma-4-31b-it") 
-        response = model.generate_content(prompt)
+        # Nova sintaxe de chamada utilizando o cliente
+        response = client.models.generate_content(
+            model="gemma-4-31b-it",
+            contents=prompt
+        )
         return {"feedback": response.text}
     except Exception as e:
         return {"feedback": f"Erro na IA: {str(e)}"}
@@ -137,9 +140,11 @@ async def importar_treino_ia(req: ImportarTreinoRequest):
     """
     
     try:
-        # gemini-1.5-flash possui a menor latência para extração de dados
-        model = genai.GenerativeModel("gemini-2.5-flash")
-        response = model.generate_content(prompt)
+        # Atualizado para a nova versão Flash de alto desempenho
+        response = client.models.generate_content(
+            model="gemini-3.5-flash",
+            contents=prompt
+        )
         # O front-end espera um objeto com a chave "resultado" para aplicar o Regex
         return {"resultado": response.text}
     except Exception as e:
