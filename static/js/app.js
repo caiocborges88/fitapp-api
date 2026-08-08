@@ -572,25 +572,59 @@ function removeExercise(bIndex, eIndex) {
                     }
 
                     const row = document.createElement('div'); row.className = 'set-row';
-                    row.innerHTML = `<div class="set-label">S${s}</div><input type="number" class="kg-val" placeholder="Kg" value="${data.kg}"><input type="number" class="rp-val" placeholder="Reps" value="${data.reps}"><input type="checkbox" class="chk-set" ${data.checked ? 'checked' : ''}>`;
+                    
+                    // --- MANOBRA 1: BOTÃO DE ISOMETRIA INJETADO AO HTML ---
+                    row.innerHTML = `<div class="set-label">S${s}</div><input type="number" class="kg-val" placeholder="Kg" value="${data.kg}"><input type="number" class="rp-val" placeholder="Reps / s" value="${data.reps}"><button class="btn-iso" style="background:none; border:none; cursor:pointer; font-size:16px; padding:0 5px;" title="Iniciar Isometria">⏱️</button><input type="checkbox" class="chk-set" ${data.checked ? 'checked' : ''}>`;
                     
                     const chk = row.querySelector('.chk-set');
                     const kgInp = row.querySelector('.kg-val');
                     const rpInp = row.querySelector('.rp-val');
+                    const btnIso = row.querySelector('.btn-iso'); // Captura o novo botão
 
                     const updateState = () => {
                         ex.setsData[s-1] = { kg: kgInp.value, reps: rpInp.value, checked: chk.checked };
                         saveWorkoutState(); // Dispara o save automático
                     };
 
+                    // --- MANOBRA 2: LÓGICA DO CRONÔMETRO ATIVO ---
+                    let localIsoTimer = null;
+                    btnIso.addEventListener('click', () => {
+                        if (localIsoTimer) {
+                            // Pausa o relógio se já estiver rodando
+                            clearInterval(localIsoTimer);
+                            localIsoTimer = null;
+                            btnIso.textContent = '⏱️';
+                            btnIso.style.textShadow = 'none';
+                        } else {
+                            // Inicia a contagem em segundos direto na caixa de Repetições
+                            btnIso.textContent = '⏸️';
+                            btnIso.style.textShadow = '0 0 8px #00ff88';
+                            let currentSecs = parseInt(rpInp.value) || 0;
+                            localIsoTimer = setInterval(() => {
+                                currentSecs++;
+                                rpInp.value = currentSecs;
+                                updateState(); // Salva a cada segundo
+                            }, 1000);
+                        }
+                    });
+                    // --- FIM DA MANOBRA 2 ---
+
                     kgInp.addEventListener('input', updateState);
                     rpInp.addEventListener('input', updateState);
 
                     chk.addEventListener('change', () => {
+                        // --- MANOBRA 3: DESARMA O RELÓGIO AO MARCAR COMO CONCLUÍDO ---
+                        if (localIsoTimer) {
+                            clearInterval(localIsoTimer);
+                            localIsoTimer = null;
+                            btnIso.textContent = '⏱️';
+                            btnIso.style.textShadow = 'none';
+                        }
+                        // -------------------------------------------------------------
+                        
                         if (chk.checked) { 
                             checkedSets++; 
                             if(checkedSets < totalSets) startRestTimer();
-                            // Converte a entrada atual do usuário para o padrão matemático
                             let rawKgInput = String(kgInp.value || "0").replace(',', '.');
                             todayLog.push({ exercise: ex.name, set: s, kg: parseFloat(rawKgInput) || 0, reps: parseInt(rpInp.value) || 0 });
                         } else { 
