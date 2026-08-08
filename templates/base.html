@@ -17,7 +17,7 @@
     <div class="container" id="appContainer">
         <!-- INÍCIO DA TELA: TREINO -->
         <main id="tab-treino" class="tab-content active">
-            <div id="timerContainer" class="timer-container">
+            <<div id="timerContainer" class="timer-container">
                 <div id="timerDisplay" class="timer-display">01:00</div>
                 <div class="timer-controls">
                     <button class="time-btn active" data-time="60">60s</button>
@@ -26,35 +26,8 @@
                 </div>
             </div>
             
-            <!-- Terreno de Preparação para o Gráfico de Evolução -->
-            <div class="weekly-calendar" style="background: #1e1e1e; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #333; display: none;" id="metricsContainer">
-                <div style="font-size: 13px; font-weight: bold; color: #a64dff; margin-bottom: 10px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">Evolução de Cargas Máximas</div>
-                <!-- MANOBRA: Jaula de contenção de altura rígida e posição relativa para o Chart.js -->
-                <div style="position: relative; height: 250px; width: 100%;">
-                    <canvas id="metricsChart"></canvas>
-                </div>
-            </div>
-
-            <!-- Calendário Semanal -->
-            <div class="weekly-calendar" style="background: #1e1e1e; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #333;">
-                <div style="font-size: 13px; font-weight: bold; color: #aaa; margin-bottom: 15px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">Histórico da Semana</div>
-                <div id="weeklyGrid" style="display: flex; justify-content: space-between; align-items: center;">
-                    <!-- Renderizado via JavaScript -->
-                </div>
-            </div>
-
-            <!-- Painel de Estatísticas -->
+            <!-- Painel de Configurações (Isolado e Limpo) -->
             <div class="dashboard-header">
-                <div class="stats-panel">
-                    <div class="stat-box" onclick="FitApp.openHistoryModal()" style="cursor: pointer; border: 1px solid #00ff88; background: rgba(0, 255, 136, 0.05); transition: background 0.3s;">
-                        <span id="statTotal" class="stat-value">0</span>
-                        <span class="stat-label">Treinos Salvos 🔍</span>
-                    </div>
-                    <div class="stat-box">
-                        <span id="statLast" class="stat-value">-</span>
-                        <span class="stat-label">Último Treino</span>
-                    </div>
-                </div>
                 <div style="display: flex; gap: 10px;">
                     <select id="styleSelector" class="select-level" style="flex: 1;">
                         <option value="biset" selected>🔗 Modo Bi-set</option>
@@ -142,6 +115,35 @@
         
         <!-- INÍCIO DA TELA: ÁLBUM E COACH -->
         <main id="tab-calendario" class="tab-content">
+            
+            <!-- Painel de Estatísticas -->
+            <div class="stats-panel" style="margin-bottom: 20px;">
+                <div class="stat-box" onclick="FitApp.openHistoryModal()" style="cursor: pointer; border: 1px solid #00ff88; background: rgba(0, 255, 136, 0.05); transition: background 0.3s;">
+                    <span id="statTotal" class="stat-value">0</span>
+                    <span class="stat-label">Treinos Salvos 🔍</span>
+                </div>
+                <div class="stat-box">
+                    <span id="statLast" class="stat-value">-</span>
+                    <span class="stat-label">Último Treino</span>
+                </div>
+            </div>
+
+            <!-- Gráfico de Evolução -->
+            <div class="weekly-calendar" style="background: #1e1e1e; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #333; display: none;" id="metricsContainer">
+                <div style="font-size: 13px; font-weight: bold; color: #a64dff; margin-bottom: 10px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">Evolução de Cargas Máximas</div>
+                <div style="position: relative; height: 250px; width: 100%;">
+                    <canvas id="metricsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Calendário Semanal -->
+            <div class="weekly-calendar" style="background: #1e1e1e; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #333;">
+                <div style="font-size: 13px; font-weight: bold; color: #aaa; margin-bottom: 15px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">Histórico da Semana</div>
+                <div id="weeklyGrid" style="display: flex; justify-content: space-between; align-items: center;">
+                    <!-- Renderizado via JavaScript -->
+                </div>
+            </div>
+
             <div class="ai-panel">
                 <div class="ai-header">🤖 Coach de IA Generativa</div>
                 <p style="font-size: 0.85em; color: #a0a0a0; margin-bottom:10px;">Analise seu rendimento e progresso de cargas.</p>
