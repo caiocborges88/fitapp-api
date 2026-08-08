@@ -16,6 +16,19 @@ const FitApp = (() => {
     const safeSet = (k, v) => { try { localStorage.setItem(k, v); return true; } catch(e) { return false; } };
     const safeGet = (k) => { try { return localStorage.getItem(k); } catch(e) { return null; } };
 
+    // ESCUDO ANTI-XSS: Neutraliza scripts maliciosos injetados via texto
+    const escapeHTML = (str) => {
+        return str.replace(/[&<>'"]/g, 
+            tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag] || tag)
+        );
+    };
+
     function showToast(msg) { els.toast.textContent = msg; els.toast.classList.add('show'); setTimeout(() => els.toast.classList.remove('show'), 3000); }
     function speak(text) { if (!audioEnabled || !('speechSynthesis' in window)) return; window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'pt-BR'; utterance.rate = 1.1; window.speechSynthesis.speak(utterance); }
     function toggleAudio() { audioEnabled = !audioEnabled; const btn = document.getElementById('btnAudio'); if (audioEnabled) { btn.classList.add('active'); btn.innerHTML = '🔊 <span>Áudio On</span>'; speak("Assistente ativado."); } else { btn.classList.remove('active'); btn.innerHTML = '🔈 <span>Áudio Off</span>'; window.speechSynthesis.cancel(); } }
@@ -947,7 +960,7 @@ function removeExercise(bIndex, eIndex) {
             
             div.innerHTML = `
                 <div style="flex: 1;" onclick="FitApp.startWorkout('custom_${workout.id}')">
-                    <h3 style="margin: 0; color: #fff; font-size: 16px;">${workout.name}</h3>
+                    <h3 style="margin: 0; color: #fff; font-size: 16px;">${escapeHTML(workout.name)}</h3>
                     <p style="margin: 0; color: #aaa; font-size: 12px; margin-top: 5px;">${workout.routine[0].exercises.length} exercícios estruturados</p>
                 </div>
                 <button onclick="FitApp.deleteCustomWorkout(${workout.id}, event)" style="background: none; border: none; color: #ff4444; font-size: 18px; cursor: pointer; padding: 5px; margin-left: 10px;" title="Excluir">🗑️</button>
