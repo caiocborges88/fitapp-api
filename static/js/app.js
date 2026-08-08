@@ -626,6 +626,13 @@ function removeExercise(bIndex, eIndex) {
 
         let weekLog = JSON.parse(safeGet('fitapp_week_log') || '[]');
         weekLog.push(payload);
+
+        // --- INÍCIO DA MANOBRA: TRAVA DE MEMÓRIA (MÁX 100 TREINOS LOCAIS) ---
+        if (weekLog.length > 100) {
+            weekLog = weekLog.slice(-100); // Fica apenas com as 100 entradas mais recentes
+        }
+        // --- FIM DA MANOBRA ---
+
         safeSet('fitapp_week_log', JSON.stringify(weekLog));
 
         clearWorkoutState(); // <-- Limpa a memória de treino ativo
