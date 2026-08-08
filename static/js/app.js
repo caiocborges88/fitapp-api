@@ -944,13 +944,27 @@ function removeExercise(bIndex, eIndex) {
             header.style.borderBottom = '1px solid #333';
             header.style.paddingBottom = '5px';
             header.style.textTransform = 'uppercase';
-            header.textContent = title;
+            
+            // --- INÍCIO DA MANOBRA: CABEÇALHO RETRÁTIL ---
+            header.style.cursor = 'pointer';
+            header.style.display = 'flex';
+            header.style.justifyContent = 'space-between';
+            header.style.alignItems = 'center';
+            header.innerHTML = `<span>${title}</span><span style="font-size: 14px; color: #888; transition: transform 0.3s;">▼</span>`;
             categorySection.appendChild(header);
 
             const cardContainer = document.createElement('div');
             cardContainer.className = 'library-card-container';
-            cardContainer.style.display = 'grid';
+            cardContainer.style.display = 'grid'; // Inicia aberto
             cardContainer.style.gap = '15px';
+            
+            // Lógica de clique para ocultar/mostrar
+            header.onclick = () => {
+                const isVisible = cardContainer.style.display === 'grid';
+                cardContainer.style.display = isVisible ? 'none' : 'grid';
+                header.querySelector('span:last-child').style.transform = isVisible ? 'rotate(-90deg)' : 'rotate(0deg)';
+            };
+            // --- FIM DA MANOBRA ---
 
             groups[key].forEach(item => {
                 const card = document.createElement('div');
@@ -979,6 +993,15 @@ function removeExercise(bIndex, eIndex) {
         sections.forEach(section => {
             const visibleCards = Array.from(section.querySelectorAll('.library-card')).filter(c => c.style.display === 'block');
             section.style.display = visibleCards.length > 0 ? 'block' : 'none';
+            
+            // --- INÍCIO DA MANOBRA: ABERTURA AUTOMÁTICA NA BUSCA ---
+            if (query !== '' && visibleCards.length > 0) {
+                const container = section.querySelector('.library-card-container');
+                const arrow = section.querySelector('h3 span:last-child');
+                if (container) container.style.display = 'grid';
+                if (arrow) arrow.style.transform = 'rotate(0deg)';
+            }
+            // --- FIM DA MANOBRA ---
         });
     }
 
