@@ -164,6 +164,7 @@ const FitApp = (() => {
         // Verifica se atualiza as caixas de execução ou a lista de preparação
         if (isWorkoutActive) {
             renderCurrentRoutine(); 
+            saveWorkoutState(); // <-- MANOBRA: Força a gravação imediata no Autosave
         } else {
             renderPreviewList();
         }
@@ -214,7 +215,8 @@ function renderWeeklyCalendar() {
             let dayName = d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '');
             dayName = dayName.substring(0, 3);
             
-            const workedOut = history.find(h => h.date === localISOTime);
+            // --- MANOBRA: INVERTE A BUSCA PARA PEGAR SEMPRE O ÚLTIMO TREINO DO DIA ---
+            const workedOut = history.slice().reverse().find(h => h.date === localISOTime);
             
             const dayEl = document.createElement('div');
             dayEl.style.display = 'flex';
