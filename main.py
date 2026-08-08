@@ -80,28 +80,42 @@ async def read_root(request: Request):
 
 @app.post("/api/salvar-treino")
 async def salvar_treino(treino: TreinoLog):
-    conn = psycopg2.connect(DATABASE_URL)
-    cursor = conn.cursor()
-    for item in treino.data:
-        # PostgreSQL usa %s em vez de ?
-        cursor.execute('''
-            INSERT INTO treinos (data_treino, treino_tipo, exercicio, serie, peso, reps)
-            VALUES (%s, %s, %s, %s, %s, %s)
-        ''', (treino.date, treino.tipo, item.exercise, item.set, item.kg, item.reps))
-    conn.commit()
-    cursor.close()
-    conn.close()
-    return {"status": "sucesso", "mensagem": f"Treino {treino.tipo} salvo com segurança nas nuvens!"}
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cursor = conn.cursor()
+        for item in treino.data:
+            # PostgreSQL usa %s em vez de ?
+            cursor.execute('''
+                INSERT INTO treinos (data_treino, treino_tipo, exercicio, serie, peso, reps)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            ''', (treino.date, treino.tipo, item.exercise, item.set, item.kg, item.reps))
+        conn.commit()
+        return {"status": "sucesso", "mensagem": f"Treino {treino.tipo} salvo com segurança nas nuvens!"}
+    except Exception as e:
+        if conn:
+            conn.rollback() # Cancela a operação se der erro na metade
+        return {"status": "erro", "mensagem": str(e)}
+    finally:
+        if conn:
+            cursor.close()
+            conn.close() # Garante o fechamento da conexão
 
 @app.get("/api/coach")
 async def consultar_coach():
-    conn = psycopg2.connect(DATABASE_URL)
-    cursor = conn.cursor()
-    # Busca os últimos 20 registros
-    cursor.execute("SELECT data_treino, treino_tipo, exercicio, serie, peso, reps FROM treinos ORDER BY id DESC LIMIT 20")
-    registros = cursor.fetchall()
-    cursor.close()
-    conn.close()
+    conn = None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cursor = conn.cursor()
+        # Busca os últimos 20 registros
+        cursor.execute("SELECT data_treino, treino_tipo, exercicio, serie, peso, reps FROM treinos ORDER BY id DESC LIMIT 20")
+        registros = cursor.fetchall()
+    except Exception as e:
+        return {"feedback": f"Erro ao acessar o banco: {str(e)}"}
+    finally:
+        if conn:
+            cursor.close()
+            conn.close() # Garante o fechamento da conexão
 
     if not registros:
         return {"feedback": "Banco de dados em nuvem vazio. Salve um treino primeiro, capitão!"}
@@ -118,9 +132,9 @@ async def consultar_coach():
     """
 
     try:
-        # Nova sintaxe de chamada utilizando o cliente
+        # Padronizado para o modelo único da aplicação
         response = client.models.generate_content(
-            model="gemma-4-31b-it",
+            model="gemini-3.5-flash",
             contents=prompt
         )
         return {"feedback": response.text}
@@ -162,8 +176,12 @@ async def importar_treino_ia(req: ImportarTreinoRequest):
             model="gemini-3.5-flash",
             contents=prompt
         )
-        # O front-end espera um objeto com a chave "resultado" para aplicar o Regex
-        return {"resultado": response.text}
+        
+        # Filtro de higienização: remove aspas crases de formatação Markdown caso a IA desobedeça
+        texto_limpo = response.text.replace("```json", "").replace("```", "").strip()
+        
+        # O front-end espera um objeto com a chave "resultado"
+        return {"resultado": texto_limpo}
     except Exception as e:
         print(f"Erro na extração IA: {e}")
         return {"resultado": "[]", "erro": str(e)}
