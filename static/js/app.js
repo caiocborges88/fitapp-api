@@ -22,17 +22,42 @@ const FitApp = (() => {
 
     function startRestTimer() {
         const containerEl = document.getElementById('timerContainer'), displayEl = document.getElementById('timerDisplay');
-        containerEl.style.display = 'block'; clearInterval(restTimer); let timeLeft = currentRestTime;
-        speak(`Descanso. ${timeLeft} segundos.`);
+        containerEl.style.display = 'block'; 
+        clearInterval(restTimer); 
         
-        const updateUI = () => { let m = Math.floor(timeLeft/60).toString().padStart(2,'0'), s = (timeLeft%60).toString().padStart(2,'0'); displayEl.textContent = `${m}:${s}`; };
-        updateUI();
+        let duration = currentRestTime;
+        const endTime = Date.now() + (duration * 1000); // Marca o alvo no tempo real
+        let alertGiven = false; // Trava para o áudio de 10s não engasgar
+
+        speak(`Descanso. ${duration} segundos.`);
+        
+        const updateUI = (timeToFormat) => { 
+            let m = Math.floor(timeToFormat/60).toString().padStart(2,'0');
+            let s = (timeToFormat%60).toString().padStart(2,'0'); 
+            displayEl.textContent = `${m}:${s}`; 
+        };
+        
+        updateUI(duration);
 
         restTimer = setInterval(() => {
-            timeLeft--; updateUI();
-            if (timeLeft === 10) speak("Dez segundos.");
-            if (timeLeft <= 0) { clearInterval(restTimer); containerEl.style.display = 'none'; speak("Fim do descanso."); }
-        }, 1000);
+            // Calcula a diferença entre o relógio do celular AGORA e o alvo
+            let timeLeft = Math.ceil((endTime - Date.now()) / 1000);
+            
+            if (timeLeft < 0) timeLeft = 0;
+            
+            updateUI(timeLeft);
+            
+            if (timeLeft <= 10 && !alertGiven) {
+                speak("Dez segundos.");
+                alertGiven = true;
+            }
+
+            if (timeLeft <= 0) { 
+                clearInterval(restTimer); 
+                containerEl.style.display = 'none'; 
+                speak("Fim do descanso."); 
+            }
+        }, 1000); 
     }
     function stopRestTimer() { clearInterval(restTimer); document.getElementById('timerContainer').style.display = 'none'; }
 
@@ -632,7 +657,7 @@ function removeExercise(bIndex, eIndex) {
         revealArea.style.flexDirection = 'column';
         
         let savedCollection = JSON.parse(safeGet('fitapp_album') || '[]');
-        let repetidas = parseInt(safeGet('fitapp_repetidas') || '0');
+        let repetidas = parseInt(safeGet('fitapp_repetidas') || '0') || 0; // O "|| 0" blinda contra o vírus 'NaN'
         
         const roll = Math.random(); 
         let pool = stickersDB.filter(s => s.rarity === 'comum');
@@ -689,7 +714,7 @@ function removeExercise(bIndex, eIndex) {
         grid.innerHTML = '';
         
         let savedCollection = JSON.parse(safeGet('fitapp_album') || '[]');
-        let repetidas = parseInt(safeGet('fitapp_repetidas') || '0');
+        let repetidas = parseInt(safeGet('fitapp_repetidas') || '0') || 0; // O "|| 0" blinda contra o vírus 'NaN'
         
         const progressEl = document.getElementById('albumProgress');
         if (progressEl) progressEl.textContent = `${savedCollection.length} / ${stickersDB.length} Conquistas`;
@@ -780,7 +805,7 @@ function removeExercise(bIndex, eIndex) {
     // Função Executora da Forja
     function craftSticker() {
         let savedCollection = JSON.parse(safeGet('fitapp_album') || '[]');
-        let repetidas = parseInt(safeGet('fitapp_repetidas') || '0');
+        let repetidas = parseInt(safeGet('fitapp_repetidas') || '0') || 0; // O "|| 0" blinda contra o vírus 'NaN'
         
         if (repetidas < 3) return;
         
