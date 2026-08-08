@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FitApp - Diário de Treinos</title>
+    
+    <!-- MANOBRA PWA: Manifesto e Cores do Sistema -->
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#121212">
+    <link rel="apple-touch-icon" href="/static/icon-192.png">
+
     <!-- Chamando o CSS -->
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
@@ -276,5 +282,16 @@
     <!-- Chamando o JavaScript -->
     <script src="/static/js/dados.js"></script>
     <script src="/static/js/app.js"></script>
+
+    <!-- MANOBRA PWA: Registro do Motor Offline -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then(reg => console.log('Base segura: Service Worker ativado.', reg))
+                    .catch(err => console.error('Falha no motor offline:', err));
+            });
+        }
+    </script>
 </body>
 </html>
