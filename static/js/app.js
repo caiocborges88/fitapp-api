@@ -603,7 +603,12 @@ function removeExercise(bIndex, eIndex) {
     async function finishWorkout() {
         const isComplete = checkedSets === totalSets;
         const tipoTreino = currentWorkoutType; 
-        const dataHoje = new Date().toISOString().split('T')[0];
+        
+        // --- INÍCIO DA MANOBRA: CORREÇÃO DO FUSO HORÁRIO ---
+        const d = new Date();
+        const offset = d.getTimezoneOffset() * 60000;
+        const dataHoje = (new Date(d.getTime() - offset)).toISOString().split('T')[0];
+        // --- FIM DA MANOBRA ---
         
         let totalTimeSecs = 0;
         if (workoutStartTime) {
