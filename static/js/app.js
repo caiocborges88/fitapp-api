@@ -96,7 +96,15 @@ const FitApp = (() => {
         const style = els.styleSelector ? els.styleSelector.value : 'biset';
         const level = els.levelSelector ? els.levelSelector.value : 'intermediario';
         const type = currentWorkoutType;
-        const originalName = dbWorkouts[style][level][type][bIndex].exercises[eIndex].name;
+        
+        // --- INÍCIO DA MANOBRA: PREVENÇÃO DE CRASH EM TREINOS CUSTOMIZADOS ---
+        let originalName = currentName; 
+        const isStandardWorkout = !type.startsWith('custom_') && type !== 'Livre' && type !== 'Casa' && type !== 'novo_customizado';
+        
+        if (isStandardWorkout && typeof dbWorkouts !== 'undefined') {
+            originalName = dbWorkouts[style][level][type][bIndex].exercises[eIndex].name;
+        }
+        // --- FIM DA MANOBRA ---
 
         let modal = document.getElementById('swapModal');
         if (!modal) {
