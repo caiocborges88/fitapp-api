@@ -1109,7 +1109,7 @@ function removeExercise(bIndex, eIndex) {
         document.getElementById(tabId).classList.add('active'); document.getElementById(navId).classList.add('active');
         
         if (tabId === 'tab-calendario') renderAlbum();
-        if (tabId === 'tab-biblioteca') renderLibrary(); 
+        if (tabId === 'tab-biblioteca') filterLibrary(); // <-- Trocamos renderLibrary por filterLibrary
         if (tabId === 'tab-treino') {
             if (!currentWorkoutType) {
                 document.getElementById('workoutCards').style.display = 'flex';
