@@ -1431,18 +1431,21 @@ function carregarProximoTreinoIA() {
     // --- INÍCIO DA MANOBRA: SISTEMA HÍBRIDO (ADAPTAÇÃO PARA CASA) ---
     function adaptWorkoutToHome() {
         let changed = 0;
+        let usedSubstitutes = []; // Memória tática: impede a repetição de exercícios
         
-        // MANOBRA: Analisador léxico para garantir a substituição independentemente da especificidade do foco
+        // Remove acentos para não dar conflito (ex: Bíceps vs biceps)
+        const removeAccents = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        
         const getBroadGroup = (focusString) => {
             if (!focusString) return 'geral';
-            const f = focusString.toLowerCase();
+            const f = removeAccents(focusString);
             if (f.includes('peito')) return 'peito';
-            if (f.includes('costas') || f.includes('dorsal') || f.includes('lombar')) return 'costas';
-            if (f.includes('perna') || f.includes('quadríceps') || f.includes('glúteo') || f.includes('posterior') || f.includes('panturrilha') || f.includes('adutor') || f.includes('abdutor') || f.includes('coxa')) return 'pernas';
-            if (f.includes('ombro') || f.includes('deltóide') || f.includes('trapézio')) return 'ombro';
-            if (f.includes('tríceps')) return 'triceps';
-            if (f.includes('bíceps') || f.includes('antebraço')) return 'biceps';
-            if (f.includes('core') || f.includes('abdom') || f.includes('oblíquo')) return 'core';
+            if (f.includes('costa') || f.includes('dorsal') || f.includes('lombar')) return 'costas';
+            if (f.includes('perna') || f.includes('quadriceps') || f.includes('gluteo') || f.includes('posterior') || f.includes('panturrilha') || f.includes('adutor') || f.includes('abdutor') || f.includes('coxa')) return 'pernas';
+            if (f.includes('ombro') || f.includes('deltoide') || f.includes('trapezio')) return 'ombro';
+            if (f.includes('triceps')) return 'triceps';
+            if (f.includes('biceps') || f.includes('antebraco')) return 'biceps';
+            if (f.includes('core') || f.includes('abdom') || f.includes('obliquo')) return 'core';
             return 'geral';
         };
         
@@ -1450,16 +1453,26 @@ function carregarProximoTreinoIA() {
             bloco.exercises.forEach(ex => {
                 const dictItem = dictionaryData.find(d => d.name === ex.name);
                 
-                // Se o exercício existir na base e exigir academia
-                if (dictItem && dictItem.ambiente !== 'casa') {
+                // Se não for peso corporal, a adaptação é acionada
+                if (dictItem && dictItem.equip !== 'peso_corporal') {
                     const targetGroup = getBroadGroup(dictItem.focus);
                     
-                    // Procura substitutos do mesmo grupo muscular que sejam de 'casa'
-                    const pool = dictionaryData.filter(d => getBroadGroup(d.focus) === targetGroup && d.ambiente === 'casa');
+                    // Procura substitutos do mesmo grupo que sejam APENAS peso corporal e ainda não usados
+                    let pool = dictionaryData.filter(d => 
+                        getBroadGroup(d.focus) === targetGroup && 
+                        d.equip === 'peso_corporal' &&
+                        !usedSubstitutes.includes(d.name)
+                    );
+                    
+                    // Se o arsenal de peso corporal daquele músculo esgotou, remove o filtro de repetidos para não quebrar a rotina
+                    if (pool.length === 0) {
+                        pool = dictionaryData.filter(d => getBroadGroup(d.focus) === targetGroup && d.equip === 'peso_corporal');
+                    }
                     
                     if (pool.length > 0) {
-                        const newEx = pool[Math.floor(Math.random() * pool.length)]; // Sorteia uma variação
+                        const newEx = pool[Math.floor(Math.random() * pool.length)];
                         ex.name = newEx.name;
+                        usedSubstitutes.push(newEx.name); // Salva na memória
                         changed++;
                     }
                 }
@@ -1467,7 +1480,6 @@ function carregarProximoTreinoIA() {
         });
         
         if (changed > 0) {
-            // Transforma o treino em "Livre" para permitir que você o salve
             if (currentWorkoutType !== 'Livre' && !currentWorkoutType.startsWith('custom_')) {
                 currentWorkoutType = 'Livre';
                 const customControls = document.getElementById('customWorkoutControls');
@@ -1476,17 +1488,17 @@ function carregarProximoTreinoIA() {
                 
                 if(customControls) customControls.style.display = 'flex';
                 if(nameContainer) nameContainer.style.display = 'block';
-                if(nameInput) nameInput.value = "Treino Adaptado (Casa)";
+                if(nameInput) nameInput.value = "Treino Adaptado (Sem Equipamentos)";
             }
             
             document.getElementById('previewTitle').textContent = `🏠 Adaptação Concluída`;
             document.getElementById('previewDesc').textContent = `${changed} exercícios alterados para peso corporal e improvisação.`;
             renderPreviewList();
             
-            if(audioEnabled) speak("Treino adaptado para ambiente doméstico.");
+            if(audioEnabled) speak("Treino adaptado para ambiente sem equipamentos.");
             showToast("Adaptação tática aplicada!");
         } else {
-            showToast("Este treino já está adaptado para casa.");
+            showToast("Este treino já é totalmente focado em peso corporal.");
         }
     }
     // --- FIM DA MANOBRA ---
