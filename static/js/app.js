@@ -1,6 +1,6 @@
 'use strict';
 
-const FitApp = (() => {
+var FitApp = (() => {
     let totalSets = 0, checkedSets = 0, audioEnabled = false, restTimer = null, currentRestTime = 60;
     let todayLog = [];
     let currentRoutine = []; 

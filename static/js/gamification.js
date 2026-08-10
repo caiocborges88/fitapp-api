@@ -1,6 +1,6 @@
 'use strict';
 
-const FitGamification = (() => {
+var FitGamification = (() => {
     let currentAlbumPage = 1;
 
     function showPackModal() { 

@@ -1,7 +1,7 @@
 // static/js/api.js
 'use strict';
 
-const FitAPI = (() => {
+var FitAPI = (() => {
     const BASE_URL = '/api';
 
     // Interceptador global de respostas
