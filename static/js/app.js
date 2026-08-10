@@ -301,54 +301,55 @@ function saveWorkoutState() {
         localStorage.removeItem('fitapp_active_state');
     }
 
+    // --- INÍCIO DA MANOBRA: LISTA DE PRÉVIA COM INTEGRAÇÃO YOUTUBE ---
     function renderPreviewList() {
-        const listEl = document.getElementById('previewList');
-        const btnStart = document.getElementById('btnStartWorkout');
-        if (!listEl) return;
-        listEl.innerHTML = '';
+        const list = document.getElementById('previewList');
+        if (!list) return;
+        list.innerHTML = '';
         
-        let totalExercises = 0;
-
         currentRoutine.forEach((bloco, bIndex) => {
-            const blockDiv = document.createElement('div');
-            blockDiv.style.marginBottom = '12px';
-            blockDiv.style.textAlign = 'left';
-            
-            if (currentWorkoutType !== 'Livre') {
-                blockDiv.innerHTML = `<div style="color: #4da3ff; font-weight: bold; font-size: 13px; margin-bottom: 5px;">${bloco.title}</div>`;
-            }
-            
+            const blockTitle = document.createElement('h4');
+            blockTitle.style.color = '#a64dff';
+            blockTitle.style.marginTop = '15px';
+            blockTitle.style.marginBottom = '10px';
+            blockTitle.style.borderBottom = '1px solid #333';
+            blockTitle.style.paddingBottom = '5px';
+            blockTitle.textContent = bloco.title;
+            list.appendChild(blockTitle);
+
             bloco.exercises.forEach((ex, eIndex) => {
-                totalExercises++;
-                const row = document.createElement('div');
-                row.style.display = 'flex';
-                row.style.justifyContent = 'space-between';
-                row.style.alignItems = 'center';
-                row.style.background = '#1e1e1e';
-                row.style.padding = '8px 10px';
-                row.style.borderRadius = '6px';
-                row.style.marginBottom = '4px';
-                
-                row.innerHTML = `
-                    <div style="font-size: 14px; color: #fff; line-height: 1.2;">${ex.name}</div>
-                    <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
-                        <span style="font-size: 12px; color: #aaa; background: #111; padding: 2px 6px; border-radius: 4px; white-space: nowrap;">${ex.sets}x ${ex.target}</span>
-                        <button class="btn-swap" onclick="FitApp.openSwapModal(${bIndex}, ${eIndex})" title="Substituir" style="font-size: 14px; padding: 4px;">🔄</button>
-                        <button class="btn-swap" onclick="FitApp.removeExercise(${bIndex}, ${eIndex})" title="Remover" style="font-size: 14px; padding: 4px; color: #ff4444;">❌</button>
+                const item = document.createElement('div');
+                item.style.display = 'flex';
+                item.style.justifyContent = 'space-between';
+                item.style.alignItems = 'center';
+                item.style.background = '#1e1e1e';
+                item.style.padding = '12px';
+                item.style.marginBottom = '8px';
+                item.style.borderRadius = '6px';
+                item.style.border = '1px solid #333';
+
+                // O Motor de Busca Automática no YouTube
+                const ytQuery = encodeURIComponent(`Como executar o exercício ${ex.name}`);
+                const ytLink = `https://www.youtube.com/results?search_query=${ytQuery}`;
+
+                item.innerHTML = `
+                    <div style="flex: 1;">
+                        <div style="font-weight: bold; color: #fff; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                            ${ex.name}
+                            <a href="${ytLink}" target="_blank" title="Ver execução no YouTube" style="text-decoration: none; font-size: 16px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">🎥</a>
+                        </div>
+                        <div style="font-size: 12px; color: #00ff88; margin-top: 4px; font-weight: bold;">${ex.sets}x ${ex.target}</div>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="FitApp.openSwapModal(${bIndex}, ${eIndex})" style="background: #333; border: none; color: #fff; padding: 6px 10px; border-radius: 4px; cursor: pointer;">🔄</button>
+                        <button onclick="FitApp.removeExercise(${bIndex}, ${eIndex})" style="background: #333; border: none; color: #ff4d4d; padding: 6px 10px; border-radius: 4px; cursor: pointer;">❌</button>
                     </div>
                 `;
-                blockDiv.appendChild(row);
+                list.appendChild(item);
             });
-            listEl.appendChild(blockDiv);
         });
-
-        if (totalExercises === 0) {
-            listEl.innerHTML = `<div style="text-align: center; color: #666; padding: 20px; font-size: 13px;">Nenhum exercício adicionado.<br><br>Que tal iniciar puxando um Peck Deck na Polia ou uma Variação de Mesa Flexora da biblioteca?</div>`;
-            if(btnStart) { btnStart.style.opacity = '0.3'; btnStart.style.pointerEvents = 'none'; }
-        } else {
-            if(btnStart) { btnStart.style.opacity = '1'; btnStart.style.pointerEvents = 'auto'; }
-        }
     }
+    // --- FIM DA MANOBRA ---
 function removeExercise(bIndex, eIndex) {
         currentRoutine[bIndex].exercises.splice(eIndex, 1);
         renderPreviewList();
