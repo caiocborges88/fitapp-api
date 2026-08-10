@@ -256,23 +256,36 @@
     <div id="importAiModal" class="swap-modal-overlay">
         <div class="swap-modal-content" style="display: flex; flex-direction: column; width: 95%; max-width: 500px;">
             <div class="swap-modal-header">
-                <h3 style="color: #00ff88;">🤖 Importar Treino (IA)</h3>
+                <h3 style="color: #00ff88;">🤖 Inteligência Artificial</h3>
                 <button class="btn-close-modal" onclick="document.getElementById('importAiModal').style.display='none'" style="display: block;">&times;</button>
             </div>
             
-            <p style="font-size: 13px; color: #aaa; margin-bottom: 15px;">Cole a mensagem do WhatsApp (ou texto livre) com o treino passado pelo seu personal. O Gemini fará o resto.</p>
+            <p style="font-size: 13px; color: #aaa; margin-bottom: 15px;">Defina os dias para a IA montar sua rotina <strong>OU</strong> apenas cole o texto do WhatsApp enviado pelo seu personal.</p>
             
-            <div style="display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none;">
-                <button onclick="document.getElementById('aiWorkoutName').value='Casa (IA)'; document.getElementById('aiWorkoutText').value='Monte um treino em casa para o corpo todo, apenas com peso do corpo.';" style="background: #2a2a2a; border: 1px solid #00ff88; color: #00ff88; padding: 6px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; white-space: nowrap;">🏠 Sugerir Treino em Casa</button>
-                <button onclick="document.getElementById('aiWorkoutName').value='Mobilidade (IA)'; document.getElementById('aiWorkoutText').value='Monte uma rotina de alongamento e mobilidade de 10 minutos.';" style="background: #2a2a2a; border: 1px solid #a64dff; color: #a64dff; padding: 6px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; white-space: nowrap;">🧘 Mobilidade</button>
+            <!-- MANOBRA: Novos Seletores de Geração Dinâmica -->
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <select id="aiDays" class="select-level" style="flex: 1; border-color: #00ff88;">
+                    <option value="1">1 Dia Único</option>
+                    <option value="2">2 Dias (Fullbody)</option>
+                    <option value="3" selected>3 Dias (ABC)</option>
+                    <option value="4">4 Dias (ABCD)</option>
+                    <option value="5">5 Dias (ABCDE)</option>
+                </select>
+                
+                <select id="aiEnv" class="select-level" style="flex: 1; border-color: #00ff88;">
+                    <option value="academia" selected>🏋️ Academia</option>
+                    <option value="peso_corporal">🏠 Só Peso Corporal</option>
+                    <option value="calistenia">🏖️ Praça/Calistenia</option>
+                </select>
             </div>
 
-            <input type="text" id="aiWorkoutName" placeholder="Nomeie este treino (Ex: Peito e Tríceps)" style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 15px; font-size: 14px;">
+            <!-- Mantém a área de texto original para importação manual -->
+            <input type="text" id="aiWorkoutName" placeholder="Nome do Treino (Opcional se for de 2+ dias)" style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 10px; font-size: 14px;">
             
-            <textarea id="aiWorkoutText" rows="6" placeholder="Cole o texto aqui..." style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 15px; font-size: 14px; resize: vertical;"></textarea>
+            <textarea id="aiWorkoutText" rows="4" placeholder="[OPCIONAL] Se quiser colar um treino do WhatsApp, cole aqui. Se deixar em branco, a IA montará uma rotina nova para você." style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 15px; font-size: 14px; resize: vertical;"></textarea>
             
-            <button id="btnProcessAi" class="btn-action" onclick="FitApp.processWorkoutWithAI()" style="background: #00ff88; color: #000; font-weight: bold; margin-bottom: 10px;">⚡ Processar com Gemini</button>
-            <div id="aiImportLoader" class="loader" style="color: #00ff88; display: none;">Analisando com IA...</div>
+            <button id="btnProcessAi" class="btn-action" onclick="FitApp.processWorkoutWithAI()" style="background: #00ff88; color: #000; font-weight: bold; margin-bottom: 10px;">⚡ Processar Comando IA</button>
+            <div id="aiImportLoader" class="loader" style="color: #00ff88; display: none;">O Gemini está processando...</div>
         </div>
     </div>
 

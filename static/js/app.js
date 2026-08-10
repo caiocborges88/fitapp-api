@@ -1322,58 +1322,102 @@ function removeExercise(bIndex, eIndex) {
         if (textInput) textInput.value = '';
     }
 
+    // --- INÍCIO DA MANOBRA: CÉREBRO DO GERADOR/IMPORTADOR IA ---
     async function processWorkoutWithAI() {
-        const nameInput = document.getElementById('aiWorkoutName').value.trim();
-        const textInput = document.getElementById('aiWorkoutText').value.trim();
+        const days = document.getElementById('aiDays').value;
+        const env = document.getElementById('aiEnv').value;
+        const workoutName = document.getElementById('aiWorkoutName').value || `Rotina IA (${days} Dias)`;
+        const pastedText = document.getElementById('aiWorkoutText').value.trim();
         
-        if (!nameInput || !textInput) {
-            showToast("Alerta: Preencha o nome e cole o texto do treino.");
-            return;
-        }
-
-        const btn = document.getElementById('btnProcessAi');
         const loader = document.getElementById('aiImportLoader');
+        const btn = document.getElementById('btnProcessAi');
         
-        btn.style.display = 'none';
         loader.style.display = 'block';
+        btn.disabled = true;
+        
+        let megaPrompt = "";
+
+        if (pastedText !== "") {
+            // Rota 1: O usuário colou um treino do WhatsApp (Importação Clássica)
+            megaPrompt = `
+            O usuário quer importar este treino:
+            "${pastedText}"
+            
+            Se for apenas um dia de treino, chame-o de "${workoutName}".
+            Retorne APENAS um JSON válido.
+            `;
+        } else {
+            // Rota 2: O usuário deixou em branco (Geração Dinâmica)
+            // Coleta apenas os exercícios permitidos para o ambiente escolhido
+            const allowedExercises = dictionaryData.filter(d => {
+                if (env === 'academia') return true; 
+                if (env === 'calistenia') return d.equip === 'peso_corporal' || d.equip === 'calistenia';
+                return d.equip === 'peso_corporal';
+            }).map(d => d.name).join(", ");
+            
+            megaPrompt = `
+            Crie uma rotina de treino de ${days} dias. 
+            REGRA ABSOLUTA: Você SÓ PODE usar os exercícios exatos desta lista abaixo. Não invente nenhum outro nome.
+            LISTA PERMITIDA: [${allowedExercises}].
+            
+            Para cada dia, escolha de 5 a 6 exercícios coerentes com o grupamento muscular do dia.
+            Defina séries lógicas (ex: 3 ou 4) e repetições de hipertrofia (ex: 8-12).
+            Retorne APENAS o JSON válido.
+            `;
+        }
 
         try {
-            const response = await fetch('/api/importar-treino-ia', {
+            const res = await fetch('/api/importar-treino-ia', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ texto: textInput })
+                body: JSON.stringify({ texto: megaPrompt })
             });
-
-            const data = await response.json();
+            const data = await res.json();
             
-            if (data.erro) {
-                throw new Error("Servidor Python: " + data.erro);
-            }
-            
-            const jsonMatch = data.resultado.match(/\[[\s\S]*\]/);
-            if (!jsonMatch) throw new Error("A IA não retornou um formato de dados válido.");
-            
-            const parsedData = JSON.parse(jsonMatch[0]);
-            if (parsedData.length === 0) throw new Error("A IA não identificou nenhum exercício.");
-
-            // Verifica se é a nova estrutura de múltiplos treinos (Periodização)
-            if (parsedData[0].nome_treino && parsedData[0].exercicios) {
-                filaDeTreinosIA = parsedData; // Coloca todos na fila
-                document.getElementById('importAiModal').style.display = 'none'; // ID corrigido
-                carregarProximoTreinoIA(); // Inicia o carrossel
+            if (data.resultado && data.resultado !== "[]") {
+                const parsed = JSON.parse(data.resultado);
+                currentWorkoutType = 'custom_ia'; // Trava como customizado
+                
+                // Salva a rotina gerada na memória da interface
+                currentRoutine = parsed.map((dia, index) => {
+                    const idLetra = String.fromCharCode(65 + index); // A, B, C...
+                    return {
+                        title: pastedText === "" && days > 1 ? `Treino ${idLetra} - ${dia.nome_treino}` : dia.nome_treino,
+                        exercises: dia.exercicios.map(ex => ({ name: ex.nome, sets: parseInt(ex.series) || 4, target: ex.repeticoes || "10-12 rep" }))
+                    };
+                });
+                
+                document.getElementById('importAiModal').style.display = 'none';
+                
+                // Exibe controles de salvamento na tela de preparação
+                const customControls = document.getElementById('customWorkoutControls');
+                const nameContainer = document.getElementById('customWorkoutNameContainer');
+                const nameInput = document.getElementById('customWorkoutName');
+                
+                if(customControls) customControls.style.display = 'flex';
+                if(nameContainer) nameContainer.style.display = 'block';
+                if(nameInput) nameInput.value = workoutName;
+                
+                document.getElementById('previewTitle').textContent = pastedText ? `🤖 Treino Importado` : `🤖 Periodização Criada`;
+                document.getElementById('previewDesc').textContent = `Revise os movimentos. Clique em 'Salvar Template' para guardá-lo permanentemente na sua estante.`;
+                renderPreviewList();
+                showToast("A inteligência artificial processou os dados com sucesso!");
+                
+                // Limpa os campos para a próxima operação
+                document.getElementById('aiWorkoutText').value = "";
+                document.getElementById('aiWorkoutName').value = "";
             } else {
-                throw new Error("A estrutura do JSON não corresponde à periodização de treinos.");
+                showToast("Falha na geração do treino. Tente novamente.");
             }
-
         } catch (error) {
             console.error(error);
-            // Exibe o erro real na interface para facilitar a depuração
-            showToast("Falha: " + error.message);
+            showToast("Erro de conexão com o servidor de IA.");
         } finally {
-            btn.style.display = 'block';
             loader.style.display = 'none';
+            btn.disabled = false;
         }
     }
+    // --- FIM DA MANOBRA ---
 
 function carregarProximoTreinoIA() {
         if (filaDeTreinosIA.length === 0) {
