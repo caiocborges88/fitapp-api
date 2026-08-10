@@ -547,14 +547,20 @@ function removeExercise(bIndex, eIndex) {
                 const blockDiv = document.createElement('div'); blockDiv.className = 'exercise-block';
                 const linkIcon = (isBiset && eIndex < bloco.exercises.length - 1) ? ' <span style="color:#00ff88;">🔗</span>' : '';
                 
+                // --- INÍCIO DA MANOBRA: DEEP LINKING YOUTUBE NO COMBATE ---
+                const ytQuery = encodeURIComponent(`Como executar o exercício ${ex.name}`);
+                const ytLink = `https://www.youtube.com/results?search_query=${ytQuery}`;
+                
                 blockDiv.innerHTML = `
                     <div class="exercise-header">
                         <span class="ex-name" onclick="FitApp.openDict('${ex.name}')">${ex.name}${linkIcon}</span>
-                        <div class="ex-controls">
+                        <div class="ex-controls" style="display: flex; align-items: center; gap: 8px;">
+                            <a href="${ytLink}" target="_blank" style="text-decoration: none; font-size: 18px;" title="Ver execução no YouTube">🎥</a>
                             <span class="target-reps">${ex.target}</span>
                             <button class="btn-swap" onclick="FitApp.openSwapModal(${bIndex}, ${eIndex})" title="Substituir Exercício">🔄</button>
                         </div>
                     </div>`;
+                // --- FIM DA MANOBRA ---
                 
                 if (!ex.setsData) ex.setsData = []; // Prepara a memória individual do exercício
                 
@@ -979,32 +985,123 @@ function removeExercise(bIndex, eIndex) {
         }
     }
 
+    // --- INÍCIO DA MANOBRA: BASE DE DADOS SANFONA COM DEEP LINK YOUTUBE ---
     function filterLibrary() {
-        const query = document.getElementById('searchInput').value.toLowerCase();
+        const searchInput = document.getElementById('searchInput');
+        if (!searchInput) return;
         
-        // Primeiro, filtra os cartões individuais
-        const cards = document.querySelectorAll('.library-card');
-        cards.forEach(card => {
-            const text = card.textContent.toLowerCase();
-            card.style.display = text.includes(query) ? 'block' : 'none';
+        const query = searchInput.value.toLowerCase();
+        const grid = document.getElementById('libraryGrid');
+        if (!grid) return;
+        grid.innerHTML = '';
+
+        // Definição dos esquadrões (grupos musculares)
+        const groups = {
+            'Peito': [], 'Costas': [], 'Pernas': [], 'Ombros': [], 
+            'Tríceps': [], 'Bíceps': [], 'Core': [], 'Mobilidade / Cardio': [], 'Outros': []
+        };
+
+        // Classificação e Filtragem
+        dictionaryData.forEach(ex => {
+            // Se houver busca, filtra. Se não, passa todos.
+            if (query && !ex.name.toLowerCase().includes(query) && !ex.focus.toLowerCase().includes(query)) return;
+            
+            // Remove acentos para facilitar o agrupamento
+            const focusLow = ex.focus.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            let cat = 'Outros';
+            
+            if (focusLow.includes('peito') || focusLow.includes('peitoral')) cat = 'Peito';
+            else if (focusLow.includes('costa') || focusLow.includes('dorsal') || focusLow.includes('lombar')) cat = 'Costas';
+            else if (focusLow.includes('perna') || focusLow.includes('gluteo') || focusLow.includes('panturrilha') || focusLow.includes('quadriceps') || focusLow.includes('posterior') || focusLow.includes('adutor') || focusLow.includes('abdutor') || focusLow.includes('coxa')) cat = 'Pernas';
+            else if (focusLow.includes('ombro') || focusLow.includes('deltoide') || focusLow.includes('trapezio')) cat = 'Ombros';
+            else if (focusLow.includes('triceps')) cat = 'Tríceps';
+            else if (focusLow.includes('biceps') || focusLow.includes('antebraco')) cat = 'Bíceps';
+            else if (focusLow.includes('core') || focusLow.includes('abdom') || focusLow.includes('obliquo')) cat = 'Core';
+            else if (focusLow.includes('mobilidade') || focusLow.includes('cardio')) cat = 'Mobilidade / Cardio';
+            
+            groups[cat].push(ex);
         });
 
-        // Segundo, oculta categorias inteiras se todos os cartões dentro dela estiverem ocultos
-        const sections = document.querySelectorAll('.library-category-section');
-        sections.forEach(section => {
-            const visibleCards = Array.from(section.querySelectorAll('.library-card')).filter(c => c.style.display === 'block');
-            section.style.display = visibleCards.length > 0 ? 'block' : 'none';
+        // Montagem da Interface (Accordions)
+        for (const [groupName, exercises] of Object.entries(groups)) {
+            if (exercises.length === 0) continue;
+
+            const groupContainer = document.createElement('div');
+            groupContainer.style.marginBottom = '10px';
+            groupContainer.style.background = '#1e1e1e';
+            groupContainer.style.borderRadius = '8px';
+            groupContainer.style.border = '1px solid #333';
+            groupContainer.style.overflow = 'hidden';
+
+            // Cabeçalho da Sanfona
+            const header = document.createElement('div');
+            header.style.padding = '15px';
+            header.style.background = '#2a2a2a';
+            header.style.cursor = 'pointer';
+            header.style.display = 'flex';
+            header.style.justifyContent = 'space-between';
+            header.style.alignItems = 'center';
+            header.style.fontWeight = 'bold';
+            header.style.color = '#a64dff';
             
-            // --- INÍCIO DA MANOBRA: ABERTURA AUTOMÁTICA NA BUSCA ---
-            if (query !== '' && visibleCards.length > 0) {
-                const container = section.querySelector('.library-card-container');
-                const arrow = section.querySelector('h3 span:last-child');
-                if (container) container.style.display = 'grid';
-                if (arrow) arrow.style.transform = 'rotate(0deg)';
-            }
-            // --- FIM DA MANOBRA ---
-        });
+            // Lógica de abertura inteligente: Se o usuário estiver pesquisando algo, a sanfona abre. Se não, fica fechada.
+            const isOpen = query.length > 0;
+            header.innerHTML = `<span>${groupName} (${exercises.length})</span> <span style="transform: ${isOpen ? 'rotate(180deg)' : 'rotate(0deg)'}; transition: transform 0.3s; color: #fff;">▼</span>`;
+            
+            // Área de lista
+            const listContainer = document.createElement('div');
+            listContainer.style.display = isOpen ? 'block' : 'none';
+            listContainer.style.padding = '10px';
+            listContainer.style.background = '#151515';
+
+            // Gatilho de clique para abrir/fechar
+            header.onclick = () => {
+                const isCurrentlyOpen = listContainer.style.display === 'block';
+                listContainer.style.display = isCurrentlyOpen ? 'none' : 'block';
+                header.querySelector('span:last-child').style.transform = isCurrentlyOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+            };
+
+            // Preenchimento dos exercícios
+            exercises.forEach(ex => {
+                const exDiv = document.createElement('div');
+                exDiv.style.background = '#111';
+                exDiv.style.padding = '12px';
+                exDiv.style.marginBottom = '8px';
+                exDiv.style.borderRadius = '6px';
+                exDiv.style.border = '1px solid #444';
+                
+                // Mapeia o ícone do equipamento
+                let equipIcon = "🏋️";
+                if(ex.equip === "peso_corporal") equipIcon = "🏠";
+                if(ex.equip === "calistenia") equipIcon = "🏖️";
+                if(ex.equip === "cabo") equipIcon = "⛓️";
+
+                // Motor do YouTube
+                const ytQuery = encodeURIComponent(`Como executar o exercício ${ex.name}`);
+                const ytLink = `https://www.youtube.com/results?search_query=${ytQuery}`;
+
+                exDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div style="flex: 1; padding-right: 10px;">
+                            <div style="font-weight: bold; color: #fff; font-size: 14px; margin-bottom: 5px;">
+                                ${ex.name}
+                            </div>
+                            <div style="font-size: 11px; color: #aaa; margin-bottom: 8px;">${ex.desc}</div>
+                            <span style="font-size: 10px; background: #333; padding: 2px 6px; border-radius: 4px; color: #00ff88;">${ex.focus}</span>
+                            <span style="font-size: 10px; background: #333; padding: 2px 6px; border-radius: 4px; color: #aaa; margin-left: 5px;">${equipIcon} ${ex.equip ? ex.equip.replace('_', ' ') : 'academia'}</span>
+                        </div>
+                        <a href="${ytLink}" target="_blank" style="text-decoration: none; font-size: 22px; padding: 8px; background: rgba(255, 0, 0, 0.1); border-radius: 6px; border: 1px solid rgba(255,0,0,0.3); transition: all 0.2s; display: flex; align-items: center; justify-content: center;" title="Ver no YouTube">🎥</a>
+                    </div>
+                `;
+                listContainer.appendChild(exDiv);
+            });
+
+            groupContainer.appendChild(header);
+            groupContainer.appendChild(listContainer);
+            grid.appendChild(groupContainer);
+        }
     }
+    // --- FIM DA MANOBRA ---
 
     function switchTab(tabId, navId) {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
