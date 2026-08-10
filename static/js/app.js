@@ -1428,12 +1428,15 @@ function carregarProximoTreinoIA() {
         if (preview) preview.style.display = 'block';
     }
 
-    // --- INÍCIO DA MANOBRA: SISTEMA HÍBRIDO (ADAPTAÇÃO PARA CASA) ---
+    // --- INÍCIO DA MANOBRA: SISTEMA HÍBRIDO DE AMBIENTES ---
     function adaptWorkoutToHome() {
-        let changed = 0;
-        let usedSubstitutes = []; // Memória tática: impede a repetição de exercícios
+        const envChoice = document.getElementById('envSelector') ? document.getElementById('envSelector').value : 'casa';
+        const allowedEquips = envChoice === 'praia' ? ['peso_corporal', 'calistenia'] : ['peso_corporal'];
         
-        // Remove acentos para não dar conflito (ex: Bíceps vs biceps)
+        let changed = 0;
+        let usedSubstitutes = []; // Memória tática
+        
+        // Remove acentos para garantir o cruzamento
         const removeAccents = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
         
         const getBroadGroup = (focusString) => {
@@ -1453,20 +1456,20 @@ function carregarProximoTreinoIA() {
             bloco.exercises.forEach(ex => {
                 const dictItem = dictionaryData.find(d => d.name === ex.name);
                 
-                // Se não for peso corporal, a adaptação é acionada
-                if (dictItem && dictItem.equip !== 'peso_corporal') {
+                // Se o exercício atual exigir equipamento proibido no ambiente selecionado
+                if (dictItem && !allowedEquips.includes(dictItem.equip)) {
                     const targetGroup = getBroadGroup(dictItem.focus);
                     
-                    // Procura substitutos do mesmo grupo que sejam APENAS peso corporal e ainda não usados
+                    // Busca substitutos permitidos e ainda não utilizados
                     let pool = dictionaryData.filter(d => 
                         getBroadGroup(d.focus) === targetGroup && 
-                        d.equip === 'peso_corporal' &&
+                        allowedEquips.includes(d.equip) &&
                         !usedSubstitutes.includes(d.name)
                     );
                     
-                    // Se o arsenal de peso corporal daquele músculo esgotou, remove o filtro de repetidos para não quebrar a rotina
+                    // Recicla exercícios se o arsenal inédito acabar
                     if (pool.length === 0) {
-                        pool = dictionaryData.filter(d => getBroadGroup(d.focus) === targetGroup && d.equip === 'peso_corporal');
+                        pool = dictionaryData.filter(d => getBroadGroup(d.focus) === targetGroup && allowedEquips.includes(d.equip));
                     }
                     
                     if (pool.length > 0) {
@@ -1488,17 +1491,19 @@ function carregarProximoTreinoIA() {
                 
                 if(customControls) customControls.style.display = 'flex';
                 if(nameContainer) nameContainer.style.display = 'block';
-                if(nameInput) nameInput.value = "Treino Adaptado (Sem Equipamentos)";
+                
+                const envName = envChoice === 'praia' ? 'Praia/Praça' : 'Quarto/Casa';
+                if(nameInput) nameInput.value = `Treino Adaptado (${envName})`;
             }
             
-            document.getElementById('previewTitle').textContent = `🏠 Adaptação Concluída`;
-            document.getElementById('previewDesc').textContent = `${changed} exercícios alterados para peso corporal e improvisação.`;
+            document.getElementById('previewTitle').textContent = `⚡ Adaptação Concluída`;
+            document.getElementById('previewDesc').textContent = `${changed} exercícios alterados com base no terreno escolhido.`;
             renderPreviewList();
             
-            if(audioEnabled) speak("Treino adaptado para ambiente sem equipamentos.");
-            showToast("Adaptação tática aplicada!");
+            if(audioEnabled) speak("Protocolo de ambiente executado.");
+            showToast("Adaptação de terreno aplicada!");
         } else {
-            showToast("Este treino já é totalmente focado em peso corporal.");
+            showToast("Sua rotina já está perfeitamente alinhada com este ambiente.");
         }
     }
     // --- FIM DA MANOBRA ---

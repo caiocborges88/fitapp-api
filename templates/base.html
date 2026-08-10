@@ -104,8 +104,14 @@
                     <button class="btn-action" onclick="FitApp.saveCustomWorkout()" style="background: rgba(166, 77, 255, 0.15); border: 1px solid #a64dff; color: #a64dff; flex: 1; padding: 12px; font-size: 13px;">💾 Salvar Template</button>
                 </div>
 
-                <!-- MANOBRA: Botão do Sistema Híbrido -->
-                <button id="btnAdaptHome" class="btn-action" onclick="FitApp.adaptWorkoutToHome()" style="background: rgba(0, 255, 136, 0.1); border: 1px dashed #00ff88; color: #00ff88; margin-bottom: 10px;">🏠 Adaptar para Casa</button>
+                <!-- MANOBRA: Menu de Adaptação de Ambiente -->
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <select id="envSelector" class="select-level" style="flex: 2; border-color: #00ff88; color: #00ff88; background: rgba(0, 255, 136, 0.05);">
+                        <option value="casa">🏠 Quarto / Casa</option>
+                        <option value="praia">🏖️ Praia / Praça</option>
+                    </select>
+                    <button id="btnAdaptHome" class="btn-action" onclick="FitApp.adaptWorkoutToHome()" style="background: rgba(0, 255, 136, 0.1); border: 1px dashed #00ff88; color: #00ff88; flex: 1; margin: 0;">⚡ Adaptar</button>
+                </div>
 
                 <button id="btnStartWorkout" class="btn-action btn-success" onclick="FitApp.beginWorkoutExecution()" style="margin-bottom: 10px;">▶️ Iniciar Treino</button>
                 <button class="btn-action" onclick="FitApp.cancelWorkoutPreview()" style="background: #555;">⬅️ Voltar ao Painel</button>
