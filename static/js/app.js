@@ -1432,19 +1432,33 @@ function carregarProximoTreinoIA() {
     function adaptWorkoutToHome() {
         let changed = 0;
         
+        // MANOBRA: Analisador léxico para garantir a substituição independentemente da especificidade do foco
+        const getBroadGroup = (focusString) => {
+            if (!focusString) return 'geral';
+            const f = focusString.toLowerCase();
+            if (f.includes('peito')) return 'peito';
+            if (f.includes('costas') || f.includes('dorsal') || f.includes('lombar')) return 'costas';
+            if (f.includes('perna') || f.includes('quadríceps') || f.includes('glúteo') || f.includes('posterior') || f.includes('panturrilha') || f.includes('adutor') || f.includes('abdutor') || f.includes('coxa')) return 'pernas';
+            if (f.includes('ombro') || f.includes('deltóide') || f.includes('trapézio')) return 'ombro';
+            if (f.includes('tríceps')) return 'triceps';
+            if (f.includes('bíceps') || f.includes('antebraço')) return 'biceps';
+            if (f.includes('core') || f.includes('abdom') || f.includes('oblíquo')) return 'core';
+            return 'geral';
+        };
+        
         currentRoutine.forEach(bloco => {
             bloco.exercises.forEach(ex => {
                 const dictItem = dictionaryData.find(d => d.name === ex.name);
                 
                 // Se o exercício existir na base e exigir academia
                 if (dictItem && dictItem.ambiente !== 'casa') {
-                    const targetGroup = getMuscleGroup(dictItem.focus);
+                    const targetGroup = getBroadGroup(dictItem.focus);
                     
                     // Procura substitutos do mesmo grupo muscular que sejam de 'casa'
-                    const pool = dictionaryData.filter(d => getMuscleGroup(d.focus) === targetGroup && d.ambiente === 'casa');
+                    const pool = dictionaryData.filter(d => getBroadGroup(d.focus) === targetGroup && d.ambiente === 'casa');
                     
                     if (pool.length > 0) {
-                        const newEx = pool[Math.floor(Math.random() * pool.length)]; // Sorteia uma variação para não ficar repetitivo
+                        const newEx = pool[Math.floor(Math.random() * pool.length)]; // Sorteia uma variação
                         ex.name = newEx.name;
                         changed++;
                     }
