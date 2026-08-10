@@ -1,4 +1,5 @@
 import os
+import uvicorn
 import psycopg2
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
@@ -185,3 +186,9 @@ async def importar_treino_ia(req: ImportarTreinoRequest):
     except Exception as e:
         print(f"Erro na extração IA: {e}")
         return {"resultado": "[]", "erro": str(e)}
+
+# --- NOVO: BLOCO DE INICIALIZAÇÃO NATIVA ---
+if __name__ == "__main__":
+    # Captura a porta dinâmica do Render ou usa 10000 como padrão de segurança
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)

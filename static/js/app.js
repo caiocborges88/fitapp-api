@@ -1428,104 +1428,52 @@ function carregarProximoTreinoIA() {
         if (preview) preview.style.display = 'block';
     }
 
-    // --- INÍCIO DA MANOBRA: MOTOR DO GRÁFICO DE EVOLUÇÃO ---
-    function renderMetricsChart() {
-        const container = document.getElementById('metricsContainer');
-        const canvas = document.getElementById('metricsChart');
-        if (!container || !canvas || typeof Chart === 'undefined') return;
-
-        let history = JSON.parse(safeGet('fitapp_week_log') || '[]');
-        if (history.length === 0) {
-            container.style.display = 'none';
-            return;
-        }
-
-        const exStats = {};
-        const dateSet = new Set();
-
-        // 1. Mineração de Dados: Busca a carga máxima de cada exercício por dia
-        history.forEach(log => {
-            if (!log.data || log.data.length === 0) return;
-            
-            // Converte YYYY-MM-DD para DD/MM para o gráfico ficar limpo
-            const parts = log.date.split('-');
-            if(parts.length !== 3) return;
-            const shortDate = `${parts[2]}/${parts[1]}`; 
-            
-            let hasValidWeight = false;
-
-            log.data.forEach(item => {
-                if (item.kg > 0) {
-                    hasValidWeight = true;
-                    if (!exStats[item.exercise]) exStats[item.exercise] = { count: 0, maxKgByDate: {} };
+    // --- INÍCIO DA MANOBRA: SISTEMA HÍBRIDO (ADAPTAÇÃO PARA CASA) ---
+    function adaptWorkoutToHome() {
+        let changed = 0;
+        
+        currentRoutine.forEach(bloco => {
+            bloco.exercises.forEach(ex => {
+                const dictItem = dictionaryData.find(d => d.name === ex.name);
+                
+                // Se o exercício existir na base e exigir academia
+                if (dictItem && dictItem.ambiente !== 'casa') {
+                    const targetGroup = getMuscleGroup(dictItem.focus);
                     
-                    const currentMax = exStats[item.exercise].maxKgByDate[log.date] || 0;
-                    if (item.kg > currentMax) {
-                        exStats[item.exercise].maxKgByDate[log.date] = item.kg; // Guarda usando a data completa YYYY-MM-DD para ordenar certo
+                    // Procura substitutos do mesmo grupo muscular que sejam de 'casa'
+                    const pool = dictionaryData.filter(d => getMuscleGroup(d.focus) === targetGroup && d.ambiente === 'casa');
+                    
+                    if (pool.length > 0) {
+                        const newEx = pool[Math.floor(Math.random() * pool.length)]; // Sorteia uma variação para não ficar repetitivo
+                        ex.name = newEx.name;
+                        changed++;
                     }
                 }
             });
-            if (hasValidWeight) dateSet.add(log.date);
         });
-
-        // 2. Filtro de Relevância: Pega os 3 exercícios mais frequentes
-        const topExercises = Object.keys(exStats)
-            .map(ex => ({ name: ex, count: Object.keys(exStats[ex].maxKgByDate).length }))
-            .sort((a, b) => b.count - a.count)
-            .slice(0, 3)
-            .map(obj => obj.name);
-
-        if (topExercises.length === 0) {
-            container.style.display = 'none';
-            return;
-        }
-
-        // Exibe a moldura do gráfico
-        container.style.display = 'block';
-
-        // Ordena cronologicamente e gera os rótulos do Eixo X (DD/MM)
-        const sortedDates = Array.from(dateSet).sort();
-        const labels = sortedDates.map(d => `${d.split('-')[2]}/${d.split('-')[1]}`); 
         
-        const colors = ['#00ff88', '#a64dff', '#4da3ff'];
-        
-        // 3. Montagem das Linhas (Datasets)
-        const datasets = topExercises.map((exName, index) => {
-            // Se não treinou esse músculo no dia, o valor é null. A linha "pula" o dia e conecta direto.
-            const dataPoints = sortedDates.map(date => exStats[exName].maxKgByDate[date] || null);
-            return {
-                label: exName.length > 15 ? exName.substring(0, 15) + '...' : exName,
-                data: dataPoints,
-                borderColor: colors[index],
-                backgroundColor: colors[index],
-                tension: 0.3, // Curva suave
-                borderWidth: 2,
-                pointRadius: 4,
-                spanGaps: true // Diretriz Tática: Conecta a linha ignorando os dias nulos
-            };
-        });
-
-        // Destrói o gráfico antigo antes de desenhar o novo (previne flickering)
-        if (metricsChartInstance) metricsChartInstance.destroy();
-
-        // Renderiza o gráfico
-        metricsChartInstance = new Chart(canvas, {
-            type: 'line',
-            data: { labels, datasets },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                color: '#fff',
-                plugins: {
-                    legend: { labels: { color: '#aaa', font: { size: 10, family: 'monospace' }, boxWidth: 12 } },
-                    tooltip: { mode: 'index', intersect: false }
-                },
-                scales: {
-                    x: { ticks: { color: '#888', font: { size: 10 } }, grid: { color: '#333' } },
-                    y: { ticks: { color: '#888', font: { size: 10 } }, grid: { color: '#333' }, beginAtZero: true }
-                }
+        if (changed > 0) {
+            // Transforma o treino em "Livre" para permitir que você o salve
+            if (currentWorkoutType !== 'Livre' && !currentWorkoutType.startsWith('custom_')) {
+                currentWorkoutType = 'Livre';
+                const customControls = document.getElementById('customWorkoutControls');
+                const nameContainer = document.getElementById('customWorkoutNameContainer');
+                const nameInput = document.getElementById('customWorkoutName');
+                
+                if(customControls) customControls.style.display = 'flex';
+                if(nameContainer) nameContainer.style.display = 'block';
+                if(nameInput) nameInput.value = "Treino Adaptado (Casa)";
             }
-        });
+            
+            document.getElementById('previewTitle').textContent = `🏠 Adaptação Concluída`;
+            document.getElementById('previewDesc').textContent = `${changed} exercícios alterados para peso corporal e improvisação.`;
+            renderPreviewList();
+            
+            if(audioEnabled) speak("Treino adaptado para ambiente doméstico.");
+            showToast("Adaptação tática aplicada!");
+        } else {
+            showToast("Este treino já está adaptado para casa.");
+        }
     }
     // --- FIM DA MANOBRA ---
 
@@ -1616,7 +1564,7 @@ function carregarProximoTreinoIA() {
     
     return { 
         init, filterLibrary, openSwapModal, confirmSwap, unlockAll, startWorkout,
-        beginWorkoutExecution, cancelWorkoutPreview, 
+        beginWorkoutExecution, cancelWorkoutPreview, adaptWorkoutToHome, // <-- Função injetada aqui
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter, craftSticker,
         openHistoryModal, switchHistoryTab,
         saveCustomWorkout, deleteCustomWorkout,
