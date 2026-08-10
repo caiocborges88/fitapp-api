@@ -1400,6 +1400,18 @@ function removeExercise(bIndex, eIndex) {
                 
                 document.getElementById('previewTitle').textContent = pastedText ? `🤖 Treino Importado` : `🤖 Periodização Criada`;
                 document.getElementById('previewDesc').textContent = `Revise os movimentos. Clique em 'Salvar Template' para guardá-lo permanentemente na sua estante.`;
+                
+                // --- INÍCIO DA MANOBRA: TRANSIÇÃO VISUAL DE TELA ---
+                const workoutCards = document.getElementById('workoutCards');
+                if (workoutCards) workoutCards.style.display = 'none';
+                
+                const dashHeader = document.querySelector('.dashboard-header');
+                if (dashHeader) dashHeader.style.display = 'none';
+                
+                const workoutPreview = document.getElementById('workoutPreview');
+                if (workoutPreview) workoutPreview.style.display = 'block';
+                // --- FIM DA MANOBRA ---
+
                 renderPreviewList();
                 showToast("A inteligência artificial processou os dados com sucesso!");
                 
