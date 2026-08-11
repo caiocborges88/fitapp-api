@@ -1447,6 +1447,94 @@ function removeExercise(bIndex, eIndex) {
         }
     }
 
+function renderMetricsChart() {
+        const ctx = document.getElementById('metricsChart');
+        const container = document.getElementById('metricsContainer');
+        if (!ctx || !container) return;
+
+        // Resgata o histórico do banco de dados local
+        let history = JSON.parse(safeGet('fitapp_week_log') || '[]');
+        
+        // Se houver menos de 2 treinos, o gráfico não tem o que comparar, então fica oculto
+        if (history.length < 2) {
+            container.style.display = 'none';
+            return;
+        }
+
+        container.style.display = 'block';
+
+        // Filtra apenas os últimos 7 treinos para não espremer o gráfico no celular
+        const recentHistory = history.slice(-7);
+        
+        // Extrai as datas para o eixo X
+        const labels = recentHistory.map(h => {
+            const dateObj = new Date(h.date + 'T12:00:00');
+            return dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        });
+
+        // Calcula o Volume Total (Carga x Repetições) para o eixo Y
+        const dataPoints = recentHistory.map(h => {
+            let volume = 0;
+            if (h.data && h.data.length > 0) {
+                h.data.forEach(set => {
+                    volume += (parseFloat(set.kg) || 0) * (parseInt(set.reps) || 0);
+                });
+            }
+            return volume;
+        });
+
+        // Destrói o gráfico anterior caso ele já exista para evitar sobreposição
+        if (metricsChartInstance) {
+            metricsChartInstance.destroy();
+        }
+
+        // Constrói o novo gráfico de elite
+        metricsChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Volume Total (Kg x Reps)',
+                    data: dataPoints,
+                    borderColor: '#a64dff', // Roxo elétrico da nossa identidade
+                    backgroundColor: 'rgba(166, 77, 255, 0.2)', // Fundo de vidro translúcido
+                    borderWidth: 3,
+                    pointBackgroundColor: '#00ff88', // Ponto verde neon
+                    pointBorderColor: '#00ff88',
+                    pointRadius: 5,
+                    pointHoverRadius: 8,
+                    fill: true,
+                    tension: 0.4 // Curvatura suave e futurista
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        titleColor: '#00ff88',
+                        bodyColor: '#fff',
+                        borderColor: '#a64dff',
+                        borderWidth: 1
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: '#888' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#888' }
+                    }
+                }
+            }
+        });
+    }
+    
     function init() {
         els.styleSelector = document.getElementById('styleSelector');
         els.levelSelector = document.getElementById('levelSelector'); 
