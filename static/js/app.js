@@ -517,6 +517,10 @@ function removeExercise(bIndex, eIndex) {
         els.workoutArea.style.display = 'block'; 
         els.btnFinishArea.style.display = 'block';
 
+        // ATIVA MODO FOCO: Oculta o Menu Inferior
+        const navBar = document.querySelector('nav');
+        if(navBar) navBar.style.display = 'none';
+
         workoutStartTime = Date.now();
         if (globalTimer) clearInterval(globalTimer);
         globalTimer = setInterval(updateGlobalTimer, 1000);
@@ -687,6 +691,10 @@ function removeExercise(bIndex, eIndex) {
         els.workoutArea.style.display = 'none'; 
         els.btnFinishArea.style.display = 'none';
         document.getElementById('workoutCards').style.display = 'flex';
+        
+        // DESATIVA MODO FOCO: Devolve o Menu Inferior
+        const navBar = document.querySelector('nav');
+        if(navBar) navBar.style.display = 'flex';
         const header = document.querySelector('.dashboard-header');
         if (header) header.style.display = 'block';
 
@@ -1613,6 +1621,10 @@ function renderMetricsChart() {
             if (header) header.style.display = 'none';
             els.workoutArea.style.display = 'block'; 
             els.btnFinishArea.style.display = 'block';
+            
+            // GARANTE O MODO FOCO: Caso a página seja recarregada no meio do treino
+            const navBar = document.querySelector('nav');
+            if(navBar) navBar.style.display = 'none';
             
             if (globalTimer) clearInterval(globalTimer);
             globalTimer = setInterval(updateGlobalTimer, 1000);
