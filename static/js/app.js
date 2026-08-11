@@ -891,8 +891,11 @@ function removeExercise(bIndex, eIndex) {
         
         // Distribuição tática das renderizações
         if (tabId === 'tab-conquistas') FitGamification.renderAlbum();
-        if (tabId === 'tab-evolucao') renderMonthlyCalendar(); // Exibe o calendário ao abrir a aba Evolução
-        if (tabId === 'tab-biblioteca') filterLibrary(); 
+        if (tabId === 'tab-evolucao') {
+            renderWeeklyCalendar();
+            if (typeof renderMetricsChart === 'function') renderMetricsChart();
+        }
+        if (tabId === 'tab-biblioteca') filterLibrary();
         if (tabId === 'tab-treino') {
             if (!currentWorkoutType) {
                 document.getElementById('workoutCards').style.display = 'flex';
