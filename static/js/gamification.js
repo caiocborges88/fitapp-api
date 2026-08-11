@@ -21,16 +21,27 @@ var FitGamification = (() => {
         let repetidas = parseInt(FitApp.safeGet('fitapp_repetidas') || '0') || 0; 
         
         const roll = Math.random(); 
-        let pool = stickersDB.filter(s => s.rarity === 'comum');
+        let targetRarity = 'comum';
         
-        if (roll > 0.95) pool = stickersDB.filter(s => s.rarity === 'holografico'); 
-        else if (roll > 0.80) pool = stickersDB.filter(s => s.rarity === 'ouro'); 
-        else if (roll > 0.50) pool = stickersDB.filter(s => s.rarity === 'prata');
-        
+        if (roll > 0.95) targetRarity = 'holografico'; 
+        else if (roll > 0.85) targetRarity = 'ouro'; 
+        else if (roll > 0.60) targetRarity = 'prata';
+
+        let pool = stickersDB.filter(s => s.rarity === targetRarity);
         if (pool.length === 0) pool = stickersDB.filter(s => s.rarity === 'comum'); 
+
+        // MANOBRA DE PIEDADE: Tenta priorizar uma carta que falta da raridade sorteada
+        let missingInPool = pool.filter(s => !savedCollection.includes(s.id));
         
-        const drawn = pool[Math.floor(Math.random() * pool.length)];
+        let drawn;
         let isRepeated = false;
+
+        // Se sorteou Ouro/Holo e tem alguma faltando, garante a inédita!
+        if ((targetRarity === 'ouro' || targetRarity === 'holografico') && missingInPool.length > 0) {
+            drawn = missingInPool[Math.floor(Math.random() * missingInPool.length)];
+        } else {
+            drawn = pool[Math.floor(Math.random() * pool.length)];
+        }
         
         if (!savedCollection.includes(drawn.id)) {
             savedCollection.push(drawn.id);
@@ -160,13 +171,16 @@ var FitGamification = (() => {
         
         if (repetidas < 3) return;
         
-        const faltantes = stickersDB.filter(s => !savedCollection.includes(s.id));
-        if (faltantes.length === 0) {
-            FitApp.showToast("Sua galeria já está completa!");
+        // REGRA DE ELITE: A Forja só tem poder para fabricar cartas 'comum' ou 'prata'. 
+        // Cartas 'ouro' e 'holografico' só podem ser ganhas abrindo pacotes pós-treino!
+        const faltantesForja = stickersDB.filter(s => !savedCollection.includes(s.id) && (s.rarity === 'comum' || s.rarity === 'prata'));
+        
+        if (faltantesForja.length === 0) {
+            FitApp.showToast("Alerta: A Forja só fabrica Prata e Comum. Treine para achar as raras!");
             return;
         }
         
-        const nova = faltantes[Math.floor(Math.random() * faltantes.length)];
+        const nova = faltantesForja[Math.floor(Math.random() * faltantesForja.length)];
         savedCollection.push(nova.id);
         repetidas -= 3;
         
