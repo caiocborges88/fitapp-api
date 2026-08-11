@@ -695,7 +695,7 @@ function removeExercise(bIndex, eIndex) {
         renderWeeklyCalendar(); 
         if (typeof renderMetricsChart === 'function') renderMetricsChart(); 
 
-        if(isComplete) { FitGamification.showPackModal(); } else { showToast('Treino salvo no sistema.'); switchTab('tab-calendario', 'nav-calendario'); }
+        if(isComplete) { FitGamification.showPackModal(); } else { showToast('Treino salvo no sistema.'); switchTab('tab-evolucao', 'nav-evolucao'); }
     }
 
     async function fetchAIFeedback() {
@@ -889,13 +889,14 @@ function removeExercise(bIndex, eIndex) {
         document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
         document.getElementById(tabId).classList.add('active'); document.getElementById(navId).classList.add('active');
         
-        if (tabId === 'tab-calendario') FitGamification.renderAlbum();
+        // Distribuição tática das renderizações
+        if (tabId === 'tab-conquistas') FitGamification.renderAlbum();
+        if (tabId === 'tab-evolucao') renderMonthlyCalendar(); // Exibe o calendário ao abrir a aba Evolução
         if (tabId === 'tab-biblioteca') filterLibrary(); 
         if (tabId === 'tab-treino') {
             if (!currentWorkoutType) {
                 document.getElementById('workoutCards').style.display = 'flex';
-                const header = document.querySelector('.dashboard-header');
-                if (header) header.style.display = 'block';
+                // Remove o comportamento de esconder/mostrar o cabeçalho (que agora está na aba Perfil)
                 els.workoutArea.style.display = 'none';
                 els.btnFinishArea.style.display = 'none';
                 checkSequence();
@@ -1454,7 +1455,8 @@ function removeExercise(bIndex, eIndex) {
         const savedLevel = safeGet('fitapp_level');
         if (savedLevel && els.levelSelector) els.levelSelector.value = savedLevel;
 
-        ['treino', 'calendario', 'biblioteca'].forEach(tab => { 
+        // Mapeia todas as 5 abas da nova arquitetura
+        ['treino', 'evolucao', 'conquistas', 'biblioteca', 'perfil'].forEach(tab => { 
             const navBtn = document.getElementById(`nav-${tab}`);
             if (navBtn) navBtn.addEventListener('click', () => switchTab(`tab-${tab}`, `nav-${tab}`)); 
         });
@@ -1492,7 +1494,7 @@ function removeExercise(bIndex, eIndex) {
         const btnClosePack = document.getElementById('btnClosePack');
         if (btnClosePack) btnClosePack.addEventListener('click', () => { 
             document.getElementById('packModal').style.display = 'none'; 
-            switchTab('tab-calendario', 'nav-calendario'); 
+            switchTab('tab-evolucao', 'nav-evolucao');
         });
         
         checkSequence(); 

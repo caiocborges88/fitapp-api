@@ -16,9 +16,9 @@ header { background-color: var(--surface-color); padding: 15px 20px; display: fl
 .container { padding: 20px; max-width: 600px; margin: 0 auto; }
 
 nav { position: fixed; bottom: 0; width: 100%; max-width: 600px; left: 50%; transform: translateX(-50%); background-color: var(--surface-color); display: flex; justify-content: space-around; padding: 10px 0; z-index: 100; }
-nav button { background: none; border: none; color: var(--text-muted); font-size: 14px; display: flex; flex-direction: column; align-items: center; cursor: pointer; width: 33%; padding: 5px; }
-nav button.active { color: var(--primary-color); font-weight: bold; transform: scale(1.05); }
-nav button .icon { font-size: 20px; margin-bottom: 5px; }
+nav button { background: none; border: none; color: var(--text-muted); font-size: 11px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; flex: 1; padding: 6px 2px; }
+nav button.active { color: var(--success-color); font-weight: bold; text-shadow: 0 0 8px rgba(40, 167, 69, 0.4); transform: scale(1.05); }
+nav button .icon { font-size: 22px; margin-bottom: 4px; }
 
 .tab-content { display: none; animation: slideIn 0.3s ease forwards; opacity: 0; }
 .tab-content.active { display: block; }

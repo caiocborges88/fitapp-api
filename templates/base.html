@@ -22,9 +22,10 @@
     </header>
 
     <div class="container" id="appContainer">
-        <!-- INÍCIO DA TELA: TREINO -->
+        
+        <!-- 1. ABA TREINAR (Ação Pura) -->
         <main id="tab-treino" class="tab-content active">
-            <<div id="timerContainer" class="timer-container">
+            <div id="timerContainer" class="timer-container">
                 <div id="timerDisplay" class="timer-display">01:00</div>
                 <div class="timer-controls">
                     <button class="time-btn active" data-time="60">60s</button>
@@ -32,23 +33,7 @@
                     <button class="time-btn" data-time="120">120s</button>
                 </div>
             </div>
-            
-            <!-- Painel de Configurações (Isolado e Limpo) -->
-            <div class="dashboard-header">
-                <div style="display: flex; gap: 10px;">
-                    <select id="styleSelector" class="select-level" style="flex: 1;">
-                        <option value="biset" selected>🔗 Modo Bi-set</option>
-                        <option value="tradicional">🏋️ Modo Tradicional</option>
-                    </select>
-                    <select id="levelSelector" class="select-level" style="flex: 1;">
-                        <option value="iniciante">🟢 Iniciante</option>
-                        <option value="intermediario" selected>🟡 Intermediário</option>
-                        <option value="avancado">🔴 Avançado</option>
-                    </select>
-                </div>
-            </div>
 
-            <!-- Cartões de Sequência Lógica -->
             <div class="workout-cards" id="workoutCards">
                 <div class="card-treino" id="card-A" onclick="FitApp.startWorkout('A')">
                     <h3>Treino A</h3>
@@ -65,30 +50,13 @@
                     <p>Pernas & Ombros</p>
                     <div class="lock-overlay" id="lock-C">🔒</div>
                 </div>
-
                 <div class="card-treino" id="card-Casa" onclick="FitApp.startWorkout('Casa')" style="border-left-color: #00ff88; margin-top: 10px; background: rgba(0, 255, 136, 0.05);">
                     <h3 style="color: #00ff88;">🏠 Treino em Casa</h3>
                     <p>FullBody Sem Equipamentos</p>
                 </div>
-                
-                <!-- Seção de Treinos Customizados -->
-                <div style="margin-top: 20px; border-top: 1px dashed #444; padding-top: 15px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <h3 style="color: #a64dff; font-size: 14px; text-transform: uppercase;">Meus Treinos</h3>
-                        <div style="display: flex; gap: 8px;">
-                            <button onclick="FitApp.openImportAiModal()" style="background: #111; color: #00ff88; border: 1px solid #00ff88; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">🤖 Importar IA</button>
-                            <button onclick="FitApp.startWorkout('Livre')" style="background: #a64dff; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px; box-shadow: 0 2px 5px rgba(166, 77, 255, 0.4);">➕ Criar Novo</button>
-                        </div>
-                    </div>
-                    <div id="customWorkoutsList" style="display: flex; flex-direction: column; gap: 10px;"></div>
-                </div>
-            </div>
-            
-            <div style="text-align: center; margin-bottom: 20px;">
-                <button class="btn-text" onclick="FitApp.unlockAll()" style="color: #666; background: none; border: none; text-decoration: underline; cursor: pointer; font-size: 12px;">Desbloquear todos (Override)</button>
             </div>
 
-            <!-- Tela de Preparação (Staging Area) -->
+            <!-- Tela de Preparação e Execução (Mantida aqui) -->
             <div id="workoutPreview" style="display: none; padding: 15px; background: #2a2a2a; border-radius: 8px; margin-bottom: 20px;">
                 <div style="text-align: center; margin-bottom: 15px;">
                     <h2 id="previewTitle" style="color: #00ff88; margin-bottom: 5px;">Treino Selecionado</h2>
@@ -97,15 +65,11 @@
                         <input type="text" id="customWorkoutName" placeholder="Nome do Treino (Ex: Peito Focado)" style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #a64dff; background: #111; color: #fff; text-align: center; font-weight: bold; font-size: 14px;">
                     </div>
                 </div>
-                
                 <div id="previewList" style="max-height: 45vh; overflow-y: auto; margin-bottom: 20px; padding-right: 5px; border-top: 1px solid #444; padding-top: 15px;"></div>
-                
                 <div id="customWorkoutControls" style="display: none; gap: 10px; margin-bottom: 15px;">
                     <button class="btn-action" onclick="FitApp.openAddExerciseModal()" style="background: #111; border: 1px dashed #a64dff; color: #a64dff; flex: 1; padding: 12px; font-size: 13px;">➕ Exercício</button>
                     <button class="btn-action" onclick="FitApp.saveCustomWorkout()" style="background: rgba(166, 77, 255, 0.15); border: 1px solid #a64dff; color: #a64dff; flex: 1; padding: 12px; font-size: 13px;">💾 Salvar Template</button>
                 </div>
-
-                <!-- MANOBRA: Menu de Adaptação de Ambiente -->
                 <div style="display: flex; gap: 10px; margin-bottom: 10px;">
                     <select id="envSelector" class="select-level" style="flex: 2; border-color: #00ff88; color: #00ff88; background: rgba(0, 255, 136, 0.05);">
                         <option value="casa">🏠 Quarto / Casa</option>
@@ -113,7 +77,6 @@
                     </select>
                     <button id="btnAdaptHome" class="btn-action" onclick="FitApp.adaptWorkoutToHome()" style="background: rgba(0, 255, 136, 0.1); border: 1px dashed #00ff88; color: #00ff88; flex: 1; margin: 0;">⚡ Adaptar</button>
                 </div>
-
                 <button id="btnStartWorkout" class="btn-action btn-success" onclick="FitApp.beginWorkoutExecution()" style="margin-bottom: 10px;">▶️ Iniciar Treino</button>
                 <button class="btn-action" onclick="FitApp.cancelWorkoutPreview()" style="background: #555;">⬅️ Voltar ao Painel</button>
             </div>
@@ -123,16 +86,13 @@
                 <div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
                 <div id="exerciseList"></div>
             </div>
-            
             <div class="btn-finish-area" id="btnFinishArea">
                 <button id="btnFinishAction" class="btn-action btn-warning">⚠️ Encerrar Incompleto</button>
             </div>
         </main>
         
-        <!-- INÍCIO DA TELA: ÁLBUM E COACH -->
-        <main id="tab-calendario" class="tab-content">
-            
-            <!-- Painel de Estatísticas -->
+        <!-- 2. ABA EVOLUÇÃO (Métricas e IA) -->
+        <main id="tab-evolucao" class="tab-content">
             <div class="stats-panel" style="margin-bottom: 20px;">
                 <div class="stat-box" onclick="FitApp.openHistoryModal()" style="cursor: pointer; border: 1px solid #00ff88; background: rgba(0, 255, 136, 0.05); transition: background 0.3s;">
                     <span id="statTotal" class="stat-value">0</span>
@@ -143,23 +103,16 @@
                     <span class="stat-label">Último Treino</span>
                 </div>
             </div>
-
-            <!-- Gráfico de Evolução -->
             <div class="weekly-calendar" style="background: #1e1e1e; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #333; display: none;" id="metricsContainer">
                 <div style="font-size: 13px; font-weight: bold; color: #a64dff; margin-bottom: 10px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">Evolução de Cargas Máximas</div>
                 <div style="position: relative; height: 250px; width: 100%;">
                     <canvas id="metricsChart"></canvas>
                 </div>
             </div>
-
-            <!-- Calendário Semanal -->
             <div class="weekly-calendar" style="background: #1e1e1e; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #333;">
                 <div style="font-size: 13px; font-weight: bold; color: #aaa; margin-bottom: 15px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">Histórico da Semana</div>
-                <div id="weeklyGrid" style="display: flex; justify-content: space-between; align-items: center;">
-                    <!-- Renderizado via JavaScript -->
-                </div>
+                <div id="weeklyGrid" style="display: flex; justify-content: space-between; align-items: center;"></div>
             </div>
-
             <div class="ai-panel">
                 <div class="ai-header">🤖 Coach de IA Generativa</div>
                 <p style="font-size: 0.85em; color: #a0a0a0; margin-bottom:10px;">Analise seu rendimento e progresso de cargas.</p>
@@ -167,7 +120,10 @@
                 <div class="loader" id="aiLoader">Analisando dados... aguarde.</div>
                 <div class="ai-response" id="aiResponse"></div>
             </div>
+        </main>
 
+        <!-- 3. ABA CONQUISTAS (Gamificação) -->
+        <main id="tab-conquistas" class="tab-content">
             <div class="album-header">
                 <h2>Galeria de Conquistas</h2>
                 <div class="album-progress" id="albumProgress">0 / 24 Conquistas</div>
@@ -175,7 +131,7 @@
             <div class="album-grid" id="albumGrid"></div>
         </main>
         
-        <!-- INÍCIO DA TELA: BASE DE DADOS -->
+        <!-- 4. ABA BASE (Biblioteca e Templates) -->
         <main id="tab-biblioteca" class="tab-content">
             <div class="library-header">
                 <h2>Base de Movimentos</h2>
@@ -184,117 +140,50 @@
                 </div>
             </div>
             <div id="libraryGrid" class="library-grid"></div>
+
+            <!-- Movido da antiga tela de treino -->
+            <div style="margin-top: 30px; border-top: 1px dashed #444; padding-top: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 style="color: #a64dff; font-size: 16px; text-transform: uppercase;">Meus Templates</h3>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="FitApp.openImportAiModal()" style="background: #111; color: #00ff88; border: 1px solid #00ff88; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">🤖 Importar IA</button>
+                        <button onclick="FitApp.startWorkout('Livre')" style="background: #a64dff; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">➕ Criar Novo</button>
+                    </div>
+                </div>
+                <div id="customWorkoutsList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+            </div>
+        </main>
+
+        <!-- 5. ABA PERFIL (Configurações) -->
+        <main id="tab-perfil" class="tab-content">
+            <h2 style="color: #fff; margin-bottom: 20px; text-align: center;">⚙️ Configurações</h2>
+            <div class="dashboard-header" style="background: #1e1e1e; padding: 20px; border-radius: 8px; border: 1px solid #333;">
+                <label style="color: #aaa; font-size: 12px; display: block; margin-bottom: 5px;">Modo de Execução</label>
+                <select id="styleSelector" class="select-level" style="width: 100%; margin-bottom: 15px;">
+                    <option value="biset" selected>🔗 Modo Bi-set</option>
+                    <option value="tradicional">🏋️ Modo Tradicional</option>
+                </select>
+
+                <label style="color: #aaa; font-size: 12px; display: block; margin-bottom: 5px;">Nível de Dificuldade</label>
+                <select id="levelSelector" class="select-level" style="width: 100%;">
+                    <option value="iniciante">🟢 Iniciante</option>
+                    <option value="intermediario" selected>🟡 Intermediário</option>
+                    <option value="avancado">🔴 Avançado</option>
+                </select>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn-text" onclick="FitApp.unlockAll()" style="color: #ff4444; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold;">🔓 Desbloquear Sequência</button>
+            </div>
         </main>
     </div>
 
-    <!-- ZONA DE MODAIS (JANELAS FLUTUANTES) -->
-    <div class="pack-modal" id="packModal">
-        <div class="pack-envelope" id="packEnvelope">
-            Pacotinho do Dia<br><br>👆 TOQUE PARA RASGAR
-        </div>
-        <div class="pack-reveal-area" id="packRevealArea"></div>
-        <button class="btn-close-modal" id="btnClosePack">Ir para o Álbum</button>
-    </div>
-
-    <div id="addExerciseModal" class="swap-modal-overlay">
-        <div class="swap-modal-content" style="max-height: 90vh; display: flex; flex-direction: column;">
-            <div class="swap-modal-header">
-                <h3>Adicionar Exercício</h3>
-                <button class="btn-close-modal" onclick="document.getElementById('addExerciseModal').style.display='none'" style="display: block;">&times;</button>
-            </div>
-            
-            <input type="text" id="searchAddInput" placeholder="Buscar exercício..." onkeyup="FitApp.filterAddModal()" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #121212; color: #fff; margin-bottom: 10px;">
-            
-            <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; padding-bottom: 5px; margin-bottom: 10px; flex-shrink: 0;">
-                <button class="filter-chip" onclick="FitApp.setCategoryFilter('todos', this)" style="background: rgba(166, 77, 255, 0.2); color: #a64dff; border: 1px solid #a64dff; padding: 6px 12px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer;">Todos</button>
-                <button class="filter-chip" onclick="FitApp.setCategoryFilter('peito', this)" style="background: #2a2a2a; color: #aaa; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer;">Peito</button>
-                <button class="filter-chip" onclick="FitApp.setCategoryFilter('costas', this)" style="background: #2a2a2a; color: #aaa; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer;">Costas</button>
-                <button class="filter-chip" onclick="FitApp.setCategoryFilter('pernas', this)" style="background: #2a2a2a; color: #aaa; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer;">Pernas</button>
-                <button class="filter-chip" onclick="FitApp.setCategoryFilter('ombros', this)" style="background: #2a2a2a; color: #aaa; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer;">Ombros</button>
-                <button class="filter-chip" onclick="FitApp.setCategoryFilter('triceps', this)" style="background: #2a2a2a; color: #aaa; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer;">Tríceps</button>
-                <button class="filter-chip" onclick="FitApp.setCategoryFilter('biceps', this)" style="background: #2a2a2a; color: #aaa; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer;">Bíceps</button>
-                <button class="filter-chip" onclick="FitApp.setCategoryFilter('core', this)" style="background: #2a2a2a; color: #aaa; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer;">Core</button>
-            </div>
-
-            <div id="addExerciseList" class="swap-list" style="flex: 1; overflow-y: auto; margin-bottom: 15px;"></div>
-            
-            <div id="addExerciseConfig" style="display: none; background: #2a2a2a; padding: 15px; border-radius: 8px; border-left: 4px solid #a64dff; margin-bottom: 15px;">
-                <h4 id="selectedExerciseName" style="color: #fff; margin-bottom: 10px;">Nome do Exercicio</h4>
-                <div style="display: flex; gap: 10px;">
-                    <div style="flex: 1;">
-                        <label style="color: #aaa; font-size: 12px;">Séries</label>
-                        <input type="number" id="customSets" value="4" style="width: 100%; padding: 8px; background: #111; border: 1px solid #444; color: #fff; border-radius: 4px; text-align: center;">
-                    </div>
-                    <div style="flex: 1;">
-                        <label style="color: #aaa; font-size: 12px;">Repetições</label>
-                        <input type="text" id="customReps" value="10-12" style="width: 100%; padding: 8px; background: #111; border: 1px solid #444; color: #fff; border-radius: 4px; text-align: center;">
-                    </div>
-                </div>
-                <button onclick="FitApp.confirmAddExercise()" style="width: 100%; padding: 10px; margin-top: 15px; background: #a64dff; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">✅ Adicionar ao Treino</button>
-            </div>
-            
-            <button onclick="document.getElementById('addExerciseModal').style.display='none'" style="width: 100%; padding: 12px; background: #333; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Cancelar</button>
-        </div>
-    </div>
-
-    <div id="historyModal" class="swap-modal-overlay">
-        <div class="swap-modal-content" style="max-height: 90vh; display: flex; flex-direction: column; width: 95%; max-width: 500px;">
-            <div class="swap-modal-header">
-                <h3>📖 Histórico de Treinos</h3>
-                <button class="btn-close-modal" onclick="document.getElementById('historyModal').style.display='none'" style="display: block;">&times;</button>
-            </div>
-            
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <button id="btnTabList" class="time-btn active" onclick="FitApp.switchHistoryTab('list')">📋 Lista</button>
-                <button id="btnTabCalendar" class="time-btn" onclick="FitApp.switchHistoryTab('calendar')">📅 Mensal</button>
-            </div>
-            
-            <div id="historyListView" style="flex: 1; overflow-y: auto; display: block; padding-right: 5px;"></div>
-            <div id="historyCalendarView" style="flex: 1; overflow-y: auto; display: none; padding-right: 5px;"></div>
-        </div>
-    </div>
-
-    <div id="importAiModal" class="swap-modal-overlay">
-        <div class="swap-modal-content" style="display: flex; flex-direction: column; width: 95%; max-width: 500px;">
-            <div class="swap-modal-header">
-                <h3 style="color: #00ff88;">🤖 Inteligência Artificial</h3>
-                <button class="btn-close-modal" onclick="document.getElementById('importAiModal').style.display='none'" style="display: block;">&times;</button>
-            </div>
-            
-            <p style="font-size: 13px; color: #aaa; margin-bottom: 15px;">Defina os dias para a IA montar sua rotina <strong>OU</strong> apenas cole o texto do WhatsApp enviado pelo seu personal.</p>
-            
-            <!-- MANOBRA: Novos Seletores de Geração Dinâmica -->
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <select id="aiDays" class="select-level" style="flex: 1; border-color: #00ff88;">
-                    <option value="1">1 Dia Único</option>
-                    <option value="2">2 Dias (Fullbody)</option>
-                    <option value="3" selected>3 Dias (ABC)</option>
-                    <option value="4">4 Dias (ABCD)</option>
-                    <option value="5">5 Dias (ABCDE)</option>
-                </select>
-                
-                <select id="aiEnv" class="select-level" style="flex: 1; border-color: #00ff88;">
-                    <option value="academia" selected>🏋️ Academia</option>
-                    <option value="peso_corporal">🏠 Só Peso Corporal</option>
-                    <option value="calistenia">🏖️ Praça/Calistenia</option>
-                </select>
-            </div>
-
-            <!-- Mantém a área de texto original para importação manual -->
-            <input type="text" id="aiWorkoutName" placeholder="Nome do Treino (Opcional se for de 2+ dias)" style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 10px; font-size: 14px;">
-            
-            <textarea id="aiWorkoutText" rows="4" placeholder="[OPCIONAL] Se quiser colar um treino do WhatsApp, cole aqui. Se deixar em branco, a IA montará uma rotina nova para você." style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 15px; font-size: 14px; resize: vertical;"></textarea>
-            
-            <button id="btnProcessAi" class="btn-action" onclick="FitApp.processWorkoutWithAI()" style="background: #00ff88; color: #000; font-weight: bold; margin-bottom: 10px;">⚡ Processar Comando IA</button>
-            <div id="aiImportLoader" class="loader" style="color: #00ff88; display: none;">O Gemini está processando...</div>
-        </div>
-    </div>
-
-    <!-- Navegação Inferior (Menu Principal) -->
+    <!-- Navegação Inferior de 5 Abas -->
     <nav>
         <button id="nav-treino" class="active"><span class="icon">🏋️</span> Treinar</button>
-        <button id="nav-calendario"><span class="icon">📖</span> Álbum & Coach</button>
+        <button id="nav-evolucao"><span class="icon">📈</span> Evolução</button>
+        <button id="nav-conquistas"><span class="icon">🏆</span> Álbum</button>
         <button id="nav-biblioteca"><span class="icon">🔍</span> Base</button>
+        <button id="nav-perfil"><span class="icon">⚙️</span> Perfil</button>
     </nav>
 
     <div id="toast" class="toast"></div>
