@@ -269,9 +269,8 @@
                 </select>
             </div>
 
-            <input type="text" id="aiWorkoutName" placeholder="Nome do Treino (Opcional se for de 2+ dias)" style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 10px; font-size: 14px;">
-            
-            <textarea id="aiWorkoutText" rows="4" placeholder="[OPCIONAL] Se quiser colar um treino do WhatsApp, cole aqui. Se deixar em branco, a IA montará uma rotina nova para você." style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 15px; font-size: 14px; resize: vertical;"></textarea>
+            <input type="text" id="aiWorkoutName" placeholder="Nome do Treino (Opcional se for de 2+ dias)" style="margin-bottom: 10px;">
+            <textarea id="aiWorkoutText" rows="4" placeholder="[OPCIONAL] Cole aqui o treino do WhatsApp, ou deixe em branco para a IA criar do zero." style="margin-bottom: 15px; resize: vertical;"></textarea>
             
             <button id="btnProcessAi" class="btn-action" onclick="FitApp.processWorkoutWithAI()" style="background: #00ff88; color: #000; font-weight: bold; margin-bottom: 10px;">⚡ Processar Comando IA</button>
             <div id="aiImportLoader" class="loader" style="color: #00ff88; display: none;">O Gemini está processando...</div>

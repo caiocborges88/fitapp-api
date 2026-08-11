@@ -794,6 +794,11 @@ function removeExercise(bIndex, eIndex) {
             'Tríceps': [], 'Bíceps': [], 'Core': [], 'Mobilidade / Cardio': [], 'Outros': []
         };
 
+        const groupIcons = {
+            'Peito': '🦍', 'Costas': '🛡️', 'Pernas': '🦵', 'Ombros': '🥥', 
+            'Tríceps': '🐎', 'Bíceps': '💪', 'Core': '🧱', 'Mobilidade / Cardio': '🏃', 'Outros': '🔧'
+        };
+
         dictionaryData.forEach(ex => {
             if (query && !ex.name.toLowerCase().includes(query) && !ex.focus.toLowerCase().includes(query)) return;
             
@@ -833,7 +838,8 @@ function removeExercise(bIndex, eIndex) {
             header.style.color = '#a64dff';
             
             const isOpen = query.length > 0;
-            header.innerHTML = `<span>${groupName} (${exercises.length})</span> <span style="transform: ${isOpen ? 'rotate(180deg)' : 'rotate(0deg)'}; transition: transform 0.3s; color: #fff;">▼</span>`;
+            const icon = groupIcons[groupName] || '🏋️';
+            header.innerHTML = `<span style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 18px;">${icon}</span> ${groupName} <span style="color: #666; font-size: 12px; font-weight: normal;">(${exercises.length})</span></span> <span style="transform: ${isOpen ? 'rotate(180deg)' : 'rotate(0deg)'}; transition: transform 0.3s; color: #fff;">▼</span>`;
             
             const listContainer = document.createElement('div');
             listContainer.style.display = isOpen ? 'block' : 'none';
