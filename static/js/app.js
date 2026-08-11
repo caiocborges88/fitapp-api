@@ -319,14 +319,7 @@ function saveWorkoutState() {
 
             bloco.exercises.forEach((ex, eIndex) => {
                 const item = document.createElement('div');
-                item.style.display = 'flex';
-                item.style.justifyContent = 'space-between';
-                item.style.alignItems = 'center';
-                item.style.background = '#1e1e1e';
-                item.style.padding = '12px';
-                item.style.marginBottom = '8px';
-                item.style.borderRadius = '6px';
-                item.style.border = '1px solid #333';
+                item.className = 'preview-item'; // Conecta ao nosso novo CSS premium
 
                 // NOVO: Higienização de Variáveis Dinâmicas
                 const safeName = escapeHTML(ex.name);

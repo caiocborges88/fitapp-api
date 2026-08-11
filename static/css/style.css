@@ -565,3 +565,33 @@ select:focus, textarea:focus, input[type="text"]:focus {
     margin-top: 25px;
     text-align: center;
 }
+/* --- TELA DE PREVIEW (MISSION BRIEFING) --- */
+.preview-container {
+    display: none; padding: 20px; 
+    background: linear-gradient(145deg, #1e1e1e, #121212); 
+    border-radius: 16px; margin-bottom: 25px;
+    border: 1px solid rgba(255,255,255,0.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.preview-item {
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(30, 30, 30, 0.6);
+    padding: 15px; margin-bottom: 10px;
+    border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);
+    backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+}
+
+.btn-start-pulse {
+    background-color: #00ff88; color: #000;
+    font-size: 18px; font-weight: 900; text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 20px; border: none;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+    animation: pulse-neon 2s infinite;
+}
+
+@keyframes pulse-neon {
+    0% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(0, 255, 136, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
+}
