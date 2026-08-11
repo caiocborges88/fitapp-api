@@ -349,43 +349,67 @@ select { width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #444;
 .workout-cards {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 16px; /* Mais espaço (respiro) entre os treinos */
+    margin-bottom: 25px;
 }
 
 .card-treino {
-    background: #2a2a2a;
+    background: linear-gradient(145deg, #222222, #181818); /* Traz profundidade metálica */
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Borda superior sutil como reflexo de luz */
     border-left: 4px solid #00ff88;
-    padding: 20px;
-    border-radius: 8px;
+    padding: 22px 20px;
+    border-radius: 16px; /* Curvatura moderna de apps premium */
     position: relative;
     cursor: pointer;
-    transition: transform 0.2s, background 0.3s;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transição elástica e natural */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5); /* Sombra pesada para criar desnível */
     overflow: hidden;
 }
 
-.card-treino:hover { background: #333; }
-.card-treino h3 { margin: 0 0 5px 0; color: #fff; }
-.card-treino p { margin: 0; color: #aaa; font-size: 14px; }
+.card-treino:hover { 
+    transform: translateY(-3px); /* Levanta o cartão ao tocar/passar o mouse */
+    box-shadow: 0 10px 25px rgba(0, 255, 136, 0.15); /* O verde emite um brilho sutil no fundo */
+    background: linear-gradient(145deg, #2a2a2a, #1c1c1c);
+}
 
-/* Sistema de Bloqueio Visual */
+.card-treino h3 { 
+    margin: 0 0 5px 0; 
+    color: #ffffff; 
+    font-size: 1.2rem; 
+    font-weight: 700; 
+    letter-spacing: 0.5px; 
+}
+
+.card-treino p { 
+    margin: 0; 
+    color: #a0a0a0; 
+    font-size: 13px; 
+    font-weight: 500; 
+}
+
+/* Sistema de Bloqueio Visual - Mais discreto e elegante */
 .card-treino.locked {
-    opacity: 0.5;
-    border-left-color: #555;
+    background: #151515;
+    border: 1px dashed #333;
+    border-left: 4px solid #333;
+    opacity: 0.6;
+    box-shadow: none; /* Retira a sombra para parecer "desligado" */
     cursor: not-allowed;
-    pointer-events: none; /* Impede o clique no CSS */
+    pointer-events: none;
 }
 
 .lock-overlay {
     position: absolute;
     top: 50%; right: 20px;
     transform: translateY(-50%);
-    font-size: 24px;
+    font-size: 20px;
+    color: #555;
     display: none;
 }
 
 .card-treino.locked .lock-overlay {
     display: block;
+}
 }
 /* --- ESTILOS DA GALERIA DE CONQUISTAS --- */
 
