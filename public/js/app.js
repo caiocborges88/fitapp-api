@@ -1411,29 +1411,33 @@ function removeExercise(bIndex, eIndex) {
     });
     
     if (changed > 0) {
-        if (currentWorkoutType !== 'Livre' && !currentWorkoutType.startsWith('custom_')) {
-            currentWorkoutType = 'Livre';
-            const customControls = document.getElementById('customWorkoutControls');
-            const nameContainer = document.getElementById('customWorkoutNameContainer');
             const nameInput = document.getElementById('customWorkoutName');
-            
-            if(customControls) customControls.style.display = 'flex';
-            if(nameContainer) nameContainer.style.display = 'block';
-            
             const envName = envChoice === 'praia' ? 'Praia/Praça' : 'Quarto/Casa';
+            
+            // Trava de conversão para modo Livre
+            if (currentWorkoutType !== 'Livre' && !currentWorkoutType.startsWith('custom_')) {
+                currentWorkoutType = 'Livre';
+                const customControls = document.getElementById('customWorkoutControls');
+                const nameContainer = document.getElementById('customWorkoutNameContainer');
+                
+                if(customControls) customControls.style.display = 'flex';
+                if(nameContainer) nameContainer.style.display = 'block';
+            }
+            
+            // A atualização do nome agora ocorre livremente fora da trava
             if(nameInput) nameInput.value = `Treino Adaptado (${envName})`;
+            
+            document.getElementById('previewTitle').textContent = `⚡ Adaptação Concluída`;
+            document.getElementById('previewDesc').textContent = `${changed} exercícios alterados para o terreno: ${envName}.`;
+            renderPreviewList();
+            
+            if(typeof audioEnabled !== 'undefined' && audioEnabled) speak("Protocolo de ambiente executado.");
+            showToast(`Adaptação para ${envName} aplicada!`);
+        } else {
+            const envName = envChoice === 'praia' ? 'Praia/Praça' : 'Quarto/Casa';
+            showToast(`A rotina já está alinhada para ${envName}. Mude o seletor para trocar.`);
         }
-        
-        document.getElementById('previewTitle').textContent = `⚡ Adaptação Concluída`;
-        document.getElementById('previewDesc').textContent = `${changed} exercícios alterados com base no terreno escolhido.`;
-        renderPreviewList();
-        
-        if(typeof audioEnabled !== 'undefined' && audioEnabled) speak("Protocolo de ambiente executado.");
-        showToast("Adaptação de terreno aplicada!");
-    } else {
-        showToast("Sua rotina já está perfeitamente alinhada com este ambiente.");
     }
-}
 
     async function syncOfflineWorkouts() {
         let syncQueue = JSON.parse(safeGet('fitapp_sync_queue') || '[]');
