@@ -273,6 +273,16 @@ function renderWeeklyCalendar() {
             showToast("Sequência bloqueada. Conclua o treino anterior.");
             return;
         }
+        
+        // NOVO: Força o redirecionamento tático para a linha de frente (Aba Treinar)
+        const tabTreino = document.getElementById('nav-treino');
+        if (tabTreino) {
+            tabTreino.click();
+        }
+        
+        // Garante que o scroll volte para o topo ao trocar de tela
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
         currentWorkoutType = type;
         loadWorkout();
     }
