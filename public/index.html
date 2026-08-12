@@ -56,6 +56,17 @@
                 </div>
             </div>
 
+            <!-- NOVO: Meus Templates na Linha de Frente -->
+            <div id="templatesFrontline" style="margin-top: 20px; border-top: 1px dashed #333; padding-top: 20px; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 style="color: #a64dff; font-size: 16px; text-transform: uppercase;">Meus Templates</h3>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="FitApp.startWorkout('Livre')" style="background: #a64dff; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">➕ Criar Novo</button>
+                    </div>
+                </div>
+                <div id="customWorkoutsList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+            </div>
+
             <!-- Tela de Preparação (Staging Area) -->
             <div id="workoutPreview" class="preview-container">
                 <div style="text-align: center; margin-bottom: 20px;">
@@ -124,10 +135,15 @@
                 <div id="weeklyGrid" style="display: flex; justify-content: space-between; align-items: center;"></div>
             </div>
             <div class="ai-panel">
-                <div class="ai-header">🤖 Coach de IA Generativa</div>
-                <p style="font-size: 0.85em; color: #a0a0a0; margin-bottom:10px;">Analise seu rendimento e progresso de cargas.</p>
-                <button class="btn-ai" id="btnAnalyzeAI">⚡ Analisar Treinos da Semana</button>
-                <div class="loader" id="aiLoader">Analisando dados... aguarde.</div>
+                <div class="ai-header">🧠 Central de IA Generativa</div>
+                <p style="font-size: 0.85em; color: #a0a0a0; margin-bottom:15px;">Aproveite o poder do processamento avançado para otimizar seus resultados.</p>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <button class="btn-ai" onclick="FitApp.openImportAiModal()" style="flex: 1; background: #111; color: #00ff88; border: 1px solid #00ff88; font-size: 13px;">📥 Importar (WhatsApp)</button>
+                    <button class="btn-ai" id="btnAnalyzeAI" style="flex: 1; font-size: 13px;">⚡ Analisar Rendimento</button>
+                </div>
+                
+                <div class="loader" id="aiLoader">Processando dados na matriz... aguarde.</div>
                 <div class="ai-response" id="aiResponse"></div>
             </div>
         </main>
@@ -150,18 +166,6 @@
                 </div>
             </div>
             <div id="libraryGrid" class="library-grid"></div>
-
-            <!-- Movido da antiga tela de treino -->
-            <div style="margin-top: 30px; border-top: 1px dashed #444; padding-top: 20px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h3 style="color: #a64dff; font-size: 16px; text-transform: uppercase;">Meus Templates</h3>
-                    <div style="display: flex; gap: 8px;">
-                        <button onclick="FitApp.openImportAiModal()" style="background: #111; color: #00ff88; border: 1px solid #00ff88; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">🤖 Importar IA</button>
-                        <button onclick="FitApp.startWorkout('Livre')" style="background: #a64dff; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">➕ Criar Novo</button>
-                    </div>
-                </div>
-                <div id="customWorkoutsList" style="display: flex; flex-direction: column; gap: 10px;"></div>
-            </div>
         </main>
 
         <!-- 5. ABA PERFIL (Configurações) -->
@@ -290,7 +294,7 @@
     <!-- Navegação Inferior de 5 Abas -->
     <nav>
         <button id="nav-treino" class="active"><span class="icon">🏋️</span> Treinar</button>
-        <button id="nav-evolucao"><span class="icon">📈</span> Evolução</button>
+        <button id="nav-evolucao"><span class="icon">🧠</span> IA & Status</button>
         <button id="nav-conquistas"><span class="icon">🏆</span> Álbum</button>
         <button id="nav-biblioteca"><span class="icon">🔍</span> Base</button>
         <button id="nav-perfil"><span class="icon">⚙️</span> Perfil</button>
