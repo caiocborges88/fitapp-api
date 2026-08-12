@@ -552,23 +552,46 @@ function removeExercise(bIndex, eIndex) {
                 const blockDiv = document.createElement('div'); blockDiv.className = 'exercise-block';
                 const linkIcon = (isBiset && eIndex < bloco.exercises.length - 1) ? ' <span style="color:#00ff88;">🔗</span>' : '';
                 
-                // NOVO: Higienização
+                // Higienização
                 const safeName = escapeHTML(ex.name);
                 const safeTarget = escapeHTML(ex.target);
                 const ytQuery = encodeURIComponent(`Como executar o exercício ${safeName}`);
                 const ytLink = `https://www.youtube.com/results?search_query=${ytQuery}`;
                 
+                // NOVO: Resgata a anotação salva no estado ativo (se houver)
+                const savedNotes = ex.notes ? escapeHTML(ex.notes) : '';
+                
                 blockDiv.innerHTML = `
                     <div class="exercise-header">
                         <span class="ex-name" onclick="FitApp.openDict('${safeName.replace(/'/g, "\\'")}')">${safeName}${linkIcon}</span>
                         <div class="ex-controls" style="display: flex; align-items: center; gap: 8px;">
+                            <button class="btn-notes" style="background: none; border: none; cursor: pointer; font-size: 16px; padding: 0;" title="Log de Combate (Anotações)">📝</button>
                             <a href="${ytLink}" target="_blank" style="text-decoration: none; font-size: 18px;" title="Ver execução no YouTube">🎥</a>
                             <span class="target-reps">${safeTarget}</span>
                             <button class="btn-swap" onclick="FitApp.openSwapModal(${bIndex}, ${eIndex})" title="Substituir Exercício">🔄</button>
                         </div>
+                    </div>
+                    <div class="notes-container" style="display: none; background: #1a1a1a; padding: 10px; border-radius: 6px; border-left: 2px solid #a64dff; margin-bottom: 12px; margin-top: 5px;">
+                        <textarea class="ex-notes-input" placeholder="Anotações táticas (ex: banco inclinado no nível 3, fadiga no ombro...)" style="width: 100%; background: transparent; border: none; color: #ccc; font-size: 12px; resize: vertical; min-height: 45px; outline: none;">${savedNotes}</textarea>
                     </div>`;
                 
-                if (!ex.setsData) ex.setsData = []; 
+                // NOVO: Motor de Eventos da Sanfona de Anotações
+                const btnNotes = blockDiv.querySelector('.btn-notes');
+                const notesContainer = blockDiv.querySelector('.notes-container');
+                const notesInput = blockDiv.querySelector('.ex-notes-input');
+
+                btnNotes.addEventListener('click', () => {
+                    const isHidden = notesContainer.style.display === 'none';
+                    notesContainer.style.display = isHidden ? 'block' : 'none';
+                    if (isHidden) notesInput.focus();
+                });
+
+                notesInput.addEventListener('input', () => {
+                    ex.notes = notesInput.value;
+                    saveWorkoutState(); // Salva em tempo real no localStorage para evitar perda se fechar o app
+                });
+
+                if (!ex.setsData) ex.setsData = [];
                 
                 for(let s = 1; s <= ex.sets; s++) {
                     totalSets++; 
