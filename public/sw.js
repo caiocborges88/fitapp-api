@@ -1,11 +1,15 @@
-const CACHE_NAME = 'fitapp-cache-v2'; // Alterado para v2 para forçar a atualização do cache
+const CACHE_NAME = 'fitapp-cache-v3'; // Atualizado para v3 para purgar o cache do servidor antigo
 const urlsToCache = [
   '/',
-  '/static/css/style.css',
-  '/static/js/app.js',
-  '/static/js/dados.js',
-  '/static/js/api.js',            // NOVO: Adicionado à matriz de sobrevivência
-  '/static/js/gamification.js'    // NOVO: Adicionado à matriz de sobrevivência
+  '/index.html',
+  '/css/style.css',
+  '/js/app.js',
+  '/js/dados.js',
+  '/js/api.js',            
+  '/js/gamification.js',
+  '/manifest.json',
+  '/icon-192.png',
+  '/icon-512.png'
 ];
 
 // Estágio de Instalação: Guarda os arquivos base na memória do celular

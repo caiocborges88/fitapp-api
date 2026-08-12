@@ -6,13 +6,13 @@
     <title>FitApp - Diário de Treinos</title>
     
     <!-- MANOBRA PWA: Manifesto e Cores do Sistema -->
-    <link rel="manifest" href="/static/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#121212">
-    <link rel="apple-touch-icon" href="/static/icon-192.png">
-    <link rel="icon" type="image/png" href="/static/icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" type="image/png" href="icon-192.png">
 
     <!-- Chamando o CSS -->
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -302,17 +302,16 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- Chamando o JavaScript -->
-    <!-- Chamando o JavaScript -->
-    <script src="/static/js/dados.js"></script>
-    <script src="/static/js/api.js"></script> <!-- NOVO: Camada de Rede Isolada -->
-    <script src="/static/js/app.js"></script>
-    <script src="/static/js/gamification.js"></script> <!-- NOVO: Motor de Gamificação Isolado -->
+    <script src="js/dados.js"></script>
+    <script src="js/api.js"></script> 
+    <script src="js/app.js"></script>
+    <script src="js/gamification.js"></script> 
 
     <!-- MANOBRA PWA: Registro do Motor Offline -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/static/sw.js')
+                navigator.serviceWorker.register('sw.js')
                     .then(reg => console.log('Base segura: Service Worker ativado.', reg))
                     .catch(err => console.error('Falha no motor offline:', err));
             });
