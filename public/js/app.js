@@ -1346,39 +1346,52 @@ function removeExercise(bIndex, eIndex) {
     }
 
     function adaptWorkoutToHome() {
-        const envChoice = document.getElementById('envSelector') ? document.getElementById('envSelector').value : 'casa';
-        const allowedEquips = envChoice === 'praia' ? ['peso_corporal', 'calistenia'] : ['peso_corporal'];
-        
-        let changed = 0;
-        let usedSubstitutes = []; 
-        
-        const removeAccents = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-        
-        const getBroadGroup = (focusString) => {
-            if (!focusString) return 'geral';
-            const f = removeAccents(focusString);
-            if (f.includes('peito')) return 'peito';
-            if (f.includes('costa') || f.includes('dorsal') || f.includes('lombar')) return 'costas';
-            if (f.includes('perna') || f.includes('quadriceps') || f.includes('gluteo') || f.includes('posterior') || f.includes('panturrilha') || f.includes('adutor') || f.includes('abdutor') || f.includes('coxa')) return 'pernas';
-            if (f.includes('ombro') || f.includes('deltoide') || f.includes('trapezio')) return 'ombro';
-            if (f.includes('triceps')) return 'triceps';
-            if (f.includes('biceps') || f.includes('antebraco')) return 'biceps';
-            if (f.includes('core') || f.includes('abdom') || f.includes('obliquo')) return 'core';
-            return 'geral';
-        };
-        
-        currentRoutine.forEach(bloco => {
-            bloco.exercises.forEach(ex => {
-                const dictItem = dictionaryData.find(d => d.name === ex.name);
+    const envChoice = document.getElementById('envSelector') ? document.getElementById('envSelector').value : 'casa';
+    const allowedEquips = envChoice === 'praia' ? ['peso_corporal', 'calistenia'] : ['peso_corporal'];
+    const preferredEquip = envChoice === 'praia' ? 'calistenia' : 'peso_corporal';
+    
+    let changed = 0;
+    let usedSubstitutes = []; 
+    
+    const removeAccents = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    
+    const getBroadGroup = (focusString) => {
+        if (!focusString) return 'geral';
+        const f = removeAccents(focusString);
+        if (f.includes('peito')) return 'peito';
+        if (f.includes('costa') || f.includes('dorsal') || f.includes('lombar')) return 'costas';
+        if (f.includes('perna') || f.includes('quadriceps') || f.includes('gluteo') || f.includes('posterior') || f.includes('panturrilha') || f.includes('adutor') || f.includes('abdutor') || f.includes('coxa')) return 'pernas';
+        if (f.includes('ombro') || f.includes('deltoide') || f.includes('trapezio')) return 'ombro';
+        if (f.includes('triceps')) return 'triceps';
+        if (f.includes('biceps') || f.includes('antebraco')) return 'biceps';
+        if (f.includes('core') || f.includes('abdom') || f.includes('obliquo')) return 'core';
+        return 'geral';
+    };
+    
+    currentRoutine.forEach(bloco => {
+        bloco.exercises.forEach(ex => {
+            const dictItem = dictionaryData.find(d => d.name === ex.name);
+            
+            if (dictItem) {
+                const isForbidden = !allowedEquips.includes(dictItem.equip);
+                const canUpgradeToCalisthenics = (envChoice === 'praia' && dictItem.equip === 'peso_corporal');
                 
-                if (dictItem && !allowedEquips.includes(dictItem.equip)) {
+                if (isForbidden || canUpgradeToCalisthenics) {
                     const targetGroup = getBroadGroup(dictItem.focus);
                     
                     let pool = dictionaryData.filter(d => 
                         getBroadGroup(d.focus) === targetGroup && 
-                        allowedEquips.includes(d.equip) &&
+                        d.equip === preferredEquip &&
                         !usedSubstitutes.includes(d.name)
                     );
+                    
+                    if (pool.length === 0) {
+                        pool = dictionaryData.filter(d => 
+                            getBroadGroup(d.focus) === targetGroup && 
+                            allowedEquips.includes(d.equip) &&
+                            !usedSubstitutes.includes(d.name)
+                        );
+                    }
                     
                     if (pool.length === 0) {
                         pool = dictionaryData.filter(d => getBroadGroup(d.focus) === targetGroup && allowedEquips.includes(d.equip));
@@ -1386,38 +1399,41 @@ function removeExercise(bIndex, eIndex) {
                     
                     if (pool.length > 0) {
                         const newEx = pool[Math.floor(Math.random() * pool.length)];
-                        ex.name = newEx.name;
-                        usedSubstitutes.push(newEx.name); 
-                        changed++;
+                        if (ex.name !== newEx.name) {
+                            ex.name = newEx.name;
+                            usedSubstitutes.push(newEx.name); 
+                            changed++;
+                        }
                     }
                 }
-            });
-        });
-        
-        if (changed > 0) {
-            if (currentWorkoutType !== 'Livre' && !currentWorkoutType.startsWith('custom_')) {
-                currentWorkoutType = 'Livre';
-                const customControls = document.getElementById('customWorkoutControls');
-                const nameContainer = document.getElementById('customWorkoutNameContainer');
-                const nameInput = document.getElementById('customWorkoutName');
-                
-                if(customControls) customControls.style.display = 'flex';
-                if(nameContainer) nameContainer.style.display = 'block';
-                
-                const envName = envChoice === 'praia' ? 'Praia/Praça' : 'Quarto/Casa';
-                if(nameInput) nameInput.value = `Treino Adaptado (${envName})`;
             }
+        });
+    });
+    
+    if (changed > 0) {
+        if (currentWorkoutType !== 'Livre' && !currentWorkoutType.startsWith('custom_')) {
+            currentWorkoutType = 'Livre';
+            const customControls = document.getElementById('customWorkoutControls');
+            const nameContainer = document.getElementById('customWorkoutNameContainer');
+            const nameInput = document.getElementById('customWorkoutName');
             
-            document.getElementById('previewTitle').textContent = `⚡ Adaptação Concluída`;
-            document.getElementById('previewDesc').textContent = `${changed} exercícios alterados com base no terreno escolhido.`;
-            renderPreviewList();
+            if(customControls) customControls.style.display = 'flex';
+            if(nameContainer) nameContainer.style.display = 'block';
             
-            if(audioEnabled) speak("Protocolo de ambiente executado.");
-            showToast("Adaptação de terreno aplicada!");
-        } else {
-            showToast("Sua rotina já está perfeitamente alinhada com este ambiente.");
+            const envName = envChoice === 'praia' ? 'Praia/Praça' : 'Quarto/Casa';
+            if(nameInput) nameInput.value = `Treino Adaptado (${envName})`;
         }
+        
+        document.getElementById('previewTitle').textContent = `⚡ Adaptação Concluída`;
+        document.getElementById('previewDesc').textContent = `${changed} exercícios alterados com base no terreno escolhido.`;
+        renderPreviewList();
+        
+        if(typeof audioEnabled !== 'undefined' && audioEnabled) speak("Protocolo de ambiente executado.");
+        showToast("Adaptação de terreno aplicada!");
+    } else {
+        showToast("Sua rotina já está perfeitamente alinhada com este ambiente.");
     }
+}
 
     async function syncOfflineWorkouts() {
         let syncQueue = JSON.parse(safeGet('fitapp_sync_queue') || '[]');
