@@ -172,6 +172,14 @@
         <main id="tab-perfil" class="tab-content">
             <h2 style="color: #fff; margin-bottom: 20px; text-align: center;">⚙️ Configurações</h2>
             <div class="dashboard-header" style="background: #1e1e1e; padding: 20px; border-radius: 8px; border: 1px solid #333;">
+                
+                <!-- NOVO: Seletor de Perfil -->
+                <label style="color: #aaa; font-size: 12px; display: block; margin-bottom: 5px;">Perfil de Treinamento</label>
+                <select id="profileSelector" class="select-level" style="width: 100%; margin-bottom: 15px; border-color: #a64dff;">
+                    <option value="masculino" selected>👨 Padrão (Geral)</option>
+                    <option value="feminino">👩 Feminino (Foco Inferiores)</option>
+                </select>
+
                 <label style="color: #aaa; font-size: 12px; display: block; margin-bottom: 5px;">Modo de Execução</label>
                 <select id="styleSelector" class="select-level" style="width: 100%; margin-bottom: 15px;">
                     <option value="biset" selected>🔗 Modo Bi-set</option>
