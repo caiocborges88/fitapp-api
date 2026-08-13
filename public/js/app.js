@@ -432,6 +432,7 @@ function removeExercise(bIndex, eIndex) {
     function loadWorkout() {
         const style = els.styleSelector ? els.styleSelector.value : 'biset';
         const level = els.levelSelector ? els.levelSelector.value : 'intermediario';
+        const profile = els.profileSelector ? els.profileSelector.value : 'masculino'; // NOVO: Leitura do Perfil
         const type = currentWorkoutType;
         if (!type) return;
 
@@ -488,11 +489,15 @@ function removeExercise(bIndex, eIndex) {
                 }
             }
         } else {
-            currentRoutine = JSON.parse(JSON.stringify(dbWorkouts[style][level][type] || dbWorkouts['biset']['intermediario']['A']));
+            // NOVO: Seleciona o banco de dados correto com base na chave de perfil
+            const activeDB = profile === 'feminino' ? dbWorkoutsFeminino : dbWorkouts;
+            currentRoutine = JSON.parse(JSON.stringify(activeDB[style][level][type] || activeDB['biset']['intermediario']['A']));
+            
             if(preview) {
                 document.getElementById('previewTitle').textContent = `Treino ${type}`;
                 const styleName = style === 'biset' ? 'Modo Bi-set' : 'Modo Tradicional';
-                document.getElementById('previewDesc').textContent = `${styleName} - Nível ${level.charAt(0).toUpperCase() + level.slice(1)}`;
+                const profileLabel = profile === 'feminino' ? '👩 Foco Inferiores' : '👨 Padrão'; // Identificador Visual
+                document.getElementById('previewDesc').textContent = `${styleName} - Nível ${level.charAt(0).toUpperCase() + level.slice(1)} | ${profileLabel}`;
                 if(customControls) customControls.style.display = 'none';
                 if(nameContainer) nameContainer.style.display = 'none';
             }
@@ -1621,6 +1626,7 @@ function renderMetricsChart() {
     }
     
     function init() {
+        els.profileSelector = document.getElementById('profileSelector'); // NOVO: Mapeamento do Perfil
         els.styleSelector = document.getElementById('styleSelector');
         els.levelSelector = document.getElementById('levelSelector'); 
         els.workoutArea = document.getElementById('workoutArea'); 
@@ -1632,8 +1638,13 @@ function renderMetricsChart() {
         window.addEventListener('online', syncOfflineWorkouts);
         syncOfflineWorkouts();
 
+        // NOVO: Resgata o perfil salvo no cache do celular
+        const savedProfile = safeGet('fitapp_profile');
+        if (savedProfile && els.profileSelector) els.profileSelector.value = savedProfile;
+
         const savedStyle = safeGet('fitapp_style');
         if (savedStyle && els.styleSelector) els.styleSelector.value = savedStyle;
+        
         const savedLevel = safeGet('fitapp_level');
         if (savedLevel && els.levelSelector) els.levelSelector.value = savedLevel;
 
@@ -1643,6 +1654,13 @@ function renderMetricsChart() {
             if (navBtn) navBtn.addEventListener('click', () => switchTab(`tab-${tab}`, `nav-${tab}`)); 
         });
         
+        // NOVO: Ouve as mudanças no seletor de perfil, salva e recarrega o treino
+        if (els.profileSelector) els.profileSelector.addEventListener('change', () => {
+            safeSet('fitapp_profile', els.profileSelector.value);
+            if(currentWorkoutType) loadWorkout(); 
+            showToast(els.profileSelector.value === 'feminino' ? 'Perfil Feminino ativado.' : 'Perfil Padrão ativado.');
+        });
+
         if (els.styleSelector) els.styleSelector.addEventListener('change', () => {
             safeSet('fitapp_style', els.styleSelector.value);
             if(currentWorkoutType) loadWorkout(); 
