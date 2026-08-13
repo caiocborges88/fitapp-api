@@ -292,7 +292,7 @@
     </div>
 
     <!-- Navegação Inferior de 5 Abas -->
-    <nav>
+    <nav style="position: relative; z-index: 9999;">
         <button id="nav-treino" class="active"><span class="icon">🏋️</span> Treinar</button>
         <button id="nav-evolucao"><span class="icon">🧠</span> IA & Status</button>
         <button id="nav-conquistas"><span class="icon">🏆</span> Álbum</button>
@@ -300,7 +300,7 @@
         <button id="nav-perfil"><span class="icon">⚙️</span> Perfil</button>
     </nav>
 
-    <div id="toast" class="toast"></div>
+    <div id="toast" class="toast" style="pointer-events: none; z-index: 10000;"></div>
 
     <!-- Script do Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
