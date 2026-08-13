@@ -539,6 +539,9 @@ function removeExercise(bIndex, eIndex) {
         checkedSets = 0; 
         todayLog = [];
         
+        // NOVO: Spotter Digital (Motor de Busca do Histórico)
+        const historyLog = JSON.parse(safeGet('fitapp_week_log') || '[]');
+        
         currentRoutine.forEach((bloco, bIndex) => {
             const isBiset = bloco.exercises.length > 1;
             const cardClass = isBiset ? 'biset-card' : 'tradicional-card'; 
@@ -558,13 +561,43 @@ function removeExercise(bIndex, eIndex) {
                 const ytQuery = encodeURIComponent(`Como executar o exercício ${safeName}`);
                 const ytLink = `https://www.youtube.com/results?search_query=${ytQuery}`;
                 
-                // NOVO: Resgata a anotação salva no estado ativo (se houver)
                 const savedNotes = ex.notes ? escapeHTML(ex.notes) : '';
+                
+                // NOVO: Spotter Digital (Cálculo da Progressão Preditiva)
+                let aiSuggestionHTML = '';
+                // Busca de trás pra frente (mais recente primeiro)
+                const lastWorkoutMatch = historyLog.slice().reverse().find(log => 
+                    log.data && log.data.some(d => d.exercise === ex.name)
+                );
+
+                if (lastWorkoutMatch) {
+                    // Pega a carga e repetições da ÚLTIMA SÉRIE desse exercício no treino passado
+                    const lastSets = lastWorkoutMatch.data.filter(d => d.exercise === ex.name);
+                    if (lastSets.length > 0) {
+                        const finalSet = lastSets[lastSets.length - 1]; 
+                        let suggestedKg = parseFloat(finalSet.kg) || 0;
+                        const repsDone = parseInt(finalSet.reps) || 0;
+                        
+                        // Extrai a meta do formato "10-12 rep" ou "12"
+                        const targetStr = ex.target.replace(/[^0-9-]/g, '');
+                        let targetHigh = parseInt(targetStr.split('-').pop()) || 10; // Pega o limite superior
+                        
+                        // REGRA: Se bateu o teto de repetições, IA sugere progressão de +2kg
+                        if (repsDone >= targetHigh && suggestedKg > 0) {
+                            suggestedKg += 2;
+                        }
+                        
+                        if (suggestedKg > 0) {
+                            aiSuggestionHTML = `<span style="font-size: 10px; background: rgba(166, 77, 255, 0.2); color: #a64dff; padding: 2px 6px; border-radius: 4px; border: 1px solid #a64dff; font-weight: bold; margin-right: auto;" title="Sugestão baseada no seu último treino">🎯 Alvo IA: ${suggestedKg}kg</span>`;
+                        }
+                    }
+                }
                 
                 blockDiv.innerHTML = `
                     <div class="exercise-header">
                         <span class="ex-name" onclick="FitApp.openDict('${safeName.replace(/'/g, "\\'")}')">${safeName}${linkIcon}</span>
-                        <div class="ex-controls" style="display: flex; align-items: center; gap: 8px;">
+                        <div class="ex-controls" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                            ${aiSuggestionHTML}
                             <button class="btn-notes" style="background: none; border: none; cursor: pointer; font-size: 16px; padding: 0;" title="Log de Combate (Anotações)">📝</button>
                             <a href="${ytLink}" target="_blank" style="text-decoration: none; font-size: 18px;" title="Ver execução no YouTube">🎥</a>
                             <span class="target-reps">${safeTarget}</span>
@@ -575,7 +608,7 @@ function removeExercise(bIndex, eIndex) {
                         <textarea class="ex-notes-input" placeholder="Anotações táticas (ex: banco inclinado no nível 3, fadiga no ombro...)" style="width: 100%; background: transparent; border: none; color: #ccc; font-size: 12px; resize: vertical; min-height: 45px; outline: none;">${savedNotes}</textarea>
                     </div>`;
                 
-                // NOVO: Motor de Eventos da Sanfona de Anotações
+                // Motor de Eventos da Sanfona de Anotações
                 const btnNotes = blockDiv.querySelector('.btn-notes');
                 const notesContainer = blockDiv.querySelector('.notes-container');
                 const notesInput = blockDiv.querySelector('.ex-notes-input');
@@ -588,7 +621,7 @@ function removeExercise(bIndex, eIndex) {
 
                 notesInput.addEventListener('input', () => {
                     ex.notes = notesInput.value;
-                    saveWorkoutState(); // Salva em tempo real no localStorage para evitar perda se fechar o app
+                    saveWorkoutState(); 
                 });
 
                 if (!ex.setsData) ex.setsData = [];
@@ -599,7 +632,6 @@ function removeExercise(bIndex, eIndex) {
                     
                     if (data.checked) {
                         checkedSets++;
-                        // NOVO: Usando o Escudo Numérico
                         todayLog.push({ exercise: ex.name, set: s, kg: parseSafeFloat(data.kg), reps: parseInt(data.reps) || 0 });
                     }
 
@@ -650,7 +682,6 @@ function removeExercise(bIndex, eIndex) {
                         if (chk.checked) { 
                             checkedSets++; 
                             if(checkedSets < totalSets) startRestTimer();
-                            // NOVO: Usando o Escudo Numérico para garantir consistência dos gráficos
                             todayLog.push({ exercise: ex.name, set: s, kg: parseSafeFloat(kgInp.value), reps: parseInt(rpInp.value) || 0 });
                         } else { 
                             checkedSets--; 
