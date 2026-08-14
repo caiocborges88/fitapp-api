@@ -3,6 +3,7 @@
 
 var FitGamification = (() => {
     let currentAlbumPage = 1;
+    let isSnapRewardActive = false; // NOVO: Memória tática do Contrato de Elite
 
     // --- 1. MOTORES DE NUVEM (CLOUD SYNC) ---
     // Busca o cofre criptografado do usuário ativo
@@ -42,7 +43,8 @@ var FitGamification = (() => {
     }
     // ----------------------------------------
 
-    function showPackModal() { 
+    function showPackModal(snapActive = false) { 
+        isSnapRewardActive = snapActive; // Grava se o desafio foi aceito
         document.getElementById('packEnvelope').style.display = 'flex'; 
         document.getElementById('packRevealArea').style.display = 'none'; 
         document.getElementById('btnClosePack').style.display = 'none'; 
@@ -65,9 +67,16 @@ var FitGamification = (() => {
         const roll = Math.random(); 
         let targetRarity = 'comum';
         
-        if (roll > 0.95) targetRarity = 'holografico'; 
-        else if (roll > 0.85) targetRarity = 'ouro'; 
-        else if (roll > 0.60) targetRarity = 'prata';
+        if (isSnapRewardActive) {
+            // PROTOCOLO SNAP: Hackeia o drop rate garantindo recompensa máxima
+            targetRarity = roll > 0.70 ? 'holografico' : 'ouro';
+            isSnapRewardActive = false; // Reseta a memória após o pagamento
+        } else {
+            // Drop Padrão
+            if (roll > 0.95) targetRarity = 'holografico'; 
+            else if (roll > 0.85) targetRarity = 'ouro'; 
+            else if (roll > 0.60) targetRarity = 'prata';
+        }
 
         let pool = stickersDB.filter(s => s.rarity === targetRarity);
         if (pool.length === 0) pool = stickersDB.filter(s => s.rarity === 'comum'); 
