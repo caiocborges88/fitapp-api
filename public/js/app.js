@@ -43,57 +43,126 @@ var FitApp = (() => {
     function speak(text) { if (!audioEnabled || !('speechSynthesis' in window)) return; window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'pt-BR'; utterance.rate = 1.1; window.speechSynthesis.speak(utterance); }
     function toggleAudio() { audioEnabled = !audioEnabled; const btn = document.getElementById('btnAudio'); if (audioEnabled) { btn.classList.add('active'); btn.innerHTML = '🔊 <span>Áudio On</span>'; speak("Assistente ativado."); } else { btn.classList.remove('active'); btn.innerHTML = '🔈 <span>Áudio Off</span>'; window.speechSynthesis.cancel(); } }
 
-    function startRestTimer() {
-        const containerEl = document.getElementById('timerContainer'), displayEl = document.getElementById('timerDisplay');
-        containerEl.style.display = 'block'; 
+    let currentTimerEl = null;
+    let currentTimerTarget = null;
+
+    // Função para alterar o tempo de descanso em tempo real
+    function adjustRestTime(newTime) {
+        currentRestTime = newTime;
+        if(currentTimerTarget) {
+            startRestTimer(currentTimerTarget); // Reinicia o cronômetro no mesmo bloco com o novo tempo
+        }
+    }
+
+    function startRestTimer(targetContainer) {
+        currentTimerTarget = targetContainer;
+        
+        // Esconde o cronômetro antigo do topo da tela (se ainda estiver lá)
+        const oldGlobalTimer = document.getElementById('timerContainer');
+        if(oldGlobalTimer) oldGlobalTimer.style.display = 'none';
+
         clearInterval(restTimer); 
         
+        // Remove o cronômetro ativo de outro exercício, caso o usuário pule etapas
+        if (currentTimerEl && currentTimerEl.parentNode) {
+            currentTimerEl.parentNode.removeChild(currentTimerEl);
+        }
+
+        // Cria a nova cápsula visual de tempo do zero
+        currentTimerEl = document.createElement('div');
+        currentTimerEl.className = 'inline-rest-timer';
+        currentTimerEl.style.cssText = 'background: #1a1a1a; padding: 15px; border-radius: 8px; text-align: center; margin-top: 15px; border: 1px solid #333; transition: all 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.5);';
+        
+        // Acopla exatamente abaixo das séries que acabaram de ser concluídas
+        targetContainer.appendChild(currentTimerEl);
+        
         let duration = currentRestTime;
-        const endTime = Date.now() + (duration * 1000); // Marca o alvo no tempo real
-        let alertGiven = false; // Trava para o áudio de 10s não engasgar
+        const endTime = Date.now() + (duration * 1000); 
+        let alert10sGiven = false; 
 
-        speak(`Descanso. ${duration} segundos.`);
+        if(audioEnabled) speak(`Descanso. ${duration} segundos.`);
         
-        const updateUI = (timeToFormat) => { 
-            let m = Math.floor(timeToFormat/60).toString().padStart(2,'0');
-            let s = (timeToFormat%60).toString().padStart(2,'0'); 
-            displayEl.textContent = `${m}:${s}`; 
-        };
-        
-        updateUI(duration);
-
-        restTimer = setInterval(() => {
-            // Calcula a diferença entre o relógio do celular AGORA e o alvo
+        const updateUI = () => { 
             let timeLeft = Math.ceil((endTime - Date.now()) / 1000);
-            
             if (timeLeft < 0) timeLeft = 0;
             
-            updateUI(timeLeft);
+            let m = Math.floor(timeLeft/60).toString().padStart(2,'0');
+            let s = (timeLeft%60).toString().padStart(2,'0'); 
             
-            if (timeLeft <= 10 && !alertGiven) {
-                speak("Dez segundos.");
-                alertGiven = true;
+            let timerContent = '';
+
+            // Lógica Progressiva de Cores e Engajamento
+            if (timeLeft > 10) {
+                currentTimerEl.style.borderColor = '#333';
+                currentTimerEl.style.background = '#1a1a1a';
+                timerContent = `<div style="color: #aaa; font-size: 12px; text-transform: uppercase; margin-bottom: 5px;">Recuperação Tática</div><div style="font-size: 32px; color: #fff; font-weight: bold; font-family: monospace;">${m}:${s}</div>`;
+            } else if (timeLeft <= 10 && timeLeft > 5) {
+                currentTimerEl.style.borderColor = '#ffaa00';
+                currentTimerEl.style.background = 'rgba(255, 170, 0, 0.15)';
+                timerContent = `<div style="color: #ffaa00; font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; animation: blink 1s infinite;">⚠️ Prepare-se</div><div style="font-size: 32px; color: #ffaa00; font-weight: bold; font-family: monospace;">${m}:${s}</div>`;
+                if (!alert10sGiven && audioEnabled) { speak("Dez segundos. Assuma a posição."); alert10sGiven = true; }
+            } else if (timeLeft <= 5 && timeLeft > 0) {
+                currentTimerEl.style.borderColor = '#ff4444';
+                currentTimerEl.style.background = 'rgba(255, 68, 68, 0.2)';
+                timerContent = `<div style="color: #ff4444; font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px;">Contagem Final</div><div style="font-size: 42px; color: #ff4444; font-weight: bold; text-shadow: 0 0 15px rgba(255,68,68,0.8);">${timeLeft}</div>`;
+            } else if (timeLeft === 0) {
+                currentTimerEl.style.borderColor = '#00ff88';
+                currentTimerEl.style.background = 'rgba(0, 255, 136, 0.2)';
+                timerContent = `<div style="font-size: 36px; color: #00ff88; font-weight: bold; text-shadow: 0 0 15px rgba(0,255,136,0.8); text-transform: uppercase;">🔥 Vai!</div>`;
+                if(audioEnabled) speak("Fim do descanso. Ação!");
+                clearInterval(restTimer);
+                // Remove o cronômetro 3 segundos após zerar para limpar a tela
+                setTimeout(() => {
+                    if (currentTimerEl && currentTimerEl.parentNode) currentTimerEl.parentNode.removeChild(currentTimerEl);
+                }, 3000);
             }
 
-            if (timeLeft <= 0) { 
-                clearInterval(restTimer); 
-                containerEl.style.display = 'none'; 
-                speak("Fim do descanso."); 
+            // Injeta os botões de controle de tempo dentro do próprio cronômetro
+            if (timeLeft > 0) {
+                timerContent += `
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                        <button onclick="FitApp.adjustRestTime(60)" style="background: ${currentRestTime===60?'#00ff88':'#222'}; color: ${currentRestTime===60?'#000':'#aaa'}; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;">60s</button>
+                        <button onclick="FitApp.adjustRestTime(90)" style="background: ${currentRestTime===90?'#00ff88':'#222'}; color: ${currentRestTime===90?'#000':'#aaa'}; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;">90s</button>
+                        <button onclick="FitApp.adjustRestTime(120)" style="background: ${currentRestTime===120?'#00ff88':'#222'}; color: ${currentRestTime===120?'#000':'#aaa'}; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;">120s</button>
+                    </div>
+                `;
             }
-        }, 1000); 
+            
+            currentTimerEl.innerHTML = timerContent;
+        };
+        
+        updateUI();
+        restTimer = setInterval(updateUI, 1000); 
     }
-    function stopRestTimer() { clearInterval(restTimer); document.getElementById('timerContainer').style.display = 'none'; }
 
-    function getMuscleGroup(focus) {
-        const f = (focus || "").toLowerCase();
-        if (f.includes("peit")) return "peito";
-        if (f.includes("tríceps") || f.includes("triceps")) return "triceps";
-        if (f.includes("cost") || f.includes("dorsal") || f.includes("lombar")) return "costas";
-        if (f.includes("bíc") || f.includes("bic") || f.includes("antebraço")) return "biceps";
-        if (f.includes("ombro") || f.includes("delt") || f.includes("trapézio")) return "ombros";
-        if (f.includes("pern") || f.includes("quadr") || f.includes("post") || f.includes("glút") || f.includes("adut") || f.includes("abdut") || f.includes("pant")) return "pernas";
-        if (f.includes("core") || f.includes("oblíq") || f.includes("abd")) return "core";
-        return "outros";
+    function stopRestTimer() { 
+        clearInterval(restTimer); 
+        if (currentTimerEl && currentTimerEl.parentNode) {
+            currentTimerEl.parentNode.removeChild(currentTimerEl);
+        }
+    }
+
+    // Função para adicionar ou remover séries dinamicamente durante o treino
+    function changeSets(bIndex, eIndex, delta) {
+        const ex = currentRoutine[bIndex].exercises[eIndex];
+        
+        if (delta > 0) {
+            ex.sets++;
+            if(!ex.setsData) ex.setsData = [];
+            ex.setsData.push({ kg: '', reps: '', checked: false });
+        } else if (delta < 0 && ex.sets > 1) {
+            ex.sets--;
+            const removedSet = ex.setsData.pop();
+            // Desfaz a contabilidade se a série removida já estava marcada como concluída
+            if (removedSet && removedSet.checked) {
+                checkedSets--;
+                todayLog = todayLog.filter(log => !(log.exercise === ex.name && log.set === (ex.sets + 1)));
+            }
+        }
+        
+        saveWorkoutState();
+        renderCurrentRoutine(); // Recarrega a tela instantaneamente
+        if(audioEnabled && delta > 0) speak("Série adicionada.");
     }
 
     function openSwapModal(bIndex, eIndex) {
@@ -636,6 +705,12 @@ function removeExercise(bIndex, eIndex) {
                         <span class="ex-name" onclick="FitApp.openDict('${safeName.replace(/'/g, "\\'")}')">${safeName}${linkIcon}</span>
                         <div class="ex-controls" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                             ${aiSuggestionHTML}
+                            <!-- NOVO: Controles de Edição de Série Dinâmica -->
+                            <div style="display: flex; align-items: center; background: #222; border-radius: 12px; padding: 2px 6px; border: 1px solid #444;">
+                                <button class="btn-edit-set" onclick="FitApp.changeSets(${bIndex}, ${eIndex}, -1)" style="background: none; border: none; color: #ff4444; font-weight: bold; font-size: 16px; padding: 0 5px; cursor: pointer;">-</button>
+                                <span style="font-size: 12px; color: #ccc; margin: 0 5px;">${ex.sets}x</span>
+                                <button class="btn-edit-set" onclick="FitApp.changeSets(${bIndex}, ${eIndex}, 1)" style="background: none; border: none; color: #00ff88; font-weight: bold; font-size: 16px; padding: 0 5px; cursor: pointer;">+</button>
+                            </div>
                             <button class="btn-notes" style="background: none; border: none; cursor: pointer; font-size: 16px; padding: 0;" title="Log de Combate (Anotações)">📝</button>
                             <a href="${ytLink}" target="_blank" style="text-decoration: none; font-size: 18px;" title="Ver execução no YouTube">🎥</a>
                             <span class="target-reps">${safeTarget}</span>
@@ -719,7 +794,8 @@ function removeExercise(bIndex, eIndex) {
                         
                         if (chk.checked) { 
                             checkedSets++; 
-                            if(checkedSets < totalSets) startRestTimer();
+                            // O cronômetro agora recebe 'blockDiv' como alvo para nascer debaixo da série
+                            if(checkedSets < totalSets) startRestTimer(blockDiv);
                             todayLog.push({ exercise: ex.name, set: s, kg: parseSafeFloat(kgInp.value), reps: parseInt(rpInp.value) || 0 });
                         } else { 
                             checkedSets--; 
@@ -1770,6 +1846,7 @@ function renderMetricsChart() {
         init, filterLibrary, openSwapModal, confirmSwap, unlockAll, startWorkout,
         beginWorkoutExecution, acceptSnap, declineSnap, cancelWorkoutPreview, adaptWorkoutToHome,
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,
+        adjustRestTime, changeSets, // NOVAS ENGRENAGENS
         openHistoryModal, switchHistoryTab,
         saveCustomWorkout, deleteCustomWorkout,
         openImportAiModal, processWorkoutWithAI,
