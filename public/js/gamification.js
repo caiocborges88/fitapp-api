@@ -1,7 +1,46 @@
+// static/js/gamification.js
 'use strict';
 
 var FitGamification = (() => {
     let currentAlbumPage = 1;
+
+    // --- 1. MOTORES DE NUVEM (CLOUD SYNC) ---
+    // Busca o cofre criptografado do usuário ativo
+    async function getPlayerProfile() {
+        const user = firebase.auth().currentUser;
+        if (!user) return { album: [], repetidas: 0 };
+        
+        try {
+            const doc = await firebase.firestore().collection('jogadores').doc(user.uid).get();
+            if (doc.exists) {
+                return doc.data();
+            } else {
+                return { album: [], repetidas: 0 }; // Cofre novo/vazio
+            }
+        } catch (error) {
+            console.error("Erro ao ler o cofre na nuvem:", error);
+            return { album: [], repetidas: 0 }; 
+        }
+    }
+
+    // Tranca e salva as novas conquistas na nuvem
+    async function savePlayerProfile(album, repetidas) {
+        const user = firebase.auth().currentUser;
+        if (!user) return;
+        
+        try {
+            await firebase.firestore().collection('jogadores').doc(user.uid).set({
+                album: album,
+                repetidas: repetidas,
+                nome: user.displayName,
+                email: user.email,
+                ultimoAcesso: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+        } catch (error) {
+            console.error("Erro ao selar o cofre na nuvem:", error);
+        }
+    }
+    // ----------------------------------------
 
     function showPackModal() { 
         document.getElementById('packEnvelope').style.display = 'flex'; 
@@ -10,15 +49,18 @@ var FitGamification = (() => {
         document.getElementById('packModal').style.display = 'flex'; 
     }
     
-    function openPack() {
+    async function openPack() {
         document.getElementById('packEnvelope').style.display = 'none'; 
         const revealArea = document.getElementById('packRevealArea'); 
-        revealArea.innerHTML = ''; 
+        
+        // Status visual de comunicação militar com a nuvem
+        revealArea.innerHTML = '<div style="color: #a64dff; font-weight: bold; margin-top: 20px;">Sincronizando com a Base de Dados... 📡</div>'; 
         revealArea.style.display = 'flex';
         revealArea.style.flexDirection = 'column';
         
-        let savedCollection = JSON.parse(FitApp.safeGet('fitapp_album') || '[]');
-        let repetidas = parseInt(FitApp.safeGet('fitapp_repetidas') || '0') || 0; 
+        const profile = await getPlayerProfile();
+        let savedCollection = profile.album || [];
+        let repetidas = profile.repetidas || 0; 
         
         const roll = Math.random(); 
         let targetRarity = 'comum';
@@ -30,13 +72,11 @@ var FitGamification = (() => {
         let pool = stickersDB.filter(s => s.rarity === targetRarity);
         if (pool.length === 0) pool = stickersDB.filter(s => s.rarity === 'comum'); 
 
-        // MANOBRA DE PIEDADE: Tenta priorizar uma carta que falta da raridade sorteada
         let missingInPool = pool.filter(s => !savedCollection.includes(s.id));
         
         let drawn;
         let isRepeated = false;
 
-        // Se sorteou Ouro/Holo e tem alguma faltando, garante a inédita!
         if ((targetRarity === 'ouro' || targetRarity === 'holografico') && missingInPool.length > 0) {
             drawn = missingInPool[Math.floor(Math.random() * missingInPool.length)];
         } else {
@@ -49,6 +89,11 @@ var FitGamification = (() => {
             isRepeated = true;
             repetidas++;
         }
+        
+        // Grava o resultado permanentemente no Firestore (Resgate Concluído)
+        await savePlayerProfile(savedCollection, repetidas);
+
+        revealArea.innerHTML = ''; // Limpa o aviso de sincronização
         
         const div = document.createElement('div'); 
         div.className = `sticker-slot filled ${drawn.rarity}`; 
@@ -66,14 +111,11 @@ var FitGamification = (() => {
             revealArea.appendChild(repMsg);
         }
         
-        FitApp.safeSet('fitapp_album', JSON.stringify(savedCollection));
-        FitApp.safeSet('fitapp_repetidas', repetidas.toString());
-        
-        // NOVO: Motor de Compartilhamento Nativo (Efeito Strava / FOMO)
+        // Motor de Compartilhamento Nativo (Efeito Strava) preservado
         const shareBtn = document.createElement('button');
         shareBtn.className = 'btn-action btn-start-pulse';
         shareBtn.style.marginTop = '25px';
-        shareBtn.style.background = '#25D366'; // Verde WhatsApp
+        shareBtn.style.background = '#25D366'; 
         shareBtn.style.color = '#000';
         shareBtn.style.border = 'none';
         shareBtn.style.width = '100%';
@@ -81,7 +123,6 @@ var FitGamification = (() => {
         shareBtn.innerHTML = '📲 Compartilhar Vitória';
         
         shareBtn.onclick = async () => {
-            // Busca o último treino registrado para extrair os dados reais
             const historyLog = JSON.parse(FitApp.safeGet('fitapp_week_log') || '[]');
             const lastLog = historyLog.length > 0 ? historyLog[historyLog.length - 1] : null;
             
@@ -92,15 +133,11 @@ var FitGamification = (() => {
             
             if (navigator.share) {
                 try {
-                    await navigator.share({
-                        title: 'Vitória no FitApp',
-                        text: shareText
-                    });
+                    await navigator.share({ title: 'Vitória no FitApp', text: shareText });
                 } catch (err) {
-                    console.log('Compartilhamento minimizado pelo usuário.');
+                    console.log('Compartilhamento minimizado.');
                 }
             } else {
-                // Fallback para navegadores de PC que não suportam Web Share API
                 navigator.clipboard.writeText(shareText);
                 FitApp.showToast('Relatório copiado para a área de transferência!');
             }
@@ -109,18 +146,21 @@ var FitGamification = (() => {
         revealArea.appendChild(shareBtn);
 
         document.getElementById('btnClosePack').style.display = 'block'; 
-        FitApp.speak(isRepeated ? "Conquista repetida detectada." : "Nova conquista revelada.");
+        if(window.FitApp) FitApp.speak(isRepeated ? "Conquista repetida detectada." : "Nova conquista revelada.");
     }
 
-    function renderAlbum() {
+    async function renderAlbum() {
         const grid = document.getElementById('albumGrid'); 
         if (!grid) return;
         
         grid.style.display = 'block';
-        grid.innerHTML = '';
+        grid.innerHTML = '<div style="color: #a64dff; text-align: center; padding: 20px; font-weight: bold;">Acessando Cofre de Elite... 📡</div>';
         
-        let savedCollection = JSON.parse(FitApp.safeGet('fitapp_album') || '[]');
-        let repetidas = parseInt(FitApp.safeGet('fitapp_repetidas') || '0') || 0; 
+        const profile = await getPlayerProfile();
+        let savedCollection = profile.album || [];
+        let repetidas = profile.repetidas || 0; 
+        
+        grid.innerHTML = ''; // Limpa aviso de carregamento
         
         const progressEl = document.getElementById('albumProgress');
         if (progressEl) progressEl.textContent = `${savedCollection.length} / ${stickersDB.length} Conquistas`;
@@ -204,18 +244,19 @@ var FitGamification = (() => {
         }
     }
 
-    function craftSticker() {
-        let savedCollection = JSON.parse(FitApp.safeGet('fitapp_album') || '[]');
-        let repetidas = parseInt(FitApp.safeGet('fitapp_repetidas') || '0') || 0; 
+    async function craftSticker() {
+        if(window.FitApp) FitApp.showToast("Forjando conquista na nuvem...");
+        
+        const profile = await getPlayerProfile();
+        let savedCollection = profile.album || [];
+        let repetidas = profile.repetidas || 0; 
         
         if (repetidas < 3) return;
         
-        // REGRA DE ELITE: A Forja só tem poder para fabricar cartas 'comum' ou 'prata'. 
-        // Cartas 'ouro' e 'holografico' só podem ser ganhas abrindo pacotes pós-treino!
         const faltantesForja = stickersDB.filter(s => !savedCollection.includes(s.id) && (s.rarity === 'comum' || s.rarity === 'prata'));
         
         if (faltantesForja.length === 0) {
-            FitApp.showToast("Alerta: A Forja só fabrica Prata e Comum. Treine para achar as raras!");
+            if(window.FitApp) FitApp.showToast("Alerta: A Forja só fabrica Prata e Comum. Treine para achar as raras!");
             return;
         }
         
@@ -223,12 +264,11 @@ var FitGamification = (() => {
         savedCollection.push(nova.id);
         repetidas -= 3;
         
-        FitApp.safeSet('fitapp_album', JSON.stringify(savedCollection));
-        FitApp.safeSet('fitapp_repetidas', repetidas.toString());
+        await savePlayerProfile(savedCollection, repetidas);
         
         renderAlbum();
-        FitApp.showToast(`Forja concluída: ${nova.name} desbloqueada!`);
-        FitApp.speak("Conquista forjada com sucesso.");
+        if(window.FitApp) FitApp.showToast(`Forja concluída: ${nova.name} desbloqueada!`);
+        if(window.FitApp) FitApp.speak("Conquista forjada com sucesso.");
     }
 
     return {
