@@ -711,6 +711,9 @@ function removeExercise(bIndex, eIndex) {
                                 <span style="font-size: 12px; color: #ccc; margin: 0 5px;">${ex.sets}x</span>
                                 <button class="btn-edit-set" onclick="FitApp.changeSets(${bIndex}, ${eIndex}, 1)" style="background: none; border: none; color: #00ff88; font-weight: bold; font-size: 16px; padding: 0 5px; cursor: pointer;">+</button>
                             </div>
+                            <!-- NOVO: Botão Piloto Automático -->
+                            <button id="btnAuto_${bIndex}_${eIndex}" onclick="FitApp.toggleAutoPilot(${bIndex}, ${eIndex})" style="background: rgba(0, 255, 136, 0.1); border: 1px solid #00ff88; color: #00ff88; border-radius: 8px; padding: 4px 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin-left: 5px; transition: all 0.2s;" title="Modo Hands-Free">🤖 Auto</button>
+                            
                             <button class="btn-notes" style="background: none; border: none; cursor: pointer; font-size: 16px; padding: 0;" title="Log de Combate (Anotações)">📝</button>
                             <a href="${ytLink}" target="_blank" style="text-decoration: none; font-size: 18px;" title="Ver execução no YouTube">🎥</a>
                             <span class="target-reps">${safeTarget}</span>
@@ -750,7 +753,9 @@ function removeExercise(bIndex, eIndex) {
 
                     const row = document.createElement('div'); row.className = 'set-row';
                     
-                    row.innerHTML = `<div class="set-label">S${s}</div><input type="number" class="kg-val" placeholder="Kg" value="${data.kg}"><input type="number" class="rp-val" placeholder="Reps / s" value="${data.reps}"><button class="btn-iso" style="background:none; border:none; cursor:pointer; font-size:16px; padding:0 5px;" title="Iniciar Isometria">⏱️</button><input type="checkbox" class="chk-set" ${data.checked ? 'checked' : ''}>`;
+                    // NOVO: Criando uma "Dog Tag" única para que o Piloto Automático localize o alvo
+                    const chkId = `chk_set_${bIndex}_${eIndex}_${s}`;
+                    row.innerHTML = `<div class="set-label">S${s}</div><input type="number" class="kg-val" placeholder="Kg" value="${data.kg}"><input type="number" class="rp-val" placeholder="Reps / s" value="${data.reps}"><button class="btn-iso" style="background:none; border:none; cursor:pointer; font-size:16px; padding:0 5px;" title="Iniciar Isometria">⏱️</button><input type="checkbox" id="${chkId}" class="chk-set" ${data.checked ? 'checked' : ''}>`;
                     
                     const chk = row.querySelector('.chk-set');
                     const kgInp = row.querySelector('.kg-val');
@@ -1841,12 +1846,106 @@ function renderMetricsChart() {
             showToast('Treino em andamento restaurado.');
         }
     }
-    
+// --- NOVO: MOTOR DO PILOTO AUTOMÁTICO (HANDS-FREE) ---
+    let autoBIndex = null, autoEIndex = null;
+    let autoExec = 0, autoRest = 0;
+    let autoTimeout = null;
+    let isAutoActive = false;
+
+    function toggleAutoPilot(bIndex, eIndex) {
+        if (isAutoActive && autoBIndex === bIndex && autoEIndex === eIndex) {
+            stopAutoPilot();
+        } else {
+            if (isAutoActive) stopAutoPilot(); // Aborta se estiver rodando em outro exercício
+            autoBIndex = bIndex;
+            autoEIndex = eIndex;
+            document.getElementById('autoPilotModal').style.display = 'flex';
+        }
+    }
+
+    function startAutoPilot() {
+        autoExec = parseInt(document.getElementById('autoExecTime').value) || 40;
+        autoRest = parseInt(document.getElementById('autoRestTime').value) || 45;
+        
+        document.getElementById('autoPilotModal').style.display = 'none';
+        isAutoActive = true;
+        
+        const btn = document.getElementById(`btnAuto_${autoBIndex}_${autoEIndex}`);
+        if (btn) {
+            btn.innerHTML = '🛑 Parar';
+            btn.style.color = '#ff4444';
+            btn.style.borderColor = '#ff4444';
+            btn.style.background = 'rgba(255, 68, 68, 0.1)';
+        }
+        
+        if(audioEnabled) speak("Protocolo hands-free ativado. Prepare-se.");
+        showToast("Modo Auto iniciado. Guarde o dispositivo.");
+        
+        // Timer de respiro de 3 segundos antes do combate iniciar
+        autoTimeout = setTimeout(() => { executeAutoPhase(); }, 3000);
+    }
+
+    function executeAutoPhase() {
+        if (!isAutoActive) return;
+        
+        const ex = currentRoutine[autoBIndex].exercises[autoEIndex];
+        
+        // Escaneia qual é a próxima série que ainda não foi concluída
+        let nextSet = -1;
+        for(let i = 0; i < ex.sets; i++) {
+            if(!ex.setsData[i] || !ex.setsData[i].checked) {
+                nextSet = i + 1;
+                break;
+            }
+        }
+        
+        if (nextSet === -1) {
+            stopAutoPilot();
+            if(audioEnabled) speak("Ciclo de séries concluído com sucesso.");
+            showToast("Automação finalizada. Alvo abatido.");
+            return;
+        }
+
+        if(audioEnabled) speak("Ação.");
+        showToast(`Auto: Executando Série ${nextSet}... (${autoExec}s)`);
+        
+        // Simula o tempo de execução físico do atleta
+        autoTimeout = setTimeout(() => {
+            if (!isAutoActive) return;
+            
+            // Localiza a caixa de seleção específica via ID e marca
+            const chk = document.getElementById(`chk_set_${autoBIndex}_${autoEIndex}_${nextSet}`);
+            if (chk && !chk.checked) {
+                adjustRestTime(autoRest); // Seta o cronômetro para o tempo definido no Piloto
+                chk.click(); // O clique fantasma dispara os alertas e o salvamento em nuvem
+            }
+            
+            // Aguarda o término do descanso (+2s de margem de segurança para o áudio respirar)
+            autoTimeout = setTimeout(() => {
+                executeAutoPhase(); // Chama o loop novamente para a próxima série
+            }, (autoRest + 2) * 1000);
+            
+        }, autoExec * 1000);
+    }
+
+    function stopAutoPilot() {
+        isAutoActive = false;
+        clearTimeout(autoTimeout);
+        const btn = document.getElementById(`btnAuto_${autoBIndex}_${autoEIndex}`);
+        if (btn) {
+            btn.innerHTML = '🤖 Auto';
+            btn.style.color = '#00ff88';
+            btn.style.borderColor = '#00ff88';
+            btn.style.background = 'rgba(0, 255, 136, 0.1)';
+        }
+        showToast("Piloto Automático desativado.");
+    }   
     return { 
         init, filterLibrary, openSwapModal, confirmSwap, unlockAll, startWorkout,
         beginWorkoutExecution, acceptSnap, declineSnap, cancelWorkoutPreview, adaptWorkoutToHome,
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,
         adjustRestTime, changeSets, // NOVAS ENGRENAGENS
+        toggleAutoPilot, startAutoPilot, stopAutoPilot, // Piloto Automático (Hands-Free)
         openHistoryModal, switchHistoryTab,
         saveCustomWorkout, deleteCustomWorkout,
         openImportAiModal, processWorkoutWithAI,
@@ -1861,5 +1960,4 @@ function renderMetricsChart() {
         } 
     };
 })();
-
 document.addEventListener('DOMContentLoaded', FitApp.init);
