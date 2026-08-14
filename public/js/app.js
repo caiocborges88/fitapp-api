@@ -527,7 +527,31 @@ function removeExercise(bIndex, eIndex) {
         currentRoutine = [];
     }
 
+    let snapActive = false; // Memória tática da aposta
+
     function beginWorkoutExecution() {
+        // Intercepta o clique de iniciar e bloqueia a tela
+        document.getElementById('snapModal').style.display = 'flex';
+        if(audioEnabled) speak("Atenção. Oportunidade de evolução detectada. Aceita o desafio?");
+    }
+
+    function acceptSnap() {
+        document.getElementById('snapModal').style.display = 'none';
+        snapActive = true;
+        showToast("Contrato selado. Mostre sua força.");
+        if(audioEnabled) speak("Contrato selado. Iniciando protocolo de combate.");
+        executeWorkoutStart();
+    }
+
+    function declineSnap() {
+        document.getElementById('snapModal').style.display = 'none';
+        snapActive = false;
+        showToast("Treino padrão iniciado.");
+        executeWorkoutStart();
+    }
+
+    // A função original que realmente inicia o cronômetro
+    function executeWorkoutStart() {
         isWorkoutActive = true; 
         
         document.getElementById('workoutPreview').style.display = 'none';
@@ -776,7 +800,7 @@ function removeExercise(bIndex, eIndex) {
         renderWeeklyCalendar(); 
         if (typeof renderMetricsChart === 'function') renderMetricsChart(); 
 
-        if(isComplete) { FitGamification.showPackModal(); } else { showToast('Treino salvo no sistema.'); switchTab('tab-evolucao', 'nav-evolucao'); }
+        if(isComplete) { FitGamification.showPackModal(snapActive); snapActive = false; } else { showToast('Treino salvo no sistema.'); switchTab('tab-evolucao', 'nav-evolucao'); }
     }
 
     async function fetchAIFeedback() {
@@ -1744,7 +1768,7 @@ function renderMetricsChart() {
     
     return { 
         init, filterLibrary, openSwapModal, confirmSwap, unlockAll, startWorkout,
-        beginWorkoutExecution, cancelWorkoutPreview, adaptWorkoutToHome,
+        beginWorkoutExecution, acceptSnap, declineSnap, cancelWorkoutPreview, adaptWorkoutToHome,
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,
         openHistoryModal, switchHistoryTab,
         saveCustomWorkout, deleteCustomWorkout,

@@ -233,6 +233,22 @@
     </div>
 
     <!-- ZONA DE MODAIS (JANELAS FLUTUANTES) -->
+
+    <!-- Pop-up Dramático Protocolo Snap -->
+    <div id="snapModal" class="swap-modal-overlay" style="display: none; z-index: 10000; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);">
+        <div style="background: #121212; padding: 30px; border-radius: 12px; border: 2px solid #ffaa00; text-align: center; max-width: 90%; width: 350px; box-shadow: 0 0 40px rgba(255, 170, 0, 0.4); animation: pulseSnap 2s infinite;">
+            <div style="font-size: 60px; margin-bottom: 10px; text-shadow: 0 0 20px #ffaa00;">⚡</div>
+            <h2 style="color: #ffaa00; margin-bottom: 10px; font-size: 22px; text-transform: uppercase; letter-spacing: 2px;">Contrato de Elite</h2>
+            <p id="snapMessage" style="color: #ddd; font-size: 14px; margin-bottom: 25px; line-height: 1.5;">O Spotter detectou uma margem de evolução. Aumente a carga do seu primeiro exercício em <strong style="color: #ffaa00;">+2kg</strong>.<br><br>Aceite o pacto e garanta <strong style="color: #ffaa00;">100% de chance</strong> de um drop Ouro ao finalizar o treino.</p>
+            <div style="display: flex; gap: 10px; flex-direction: column;">
+                <button onclick="FitApp.acceptSnap()" style="background: #ffaa00; color: #000; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 15px; text-transform: uppercase; box-shadow: 0 4px 15px rgba(255,170,0,0.4);">🔥 Aceitar o Desafio</button>
+                <button onclick="FitApp.declineSnap()" style="background: transparent; color: #888; border: 1px solid #444; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; text-transform: uppercase;">Recusar (Treino Normal)</button>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes pulseSnap { 0% { box-shadow: 0 0 30px rgba(255, 170, 0, 0.3); } 50% { box-shadow: 0 0 50px rgba(255, 170, 0, 0.6); } 100% { box-shadow: 0 0 30px rgba(255, 170, 0, 0.3); } }
+    </style>
     <div class="pack-modal" id="packModal">
         <div class="pack-envelope" id="packEnvelope">
             Pacotinho do Dia<br><br>👆 TOQUE PARA RASGAR
