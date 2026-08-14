@@ -69,6 +69,45 @@ var FitGamification = (() => {
         FitApp.safeSet('fitapp_album', JSON.stringify(savedCollection));
         FitApp.safeSet('fitapp_repetidas', repetidas.toString());
         
+        // NOVO: Motor de Compartilhamento Nativo (Efeito Strava / FOMO)
+        const shareBtn = document.createElement('button');
+        shareBtn.className = 'btn-action btn-start-pulse';
+        shareBtn.style.marginTop = '25px';
+        shareBtn.style.background = '#25D366'; // Verde WhatsApp
+        shareBtn.style.color = '#000';
+        shareBtn.style.border = 'none';
+        shareBtn.style.width = '100%';
+        shareBtn.style.maxWidth = '300px';
+        shareBtn.innerHTML = '📲 Compartilhar Vitória';
+        
+        shareBtn.onclick = async () => {
+            // Busca o último treino registrado para extrair os dados reais
+            const historyLog = JSON.parse(FitApp.safeGet('fitapp_week_log') || '[]');
+            const lastLog = historyLog.length > 0 ? historyLog[historyLog.length - 1] : null;
+            
+            const duration = lastLog && lastLog.duration_secs ? Math.floor(lastLog.duration_secs / 60) : '--';
+            const workoutType = lastLog ? lastLog.tipo : 'Customizado';
+            
+            const shareText = `🔥 Sobrevivi ao Treino ${workoutType} no FitApp!\n⏱️ Tempo de Combate: ${duration} min\n🏆 Recompensa: Carta ${drawn.name} (${drawn.rarity.toUpperCase()})\n🤖 O Spotter Digital calibrou minhas cargas.\n\nMonte seu esquadrão. Link na bio.`;
+            
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'Vitória no FitApp',
+                        text: shareText
+                    });
+                } catch (err) {
+                    console.log('Compartilhamento minimizado pelo usuário.');
+                }
+            } else {
+                // Fallback para navegadores de PC que não suportam Web Share API
+                navigator.clipboard.writeText(shareText);
+                FitApp.showToast('Relatório copiado para a área de transferência!');
+            }
+        };
+        
+        revealArea.appendChild(shareBtn);
+
         document.getElementById('btnClosePack').style.display = 'block'; 
         FitApp.speak(isRepeated ? "Conquista repetida detectada." : "Nova conquista revelada.");
     }
