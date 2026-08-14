@@ -127,7 +127,32 @@ const dictionaryData = [
     { name: "Remada na Porta/Lençol", focus: "Costas Base", desc: "Usar um lençol preso na porta...", equip: "peso_corporal" },
     { name: "Rosca Isométrica (Toalha/Cinto)", focus: "Bíceps", desc: "Pise em uma toalha e puxe as pontas para cima...", equip: "peso_corporal" },
     { name: "Contração de Costas Isométrica", focus: "Costas", desc: "Apoie os cotovelos contra o colchão/parede...", equip: "peso_corporal" },
-    { name: "Elevação Lateral Isométrica", focus: "Ombros", desc: "Empurre os braços lateralmente contra o batente...", equip: "peso_corporal" }
+    { name: "Elevação Lateral Isométrica", focus: "Ombros", desc: "Empurre os braços lateralmente contra o batente...", equip: "peso_corporal" },
+
+    // --- FORÇA E POTÊNCIA (ACADEMIA SOCIETY) ---
+    { name: "Sprints com Trenó (Sled)", focus: "Pernas Explosão", desc: "Empurrar ou puxar trenó com carga pesada.", equip: "maquina" },
+    { name: "Agachamento Frontal", focus: "Quadríceps/Core", desc: "Agachamento com a barra apoiada nos ombros frontais.", equip: "barra" },
+    { name: "Terra Hexagonal (Trap Bar)", focus: "Pernas/Costas", desc: "Levantamento terra utilizando barra hexagonal para biomecânica otimizada.", equip: "barra" },
+    { name: "Step-ups Pesados", focus: "Pernas Unilateral", desc: "Subida na caixa segurando halteres de alta carga.", equip: "halter" },
+    { name: "Pallof Press (Polia)", focus: "Core Anti-rotação", desc: "Na polia, empurre o cabo à frente do peito e resista à rotação do tronco.", equip: "cabo" },
+    { name: "Saltos na Caixa (Box Jump)", focus: "Pernas Pliometria", desc: "Salto explosivo e aterrissagem estável sobre caixa pliométrica.", equip: "peso_corporal" },
+    
+    // --- MECÂNICA E ESTABILIDADE (CASA) ---
+    { name: "Marchas na Parede (Wall Drills)", focus: "Pernas Mecânica", desc: "Mãos na parede, corpo inclinado, trocas de perna explosivas.", equip: "peso_corporal" },
+    { name: "Quedas de Base (Drop Squats)", focus: "Pernas Frenagem", desc: "Cair rapidamente em posição de agachamento atlético para treinar absorção.", equip: "peso_corporal" },
+    { name: "Agachamento Lateral (Cossack)", focus: "Pernas e Mobilidade", desc: "Agachamento lateral profundo, mantendo a perna oposta estendida.", equip: "peso_corporal" },
+    { name: "Flexão Nórdica", focus: "Posteriores de Coxa", desc: "De joelhos (calcanhares travados), desça o tronco controlando a queda livre.", equip: "peso_corporal" },
+    { name: "Prancha Copenhague", focus: "Adutores e Core", desc: "Prancha lateral com a perna de cima ancorada sobre uma cadeira/banco.", equip: "peso_corporal" },
+    { name: "Percevejo (Dead Bugs)", focus: "Core Anti-extensão", desc: "Deitado, estenda perna e braço opostos sem permitir que a lombar curve.", equip: "peso_corporal" },
+    { name: "Saltos em Pogo", focus: "Panturrilha Pliometria", desc: "Saltos curtos contínuos usando apenas a reatividade dos tornozelos.", equip: "peso_corporal" },
+    
+    // --- DESLOCAMENTO REAL (CAMPO / PRAÇA / ESPAÇO ABERTO) ---
+    { name: "Sprints Curtos (Aceleração)", focus: "Pernas Explosão", desc: "Tiros de velocidade máxima (saídas do zero) de 5 a 15 metros.", equip: "calistenia" },
+    { name: "Sprints Lançados (Flying Sprints)", focus: "Pernas Velocidade Média", desc: "Aceleração progressiva atingindo velocidade máxima entre 20 a 40 metros.", equip: "calistenia" },
+    { name: "Desacelerações Resistidas", focus: "Pernas Frenagem", desc: "Corrida travada por elástico ou parada brusca programada.", equip: "calistenia" },
+    { name: "Shuttle 5-10-5", focus: "Pernas Agilidade", desc: "Tiros curtos com cortes angulares e mudança brusca de direção.", equip: "calistenia" },
+    { name: "Saltos Horizontais (Broad Jump)", focus: "Pernas Pliometria", desc: "Salto máximo para frente buscando distância e aterrissagem sólida.", equip: "calistenia" },
+    { name: "Lançamento de Medicine Ball", focus: "Core Explosivo", desc: "Arremesso rotacional ou overhead de bola pesada contra parede ou no gramado.", equip: "calistenia" }
 ];
 
 // // 1. BANCO DE DADOS EXPANDIDO (Modo Bi-set e Modo Tradicional)
