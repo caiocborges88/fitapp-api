@@ -714,6 +714,8 @@ function removeExercise(bIndex, eIndex) {
     }
 
     async function finishWorkout() {
+        stopRestTimer(); // NOVO: Garante a destruição do cronômetro ao sair da tela de combate
+        
         const isComplete = checkedSets === totalSets;
         const tipoTreino = currentWorkoutType; 
         
