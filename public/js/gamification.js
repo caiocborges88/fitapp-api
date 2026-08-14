@@ -271,10 +271,99 @@ var FitGamification = (() => {
         if(window.FitApp) FitApp.speak("Conquista forjada com sucesso.");
     }
 
+// --- NOVO: ARENA PVP (Cálculo do Poder de Combate e Radar Cloud) ---
+    async function loadLeaderboard() {
+        const container = document.getElementById('leaderboardContainer');
+        if (!container) return;
+
+        // Efeito de escaneamento militar
+        container.innerHTML = '<div style="text-align: center; color: #ffaa00; padding: 20px; font-weight: bold; font-family: monospace;">Escaneando Base de Dados... 📡</div>';
+
+        try {
+            const snapshot = await firebase.firestore().collection('jogadores').get();
+            let players = [];
+
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const albumLength = data.album ? data.album.length : 0;
+                const repetidas = data.repetidas || 0;
+                const nome = data.nome || 'Atleta Anônimo';
+                
+                // A Matemática Tática: Poder de Combate (Cartas Únicas valem 10, Repetidas valem 1)
+                const combatPower = (albumLength * 10) + repetidas;
+
+                players.push({
+                    uid: doc.id,
+                    nome: nome,
+                    poder: combatPower,
+                    cartas: albumLength,
+                    suor: repetidas
+                });
+            });
+
+            // Ordena os jogadores do maior poder para o menor (Desempate)
+            players.sort((a, b) => b.poder - a.poder);
+            
+            container.innerHTML = ''; // Limpa o radar
+
+            if (players.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">Nenhum atleta na base de dados.</div>';
+                return;
+            }
+
+            const currentUser = firebase.auth().currentUser;
+            const currentUid = currentUser ? currentUser.uid : null;
+
+            players.forEach((player, index) => {
+                const isMe = player.uid === currentUid;
+                const position = index + 1;
+                
+                // Design das Medalhas do Top 3
+                let rankVisual = `<span style="font-size: 18px; font-weight: bold; color: #888; width: 30px; text-align: center;">${position}º</span>`;
+                if (position === 1) rankVisual = `<span style="font-size: 24px; text-shadow: 0 0 10px #ffaa00; width: 30px; text-align: center;">🥇</span>`;
+                if (position === 2) rankVisual = `<span style="font-size: 24px; text-shadow: 0 0 10px #c0c0c0; width: 30px; text-align: center;">🥈</span>`;
+                if (position === 3) rankVisual = `<span style="font-size: 24px; text-shadow: 0 0 10px #cd7f32; width: 30px; text-align: center;">🥉</span>`;
+
+                const block = document.createElement('div');
+                block.style.display = 'flex';
+                block.style.alignItems = 'center';
+                block.style.justifyContent = 'space-between';
+                block.style.padding = '15px';
+                block.style.borderRadius = '8px';
+                block.style.background = isMe ? 'rgba(255, 170, 0, 0.1)' : '#1e1e1e';
+                block.style.border = isMe ? '1px solid #ffaa00' : '1px solid #333';
+                block.style.boxShadow = isMe ? '0 0 15px rgba(255, 170, 0, 0.2)' : 'none';
+
+                block.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        ${rankVisual}
+                        <div>
+                            <div style="font-weight: bold; color: ${isMe ? '#ffaa00' : '#fff'}; font-size: 15px;">${player.nome} ${isMe ? '(Você)' : ''}</div>
+                            <div style="font-size: 11px; color: #aaa; margin-top: 4px;">
+                                <span style="background: #111; padding: 2px 6px; border-radius: 4px;">🏆 ${player.cartas}/24</span>
+                                <span style="background: #111; padding: 2px 6px; border-radius: 4px; margin-left: 5px;">💧 ${player.suor} pts</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 20px; font-weight: bold; color: #ffaa00; font-family: monospace;">${player.poder}</div>
+                        <div style="font-size: 10px; color: #666; text-transform: uppercase;">Poder</div>
+                    </div>
+                `;
+                container.appendChild(block);
+            });
+
+        } catch (error) {
+            console.error("Falha no radar da Arena:", error);
+            container.innerHTML = '<div style="color: #ff4444; text-align: center; padding: 20px;">Falha ao conectar com o servidor da Arena.</div>';
+        }
+    }
+
     return {
         showPackModal,
         openPack,
         renderAlbum,
-        craftSticker
+        craftSticker,
+        loadLeaderboard // Expõe o motor do ranking para o app.js
     };
 })();

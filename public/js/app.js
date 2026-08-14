@@ -977,6 +977,7 @@ function removeExercise(bIndex, eIndex) {
         document.getElementById(tabId).classList.add('active'); document.getElementById(navId).classList.add('active');
         
         // Distribuição tática das renderizações
+        if (tabId === 'tab-arena') FitGamification.loadLeaderboard(); // Injeta o carregamento do Ranking
         if (tabId === 'tab-conquistas') FitGamification.renderAlbum();
         if (tabId === 'tab-evolucao') {
             renderWeeklyCalendar();
@@ -1659,8 +1660,8 @@ function renderMetricsChart() {
         const savedLevel = safeGet('fitapp_level');
         if (savedLevel && els.levelSelector) els.levelSelector.value = savedLevel;
 
-        // Mapeia todas as 5 abas da nova arquitetura
-        ['treino', 'evolucao', 'conquistas', 'biblioteca', 'perfil'].forEach(tab => { 
+        // Mapeia todas as 6 abas da nova arquitetura (incluindo a Arena)
+        ['treino', 'evolucao', 'conquistas', 'arena', 'biblioteca', 'perfil'].forEach(tab => { 
             const navBtn = document.getElementById(`nav-${tab}`);
             if (navBtn) navBtn.addEventListener('click', () => switchTab(`tab-${tab}`, `nav-${tab}`)); 
         });

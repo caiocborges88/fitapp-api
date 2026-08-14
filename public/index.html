@@ -179,6 +179,24 @@
             <div id="libraryGrid" class="library-grid"></div>
         </main>
 
+        <!-- ABA NOVA: ARENA PVP (Ranking Global) -->
+        <main id="tab-arena" class="tab-content">
+            <div class="dashboard-header" style="text-align: center; margin-bottom: 20px;">
+                <h2 style="color: #ffaa00; margin-bottom: 5px;">⚔️ Arena PvP</h2>
+                <p style="color: #aaa; font-size: 13px;">
+                    Ranking Global de <strong style="color: #ffaa00;">Poder de Combate</strong><br>
+                    <span style="font-size: 11px;">(Carta Única = 10 pts | Suor Repetido = 1 pt)</span>
+                </p>
+                <button onclick="FitGamification.loadLeaderboard()" style="background: rgba(255, 170, 0, 0.2); border: 1px solid #ffaa00; color: #ffaa00; padding: 6px 15px; border-radius: 20px; font-size: 12px; margin-top: 10px; cursor: pointer;">
+                    🔄 Atualizar Radar
+                </button>
+            </div>
+            
+            <div id="leaderboardContainer" style="display: flex; flex-direction: column; gap: 10px; padding-bottom: 20px;">
+                <!-- O pódio será injetado aqui via JavaScript -->
+            </div>
+        </main>
+
         <!-- 5. ABA PERFIL (Configurações) -->
         <main id="tab-perfil" class="tab-content">
             <h2 style="color: #fff; margin-bottom: 20px; text-align: center;">⚙️ Configurações</h2>
@@ -311,11 +329,12 @@
         </div>
     </div>
 
-    <!-- Navegação Inferior de 5 Abas -->
-    <nav style="position: relative; z-index: 9999;">
+    <!-- Navegação Inferior de 6 Abas -->
+    <nav style="position: relative; z-index: 9999; display: flex; overflow-x: auto; white-space: nowrap; scrollbar-width: none;">
         <button id="nav-treino" class="active"><span class="icon">🏋️</span> Treinar</button>
-        <button id="nav-evolucao"><span class="icon">🧠</span> IA & Status</button>
+        <button id="nav-evolucao"><span class="icon">🧠</span> IA/Status</button>
         <button id="nav-conquistas"><span class="icon">🏆</span> Álbum</button>
+        <button id="nav-arena"><span class="icon">⚔️</span> Arena</button>
         <button id="nav-biblioteca"><span class="icon">🔍</span> Base</button>
         <button id="nav-perfil"><span class="icon">⚙️</span> Perfil</button>
     </nav>
