@@ -489,14 +489,23 @@ function removeExercise(bIndex, eIndex) {
                 }
             }
         } else {
-            // NOVO: Seleciona o banco de dados correto com base na chave de perfil
-            const activeDB = profile === 'feminino' ? dbWorkoutsFeminino : dbWorkouts;
+            // NOVO: Roteamento tático de múltiplos bancos de dados
+            let activeDB = dbWorkouts;
+            let profileLabel = '👨 Padrão';
+            
+            if (profile === 'feminino') {
+                activeDB = dbWorkoutsFeminino;
+                profileLabel = '👩 Foco Inferiores';
+            } else if (profile === 'tatico') {
+                activeDB = dbWorkoutsTatico;
+                profileLabel = '⚽ Tático (Society)';
+            }
+            
             currentRoutine = JSON.parse(JSON.stringify(activeDB[style][level][type] || activeDB['biset']['intermediario']['A']));
             
             if(preview) {
                 document.getElementById('previewTitle').textContent = `Treino ${type}`;
                 const styleName = style === 'biset' ? 'Modo Bi-set' : 'Modo Tradicional';
-                const profileLabel = profile === 'feminino' ? '👩 Foco Inferiores' : '👨 Padrão'; // Identificador Visual
                 document.getElementById('previewDesc').textContent = `${styleName} - Nível ${level.charAt(0).toUpperCase() + level.slice(1)} | ${profileLabel}`;
                 if(customControls) customControls.style.display = 'none';
                 if(nameContainer) nameContainer.style.display = 'none';
