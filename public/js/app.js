@@ -45,17 +45,21 @@ var FitApp = (() => {
 
     let currentTimerEl = null;
     let currentTimerTarget = null;
+    let currentTimerExercise = null; // Memória do exercício atual
+    let currentTacticalTip = ""; // Memória da dica para não recarregar a cada segundo
 
     // Função para alterar o tempo de descanso em tempo real
     function adjustRestTime(newTime) {
         currentRestTime = newTime;
         if(currentTimerTarget) {
-            startRestTimer(currentTimerTarget); // Reinicia o cronômetro no mesmo bloco com o novo tempo
+            // O 'true' avisa ao motor que é apenas um ajuste, para ele não repetir o áudio do dicionário
+            startRestTimer(currentTimerTarget, currentTimerExercise, true); 
         }
     }
 
-    function startRestTimer(targetContainer) {
+    function startRestTimer(targetContainer, exerciseName = null, isAdjustment = false) {
         currentTimerTarget = targetContainer;
+        currentTimerExercise = exerciseName;
         
         // Esconde o cronômetro antigo do topo da tela (se ainda estiver lá)
         const oldGlobalTimer = document.getElementById('timerContainer');
@@ -63,9 +67,30 @@ var FitApp = (() => {
 
         clearInterval(restTimer); 
         
-        // Remove o cronômetro ativo de outro exercício, caso o usuário pule etapas
+        // Remove o cronômetro ativo de outro exercício
         if (currentTimerEl && currentTimerEl.parentNode) {
             currentTimerEl.parentNode.removeChild(currentTimerEl);
+        }
+
+        // --- CÉREBRO TÁTICO: Busca a dica no dicionário ---
+        if (!isAdjustment) {
+            currentTacticalTip = "";
+            if (exerciseName && typeof dictionaryData !== 'undefined') {
+                const dictItem = dictionaryData.find(d => d.name === exerciseName);
+                if (dictItem && dictItem.desc) {
+                    currentTacticalTip = dictItem.desc; // Puxa a dica biomecânica
+                }
+            }
+            // Se não houver dica específica, usa uma diretriz de combate genérica
+            if (!currentTacticalTip) {
+                const genericTips = [
+                    "Controle a respiração. Inspire na fase excêntrica, expire na concêntrica.", 
+                    "Mantenha o foco. O descanso converte suor em hipertrofia.", 
+                    "Aproveite para oxigenar a musculatura alvo.",
+                    "Hidrate-se. A água é o combustível da contração muscular."
+                ];
+                currentTacticalTip = genericTips[Math.floor(Math.random() * genericTips.length)];
+            }
         }
 
         // Cria a nova cápsula visual de tempo do zero
@@ -73,14 +98,21 @@ var FitApp = (() => {
         currentTimerEl.className = 'inline-rest-timer';
         currentTimerEl.style.cssText = 'background: #1a1a1a; padding: 15px; border-radius: 8px; text-align: center; margin-top: 15px; border: 1px solid #333; transition: all 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.5);';
         
-        // Acopla exatamente abaixo das séries que acabaram de ser concluídas
+        // Acopla exatamente abaixo das séries
         targetContainer.appendChild(currentTimerEl);
         
         let duration = currentRestTime;
         const endTime = Date.now() + (duration * 1000); 
         let alert10sGiven = false; 
 
-        if(audioEnabled) speak(`Descanso. ${duration} segundos.`);
+        // --- MOTOR DE ÁUDIO ATUALIZADO ---
+        if (audioEnabled) {
+            if (isAdjustment) {
+                speak(`Tempo ajustado para ${duration} segundos.`);
+            } else {
+                speak(`Descanso. ${duration} segundos. Foco tático: ${currentTacticalTip}`);
+            }
+        }
         
         const updateUI = () => { 
             let timeLeft = Math.ceil((endTime - Date.now()) / 1000);
@@ -91,11 +123,14 @@ var FitApp = (() => {
             
             let timerContent = '';
 
-            // Lógica Progressiva de Cores e Engajamento
+            // Lógica Progressiva de Cores e Injeção Visual da Dica
             if (timeLeft > 10) {
                 currentTimerEl.style.borderColor = '#333';
                 currentTimerEl.style.background = '#1a1a1a';
-                timerContent = `<div style="color: #aaa; font-size: 12px; text-transform: uppercase; margin-bottom: 5px;">Recuperação Tática</div><div style="font-size: 32px; color: #fff; font-weight: bold; font-family: monospace;">${m}:${s}</div>`;
+                timerContent = `
+                    <div style="color: #a64dff; font-size: 11px; text-transform: uppercase; margin-bottom: 2px; font-weight: bold; letter-spacing: 1px;">🧠 Spotter Digital</div>
+                    <div style="color: #ccc; font-size: 13px; margin-bottom: 12px; font-style: italic; max-width: 90%; margin-left: auto; margin-right: auto;">"${currentTacticalTip}"</div>
+                    <div style="font-size: 32px; color: #fff; font-weight: bold; font-family: monospace;">${m}:${s}</div>`;
             } else if (timeLeft <= 10 && timeLeft > 5) {
                 currentTimerEl.style.borderColor = '#ffaa00';
                 currentTimerEl.style.background = 'rgba(255, 170, 0, 0.15)';
@@ -111,13 +146,9 @@ var FitApp = (() => {
                 timerContent = `<div style="font-size: 36px; color: #00ff88; font-weight: bold; text-shadow: 0 0 15px rgba(0,255,136,0.8); text-transform: uppercase;">🔥 Vai!</div>`;
                 if(audioEnabled) speak("Fim do descanso. Ação!");
                 clearInterval(restTimer);
-                // Remove o cronômetro 3 segundos após zerar para limpar a tela
-                setTimeout(() => {
-                    if (currentTimerEl && currentTimerEl.parentNode) currentTimerEl.parentNode.removeChild(currentTimerEl);
-                }, 3000);
+                setTimeout(() => { if (currentTimerEl && currentTimerEl.parentNode) currentTimerEl.parentNode.removeChild(currentTimerEl); }, 3000);
             }
 
-            // Injeta os botões de controle de tempo dentro do próprio cronômetro
             if (timeLeft > 0) {
                 timerContent += `
                     <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
@@ -799,8 +830,8 @@ function removeExercise(bIndex, eIndex) {
                         
                         if (chk.checked) { 
                             checkedSets++; 
-                            // O cronômetro agora recebe 'blockDiv' como alvo para nascer debaixo da série
-                            if(checkedSets < totalSets) startRestTimer(blockDiv);
+                            // O cronômetro recebe o 'blockDiv' visual E o 'ex.name' para puxar a dica de áudio do dicionário
+                            if(checkedSets < totalSets) startRestTimer(blockDiv, ex.name);
                             todayLog.push({ exercise: ex.name, set: s, kg: parseSafeFloat(kgInp.value), reps: parseInt(rpInp.value) || 0 });
                         } else { 
                             checkedSets--; 
