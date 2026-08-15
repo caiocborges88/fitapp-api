@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (user) {
             document.getElementById('adminStatus').innerHTML = `Comandante logado: <strong style="color:#00ff88;">${user.email || 'Admin'}</strong>`;
             executarVarreduraDeTropa();
+            carregarDicionario(); // NOVO: Manda baixar o Dicionário de Áudio
         } else {
             document.getElementById('adminStatus').innerHTML = `<span style="color:#ff4444;">Acesso Negado. Faça login via App principal.</span>`;
             usersTable.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#ff4444; padding: 30px;">Acesso restrito. Faça login como instrutor no celular primeiro.</td></tr>`;
@@ -186,3 +187,91 @@ function renderizarGrafico() {
         }
     });
 }
+// ==========================================
+// 🛡️ MÓDULO B2B: DICIONÁRIO DE MOVIMENTOS
+// ==========================================
+
+async function carregarDicionario() {
+    const db = firebase.firestore();
+    const dictTable = document.getElementById('dictTableBody');
+    
+    try {
+        const snapshot = await db.collection('dicionario').orderBy('nome').get();
+        let html = '';
+        
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            html += `
+                <tr>
+                    <td>
+                        <strong style="color: #ffaa00; font-size: 14px;">${data.nome}</strong><br>
+                        <span style="color: #666; font-size: 11px; text-transform: uppercase;">ALVO: ${data.grupo}</span>
+                    </td>
+                    <td style="font-size: 13px; color: #ccc; font-style: italic; max-width: 300px; line-height: 1.4;">"${data.dica}"</td>
+                    <td style="text-align: center;">
+                        <button onclick="deletarDicionario('${doc.id}')" style="background: transparent; border: 1px solid #ff4444; color: #ff4444; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">Excluir</button>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        dictTable.innerHTML = html || '<tr><td colspan="3" style="text-align: center; color: #888; padding: 30px;">Dicionário vazio. O sistema está aguardando as suas diretrizes, Comandante.</td></tr>';
+    } catch (error) {
+        console.error("Erro ao carregar dicionário:", error);
+        dictTable.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #ff4444; padding: 30px;">Falha ao comunicar com o servidor de dicionários.</td></tr>`;
+    }
+}
+
+window.salvarDicionario = async function() {
+    const nome = document.getElementById('dictName').value.trim();
+    const grupo = document.getElementById('dictGroup').value.trim();
+    const dica = document.getElementById('dictTip').value.trim();
+    const status = document.getElementById('dictStatus');
+
+    if (!nome || !dica) {
+        status.innerHTML = '<span style="color: #ff4444;">Erro tático: O nome do exercício e a instrução são obrigatórios.</span>';
+        return;
+    }
+
+    status.innerHTML = '<span style="color: #aaa;">Estabelecendo conexão uplink... 📡</span>';
+    const db = firebase.firestore();
+
+    try {
+        // Cria um ID limpo para evitar duplicatas (Ex: "Supino Reto" vira "supino_reto")
+        const docId = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+        
+        await db.collection('dicionario').doc(docId).set({
+            nome: nome,
+            grupo: grupo || 'Base',
+            dica: dica,
+            atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        status.innerHTML = '<span style="color: #00ff88;">✅ Padrão Biomecânico gravado com sucesso!</span>';
+        
+        // Limpa a ficha para um novo cadastro
+        document.getElementById('dictName').value = '';
+        document.getElementById('dictGroup').value = '';
+        document.getElementById('dictTip').value = '';
+        
+        carregarDicionario(); // Recarrega a tabela na hora
+        setTimeout(() => { status.innerHTML = ''; }, 4000);
+
+    } catch (error) {
+        console.error("Erro no uplink:", error);
+        status.innerHTML = '<span style="color: #ff4444;">Erro de gravação no banco central.</span>';
+    }
+};
+
+window.deletarDicionario = async function(docId) {
+    if (confirm("ATENÇÃO: Deseja realmente remover essa instrução do servidor de IA? Os alunos pararão de ouvir esta dica imediatamente.")) {
+        const db = firebase.firestore();
+        try {
+            await db.collection('dicionario').doc(docId).delete();
+            carregarDicionario(); // Atualiza a tabela
+        } catch (error) {
+            console.error("Erro ao deletar:", error);
+            alert("Falha ao remover o registro tático.");
+        }
+    }
+};

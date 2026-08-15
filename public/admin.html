@@ -53,9 +53,9 @@
             </div>
         </div>
 
-        <!-- Radar Nominal de Tropa -->
+        <!-- Radar Nominal de Tropa (Monitoramento Ao Vivo) -->
         <h2>📋 Radar de Tropa (Monitoramento Ao Vivo)</h2>
-        <table>
+        <table style="margin-bottom: 50px;">
             <thead>
                 <tr>
                     <th>Identificação do Recruta</th>
@@ -69,6 +69,42 @@
                 <tr><td colspan="5" style="text-align: center; color: #888; font-style: italic;">Sincronizando com Firestore...</td></tr>
             </tbody>
         </table>
+
+        <!-- Módulo de Treinamento (Dicionário de Áudio) -->
+        <h2>📚 Base Tática de Movimentos (Dicionário IA)</h2>
+        <div class="grid" style="grid-template-columns: 1fr 2fr;">
+            
+            <!-- Formulário de Cadastro -->
+            <div class="card" style="border-left-color: #ffaa00;">
+                <h3 style="color: #ffaa00; margin-bottom: 15px;">Cadastrar / Atualizar Padrão</h3>
+                
+                <input type="text" id="dictName" placeholder="Nome do Exercício (ex: Supino Reto)" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #111; color: #fff; border: 1px solid #333; border-radius: 4px; box-sizing: border-box; font-size: 14px;">
+                
+                <input type="text" id="dictGroup" placeholder="Grupo Muscular (ex: Peitoral)" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #111; color: #fff; border: 1px solid #333; border-radius: 4px; box-sizing: border-box; font-size: 14px;">
+                
+                <textarea id="dictTip" placeholder="Instrução Tática (O Spotter de áudio lerá esse texto no fone do aluno...)" rows="5" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #111; color: #fff; border: 1px solid #333; border-radius: 4px; box-sizing: border-box; resize: vertical; font-size: 14px; font-family: monospace;"></textarea>
+                
+                <button onclick="salvarDicionario()" style="width: 100%; padding: 14px; background: #ffaa00; color: #000; font-weight: bold; font-size: 14px; border: none; border-radius: 4px; cursor: pointer; text-transform: uppercase;">Gravar no Servidor</button>
+                <div id="dictStatus" style="margin-top: 15px; font-size: 13px; text-align: center; font-weight: bold;"></div>
+            </div>
+
+            <!-- Lista de Arsenal Criptografado -->
+            <div class="card" style="border-left-color: #333; overflow-y: auto; max-height: 400px; padding: 0;">
+                <table style="margin: 0; box-shadow: none; border-radius: 0;">
+                    <thead style="position: sticky; top: 0; z-index: 1; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
+                        <tr>
+                            <th>Exercício Cadastrado</th>
+                            <th>Instrução de Áudio (IA)</th>
+                            <th style="text-align: center;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dictTableBody">
+                        <tr><td colspan="3" style="text-align: center; color: #888; padding: 30px;">Iniciando varredura do arsenal...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
     </div>
 
     <!-- Modal do Dossiê de Combate -->
