@@ -88,16 +88,16 @@ window.abrirDossie = async function(uid) {
     if (chartInstance) { chartInstance.destroy(); }
     
     try {
-        // Intercepta a sub-coleção 'history' do usuário específico
         const db = firebase.firestore();
-        const snapshot = await db.collection('users').doc(uid).collection('history').get();
+        // CORREÇÃO: Apontando o radar para a subcoleção 'treinos_concluidos' dentro de 'jogadores'
+        const snapshot = await db.collection('jogadores').doc(uid).collection('treinos_concluidos').get();
         
         rawHistoryData = [];
         snapshot.forEach(doc => {
             rawHistoryData.push(doc.data());
         });
 
-        // Ordena os treinos pela data do mais antigo para o mais novo
+        // Ordena os treinos pela data (do mais antigo para o mais novo)
         rawHistoryData.sort((a, b) => new Date(a.date) - new Date(b.date));
         
         document.getElementById('dossierStatus').innerText = `${rawHistoryData.length} treinos analisados com sucesso.`;
