@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
             usersTable.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ff4444;">Falha de comunicação com o Firestore.</td></tr>`;
         }
     }
-}); // <--- ADICIONE ESTA LINHA AQUI! Ela fecha o DOMContentLoaded da linha 3.
+}); 
 
 // --- MOTOR GRÁFICO: Dossiê de Evolução ---
 let chartInstance = null;
