@@ -1934,7 +1934,11 @@ function renderMetricsChart() {
             renderCurrentRoutine(); 
             showToast('Treino em andamento restaurado.');
         }
-    }
+
+        // NOVO: Chama o satélite para atualizar o dicionário de áudio com as dicas B2B
+        syncTacticalDictionary(); 
+        
+    } // <-- A função init() termina aqui
 // --- NOVO: MOTOR DO PILOTO AUTOMÁTICO (HANDS-FREE) ---
     let autoBIndex = null, autoEIndex = null;
     let autoExec = 0, autoRest = 0;
@@ -2049,4 +2053,56 @@ function renderMetricsChart() {
         } 
     };
 })();
+// ==========================================
+// 📡 UPLINK COM A TORRE DE CONTROLE (B2B)
+// ==========================================
+async function syncTacticalDictionary() {
+    try {
+        const db = firebase.firestore();
+        // Tenta baixar as diretrizes do Comandante
+        const snapshot = await db.collection('dicionario').get();
+
+        if (snapshot.empty) return; // Se a nuvem estiver vazia, segue a vida normal
+
+        if (typeof dictionaryData === 'undefined') return;
+
+        let atualizados = 0;
+        let novos = 0;
+
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            const exerciseName = data.nome;
+            const newTip = data.dica;
+            const newGroup = data.grupo;
+
+            // Procura se o exercício já existe no 'dados.js'
+            const existingIndex = dictionaryData.findIndex(item => item.name.toLowerCase() === exerciseName.toLowerCase());
+
+            if (existingIndex !== -1) {
+                // OVERRIDE: Substitui a dica de fábrica pela diretriz da Nuvem
+                dictionaryData[existingIndex].desc = newTip;
+                if(newGroup) dictionaryData[existingIndex].group = newGroup;
+                atualizados++;
+            } else {
+                // ADD: Se for uma arma nova criada na Torre de Controle, adiciona ao arsenal
+                dictionaryData.push({
+                    name: exerciseName,
+                    group: newGroup || 'Geral',
+                    desc: newTip
+                });
+                novos++;
+            }
+        });
+        
+        console.log(`📡 Spotter Digital Sincronizado: ${atualizados} atualizados, ${novos} novos padrões adotados.`);
+        
+        // Se a aba da biblioteca estiver aberta, recarrega a lista para mostrar os novos exercícios
+        if (typeof filterLibrary === 'function') {
+            filterLibrary();
+        }
+
+    } catch (error) {
+        console.log("⚠️ Modo Offline: Utilizando dicionário de fábrica (dados.js).");
+    }
+}
 document.addEventListener('DOMContentLoaded', FitApp.init);
