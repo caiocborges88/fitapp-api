@@ -73,7 +73,115 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// 3. Ação de Carga Pessoal (Será expandida na próxima etapa)
-window.abrirDossie = function(uid) {
-    alert(`Solicitando arquivos da inteligência...\nID do Recruta: ${uid}\n\n(Na próxima atualização, este botão abrirá os gráficos de progressão de carga e treinos realizados deste aluno!)`);
+// --- MOTOR GRÁFICO: Dossiê de Evolução ---
+let chartInstance = null;
+let currentUid = null;
+let rawHistoryData = [];
+
+window.abrirDossie = async function(uid) {
+    currentUid = uid;
+    document.getElementById('dossierModal').style.display = 'flex';
+    document.getElementById('dossierStatus').innerText = "Baixando registros de combate da nuvem...";
+    
+    // Destrói o gráfico antigo ao abrir um novo aluno
+    if (chartInstance) { chartInstance.destroy(); }
+    
+    try {
+        // Intercepta a sub-coleção 'history' do usuário específico
+        const db = firebase.firestore();
+        const snapshot = await db.collection('users').doc(uid).collection('history').get();
+        
+        rawHistoryData = [];
+        snapshot.forEach(doc => {
+            rawHistoryData.push(doc.data());
+        });
+
+        // Ordena os treinos pela data do mais antigo para o mais novo
+        rawHistoryData.sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        document.getElementById('dossierStatus').innerText = `${rawHistoryData.length} treinos analisados com sucesso.`;
+        renderizarGrafico(); 
+
+    } catch (error) {
+        console.error("Falha na varredura do histórico:", error);
+        document.getElementById('dossierStatus').innerHTML = `<span style="color:#ff4444;">Erro ao puxar histórico. Arquivos corrompidos ou inexistentes.</span>`;
+    }
 };
+
+// Se o treinador trocar o exercício na caixa, o gráfico recalcula na hora
+document.getElementById('exerciseSelect').addEventListener('change', renderizarGrafico);
+
+function renderizarGrafico() {
+    const targetExercise = document.getElementById('exerciseSelect').value;
+    const labels = [];
+    const dataPoints = [];
+    
+    // Mineração de Dados: Procura qual foi a maior carga levantada naquele exercício em cada dia
+    rawHistoryData.forEach(session => {
+        if (!session.log) return;
+        
+        let maxCarga = 0;
+        let achouExercicio = false;
+        
+        session.log.forEach(set => {
+            if (set.exercise && set.exercise.toLowerCase() === targetExercise.toLowerCase() && set.kg > maxCarga) {
+                maxCarga = set.kg;
+                achouExercicio = true;
+            }
+        });
+        
+        if (achouExercicio) {
+            // Se o app salva como 'YYYY-MM-DD', transformamos para o padrão visual
+            let dataFormatada = session.date;
+            try {
+                let d = new Date(session.date);
+                dataFormatada = d.toLocaleDateString('pt-BR');
+            } catch(e) {}
+            
+            labels.push(dataFormatada);
+            dataPoints.push(maxCarga);
+        }
+    });
+    
+    if (labels.length === 0) {
+        document.getElementById('dossierStatus').innerHTML = `<span style="color:#ffaa00;">Nenhum registro encontrado para <strong>${targetExercise}</strong>.</span>`;
+        if (chartInstance) chartInstance.destroy();
+        return;
+    } else {
+        document.getElementById('dossierStatus').innerText = `Evolução de ${targetExercise} mapeada.`;
+    }
+
+    const ctx = document.getElementById('progressionChart').getContext('2d');
+    if (chartInstance) chartInstance.destroy();
+    
+    // Renderização Tática (Neon Line Chart)
+    chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: `Carga Máxima - ${targetExercise} (kg)`,
+                data: dataPoints,
+                borderColor: '#00ff88',
+                backgroundColor: 'rgba(0, 255, 136, 0.1)',
+                borderWidth: 3,
+                pointBackgroundColor: '#a64dff',
+                pointBorderColor: '#fff',
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                fill: true,
+                tension: 0.3 // Deixa a linha suave/curvada
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: false, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#aaa' } },
+                x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#aaa' } }
+            },
+            plugins: {
+                legend: { labels: { color: '#fff', font: { size: 14 } } }
+            }
+        }
+    });
+}
