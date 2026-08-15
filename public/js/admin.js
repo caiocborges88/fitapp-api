@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Operação de Coleta de Inteligência
     async function executarVarreduraDeTropa() {
         try {
-            // Vasculha a coleção de usuários (A mesma que grava os perfis de figurinhas)
-            const snapshot = await db.collection('users').get();
+            // CORREÇÃO: Apontando para a coleção "jogadores"
+            const snapshot = await db.collection('jogadores').get();
             
             document.getElementById('totalUsers').innerText = snapshot.size;
             
@@ -33,14 +33,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 let status = "INATIVO";
                 let statusClass = "status-inactive";
 
-                if (data.lastSync) {
-                    const dataUltimoTreino = new Date(data.lastSync);
+                // CORREÇÃO: Lendo o campo "ultimoAcesso"
+                if (data.ultimoAcesso) {
+                    // Como o Firebase salva como Timestamp, usamos o .toDate()
+                    const dataUltimoTreino = data.ultimoAcesso.toDate ? data.ultimoAcesso.toDate() : new Date(data.ultimoAcesso);
                     lastSyncDate = dataUltimoTreino.toLocaleDateString('pt-BR') + ' às ' + dataUltimoTreino.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
                     
                     // Inteligência: Calcula dias ociosos
                     const daysAgo = (Date.now() - dataUltimoTreino.getTime()) / (1000 * 3600 * 24);
                     
-                    // Se o recruta treinou nos últimos 5 dias, ele está ATIVO. Se não, está INATIVO/AWOL.
                     if (daysAgo <= 5) {
                         status = "ATIVO";
                         statusClass = "status-active";
@@ -68,10 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
         } catch (error) {
             console.error("Erro tático ao puxar dados da tropa:", error);
-            usersTable.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ff4444;">Falha de comunicação com o Firestore. Verifique as Regras de Segurança do Banco de Dados.</td></tr>`;
+            usersTable.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ff4444;">Falha de comunicação com o Firestore.</td></tr>`;
         }
     }
-});
+}); // <--- ADICIONE ESTA LINHA AQUI! Ela fecha o DOMContentLoaded da linha 3.
 
 // --- MOTOR GRÁFICO: Dossiê de Evolução ---
 let chartInstance = null;
