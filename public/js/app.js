@@ -1743,7 +1743,7 @@ function renderMetricsChart() {
     }
     
     function init() {
-        els.profileSelector = document.getElementById('profileSelector'); // NOVO: Mapeamento do Perfil
+        els.profileSelector = document.getElementById('profileSelector'); 
         els.styleSelector = document.getElementById('styleSelector');
         els.levelSelector = document.getElementById('levelSelector'); 
         els.workoutArea = document.getElementById('workoutArea'); 
@@ -1752,8 +1752,17 @@ function renderMetricsChart() {
         els.btnFinishArea = document.getElementById('btnFinishArea');
         els.toast = document.getElementById('toast');
 
-        window.addEventListener('online', syncOfflineWorkouts);
-        syncOfflineWorkouts();
+        // Escuta quando a internet volta, mas só sincroniza se estiver logado
+        window.addEventListener('online', () => {
+            if (firebase.auth().currentUser) syncOfflineWorkouts();
+        });
+        
+        // Aguarda o sinal verde do Firebase Auth para iniciar a sincronização
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                syncOfflineWorkouts();
+            }
+        });
 
         // NOVO: Resgata o perfil salvo no cache do celular
         const savedProfile = safeGet('fitapp_profile');
