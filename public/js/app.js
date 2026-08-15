@@ -1,5 +1,38 @@
 'use strict';
 
+// NOVO: Sintetizador de Áudio Tático (Web Audio API)
+const FitAudio = (() => {
+    let audioCtx = null;
+    function init() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+    function playTone(freq, type, duration, vol = 0.1) {
+        const btnAudio = document.getElementById('btnAudio');
+        if (!btnAudio || !btnAudio.classList.contains('active')) return; // Respeita o botão de mudo
+        init();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+    }
+    return {
+        beepShort: () => playTone(800, 'sine', 0.1, 0.2),
+        beepLong: () => playTone(1200, 'sine', 0.6, 0.3),
+        packRip: () => { playTone(150, 'sawtooth', 0.1, 0.1); setTimeout(() => playTone(200, 'sawtooth', 0.2, 0.1), 100); },
+        revealNormal: () => { playTone(400, 'square', 0.1, 0.1); setTimeout(() => playTone(600, 'square', 0.3, 0.1), 100); },
+        revealEpic: () => { playTone(600, 'square', 0.1, 0.1); setTimeout(() => playTone(800, 'square', 0.1, 0.1), 100); setTimeout(() => playTone(1200, 'square', 0.5, 0.15), 200); },
+        repeated: () => { playTone(300, 'triangle', 0.2, 0.1); setTimeout(() => playTone(250, 'triangle', 0.4, 0.1), 200); },
+        forge: () => { playTone(800, 'square', 0.05, 0.2); setTimeout(() => playTone(400, 'sawtooth', 0.3, 0.1), 50); }
+    };
+})();
+
 var FitApp = (() => {
     let totalSets = 0, checkedSets = 0, audioEnabled = false, restTimer = null, currentRestTime = 60;
     let todayLog = [];
@@ -114,6 +147,8 @@ var FitApp = (() => {
             }
         }
         
+        let lastBeep = -1; // Memória para não sobrepor bipes no mesmo segundo
+
         const updateUI = () => { 
             let timeLeft = Math.ceil((endTime - Date.now()) / 1000);
             if (timeLeft < 0) timeLeft = 0;
@@ -140,11 +175,25 @@ var FitApp = (() => {
                 currentTimerEl.style.borderColor = '#ff4444';
                 currentTimerEl.style.background = 'rgba(255, 68, 68, 0.2)';
                 timerContent = `<div style="color: #ff4444; font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px;">Contagem Final</div><div style="font-size: 42px; color: #ff4444; font-weight: bold; text-shadow: 0 0 15px rgba(255,68,68,0.8);">${timeLeft}</div>`;
+                
+                // NOVO: Dispara o Bipe Curto da contagem regressiva
+                if (timeLeft !== lastBeep) {
+                    FitAudio.beepShort();
+                    lastBeep = timeLeft;
+                }
+
             } else if (timeLeft === 0) {
                 currentTimerEl.style.borderColor = '#00ff88';
                 currentTimerEl.style.background = 'rgba(0, 255, 136, 0.2)';
                 timerContent = `<div style="font-size: 36px; color: #00ff88; font-weight: bold; text-shadow: 0 0 15px rgba(0,255,136,0.8); text-transform: uppercase;">🔥 Vai!</div>`;
-                if(audioEnabled) speak("Fim do descanso. Ação!");
+                
+                // NOVO: Dispara o Bipe Longo de início de combate
+                if (timeLeft !== lastBeep) {
+                    FitAudio.beepLong();
+                    if(audioEnabled) speak("Ação!");
+                    lastBeep = timeLeft;
+                }
+
                 clearInterval(restTimer);
                 setTimeout(() => { if (currentTimerEl && currentTimerEl.parentNode) currentTimerEl.parentNode.removeChild(currentTimerEl); }, 3000);
             }
@@ -164,10 +213,10 @@ var FitApp = (() => {
         
         updateUI();
         restTimer = setInterval(updateUI, 1000); 
-    }
+    } // <--- ADICIONE ESTA CHAVE AQUI! Ela fecha a função startRestTimer!
 
     function stopRestTimer() { 
-        clearInterval(restTimer); 
+        clearInterval(restTimer);
         if (currentTimerEl && currentTimerEl.parentNode) {
             currentTimerEl.parentNode.removeChild(currentTimerEl);
         }

@@ -52,11 +52,12 @@ var FitGamification = (() => {
     }
     
     async function openPack() {
+        FitAudio.packRip(); // NOVO: Som do pacote abrindo
         document.getElementById('packEnvelope').style.display = 'none'; 
         const revealArea = document.getElementById('packRevealArea'); 
         
         // Status visual de comunicação militar com a nuvem
-        revealArea.innerHTML = '<div style="color: #a64dff; font-weight: bold; margin-top: 20px;">Sincronizando com a Base de Dados... 📡</div>'; 
+        revealArea.innerHTML = '<div style="color: #a64dff; font-weight: bold; margin-top: 20px;">Sincronizando com a Base de Dados... 📡</div>';
         revealArea.style.display = 'flex';
         revealArea.style.flexDirection = 'column';
         
@@ -109,7 +110,9 @@ var FitGamification = (() => {
         div.innerHTML = `<div class="sticker-icon">${drawn.icon}</div><div>${drawn.name}</div>`; 
         revealArea.appendChild(div);
         
+        // NOVO: Avaliação Tática de Áudio
         if (isRepeated) {
+            FitAudio.repeated(); // Som de desapontamento/repetida
             const repMsg = document.createElement('div');
             repMsg.style.color = '#ffaa00';
             repMsg.style.marginTop = '15px';
@@ -118,6 +121,12 @@ var FitGamification = (() => {
             repMsg.style.textAlign = 'center';
             repMsg.textContent = "⚠️ Conquista Repetida! (+1 Ponto de Suor)";
             revealArea.appendChild(repMsg);
+        } else {
+            if (drawn.rarity === 'ouro' || drawn.rarity === 'holografico') {
+                FitAudio.revealEpic(); // Som de glória para raras
+            } else {
+                FitAudio.revealNormal(); // Som de confirmação padrão
+            }
         }
         
         // Motor de Compartilhamento Nativo (Efeito Strava) preservado
@@ -272,6 +281,8 @@ var FitGamification = (() => {
         const nova = faltantesForja[Math.floor(Math.random() * faltantesForja.length)];
         savedCollection.push(nova.id);
         repetidas -= 3;
+        
+        FitAudio.forge(); // NOVO: Som de martelada na forja
         
         await savePlayerProfile(savedCollection, repetidas);
         
