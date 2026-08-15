@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torre de Controle | FitApp B2B</title>
+    <style>
+        /* Base Tática B2B */
+        body { background: #0a0a0a; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; }
+        header { background: #111; padding: 20px 40px; border-bottom: 2px solid #a64dff; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(166, 77, 255, 0.2); }
+        h1 { margin: 0; color: #a64dff; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .card { background: #1a1a1a; padding: 25px; border-radius: 8px; border: 1px solid #333; position: relative; overflow: hidden; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: #a64dff; }
+        .card h3 { margin-top: 0; color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .card .value { font-size: 38px; font-weight: bold; color: #00ff88; font-family: monospace; }
+        
+        /* Tabela Radar */
+        h2 { border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px; color: #ddd; font-weight: 300; }
+        table { width: 100%; border-collapse: collapse; background: #151515; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        th, td { padding: 18px 20px; text-align: left; border-bottom: 1px solid #222; }
+        th { background: #111; color: #a64dff; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+        tr:hover { background: #1e1e1e; }
+        
+        .status-active { color: #00ff88; font-weight: bold; background: rgba(0,255,136,0.1); padding: 4px 8px; border-radius: 4px; font-size: 12px; text-transform: uppercase; }
+        .status-inactive { color: #ff4444; font-weight: bold; background: rgba(255,68,68,0.1); padding: 4px 8px; border-radius: 4px; font-size: 12px; text-transform: uppercase; }
+        .btn-audit { background: transparent; border: 1px solid #a64dff; color: #a64dff; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: all 0.2s; }
+        .btn-audit:hover { background: #a64dff; color: #000; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>📡 FitApp: Visão do Comandante</h1>
+        <div id="adminStatus" style="font-size: 14px; color: #aaa;">Iniciando satélite...</div>
+    </header>
+
+    <div class="container">
+        <!-- Painel de Relatórios Gerais -->
+        <div class="grid">
+            <div class="card">
+                <h3>Total de Recrutas Base</h3>
+                <div class="value" id="totalUsers">--</div>
+            </div>
+            <div class="card" style="border-left-color: #00ff88;">
+                <h3>Treinos Lançados (Nuvem)</h3>
+                <div class="value" id="totalWorkouts">--</div>
+                <div style="color: #666; font-size: 11px; margin-top: 5px;">Métrica de engajamento global</div>
+            </div>
+        </div>
+
+        <!-- Radar Nominal de Tropa -->
+        <h2>📋 Radar de Tropa (Monitoramento Ao Vivo)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Identificação do Recruta</th>
+                    <th>Nível de Combate (Suor)</th>
+                    <th>Último Treino</th>
+                    <th>Status Operacional</th>
+                    <th>Ações Táticas</th>
+                </tr>
+            </thead>
+            <tbody id="usersTableBody">
+                <tr><td colspan="5" style="text-align: center; color: #888; font-style: italic;">Sincronizando com Firestore...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Motores do Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <!-- IMPORTANTE: Adicione aqui o arquivo ou a tag <script> que inicializa a configuração (firebaseConfig) do seu projeto, a mesma que tem no index.html -->
+    <script src="js/api.js"></script> 
+    
+    <!-- Cérebro da Torre de Controle -->
+    <script src="js/admin.js"></script>
+
+</body>
+</html>
