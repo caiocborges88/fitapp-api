@@ -36,7 +36,10 @@
 
     <header>
         <h1>📡 FitApp: Visão do Comandante</h1>
-        <div id="adminStatus" style="font-size: 14px; color: #aaa;">Iniciando satélite...</div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div id="adminStatus" style="font-size: 14px; color: #aaa;">Iniciando satélite...</div>
+            <button onclick="encerrarSessaoAdmin()" style="background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px;">Desconectar</button>
+        </div>
     </header>
 
     <div class="container">
@@ -145,5 +148,16 @@
     <!-- Cérebro da Torre de Controle -->
     <script src="js/admin.js"></script>
 
+<!-- Motor de Log Out B2B -->
+    <script>
+        function encerrarSessaoAdmin() {
+            if (confirm("Deseja desconectar a Torre de Controle?")) {
+                firebase.auth().signOut().then(() => {
+                    localStorage.clear();
+                    window.location.href = 'index.html'; // Redireciona para o App Principal
+                });
+            }
+        }
+    </script>
 </body>
 </html>

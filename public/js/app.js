@@ -1027,6 +1027,22 @@ window.abortarMissao = function() {
         checkSequence(); 
     }
 };
+// ==========================================
+// LOG OUT E DESTRUIÇÃO DE CACHE LOCAL
+// ==========================================
+window.encerrarSessao = function() {
+    if (confirm("Tem certeza que deseja sair? O aplicativo será desconectado e o cachê local será apagado.")) {
+        firebase.auth().signOut().then(() => {
+            // Expurgo tático da memória
+            localStorage.clear(); 
+            // Recarrega a página para levantar o escudo de login novamente
+            window.location.reload(); 
+        }).catch((error) => {
+            console.error("Erro ao sair:", error);
+            showToast("Falha ao desconectar.");
+        });
+    }
+};
     async function fetchAIFeedback() {
         document.getElementById('aiLoader').style.display = 'block';
         document.getElementById('aiResponse').style.display = 'none';

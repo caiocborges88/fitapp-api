@@ -227,8 +227,11 @@
                     <option value="avancado">🔴 Avançado</option>
                 </select>
             </div>
-            <div style="text-align: center; margin-top: 30px;">
-                <button class="btn-text" onclick="FitApp.unlockAll()" style="color: #ff4444; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold;">🔓 Desbloquear Sequência</button>
+            <div style="text-align: center; margin-top: 30px; display: flex; flex-direction: column; gap: 15px; align-items: center;">
+                <button class="btn-text" onclick="FitApp.unlockAll()" style="color: #ffaa00; background: rgba(255, 170, 0, 0.1); border: 1px solid #ffaa00; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; width: 80%; max-width: 300px;">🔓 Desbloquear Sequência</button>
+                
+                <!-- NOVO: Botão de Log Out -->
+                <button class="btn-text" onclick="encerrarSessao()" style="color: #ff4444; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; width: 80%; max-width: 300px;">🚪 Sair (Log Out)</button>
             </div>
         </main>
     </div>
