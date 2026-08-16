@@ -351,18 +351,31 @@ var FitApp = (() => {
         if(statTotal) statTotal.textContent = total;
         if(statLast) statLast.textContent = lastType ? 'Treino ' + lastType : 'Nenhum';
 
+        // Lê a preferência do usuário (Livre por padrão)
+        const seqMode = safeGet('fitapp_sequence_mode') || 'livre';
+
+        // Destranca todos ou tranca todos inicialmente com base no modo
         ['A', 'B', 'C'].forEach(t => {
             const card = document.getElementById('card-' + t);
-            if(card) card.classList.add('locked');
+            if(card) {
+                if (seqMode === 'livre') {
+                    card.classList.remove('locked');
+                } else {
+                    card.classList.add('locked');
+                }
+            }
         });
 
-        let nextType = 'A'; 
-        if (lastType === 'A') nextType = 'B';
-        if (lastType === 'B') nextType = 'C';
-        if (lastType === 'C') nextType = 'A';
+        // Se o modo for estrito, destranca apenas o próximo da fila
+        if (seqMode === 'estrita') {
+            let nextType = 'A'; 
+            if (lastType === 'A') nextType = 'B';
+            if (lastType === 'B') nextType = 'C';
+            if (lastType === 'C') nextType = 'A';
 
-        const nextCard = document.getElementById('card-' + nextType);
-        if (nextCard) nextCard.classList.remove('locked');
+            const nextCard = document.getElementById('card-' + nextType);
+            if (nextCard) nextCard.classList.remove('locked');
+        }
     }
 
 function renderWeeklyCalendar() {
@@ -419,14 +432,6 @@ function renderWeeklyCalendar() {
             `;
             grid.appendChild(dayEl);
         }
-    }
-
-    function unlockAll() {
-        ['A', 'B', 'C'].forEach(t => {
-            const card = document.getElementById('card-' + t);
-            if(card) card.classList.remove('locked');
-        });
-        showToast("Travas manuais liberadas.");
     }
 
     function startWorkout(type) {
@@ -1941,6 +1946,19 @@ function renderMetricsChart() {
         const savedLevel = safeGet('fitapp_level');
         if (savedLevel && els.levelSelector) els.levelSelector.value = savedLevel;
 
+        // NOVO: Resgata e escuta a Chave Seletora de Bloqueio
+        const sequenceSelector = document.getElementById('sequenceSelector');
+        const savedSeq = safeGet('fitapp_sequence_mode');
+        if (savedSeq && sequenceSelector) sequenceSelector.value = savedSeq;
+
+        if (sequenceSelector) {
+            sequenceSelector.addEventListener('change', () => {
+                safeSet('fitapp_sequence_mode', sequenceSelector.value);
+                checkSequence(); // Atualiza os cadeados instantaneamente
+                showToast(sequenceSelector.value === 'livre' ? 'Ordem livre ativada.' : 'Sequência estrita ativada.');
+            });
+        }
+
         // Mapeia todas as 6 abas da nova arquitetura (incluindo a Arena)
         ['treino', 'evolucao', 'conquistas', 'arena', 'biblioteca', 'perfil'].forEach(tab => { 
             const navBtn = document.getElementById(`nav-${tab}`);
@@ -2128,7 +2146,7 @@ function renderMetricsChart() {
         showToast("Piloto Automático desativado.");
     }   
     return { 
-        init, filterLibrary, openSwapModal, confirmSwap, unlockAll, startWorkout,
+        init, filterLibrary, openSwapModal, confirmSwap, startWorkout,
         beginWorkoutExecution, acceptSnap, declineSnap, cancelWorkoutPreview, adaptWorkoutToHome,
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,
         adjustRestTime, changeSets, // NOVAS ENGRENAGENS
