@@ -908,6 +908,25 @@ function removeExercise(bIndex, eIndex) {
     }
 
     async function finishWorkout() {
+        // --- INÍCIO DA TRAVA ANTI-EXPLOIT ---
+        let tempTotalTimeSecs = 0;
+        if (workoutStartTime) {
+            tempTotalTimeSecs = Math.floor((Date.now() - workoutStartTime) / 1000);
+        }
+
+        // Bloqueio 1: Treino vazio
+        if (checkedSets === 0) {
+            showToast("⚠️ Comando Negado: Marque ao menos uma série para registrar combate.");
+            return; 
+        }
+
+        // Bloqueio 2: Speedrun (Menos de 2 minutos)
+        if (tempTotalTimeSecs < 120) {
+            showToast("⚠️ Abortado: Tempo operacional mínimo não atingido (2 minutos).");
+            return; 
+        }
+        // --- FIM DA TRAVA ANTI-EXPLOIT ---
+
         stopRestTimer(); // NOVO: Garante a destruição do cronômetro ao sair da tela de combate
         
         const isComplete = checkedSets === totalSets;
@@ -917,9 +936,8 @@ function removeExercise(bIndex, eIndex) {
         const offset = d.getTimezoneOffset() * 60000;
         const dataHoje = (new Date(d.getTime() - offset)).toISOString().split('T')[0];
         
-        let totalTimeSecs = 0;
+        let totalTimeSecs = tempTotalTimeSecs; // Resgata o tempo já calculado
         if (workoutStartTime) {
-            totalTimeSecs = Math.floor((Date.now() - workoutStartTime) / 1000);
             clearInterval(globalTimer);
             workoutStartTime = null;
         }
