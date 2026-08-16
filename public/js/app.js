@@ -90,31 +90,31 @@ var FitApp = (() => {
         }
     }
 
+    // --- NOVO MOTOR DE ALTA PRECISÃO (Substitui o setInterval) ---
+    let rafTimerId = null;
+    let isRestTimerRunning = false;
+
     function startRestTimer(targetContainer, exerciseName = null, isAdjustment = false) {
         currentTimerTarget = targetContainer;
         currentTimerExercise = exerciseName;
         
-        // Esconde o cronômetro antigo do topo da tela (se ainda estiver lá)
+        // Esconde o cronômetro antigo do topo da tela
         const oldGlobalTimer = document.getElementById('timerContainer');
         if(oldGlobalTimer) oldGlobalTimer.style.display = 'none';
 
-        clearInterval(restTimer); 
-        
-        // Remove o cronômetro ativo de outro exercício
-        if (currentTimerEl && currentTimerEl.parentNode) {
-            currentTimerEl.parentNode.removeChild(currentTimerEl);
-        }
+        // Desliga o motor anterior, se houver
+        stopRestTimer(); 
+        isRestTimerRunning = true;
 
-        // --- CÉREBRO TÁTICO: Busca a dica no dicionário ---
+        // CÉREBRO TÁTICO: Busca a dica no dicionário
         if (!isAdjustment) {
             currentTacticalTip = "";
             if (exerciseName && typeof dictionaryData !== 'undefined') {
                 const dictItem = dictionaryData.find(d => d.name === exerciseName);
                 if (dictItem && dictItem.desc) {
-                    currentTacticalTip = dictItem.desc; // Puxa a dica biomecânica
+                    currentTacticalTip = dictItem.desc; 
                 }
             }
-            // Se não houver dica específica, usa uma diretriz de combate genérica
             if (!currentTacticalTip) {
                 const genericTips = [
                     "Controle a respiração. Inspire na fase excêntrica, expire na concêntrica.", 
@@ -126,19 +126,17 @@ var FitApp = (() => {
             }
         }
 
-        // Cria a nova cápsula visual de tempo do zero
+        // Cria a nova cápsula visual
         currentTimerEl = document.createElement('div');
         currentTimerEl.className = 'inline-rest-timer';
         currentTimerEl.style.cssText = 'background: #1a1a1a; padding: 15px; border-radius: 8px; text-align: center; margin-top: 15px; border: 1px solid #333; transition: all 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.5);';
         
-        // Acopla exatamente abaixo das séries
         targetContainer.appendChild(currentTimerEl);
         
         let duration = currentRestTime;
         const endTime = Date.now() + (duration * 1000); 
         let alert10sGiven = false; 
 
-        // --- MOTOR DE ÁUDIO ATUALIZADO ---
         if (audioEnabled) {
             if (isAdjustment) {
                 speak(`Tempo ajustado para ${duration} segundos.`);
@@ -147,76 +145,91 @@ var FitApp = (() => {
             }
         }
         
-        let lastBeep = -1; // Memória para não sobrepor bipes no mesmo segundo
+        let lastBeep = -1;
+        let lastVisualUpdate = -1;
 
-        const updateUI = () => { 
+        // O Núcleo do Motor de Alta Precisão
+        const tick = () => { 
+            if (!isRestTimerRunning) return;
+
             let timeLeft = Math.ceil((endTime - Date.now()) / 1000);
             if (timeLeft < 0) timeLeft = 0;
             
-            let m = Math.floor(timeLeft/60).toString().padStart(2,'0');
-            let s = (timeLeft%60).toString().padStart(2,'0'); 
-            
-            let timerContent = '';
-
-            // Lógica Progressiva de Cores e Injeção Visual da Dica
-            if (timeLeft > 10) {
-                currentTimerEl.style.borderColor = '#333';
-                currentTimerEl.style.background = '#1a1a1a';
-                timerContent = `
-                    <div style="color: #a64dff; font-size: 11px; text-transform: uppercase; margin-bottom: 2px; font-weight: bold; letter-spacing: 1px;">🧠 Spotter Digital</div>
-                    <div style="color: #ccc; font-size: 13px; margin-bottom: 12px; font-style: italic; max-width: 90%; margin-left: auto; margin-right: auto;">"${currentTacticalTip}"</div>
-                    <div style="font-size: 32px; color: #fff; font-weight: bold; font-family: monospace;">${m}:${s}</div>`;
-            } else if (timeLeft <= 10 && timeLeft > 5) {
-                currentTimerEl.style.borderColor = '#ffaa00';
-                currentTimerEl.style.background = 'rgba(255, 170, 0, 0.15)';
-                timerContent = `<div style="color: #ffaa00; font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; animation: blink 1s infinite;">⚠️ Prepare-se</div><div style="font-size: 32px; color: #ffaa00; font-weight: bold; font-family: monospace;">${m}:${s}</div>`;
-                if (!alert10sGiven && audioEnabled) { speak("Dez segundos. Assuma a posição."); alert10sGiven = true; }
-            } else if (timeLeft <= 5 && timeLeft > 0) {
-                currentTimerEl.style.borderColor = '#ff4444';
-                currentTimerEl.style.background = 'rgba(255, 68, 68, 0.2)';
-                timerContent = `<div style="color: #ff4444; font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px;">Contagem Final</div><div style="font-size: 42px; color: #ff4444; font-weight: bold; text-shadow: 0 0 15px rgba(255,68,68,0.8);">${timeLeft}</div>`;
+            // Só atualiza a interface (HTML) se o segundo realmente virou, economizando processador
+            if (timeLeft !== lastVisualUpdate) {
+                lastVisualUpdate = timeLeft;
                 
-                // NOVO: Dispara o Bipe Curto da contagem regressiva
-                if (timeLeft !== lastBeep) {
-                    FitAudio.beepShort();
-                    lastBeep = timeLeft;
+                let m = Math.floor(timeLeft/60).toString().padStart(2,'0');
+                let s = (timeLeft%60).toString().padStart(2,'0'); 
+                
+                let timerContent = '';
+
+                // Lógica Progressiva de Cores e Áudios
+                if (timeLeft > 10) {
+                    currentTimerEl.style.borderColor = '#333';
+                    currentTimerEl.style.background = '#1a1a1a';
+                    timerContent = `
+                        <div style="color: #a64dff; font-size: 11px; text-transform: uppercase; margin-bottom: 2px; font-weight: bold; letter-spacing: 1px;">🧠 Spotter Digital</div>
+                        <div style="color: #ccc; font-size: 13px; margin-bottom: 12px; font-style: italic; max-width: 90%; margin-left: auto; margin-right: auto;">"${currentTacticalTip}"</div>
+                        <div style="font-size: 32px; color: #fff; font-weight: bold; font-family: monospace;">${m}:${s}</div>`;
+                } else if (timeLeft <= 10 && timeLeft > 5) {
+                    currentTimerEl.style.borderColor = '#ffaa00';
+                    currentTimerEl.style.background = 'rgba(255, 170, 0, 0.15)';
+                    timerContent = `<div style="color: #ffaa00; font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; animation: blink 1s infinite;">⚠️ Prepare-se</div><div style="font-size: 32px; color: #ffaa00; font-weight: bold; font-family: monospace;">${m}:${s}</div>`;
+                    if (!alert10sGiven && audioEnabled) { speak("Dez segundos. Assuma a posição."); alert10sGiven = true; }
+                } else if (timeLeft <= 5 && timeLeft > 0) {
+                    currentTimerEl.style.borderColor = '#ff4444';
+                    currentTimerEl.style.background = 'rgba(255, 68, 68, 0.2)';
+                    timerContent = `<div style="color: #ff4444; font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px;">Contagem Final</div><div style="font-size: 42px; color: #ff4444; font-weight: bold; text-shadow: 0 0 15px rgba(255,68,68,0.8);">${timeLeft}</div>`;
+                    
+                    if (timeLeft !== lastBeep) {
+                        FitAudio.beepShort();
+                        lastBeep = timeLeft;
+                    }
+                } else if (timeLeft === 0) {
+                    currentTimerEl.style.borderColor = '#00ff88';
+                    currentTimerEl.style.background = 'rgba(0, 255, 136, 0.2)';
+                    timerContent = `<div style="font-size: 36px; color: #00ff88; font-weight: bold; text-shadow: 0 0 15px rgba(0,255,136,0.8); text-transform: uppercase;">🔥 Vai!</div>`;
+                    
+                    if (timeLeft !== lastBeep) {
+                        FitAudio.beepLong();
+                        if(audioEnabled) speak("Ação!");
+                        lastBeep = timeLeft;
+                    }
+
+                    stopRestTimer();
+                    setTimeout(() => { 
+                        if (currentTimerEl && currentTimerEl.parentNode) currentTimerEl.parentNode.removeChild(currentTimerEl); 
+                    }, 3000);
                 }
 
-            } else if (timeLeft === 0) {
-                currentTimerEl.style.borderColor = '#00ff88';
-                currentTimerEl.style.background = 'rgba(0, 255, 136, 0.2)';
-                timerContent = `<div style="font-size: 36px; color: #00ff88; font-weight: bold; text-shadow: 0 0 15px rgba(0,255,136,0.8); text-transform: uppercase;">🔥 Vai!</div>`;
-                
-                // NOVO: Dispara o Bipe Longo de início de combate
-                if (timeLeft !== lastBeep) {
-                    FitAudio.beepLong();
-                    if(audioEnabled) speak("Ação!");
-                    lastBeep = timeLeft;
+                if (timeLeft > 0) {
+                    timerContent += `
+                        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                            <button onclick="FitApp.adjustRestTime(60)" style="background: ${currentRestTime===60?'#00ff88':'#222'}; color: ${currentRestTime===60?'#000':'#aaa'}; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;">60s</button>
+                            <button onclick="FitApp.adjustRestTime(90)" style="background: ${currentRestTime===90?'#00ff88':'#222'}; color: ${currentRestTime===90?'#000':'#aaa'}; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;">90s</button>
+                            <button onclick="FitApp.adjustRestTime(120)" style="background: ${currentRestTime===120?'#00ff88':'#222'}; color: ${currentRestTime===120?'#000':'#aaa'}; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;">120s</button>
+                        </div>
+                    `;
                 }
-
-                clearInterval(restTimer);
-                setTimeout(() => { if (currentTimerEl && currentTimerEl.parentNode) currentTimerEl.parentNode.removeChild(currentTimerEl); }, 3000);
+                
+                currentTimerEl.innerHTML = timerContent;
             }
 
-            if (timeLeft > 0) {
-                timerContent += `
-                    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
-                        <button onclick="FitApp.adjustRestTime(60)" style="background: ${currentRestTime===60?'#00ff88':'#222'}; color: ${currentRestTime===60?'#000':'#aaa'}; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;">60s</button>
-                        <button onclick="FitApp.adjustRestTime(90)" style="background: ${currentRestTime===90?'#00ff88':'#222'}; color: ${currentRestTime===90?'#000':'#aaa'}; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;">90s</button>
-                        <button onclick="FitApp.adjustRestTime(120)" style="background: ${currentRestTime===120?'#00ff88':'#222'}; color: ${currentRestTime===120?'#000':'#aaa'}; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;">120s</button>
-                    </div>
-                `;
+            if (isRestTimerRunning) {
+                rafTimerId = requestAnimationFrame(tick);
             }
-            
-            currentTimerEl.innerHTML = timerContent;
         };
         
-        updateUI();
-        restTimer = setInterval(updateUI, 1000); 
-    } // <--- ADICIONE ESTA CHAVE AQUI! Ela fecha a função startRestTimer!
+        rafTimerId = requestAnimationFrame(tick); 
+    }
 
     function stopRestTimer() { 
-        clearInterval(restTimer);
+        isRestTimerRunning = false;
+        if (rafTimerId) cancelAnimationFrame(rafTimerId);
+        // Garante a compatibilidade com navegadores mais antigos (fallback)
+        if (typeof restTimer !== 'undefined') clearInterval(restTimer); 
+        
         if (currentTimerEl && currentTimerEl.parentNode) {
             currentTimerEl.parentNode.removeChild(currentTimerEl);
         }
@@ -1917,7 +1930,14 @@ function renderMetricsChart() {
             const navBtn = document.getElementById(`nav-${tab}`);
             if (navBtn) navBtn.addEventListener('click', () => switchTab(`tab-${tab}`, `nav-${tab}`)); 
         });
-        
+       
+        // NOVO: Vigia de Visibilidade - Força ressincronização ao voltar pro app
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                updateGlobalTimer(); // Acorda o relógio de cima
+            }
+        });
+
         // NOVO: Ouve as mudanças no seletor de perfil, salva e recarrega o treino
         if (els.profileSelector) els.profileSelector.addEventListener('change', () => {
             safeSet('fitapp_profile', els.profileSelector.value);
