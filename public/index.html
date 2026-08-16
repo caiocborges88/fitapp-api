@@ -121,8 +121,9 @@
                 </div>
                 <div id="exerciseList" style="padding-top: 10px;"></div>
             </div>
-            <div class="btn-finish-area" id="btnFinishArea">
-                <button id="btnFinishAction" class="btn-action btn-warning">⚠️ Encerrar Incompleto</button>
+            <div class="btn-finish-area" id="btnFinishArea" style="display: none; flex-direction: column; gap: 10px;">
+                <button id="btnFinishAction" class="btn-action btn-warning">⚠️ Encerrar e Salvar Dados</button>
+                <button onclick="abortarMissao()" class="btn-action" style="background: transparent; color: #ff4444; border: 1px solid #ff4444; font-size: 14px;">❌ Abortar Missão (Não Salvar)</button>
             </div>
         </main>
         

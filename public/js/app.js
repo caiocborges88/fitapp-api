@@ -981,7 +981,39 @@ function removeExercise(bIndex, eIndex) {
 
         if(isComplete) { FitGamification.showPackModal(snapActive); snapActive = false; } else { showToast('Treino salvo no sistema.'); switchTab('tab-evolucao', 'nav-evolucao'); }
     }
+// ==========================================
+// ROTA DE FUGA: CANCELAMENTO DE TREINO
+// ==========================================
+window.abortarMissao = function() {
+    if (confirm("ATENÇÃO: Deseja realmente abortar a missão? O treino será encerrado e NENHUM dado ou ponto de suor será salvo.")) {
+        
+        // 1. Desliga os Motores
+        stopRestTimer();
+        if (globalTimer) clearInterval(globalTimer);
+        workoutStartTime = null;
+        
+        // 2. Limpa o Estado de Combate
+        clearWorkoutState();
+        currentWorkoutType = '';
+        
+        // 3. Restaura o Esconderijo Visual
+        els.workoutArea.style.display = 'none'; 
+        els.btnFinishArea.style.display = 'none';
+        document.getElementById('workoutCards').style.display = 'flex';
+        
+        // 4. Devolve as Barras de Navegação (Desativa Modo Foco)
+        const navBar = document.querySelector('nav');
+        if(navBar) navBar.style.display = 'flex';
+        const header = document.querySelector('.dashboard-header');
+        if (header) header.style.display = 'block';
 
+        // 5. Confirmação Visual
+        showToast('Missão abortada. O combate não foi registrado.');
+        
+        // Atualiza a tela base se necessário
+        checkSequence(); 
+    }
+};
     async function fetchAIFeedback() {
         document.getElementById('aiLoader').style.display = 'block';
         document.getElementById('aiResponse').style.display = 'none';
