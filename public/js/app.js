@@ -1066,9 +1066,13 @@ function removeExercise(bIndex, eIndex) {
         };
 
         dictionaryData.forEach(ex => {
-            if (query && !ex.name.toLowerCase().includes(query) && !ex.focus.toLowerCase().includes(query)) return;
+            // BLINDAGEM: Garante que os campos existem antes de dar .toLowerCase()
+            const exName = ex.name || 'Exercício Desconhecido';
+            const exFocus = ex.focus || ex.group || 'Outros'; 
             
-            const focusLow = ex.focus.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            if (query && !exName.toLowerCase().includes(query) && !exFocus.toLowerCase().includes(query)) return;
+            
+            const focusLow = exFocus.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
             let cat = 'Outros';
             
             if (focusLow.includes('peito') || focusLow.includes('peitoral')) cat = 'Peito';
@@ -1080,7 +1084,11 @@ function removeExercise(bIndex, eIndex) {
             else if (focusLow.includes('core') || focusLow.includes('abdom') || focusLow.includes('obliquo')) cat = 'Core';
             else if (focusLow.includes('mobilidade') || focusLow.includes('cardio')) cat = 'Mobilidade / Cardio';
             
-            groups[cat].push(ex);
+            groups[cat].push({
+                ...ex,
+                name: exName,
+                focus: exFocus
+            });
         });
 
         for (const [groupName, exercises] of Object.entries(groups)) {
@@ -1140,7 +1148,7 @@ function removeExercise(bIndex, eIndex) {
                             <div style="font-weight: bold; color: #fff; font-size: 14px; margin-bottom: 5px;">
                                 ${ex.name}
                             </div>
-                            <div style="font-size: 11px; color: #aaa; margin-bottom: 8px;">${ex.desc}</div>
+                            <div style="font-size: 11px; color: #aaa; margin-bottom: 8px;">${ex.desc || 'Instrução pendente.'}</div>
                             <span style="font-size: 10px; background: #333; padding: 2px 6px; border-radius: 4px; color: #00ff88;">${ex.focus}</span>
                             <span style="font-size: 10px; background: #333; padding: 2px 6px; border-radius: 4px; color: #aaa; margin-left: 5px;">${equipIcon} ${ex.equip ? ex.equip.replace('_', ' ') : 'academia'}</span>
                         </div>

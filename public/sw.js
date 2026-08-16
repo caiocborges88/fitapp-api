@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fitapp-cache-v5'; // Versão atualizada para quebrar o cache antigo
+const CACHE_NAME = 'fitapp-cache-v6'; // Atualizamos a versão para forçar a limpeza
 const urlsToCache = [
   '/',
   '/index.html',
@@ -12,11 +12,8 @@ const urlsToCache = [
   '/icon-512.png'
 ];
 
-// Estágio 1: Instalação (Guarda os arquivos base na memória do celular)
 self.addEventListener('install', event => {
-  // NOVO: Força o novo Service Worker a expulsar o antigo imediatamente
   self.skipWaiting(); 
-  
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -25,43 +22,35 @@ self.addEventListener('install', event => {
   );
 });
 
-// Estágio 2: Interceptação (Network-First com Cache Fallback)
-// Agora o app sempre tenta pegar a versão mais nova do servidor. Se estiver sem internet, usa o cache.
 self.addEventListener('fetch', event => {
-  // Ignora requisições de API e Firebase (Não "cacheia" banco de dados)
+  // Ignora chamadas para APIs e pro Firebase
   if (event.request.url.includes('/api/') || event.request.url.includes('firestore.googleapis.com')) {
       return; 
+  }
+  
+  // NOVO: Ignora explicitamente as páginas da Torre de Controle (Admin)
+  if (event.request.url.includes('admin.html') || event.request.url.includes('/js/admin.js')) {
+      return;
   }
 
   event.respondWith(
     fetch(event.request)
-      .then(response => {
-        // Se a internet funcionou, entrega o arquivo fresquinho do servidor
-        return response;
-      })
-      .catch(() => {
-        // Se a internet caiu ou falhou (Modo Offline da Skyfit), busca no cofre do cache
-        return caches.match(event.request);
-      })
+      .then(response => response)
+      .catch(() => caches.match(event.request))
   );
 });
 
-// Estágio 3: Ativação / Lixeiro (Apaga os caches fantasmas e assume a tela)
 self.addEventListener('activate', event => {
   const cacheAllowlist = [CACHE_NAME];
-  
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheAllowlist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName); // Destrói a memória da versão antiga
+            return caches.delete(cacheName);
           }
         })
       );
-    }).then(() => {
-      // NOVO: Faz o app novo assumir o controle da aba sem precisar do F5 forçado
-      return self.clients.claim();
-    })
+    }).then(() => self.clients.claim())
   );
 });
