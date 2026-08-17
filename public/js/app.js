@@ -72,6 +72,20 @@ var FitApp = (() => {
         return parseFloat(str) || 0;
     };
 
+    // NOVO: Motor de Classificação Muscular Universal
+    const getMuscleGroup = (focusString) => {
+        if (!focusString) return 'outros';
+        const f = focusString.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        if (f.includes('peito') || f.includes('peitoral')) return 'peito';
+        if (f.includes('costa') || f.includes('dorsal') || f.includes('lombar')) return 'costas';
+        if (f.includes('perna') || f.includes('gluteo') || f.includes('panturrilha') || f.includes('quadriceps') || f.includes('posterior') || f.includes('adutor') || f.includes('abdutor') || f.includes('coxa')) return 'pernas';
+        if (f.includes('ombro') || f.includes('deltoide') || f.includes('trapezio')) return 'ombros';
+        if (f.includes('triceps')) return 'triceps';
+        if (f.includes('biceps') || f.includes('antebraco')) return 'biceps';
+        if (f.includes('core') || f.includes('abdom') || f.includes('obliquo')) return 'core';
+        return 'outros';
+    };
+
     function showToast(msg) { els.toast.textContent = msg; els.toast.classList.add('show'); setTimeout(() => els.toast.classList.remove('show'), 3000); }
     function speak(text) { if (!audioEnabled || !('speechSynthesis' in window)) return; window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'pt-BR'; utterance.rate = 1.1; window.speechSynthesis.speak(utterance); }
     function toggleAudio() { audioEnabled = !audioEnabled; const btn = document.getElementById('btnAudio'); if (audioEnabled) { btn.classList.add('active'); btn.innerHTML = '🔊 <span>Áudio On</span>'; speak("Assistente ativado."); } else { btn.classList.remove('active'); btn.innerHTML = '🔈 <span>Áudio Off</span>'; window.speechSynthesis.cancel(); } }
