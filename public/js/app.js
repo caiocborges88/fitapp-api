@@ -2009,8 +2009,18 @@ function renderMetricsChart() {
         
         // Aguarda o sinal verde do Firebase Auth para iniciar a sincronização
         firebase.auth().onAuthStateChanged((user) => {
+            const loginOverlay = document.getElementById('loginOverlay');
+            const bottomNav = document.getElementById('bottomNav');
+            
             if (user) {
+                // Usuário logado: Destrói o escudo de login, mostra a barra e sincroniza
+                if (loginOverlay) loginOverlay.style.display = 'none';
+                if (bottomNav) bottomNav.style.display = 'flex';
                 syncOfflineWorkouts();
+            } else {
+                // Deslogado: Levanta o escudo de login e oculta a barra
+                if (loginOverlay) loginOverlay.style.display = 'flex';
+                if (bottomNav) bottomNav.style.display = 'none';
             }
         });
 
