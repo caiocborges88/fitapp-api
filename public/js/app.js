@@ -277,11 +277,17 @@ var FitApp = (() => {
         const currentName = ex.name;
         const currentDict = dictionaryData.find(d => d.name === currentName);
         const currentGroup = getMuscleGroup(currentDict ? currentDict.focus : "");
-        const pool = dictionaryData.filter(d => getMuscleGroup(d.focus) === currentGroup && d.name !== currentName);
-
+        
         const style = els.styleSelector ? els.styleSelector.value : 'biset';
         const level = els.levelSelector ? els.levelSelector.value : 'intermediario';
         const type = currentWorkoutType;
+
+        let pool = dictionaryData.filter(d => getMuscleGroup(d.focus) === currentGroup && d.name !== currentName);
+
+        // NOVO: Blindagem de ambiente para o Treino em Casa
+        if (type === 'Casa') {
+            pool = pool.filter(d => d.equip === 'peso_corporal' || d.equip === 'calistenia');
+        }
         
         let originalName = currentName; 
         const isStandardWorkout = !type.startsWith('custom_') && type !== 'Livre' && type !== 'Casa' && type !== 'novo_customizado';
