@@ -670,6 +670,44 @@ function removeExercise(bIndex, eIndex) {
             
             currentRoutine = JSON.parse(JSON.stringify(activeDB[style][level][type] || activeDB['biset']['intermediario']['A']));
             
+            // --- INÍCIO DO PURIFICADOR ESTRITO (ACADEMIA) ---
+            // Escaneia a rotina recém-carregada e expulsa exercícios de peso corporal/praia
+            const removeAccents = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
+            const getBroadGroup = (focusString) => {
+                const f = removeAccents(focusString);
+                if (f.includes('peito')) return 'peito';
+                if (f.includes('costa') || f.includes('dorsal') || f.includes('lombar')) return 'costas';
+                if (f.includes('perna') || f.includes('quadriceps') || f.includes('gluteo') || f.includes('posterior') || f.includes('panturrilha') || f.includes('adutor') || f.includes('abdutor') || f.includes('coxa')) return 'pernas';
+                if (f.includes('ombro') || f.includes('deltoide') || f.includes('trapezio')) return 'ombro';
+                if (f.includes('triceps')) return 'triceps';
+                if (f.includes('biceps') || f.includes('antebraco')) return 'biceps';
+                if (f.includes('core') || f.includes('abdom') || f.includes('obliquo')) return 'core';
+                return 'geral';
+            };
+
+            currentRoutine.forEach(bloco => {
+                bloco.exercises.forEach(ex => {
+                    const dictItem = dictionaryData.find(d => d.name === ex.name);
+                    // Se for peso corporal, engatilha a substituição
+                    if (dictItem && (dictItem.equip === 'peso_corporal' || dictItem.equip === 'calistenia')) {
+                        const targetGroup = getBroadGroup(dictItem.focus);
+                        
+                        // Busca no dicionário apenas máquinas/pesos livres do mesmo músculo
+                        const pool = dictionaryData.filter(d => 
+                            getBroadGroup(d.focus) === targetGroup && 
+                            d.equip !== 'peso_corporal' && 
+                            d.equip !== 'calistenia'
+                        );
+                        
+                        if (pool.length > 0) {
+                            const newEx = pool[Math.floor(Math.random() * pool.length)];
+                            ex.name = newEx.name; // Faz a troca invisível antes da tela piscar
+                        }
+                    }
+                });
+            });
+            // --- FIM DO PURIFICADOR ---
+
             if(preview) {
                 document.getElementById('previewTitle').textContent = `Treino ${type}`;
                 const styleName = style === 'biset' ? 'Modo Bi-set' : 'Modo Tradicional';
@@ -1580,7 +1618,8 @@ window.encerrarSessao = function() {
             `;
         } else {
             const allowedExercises = dictionaryData.filter(d => {
-                if (env === 'academia') return true; 
+                // Modificado: Se for academia, barra estritamente o peso corporal e calistenia
+                if (env === 'academia') return d.equip !== 'peso_corporal' && d.equip !== 'calistenia'; 
                 if (env === 'calistenia') return d.equip === 'peso_corporal' || d.equip === 'calistenia';
                 return d.equip === 'peso_corporal';
             }).map(d => d.name).join(", ");
