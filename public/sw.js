@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fitapp-cache-v6'; // Atualizamos a versão para forçar a limpeza
+const CACHE_NAME = 'fitapp-cache-v7'; // NOVO: Gatilho de expurgo ativado
 const urlsToCache = [
   '/',
   '/index.html',
