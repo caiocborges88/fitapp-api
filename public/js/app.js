@@ -638,16 +638,35 @@ function removeExercise(bIndex, eIndex) {
                 if(nameInput) nameInput.value = ''; 
             }
         } else if (type === 'Casa') {
+            // CÉREBRO TÁTICO: Gerador Dinâmico de Treino em Casa por Nível
+            const removeAccents = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
+            const isHomeReady = (item) => item.equip === 'peso_corporal' || item.equip === 'calistenia';
+            
+            // Separa o arsenal da nuvem/local por grupamentos
+            const poolPeito = dictionaryData.filter(d => isHomeReady(d) && removeAccents(d.focus).includes('peito'));
+            const poolPernas = dictionaryData.filter(d => isHomeReady(d) && (removeAccents(d.focus).includes('perna') || removeAccents(d.focus).includes('quadriceps') || removeAccents(d.focus).includes('gluteo')));
+            const poolCore = dictionaryData.filter(d => isHomeReady(d) && (removeAccents(d.focus).includes('core') || removeAccents(d.focus).includes('abdom')));
+            const poolCardio = dictionaryData.filter(d => isHomeReady(d) && (removeAccents(d.focus).includes('cardio') || removeAccents(d.focus).includes('mobilidade')));
+            
+            // Função para pescar um exercício aleatório com redundância (fallback)
+            const getRandom = (arr, fallbackName) => arr.length > 0 ? arr[Math.floor(Math.random() * arr.length)].name : fallbackName;
+            
+            // Calibragem de Esforço baseada na chave seletora
+            let setsLevel = level === 'iniciante' ? 3 : 4;
+            let repLevel = level === 'iniciante' ? "10-12 rep" : (level === 'avancado' ? "Até a falha" : "15-20 rep");
+            let timeLevel = level === 'iniciante' ? "30s" : (level === 'avancado' ? "1 min" : "45s");
+
             currentRoutine = [{
-                title: "Circuito Corporal",
+                title: `Circuito Corporal (${level.charAt(0).toUpperCase() + level.slice(1)})`,
                 exercises: [
-                    { name: "Polichinelo (Aquecimento)", sets: 3, target: "1 min" },
-                    { name: "Flexão de Braço", sets: 4, target: "Máx" },
-                    { name: "Agachamento Livre", sets: 4, target: "15-20" },
-                    { name: "Afundo Alternado", sets: 3, target: "12/perna" },
-                    { name: "Prancha Isométrica", sets: 3, target: "45s" }
+                    { name: getRandom(poolCardio, "Polichinelo (Aquecimento)"), sets: 3, target: timeLevel },
+                    { name: getRandom(poolPeito, "Flexão de Braço"), sets: setsLevel, target: repLevel },
+                    { name: getRandom(poolPernas, "Agachamento Livre"), sets: setsLevel, target: repLevel },
+                    { name: getRandom(poolPernas, "Afundo Alternado"), sets: setsLevel, target: "12/perna" },
+                    { name: getRandom(poolCore, "Prancha Isométrica"), sets: setsLevel, target: timeLevel }
                 ]
             }];
+
             if(preview) {
                 document.getElementById('previewTitle').textContent = `🏠 Treino em Casa`;
                 document.getElementById('previewDesc').textContent = `Rotina FullBody de contingência. Sem desculpas.`;
