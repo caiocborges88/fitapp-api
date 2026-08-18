@@ -2612,11 +2612,11 @@ function updateDynamicCards() {
     }
 
     return { 
-        init, filterLibrary, openSwapModal, confirmSwap, startWorkout,openForgeModal, updateForgeOptions, generateForgedWorkout,
+        init, filterLibrary, openSwapModal, confirmSwap, startWorkout, openForgeModal, updateForgeOptions, generateForgedWorkout, updateDynamicCards,
         beginWorkoutExecution, acceptSnap, declineSnap, cancelWorkoutPreview, adaptWorkoutToHome,
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,
-        adjustRestTime, changeSets, // NOVAS ENGRENAGENS
-        toggleAutoPilot, startAutoPilot, stopAutoPilot, // Piloto Automático (Hands-Free)
+        adjustRestTime, changeSets, 
+        toggleAutoPilot, startAutoPilot, stopAutoPilot, 
         openHistoryModal, switchHistoryTab,
         saveCustomWorkout, deleteCustomWorkout,
         openImportAiModal, processWorkoutWithAI,
