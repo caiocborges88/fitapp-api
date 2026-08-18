@@ -815,63 +815,23 @@ function removeExercise(bIndex, eIndex) {
                     if(nameInput) nameInput.value = customWorkout.name;
                 }
             }
-        } else {
-            // NOVO: Roteamento tático de múltiplos bancos de dados
-            let activeDB = dbWorkouts;
-            let profileLabel = '👨 Padrão';
+        } else if (type === 'A' || type === 'B' || type === 'C') {
+            // INTERCEPTAÇÃO: Gera o treino dinamicamente com base na seleção da tela inicial
+            const method = document.getElementById('mainMethodSelector') ? document.getElementById('mainMethodSelector').value : 'ppl';
             
-            if (profile === 'feminino') {
-                activeDB = dbWorkoutsFeminino;
-                profileLabel = '👩 Foco Inferiores';
-            } else if (profile === 'tatico') {
-                activeDB = dbWorkoutsTatico;
-                profileLabel = '⚽ Tático (Society)';
-            }
-            
-            currentRoutine = JSON.parse(JSON.stringify(activeDB[style][level][type] || activeDB['biset']['intermediario']['A']));
-            
-            // --- INÍCIO DO PURIFICADOR ESTRITO (ACADEMIA) ---
-            // Escaneia a rotina recém-carregada e expulsa exercícios de peso corporal/praia
-            const removeAccents = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
-            const getBroadGroup = (focusString) => {
-                const f = removeAccents(focusString);
-                if (f.includes('peito')) return 'peito';
-                if (f.includes('costa') || f.includes('dorsal') || f.includes('lombar')) return 'costas';
-                if (f.includes('perna') || f.includes('quadriceps') || f.includes('gluteo') || f.includes('posterior') || f.includes('panturrilha') || f.includes('adutor') || f.includes('abdutor') || f.includes('coxa')) return 'pernas';
-                if (f.includes('ombro') || f.includes('deltoide') || f.includes('trapezio')) return 'ombro';
-                if (f.includes('triceps')) return 'triceps';
-                if (f.includes('biceps') || f.includes('antebraco')) return 'biceps';
-                if (f.includes('core') || f.includes('abdom') || f.includes('obliquo')) return 'core';
-                return 'geral';
-            };
+            let subOpt = '';
+            if (method === 'ppl') subOpt = type === 'A' ? 'push' : (type === 'B' ? 'pull' : 'legs');
+            else if (method === 'biset_antagonista') subOpt = type === 'A' ? 'peito_costa' : (type === 'B' ? 'biceps_triceps' : 'quad_post');
+            else if (method === 'biset_agonista') subOpt = type === 'A' ? 'peito' : (type === 'B' ? 'costa' : 'perna');
+            else subOpt = type;
 
-            currentRoutine.forEach(bloco => {
-                bloco.exercises.forEach(ex => {
-                    const dictItem = dictionaryData.find(d => d.name === ex.name);
-                    // Se for peso corporal, engatilha a substituição
-                    if (dictItem && (dictItem.equip === 'peso_corporal' || dictItem.equip === 'calistenia')) {
-                        const targetGroup = getBroadGroup(dictItem.focus);
-                        
-                        // Busca no dicionário apenas máquinas/pesos livres do mesmo músculo
-                        const pool = dictionaryData.filter(d => 
-                            getBroadGroup(d.focus) === targetGroup && 
-                            d.equip !== 'peso_corporal' && 
-                            d.equip !== 'calistenia'
-                        );
-                        
-                        if (pool.length > 0) {
-                            const newEx = pool[Math.floor(Math.random() * pool.length)];
-                            ex.name = newEx.name; // Faz a troca invisível antes da tela piscar
-                        }
-                    }
-                });
-            });
-            // --- FIM DO PURIFICADOR ---
-
+            // Chama o motor da forja sem abrir o modal
+            currentRoutine = executeForgeLogic(method, subOpt);
+            
             if(preview) {
-                document.getElementById('previewTitle').textContent = `Treino ${type}`;
-                const styleName = style === 'biset' ? 'Modo Bi-set' : 'Modo Tradicional';
-                document.getElementById('previewDesc').textContent = `${styleName} - Nível ${level.charAt(0).toUpperCase() + level.slice(1)} | ${profileLabel}`;
+                const cardRef = document.getElementById('card-' + type);
+                document.getElementById('previewTitle').textContent = cardRef ? cardRef.querySelector('h3').textContent : `Treino ${type}`;
+                document.getElementById('previewDesc').textContent = cardRef ? cardRef.querySelector('p').textContent : `Nível ${level}`;
                 if(customControls) customControls.style.display = 'none';
                 if(nameContainer) nameContainer.style.display = 'none';
             }
@@ -2225,8 +2185,9 @@ function renderMetricsChart() {
         });
         
         checkSequence(); 
+        updateDynamicCards(); // NOVO: Atualiza o nome dos cartões ao iniciar
         FitGamification.renderAlbum();
-        renderWeeklyCalendar(); 
+        renderWeeklyCalendar();
         renderCustomWorkouts(); 
         if (typeof renderMetricsChart === 'function') renderMetricsChart();   
         
@@ -2536,7 +2497,120 @@ function renderMetricsChart() {
         
         FitApp.showToast("Rotina forjada com sucesso. Verifique o plano.");
         if(audioEnabled) FitApp.speak("Treino gerado conforme literatura biomecânica.");
-    }  
+    }
+function updateDynamicCards() {
+        const selector = document.getElementById('mainMethodSelector');
+        if (!selector) return;
+        
+        const method = selector.value;
+        safeSet('fitapp_main_method', method);
+        
+        const cA = document.getElementById('card-A');
+        const cB = document.getElementById('card-B');
+        const cC = document.getElementById('card-C');
+        
+        if (!cA || !cB || !cC) return;
+
+        let tA="Treino A", sA="", tB="Treino B", sB="", tC="Treino C", sC="";
+
+        if (method === 'ppl') {
+            tA="Treino Push"; sA="Peito, Ombro, Tríceps";
+            tB="Treino Pull"; sB="Costas, Trapézio, Bíceps";
+            tC="Treino Legs"; sC="Pernas & Core";
+        } else if (method === 'biset_agonista') {
+            tA="Bi-Set A"; sA="Peitoral & Ombros";
+            tB="Bi-Set B"; sB="Dorsais & Trapézio";
+            tC="Bi-Set C"; sC="Pernas & Braços";
+        } else if (method === 'biset_antagonista') {
+            tA="Antagonista A"; sA="Peito + Costas";
+            tB="Antagonista B"; sB="Bíceps + Tríceps";
+            tC="Antagonista C"; sC="Quadríceps + Posterior";
+        } else if (method === 'circuito') {
+            tA="Circuito 1"; sA="Metabólico FullBody";
+            tB="Circuito 2"; sB="Cardio & Força";
+            tC="Circuito 3"; sC="Resistência Extrema";
+        } else if (method === 'calistenia') {
+            tA="Calistenia A"; sA="Push (Empurrar Corpo)";
+            tB="Calistenia B"; sB="Pull (Puxar Corpo)";
+            tC="Calistenia C"; sC="Pernas & Core Isométrico";
+        }
+
+        if(cA.querySelector('h3')) { cA.querySelector('h3').textContent = tA; cA.querySelector('p').textContent = sA; }
+        if(cB.querySelector('h3')) { cB.querySelector('h3').textContent = tB; cB.querySelector('p').textContent = sB; }
+        if(cC.querySelector('h3')) { cC.querySelector('h3').textContent = tC; cC.querySelector('p').textContent = sC; }
+    }
+
+    function executeForgeLogic(method, subOpt) {
+        const removeAccents = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
+        const getEx = (focusTerms, equipPref, avoidNames, isStrictEquip = false) => {
+            let pool = dictionaryData.filter(d => {
+                const f = removeAccents(d.focus);
+                const matchFocus = focusTerms.some(term => f.includes(term));
+                let matchEquip = true;
+                if (equipPref) {
+                    if (isStrictEquip) matchEquip = (d.equip === equipPref);
+                    else matchEquip = (d.equip === equipPref || !d.equip);
+                }
+                return matchFocus && matchEquip && !avoidNames.includes(d.name);
+            });
+            if (pool.length === 0 && !isStrictEquip) pool = dictionaryData.filter(d => focusTerms.some(term => removeAccents(d.focus).includes(term)) && !avoidNames.includes(d.name));
+            return pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : null;
+        };
+
+        let generatedBlocks = [];
+        let used = [];
+
+        if (method === 'ppl') {
+            if (subOpt === 'push') {
+                let e1 = getEx(['peito'], 'barra', used); if(e1) used.push(e1.name); let e2 = getEx(['ombro'], 'haltere', used); if(e2) used.push(e2.name);
+                if(e1) generatedBlocks.push({ title: "Força Base", exercises: [ {name: e1.name, sets: 4, target: "8-10"}, ...(e2 ? [{name: e2.name, sets: 4, target: "10-12"}] : []) ]});
+                let e3 = getEx(['peito'], 'haltere', used); if(e3) used.push(e3.name); let e4 = getEx(['triceps'], 'cabo', used); if(e4) used.push(e4.name);
+                if(e3) generatedBlocks.push({ title: "Dano Muscular", exercises: [ {name: e3.name, sets: 4, target: "10-12"}, ...(e4 ? [{name: e4.name, sets: 4, target: "12"}] : []) ]});
+            } else if (subOpt === 'pull') {
+                let e1 = getEx(['costa', 'dorsal'], 'barra', used); if(e1) used.push(e1.name); let e2 = getEx(['trapezio', 'posterior'], 'haltere', used); if(e2) used.push(e2.name);
+                if(e1) generatedBlocks.push({ title: "Tração Pesada", exercises: [ {name: e1.name, sets: 4, target: "8-10"}, ...(e2 ? [{name: e2.name, sets: 4, target: "10-12"}] : []) ]});
+                let e3 = getEx(['costa', 'dorsal'], 'maquina', used); if(e3) used.push(e3.name); let e4 = getEx(['biceps'], 'cabo', used); if(e4) used.push(e4.name);
+                if(e3) generatedBlocks.push({ title: "Volume de Contração", exercises: [ {name: e3.name, sets: 4, target: "10-12"}, ...(e4 ? [{name: e4.name, sets: 4, target: "12"}] : []) ]});
+            } else {
+                let e1 = getEx(['perna', 'quadriceps'], 'barra', used); if(e1) used.push(e1.name); let e2 = getEx(['posterior'], 'haltere', used); if(e2) used.push(e2.name);
+                if(e1) generatedBlocks.push({ title: "Eixo de Força", exercises: [ {name: e1.name, sets: 4, target: "8-10"}, ...(e2 ? [{name: e2.name, sets: 4, target: "10-12"}] : []) ]});
+                let e3 = getEx(['panturrilha'], null, used); if(e3) used.push(e3.name); let e4 = getEx(['core', 'abdom'], null, used); if(e4) used.push(e4.name);
+                if(e3) generatedBlocks.push({ title: "Isolamento", exercises: [ {name: e3.name, sets: 4, target: "15"}, ...(e4 ? [{name: e4.name, sets: 3, target: "Falha"}] : []) ]});
+            }
+        } else if (method === 'biset_antagonista') {
+            let g1 = [subOpt.split('_')[0]]; let g2 = [subOpt.split('_')[1]];
+            if(g1[0]==='quad') g1=['quadriceps']; if(g2[0]==='post') g2=['posterior'];
+            for(let i=1; i<=3; i++) {
+                let e1 = getEx(g1, null, used); if(e1) used.push(e1.name); let e2 = getEx(g2, null, used); if(e2) used.push(e2.name);
+                if(e1 && e2) generatedBlocks.push({ title: `Bloco Oposto ${i}`, exercises: [ {name: e1.name, sets: 4, target: "10-12"}, {name: e2.name, sets: 4, target: "10-12"} ]});
+            }
+        } else if (method === 'biset_agonista') {
+            let focus = [subOpt]; if(subOpt === 'braco') focus = ['biceps', 'triceps'];
+            for(let i=1; i<=3; i++) {
+                let e1 = getEx(focus, i===1 ? 'barra' : 'haltere', used); if(e1) used.push(e1.name); let e2 = getEx(focus, i===3 ? 'cabo' : 'maquina', used); if(e2) used.push(e2.name);
+                if(e1 && e2) generatedBlocks.push({ title: `Bi-Set Agonista ${i} (Fadiga Extrema)`, exercises: [ {name: e1.name, sets: 3, target: "10 rep"}, {name: e2.name, sets: 3, target: "Até a falha"} ]});
+            }
+        } else if (method === 'circuito') {
+            let cExs = [];
+            let fP = getEx(['perna'], 'peso_corporal', used) || getEx(['perna'], null, used); if(fP) { used.push(fP.name); cExs.push({name: fP.name, sets: 4, target: "15-20 rep"}); }
+            let fC = getEx(['peito'], 'peso_corporal', used) || getEx(['peito'], null, used); if(fC) { used.push(fC.name); cExs.push({name: fC.name, sets: 4, target: "15-20 rep"}); }
+            let fB = getEx(['costa'], 'maquina', used); if(fB) { used.push(fB.name); cExs.push({name: fB.name, sets: 4, target: "15-20 rep"}); }
+            let fS = getEx(['ombro'], 'haltere', used); if(fS) { used.push(fS.name); cExs.push({name: fS.name, sets: 4, target: "15-20 rep"}); }
+            if(cExs.length > 0) generatedBlocks.push({ title: `Rodada Metabólica ${subOpt}`, exercises: cExs });
+            FitApp.adjustRestTime(45);
+        } else if (method === 'calistenia') {
+            let f1 = subOpt === 'A' ? ['peito', 'triceps'] : (subOpt === 'B' ? ['costa', 'biceps'] : ['perna']);
+            let cal1 = getEx(f1, 'calistenia', used, true) || getEx(f1, 'peso_corporal', used, true); if(cal1) used.push(cal1.name);
+            let cal2 = getEx(f1, 'peso_corporal', used, true); if(cal2) used.push(cal2.name);
+            let cal3 = getEx(['core'], 'peso_corporal', used, true); if(cal3) used.push(cal3.name);
+            if(cal1) generatedBlocks.push({ title: "Força Relativa", exercises: [ {name: cal1.name, sets: 4, target: "Falha"}, ...(cal2 ? [{name: cal2.name, sets: 4, target: "Falha"}] : []) ]});
+            if(cal3) generatedBlocks.push({ title: "Core Isométrico", exercises: [ {name: cal3.name, sets: 4, target: "Isometria Máx"} ]});
+        }
+
+        if(generatedBlocks.length === 0) generatedBlocks = [{ title: "Rotina de Contingência", exercises: [] }];
+        return generatedBlocks;
+    }
+
     return { 
         init, filterLibrary, openSwapModal, confirmSwap, startWorkout,openForgeModal, updateForgeOptions, generateForgedWorkout,
         beginWorkoutExecution, acceptSnap, declineSnap, cancelWorkoutPreview, adaptWorkoutToHome,
@@ -2557,6 +2631,7 @@ function renderMetricsChart() {
         } 
     };
 })();
+
 // ==========================================
 // 📡 UPLINK COM A TORRE DE CONTROLE (B2B)
 // ==========================================

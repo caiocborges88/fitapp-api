@@ -47,7 +47,17 @@
                     <button class="time-btn" data-time="120">120s</button>
                 </div>
             </div>
-
+        <!-- NOVO: O Cérebro Biomecânico na Linha de Frente -->
+            <div style="background: #151515; padding: 15px; border-radius: 12px; border: 1px solid #a64dff; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(166, 77, 255, 0.1);">
+                <label style="color: #a64dff; font-size: 11px; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 8px;">🧬 Inteligência Biomecânica</label>
+                <select id="mainMethodSelector" class="select-level" style="width: 100%; border-color: #a64dff; font-size: 14px;" onchange="FitApp.updateDynamicCards()">
+                    <option value="ppl" selected>Push / Pull / Legs (Eixos)</option>
+                    <option value="biset_agonista">Bi-Set Agonista (Pré-Exaustão)</option>
+                    <option value="biset_antagonista">Bi-Set Antagônico & Misto</option>
+                    <option value="circuito">Circuito Metabólico (FullBody)</option>
+                    <option value="calistenia">Calistenia (Peso do Corpo)</option>
+                </select>
+            </div>
             <div class="workout-cards" id="workoutCards">
                 <div class="card-treino" id="card-A" onclick="FitApp.startWorkout('A')">
                     <h3>Treino A</h3>
@@ -212,12 +222,6 @@
                     <option value="masculino" selected>👨 Padrão (Hipertrofia Geral)</option>
                     <option value="feminino">👩 Feminino (Foco Inferiores)</option>
                     <option value="tatico">⚽ Tático (Condicionamento Society)</option>
-                </select>
-
-                <label style="color: #aaa; font-size: 12px; display: block; margin-bottom: 5px;">Modo de Execução</label>
-                <select id="styleSelector" class="select-level" style="width: 100%; margin-bottom: 15px;">
-                    <option value="biset" selected>🔗 Modo Bi-set</option>
-                    <option value="tradicional">🏋️ Modo Tradicional</option>
                 </select>
 
                 <label style="color: #aaa; font-size: 12px; display: block; margin-bottom: 5px;">Nível de Dificuldade</label>
