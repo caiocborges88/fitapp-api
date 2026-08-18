@@ -2554,7 +2554,7 @@ function updateDynamicCards() {
                 const f = removeAccents(d.focus);
                 const matchFocus = focusTerms.some(term => f.includes(term));
                 
-                // Blindagem anti-mistura: Se for treino de academia, exclui "peso_corporal" a menos que seja explicitamente permitido (ex: Barra Fixa/Paralela)
+                // Blindagem anti-mistura
                 let isCalisthenics = d.equip === 'peso_corporal' || d.equip === 'calistenia';
                 if (!allowBodyweight && isCalisthenics) return false;
 
@@ -2563,7 +2563,7 @@ function updateDynamicCards() {
                 
                 return matchFocus && matchEquip && !avoidNames.includes(d.name);
             });
-            // Fallback flexível, mas ainda respeitando a blindagem anti-calistenia
+            // Fallback flexível
             if (pool.length === 0) {
                 pool = dictionaryData.filter(d => {
                     let isCalisthenics = d.equip === 'peso_corporal' || d.equip === 'calistenia';
@@ -2579,17 +2579,14 @@ function updateDynamicCards() {
 
         // FUNÇÃO AUXILIAR: Construtor Padrão de 3 Blocos Densos
         const buildStandardBlocks = (g1, g2, g3) => {
-            // Bloco 1: Força (Barras/Máquinas Pesadas)
             let e1 = getEx(g1, 'barra', used, true) || getEx(g1, 'maquina', used); if(e1) used.push(e1.name);
             let e2 = getEx(g2, 'haltere', used) || getEx(g2, 'maquina', used); if(e2) used.push(e2.name);
             if(e1) generatedBlocks.push({ title: "Bloco 1: Força Estrutural", exercises: [ {name: e1.name, sets: 4, target: "8-10 rep"}, ...(e2 ? [{name: e2.name, sets: 4, target: "10-12 rep"}] : []) ]});
             
-            // Bloco 2: Hipertrofia (Halteres/Cabos)
             let e3 = getEx(g1, 'haltere', used) || getEx(g1, 'cabo', used); if(e3) used.push(e3.name);
             let e4 = getEx(g3 || g2, 'cabo', used) || getEx(g3 || g2, 'haltere', used); if(e4) used.push(e4.name);
             if(e3) generatedBlocks.push({ title: "Bloco 2: Densidade Muscular", exercises: [ {name: e3.name, sets: 4, target: "10-12 rep"}, ...(e4 ? [{name: e4.name, sets: 4, target: "10-12 rep"}] : []) ]});
 
-            // Bloco 3: Isolamento/Pump (Máquinas/Cabos)
             let e5 = getEx(g1, 'maquina', used) || getEx(g1, 'cabo', used); if(e5) used.push(e5.name);
             let e6 = getEx(g2, 'maquina', used) || getEx(g2, 'cabo', used); if(e6) used.push(e6.name);
             if(e5) generatedBlocks.push({ title: "Bloco 3: Pump & Isolamento", exercises: [ {name: e5.name, sets: 3, target: "12-15 rep"}, ...(e6 ? [{name: e6.name, sets: 3, target: "Até a falha"}] : []) ]});
@@ -2597,8 +2594,10 @@ function updateDynamicCards() {
 
         // --- SISTEMA ABC (Push / Pull / Legs) ---
         if (method === 'abc' || method === 'ppl') {
-            if (subOpt === 'push' || subOpt === 'A') buildStandardBlocks(['peito'], ['ombro', 'deltoide'], ['triceps']);
-            else if (subOpt === 'pull' || subOpt === 'B') buildStandardBlocks(['costa', 'dorsal'], ['trapezio', 'posterior'], ['biceps']);
+            let isA = (subOpt === 'A' || subOpt === 'push');
+            let isB = (subOpt === 'B' || subOpt === 'pull');
+            if (isA) buildStandardBlocks(['peito'], ['ombro', 'deltoide'], ['triceps']);
+            else if (isB) buildStandardBlocks(['costa', 'dorsal'], ['trapezio', 'posterior'], ['biceps']);
             else buildStandardBlocks(['perna', 'quadriceps'], ['posterior', 'gluteo'], ['panturrilha']);
         } 
         // --- SISTEMA ABCD ---
@@ -2608,17 +2607,24 @@ function updateDynamicCards() {
             else if (subOpt === 'C') buildStandardBlocks(['quadriceps'], ['panturrilha'], ['quadriceps']);
             else if (subOpt === 'D') buildStandardBlocks(['posterior', 'gluteo'], ['ombro', 'deltoide'], ['posterior']);
         } 
-        // --- BI-SETS ---
+        // --- BI-SETS ANTAGONISTA ---
         else if (method === 'biset_antagonista') {
-            let g1 = subOpt === 'A' ? ['peito'] : (subOpt === 'B' ? ['biceps'] : ['quadriceps']);
-            let g2 = subOpt === 'A' ? ['costa'] : (subOpt === 'B' ? ['triceps'] : ['posterior']);
+            // CORREÇÃO APLICADA: Agora o motor entende perfeitamente quem ele deve buscar
+            let isA = (subOpt === 'A' || subOpt === 'peito_costa');
+            let isB = (subOpt === 'B' || subOpt === 'biceps_triceps');
+            let g1 = isA ? ['peito'] : (isB ? ['biceps'] : ['quadriceps']);
+            let g2 = isA ? ['costa'] : (isB ? ['triceps'] : ['posterior']);
             
             for(let i=1; i<=3; i++) {
                 let e1 = getEx(g1, null, used); if(e1) used.push(e1.name); let e2 = getEx(g2, null, used); if(e2) used.push(e2.name);
                 if(e1 && e2) generatedBlocks.push({ title: `Bloco Oposto ${i}`, exercises: [ {name: e1.name, sets: 4, target: "10-12 rep"}, {name: e2.name, sets: 4, target: "10-12 rep"} ]});
             }
-        } else if (method === 'biset_agonista') {
-            let focus = subOpt === 'A' ? ['peito'] : (subOpt === 'B' ? ['costa'] : ['perna']);
+        } 
+        // --- BI-SETS AGONISTA ---
+        else if (method === 'biset_agonista') {
+            let isA = (subOpt === 'A' || subOpt === 'peito');
+            let isB = (subOpt === 'B' || subOpt === 'costa');
+            let focus = isA ? ['peito'] : (isB ? ['costa'] : ['perna']);
             for(let i=1; i<=3; i++) {
                 let e1 = getEx(focus, i===1 ? 'barra' : 'haltere', used); if(e1) used.push(e1.name); let e2 = getEx(focus, i===3 ? 'cabo' : 'maquina', used); if(e2) used.push(e2.name);
                 if(e1 && e2) generatedBlocks.push({ title: `Bi-Set Exaustão ${i}`, exercises: [ {name: e1.name, sets: 3, target: "10 rep"}, {name: e2.name, sets: 3, target: "Até a falha"} ]});
@@ -2632,7 +2638,16 @@ function updateDynamicCards() {
             let fB = getEx(['costa'], 'maquina', used); if(fB) { used.push(fB.name); cExs.push({name: fB.name, sets: 4, target: "15-20 rep"}); }
             let fS = getEx(['ombro'], 'haltere', used); if(fS) { used.push(fS.name); cExs.push({name: fS.name, sets: 4, target: "15-20 rep"}); }
             if(cExs.length > 0) generatedBlocks.push({ title: `Rodada Metabólica`, exercises: cExs });
-            FitApp.adjustRestTime(45);
+        }
+        // --- CALISTENIA ---
+        else if (method === 'calistenia') {
+            let isA = (subOpt === 'A' || subOpt === 'push');
+            let isB = (subOpt === 'B' || subOpt === 'pull');
+            let f1 = isA ? ['peito', 'triceps'] : (isB ? ['costa', 'biceps'] : ['perna']);
+            
+            let cal1 = getEx(f1, 'calistenia', used, true) || getEx(f1, 'peso_corporal', used, true); if(cal1) used.push(cal1.name);
+            let cal2 = getEx(f1, 'peso_corporal', used, true); if(cal2) used.push(cal2.name);
+            if(cal1) generatedBlocks.push({ title: "Força Relativa", exercises: [ {name: cal1.name, sets: 4, target: "Falha"}, ...(cal2 ? [{name: cal2.name, sets: 4, target: "Falha"}] : []) ]});
         }
 
         // ADIÇÃO DO BLOCO DE ABDÔMEN (Se a chave estiver ativada)
