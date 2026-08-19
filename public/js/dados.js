@@ -1,110 +1,124 @@
-// 2. DICIONÁRIO DE EXERCÍCIOS CLASSIFICADO E AUDITADO PARA A FORJA
+// 2. DICIONÁRIO ESTRATÉGICO: SUBNÍVEIS E BIOMECÂNICA
 const dictionaryData = [
-    // --- CORE E ESTABILIDADE ---
-    { name: "Abdominal Bicicleta", focus: "Core, Abdômen, Oblíquo", desc: "Deitado de costas, cotovelo no joelho oposto.", equip: "peso_corporal" },
-    { name: "Abdominal Canivete", focus: "Core, Abdômen Avançado", desc: "Deitado esticado, toque as mãos nos pés.", equip: "peso_corporal" },
-    { name: "Abdominal Declinado", focus: "Core, Abdômen Avançado", desc: "Utilizando o banco declinado.", equip: "maquina" },
-    { name: "Abdominal Infra", focus: "Core, Abdômen Inferior", desc: "Deitado de costas, eleve as pernas.", equip: "peso_corporal" },
-    { name: "Abdominal Máquina", focus: "Core, Abdômen Base", desc: "Sentado no aparelho, contraia o tronco.", equip: "maquina" },
-    { name: "Abdominal Oblíquo", focus: "Core, Abdômen, Oblíquo", desc: "Deitado, cruze uma perna e toque o cotovelo.", equip: "peso_corporal" },
-    { name: "Abdominal Supra", focus: "Core, Abdômen Superior", desc: "Movimento do supra solo.", equip: "peso_corporal" },
-    { name: "Abdominal Supra com Carga", focus: "Core, Abdômen", desc: "Movimento tradicional segurando anilha.", equip: "halter" },
-    { name: "Abdominal Supra Solo", focus: "Core, Abdômen Superior", desc: "Deitado, joelhos dobrados.", equip: "peso_corporal" },
-    { name: "Elevação Pernas Pendurado", focus: "Core, Abdômen Inferior", desc: "Pendurado na barra fixa.", equip: "calistenia" },
-    { name: "Escalador (Mountain Climber)", focus: "Core, Abdômen, Cardio", desc: "Posição de prancha alta, puxe os joelhos.", equip: "peso_corporal" },
-    { name: "Hollow Body Hold", focus: "Core, Abdômen Isometria", desc: "Deitado de costas, corpo em arco.", equip: "peso_corporal" },
-    { name: "Prancha Isométrica", focus: "Core, Abdômen Estabilização", desc: "Apoiado nos antebraços, corpo reto.", equip: "peso_corporal" },
-    { name: "Prancha Lateral", focus: "Core, Abdômen, Oblíquo", desc: "Apoiado no antebraço lateralmente.", equip: "peso_corporal" },
-    { name: "Roda Abdominal", focus: "Core, Abdômen Avançado", desc: "Ajoelhado, deslize a roda à frente.", equip: "halter" },
-    { name: "Russian Twist", focus: "Core, Abdômen, Oblíquo", desc: "Sentado inclinado, gire o tronco.", equip: "peso_corporal" },
-    { name: "Superman (Solo)", focus: "Core, Lombar, Glúteo", desc: "Deitado de bruços, eleve peito e pernas.", equip: "peso_corporal" },
-    { name: "Toque no Calcanhar", focus: "Core, Abdômen, Oblíquo", desc: "Deitado, flexione o tronco lateralmente.", equip: "peso_corporal" },
-    { name: "V-Up (Abdominal em V)", focus: "Core, Abdômen Avançado", desc: "Deitado, eleve tronco e pernas juntos.", equip: "peso_corporal" },
-    { name: "Extensão Lombar Máquina", focus: "Core, Lombar", desc: "Sentado no aparelho, estenda o tronco.", equip: "maquina" },
-    
-    // --- PERNAS E GLÚTEOS ---
-    { name: "Agachamento Búlgaro", focus: "Perna, Quadríceps, Glúteo", desc: "Em pé, pé de trás no banco.", equip: "halter" },
-    { name: "Agachamento Livre", focus: "Perna, Quadríceps, Glúteo", desc: "Barra nas costas, desça até 90 graus.", equip: "barra" },
-    { name: "Agachamento no Smith", focus: "Perna, Quadríceps Guiado", desc: "Pés levemente à frente no trilho.", equip: "maquina" },
-    { name: "Agachamento com Salto", focus: "Perna, Quadríceps Explosão", desc: "Agachamento tradicional seguido de salto.", equip: "peso_corporal" },
-    { name: "Afundo / Avanço", focus: "Perna, Quadríceps, Glúteo", desc: "Passada larga à frente.", equip: "halter" },
-    { name: "Pistol Squat", focus: "Perna, Quadríceps Avançado", desc: "Agachamento de uma perna só.", equip: "peso_corporal" },
-    { name: "Cadeira Abdutora", focus: "Perna, Glúteo, Abdutor", desc: "Sentado, afaste os joelhos.", equip: "maquina" },
-    { name: "Cadeira Adutora", focus: "Perna, Adutor", desc: "Sentado, feche as pernas.", equip: "maquina" },
-    { name: "Cadeira Extensora", focus: "Perna, Quadríceps Isolado", desc: "Sentado, estenda os joelhos.", equip: "maquina" },
-    { name: "Elevação Pélvica", focus: "Perna, Glúteo, Posterior", desc: "Deitado, eleve o quadril com barra.", equip: "barra" },
-    { name: "Leg Press 45°", focus: "Perna, Quadríceps, Glúteo", desc: "Aparelho inclinado.", equip: "maquina" },
-    { name: "Leg Press Máquina", focus: "Perna, Quadríceps", desc: "Sentado na máquina horizontal.", equip: "maquina" },
-    { name: "Stiff (Terra Romeno)", focus: "Perna, Posterior, Glúteo", desc: "Joelhos semi-estendidos, desça a barra.", equip: "barra" },
-    { name: "Mesa Flexora", focus: "Perna, Posterior Isolado", desc: "Deitado de bruços, flexione os joelhos.", equip: "maquina" },
-    { name: "Panturrilha no Leg Press", focus: "Perna, Panturrilha", desc: "Posicione a ponta dos pés na plataforma.", equip: "maquina" },
-    { name: "Panturrilha Sentado", focus: "Perna, Panturrilha (Sóleo)", desc: "No aparelho específico, eleve os calcanhares.", equip: "maquina" },
-    { name: "Panturrilha no Degrau", focus: "Perna, Panturrilha Livre", desc: "Em pé na borda de um degrau.", equip: "peso_corporal" },
-    { name: "Flexão Nórdica", focus: "Perna, Posterior Avançado", desc: "De joelhos, controle a queda.", equip: "peso_corporal" },
-    
-    // --- OMBROS ---
-    { name: "Desenvolvimento Halteres", focus: "Ombro, Deltoide Base", desc: "Sentado, empurre para cima.", equip: "halter" },
-    { name: "Desenvolvimento Militar", focus: "Ombro, Deltoide Força", desc: "Em pé, empurre a barra.", equip: "barra" },
-    { name: "Desenvolvimento Máquina", focus: "Ombro, Deltoide Seguro", desc: "Sentado no aparelho.", equip: "maquina" },
-    { name: "Elevação Frontal Anilha", focus: "Ombro, Deltoide Anterior", desc: "Em pé, eleve o peso à frente.", equip: "halter" },
-    { name: "Elevação Lateral Halteres", focus: "Ombro, Deltoide Lateral", desc: "Em pé, braços semi-flexionados.", equip: "halter" },
-    { name: "Elevação Lateral Isométrica", focus: "Ombro, Deltoide Isometria", desc: "Empurre contra o batente da porta.", equip: "peso_corporal" },
-    { name: "Crucifixo Invertido Livre", focus: "Ombro, Deltoide Posterior, Costa", desc: "Tronco inclinado, eleve lateralmente.", equip: "halter" },
-    { name: "Encolhimento Halteres", focus: "Ombro, Trapézio", desc: "Em pé, eleve os ombros.", equip: "halter" },
-    { name: "Remada Alta no Cabo", focus: "Ombro, Trapézio", desc: "Puxe a barra do cabo até o queixo.", equip: "cabo" },
-    
-    // --- COSTAS E DORSAL ---
-    { name: "Barra Fixa", focus: "Costa, Dorsal, Puxar", desc: "Pegada aberta pronada.", equip: "calistenia" },
-    { name: "Barra Fixa Supinada (Chin-up)", focus: "Costa, Dorsal, Bíceps", desc: "Pegada supinada fechada.", equip: "calistenia" },
-    { name: "Puxada Alta (Livre)", focus: "Costa, Dorsal, Puxar", desc: "Puxe a barra longa no pulley.", equip: "cabo" },
-    { name: "Puxada Alta Máquina", focus: "Costa, Dorsal Seguro", desc: "Sentado na máquina articulada.", equip: "maquina" },
-    { name: "Puxada Frente Supinada", focus: "Costa, Dorsal, Bíceps", desc: "Pulley com pegada supinada.", equip: "cabo" },
-    { name: "Pulldown no Cabo", focus: "Costa, Dorsal Isolado", desc: "Braços estendidos, puxe a barra.", equip: "cabo" },
-    { name: "Remada Baixa Triângulo", focus: "Costa, Dorsal Miolo", desc: "Sentado no cabo, puxe no abdômen.", equip: "cabo" },
-    { name: "Remada Cavalinho Livre", focus: "Costa, Dorsal Densidade", desc: "Barra T, puxe no peito.", equip: "barra" },
-    { name: "Remada Curvada Livre", focus: "Costa, Dorsal Densidade", desc: "Tronco inclinado, barra no umbigo.", equip: "barra" },
-    { name: "Remada Máquina", focus: "Costa, Dorsal Base", desc: "Apoiado no peito, puxe.", equip: "maquina" },
-    { name: "Remada Unilateral (Serrote)", focus: "Costa, Dorsal Unilateral", desc: "Apoiado no banco, puxe o halter.", equip: "halter" },
-    { name: "Remada Australiana (Barra Baixa)", focus: "Costa, Dorsal Relativa", desc: "Puxe o peito até a barra baixa.", equip: "calistenia" },
-    { name: "Remada na Porta/Lençol", focus: "Costa, Dorsal Adaptação", desc: "Puxe o peso do corpo no lençol.", equip: "peso_corporal" },
-    
-    // --- PEITO ---
-    { name: "Supino Reto Barra", focus: "Peito, Peitoral Força", desc: "Deitado, desça a barra até o peito.", equip: "barra" },
-    { name: "Supino Reto Halteres", focus: "Peito, Peitoral Base", desc: "No banco reto, empurre os halteres.", equip: "halter" },
-    { name: "Supino Inclinado Halteres", focus: "Peito, Peitoral Superior", desc: "Banco a 45 graus.", equip: "halter" },
-    { name: "Supino Declinado Barra", focus: "Peito, Peitoral Inferior", desc: "Banco declinado.", equip: "barra" },
-    { name: "Supino Máquina", focus: "Peito, Peitoral Seguro", desc: "Sentado, empurre a alavanca.", equip: "maquina" },
-    { name: "Crucifixo Reto Halteres", focus: "Peito, Peitoral Isolado", desc: "Abra os braços no banco reto.", equip: "halter" },
-    { name: "Crossover Polia Média", focus: "Peito, Peitoral", desc: "Cabos na altura do ombro.", equip: "cabo" },
-    { name: "Crossover Polia Baixa", focus: "Peito, Peitoral Superior", desc: "Cabos vindos do chão.", equip: "cabo" },
-    { name: "Voador (Peck Deck)", focus: "Peito, Peitoral Isolado", desc: "Abrace a máquina à frente.", equip: "maquina" },
-    { name: "Pullover com Halter", focus: "Peito, Peitoral, Costa", desc: "Deitado, desça o halter atrás da cabeça.", equip: "halter" },
-    { name: "Flexão de Braço Tradicional", focus: "Peito, Peitoral, Tríceps", desc: "Corpo estendido no chão.", equip: "peso_corporal" },
-    { name: "Flexão de Braço (Joelhos)", focus: "Peito, Peitoral Iniciante", desc: "Joelho apoiado.", equip: "peso_corporal" },
-    { name: "Flexão Inclinada no Banco", focus: "Peito, Peitoral Inferior", desc: "Mãos no encosto do banco.", equip: "calistenia" },
-    { name: "Flexão Declinada", focus: "Peito, Peitoral Superior", desc: "Pés no banco, mãos no chão.", equip: "calistenia" },
+    // ==========================================
+    // 1. TRÍCEPS [Subníveis: triceps_longa, triceps_lateral_medial, triceps_global]
+    // ==========================================
+    { name: "Tríceps Francês Halter", focus: "triceps_longa", desc: "Braços elevados para focar na cabeça longa.", equip: "halter" },
+    { name: "Tríceps Testa", focus: "triceps_longa", desc: "Cotovelos levemente para trás da cabeça.", equip: "barra" },
+    { name: "Tríceps Pulley", focus: "triceps_lateral_medial", desc: "Braços junto ao corpo, foca cabeça lateral e medial.", equip: "cabo" },
+    { name: "Tríceps Corda", focus: "triceps_lateral_medial", desc: "Abra a corda no final para pico de contração lateral.", equip: "cabo" },
+    { name: "Tríceps Kickback (Coice)", focus: "triceps_lateral_medial", desc: "Isolação total no fim do movimento.", equip: "cabo" },
+    { name: "Tríceps Máquina", focus: "triceps_global", desc: "Trabalho global do tríceps.", equip: "maquina" },
+    { name: "Mergulho Paralelas", focus: "triceps_global, peito_esternocostal", desc: "Construtor de massa global para o complexo do tríceps.", equip: "calistenia" },
+    { name: "Mergulho no Banco", focus: "triceps_global", desc: "Trabalho completo do tríceps.", equip: "calistenia" },
+    { name: "Flexão Diamante", focus: "triceps_global, peito_esternocostal", desc: "Ativação intensa do tríceps.", equip: "peso_corporal" },
 
-    // --- BÍCEPS ---
-    { name: "Rosca Direta (Barra W)", focus: "Bíceps Base", desc: "Em pé, flexione os cotovelos.", equip: "barra" },
-    { name: "Rosca Alternada Inclinada", focus: "Bíceps Alongado", desc: "No banco inclinado, alterne os braços.", equip: "halter" },
-    { name: "Rosca Aranha (Spider Curl)", focus: "Bíceps Pico", desc: "Bruços no banco, deixe os braços caírem.", equip: "halter" },
-    { name: "Rosca Concentrada", focus: "Bíceps Pico", desc: "Apoie o tríceps na coxa.", equip: "halter" },
-    { name: "Rosca Martelo Halteres", focus: "Bíceps, Antebraço", desc: "Pegada neutra.", equip: "halter" },
-    { name: "Rosca Scott", focus: "Bíceps Isolado", desc: "Apoiado no banco Scott com barra.", equip: "barra" },
-    { name: "Rosca Scott (Máquina)", focus: "Bíceps Seguro", desc: "No aparelho articulado.", equip: "maquina" },
-    { name: "Rosca Inversa no Cabo", focus: "Bíceps, Antebraço", desc: "Pegada pronada na polia.", equip: "cabo" },
-    { name: "Rosca 21 (Barra)", focus: "Bíceps Tensão", desc: "7 baixas, 7 altas, 7 completas.", equip: "barra" },
+    // ==========================================
+    // 2. BÍCEPS E ANTEBRAÇO [Subníveis: biceps_longa, biceps_curta, biceps_braquial, biceps_global]
+    // ==========================================
+    { name: "Rosca Alternada Inclinada", focus: "biceps_longa", desc: "Maximiza alongamento para o pico do bíceps.", equip: "halter" },
+    { name: "Rosca Scott", focus: "biceps_curta", desc: "Foca na parte interna (cabeça curta) impedindo impulsos.", equip: "barra" },
+    { name: "Rosca Scott (Máquina)", focus: "biceps_curta", desc: "Tensão contínua na parte interna.", equip: "maquina" },
+    { name: "Rosca Aranha (Spider Curl)", focus: "biceps_curta", desc: "Isolamento total da cabeça curta.", equip: "halter" },
+    { name: "Rosca Concentrada", focus: "biceps_curta", desc: "Pico de contração com braço estabilizado.", equip: "halter" },
+    { name: "Rosca Martelo Halteres", focus: "biceps_braquial", desc: "Foco no braquial e braquiorradial (espessura).", equip: "halter" },
+    { name: "Rosca Inversa no Cabo", focus: "biceps_braquial", desc: "Isola braquial e extensores do antebraço.", equip: "cabo" },
+    { name: "Rosca Direta (Barra W)", focus: "biceps_global", desc: "Trabalha ambas as cabeças de forma equilibrada.", equip: "barra" },
+    { name: "Rosca 21 (Barra)", focus: "biceps_global", desc: "Estímulo metabólico global do bíceps.", equip: "barra" },
 
-    // --- TRÍCEPS ---
-    { name: "Tríceps Pulley", focus: "Tríceps Base", desc: "Empurre a barra reta no cabo.", equip: "cabo" },
-    { name: "Tríceps Corda", focus: "Tríceps Lateral", desc: "Abra a corda no final do movimento.", equip: "cabo" },
-    { name: "Tríceps Testa", focus: "Tríceps Isolado", desc: "Deitado, desça a barra na testa.", equip: "barra" },
-    { name: "Tríceps Francês Halter", focus: "Tríceps Longa", desc: "Halter atrás da nuca.", equip: "halter" },
-    { name: "Tríceps Kickback (Coice)", focus: "Tríceps Foco", desc: "Tronco inclinado, estenda para trás.", equip: "cabo" },
-    { name: "Tríceps Máquina", focus: "Tríceps Guiado", desc: "Empurre para baixo no aparelho.", equip: "maquina" },
-    { name: "Mergulho Paralelas", focus: "Tríceps, Peito Força", desc: "Desça nas barras pesadas.", equip: "calistenia" },
-    { name: "Mergulho no Banco", focus: "Tríceps Relativo", desc: "Mãos no banco de praça/casa.", equip: "calistenia" },
-    { name: "Flexão Diamante", focus: "Tríceps, Peito Foco", desc: "Mãos em triângulo no solo.", equip: "peso_corporal" }
+    // ==========================================
+    // 3. PEITORAL [Subníveis: peito_clavicular, peito_esternocostal, peito_costal, peito_hibrido]
+    // ==========================================
+    { name: "Supino Inclinado Halteres", focus: "peito_clavicular", desc: "Foco nas fibras superiores (porção clavicular).", equip: "halter" },
+    { name: "Crossover Polia Baixa", focus: "peito_clavicular", desc: "Puxando de baixo para cima (fibras superiores).", equip: "cabo" },
+    { name: "Flexão Declinada", focus: "peito_clavicular", desc: "Pés no banco (foco parte superior).", equip: "calistenia" },
+    { name: "Supino Reto Barra", focus: "peito_esternocostal", desc: "Construtor primário da espessura do peitoral.", equip: "barra" },
+    { name: "Supino Reto Halteres", focus: "peito_esternocostal", desc: "Permite maior amplitude na porção média.", equip: "halter" },
+    { name: "Supino Máquina", focus: "peito_esternocostal", desc: "Trabalho seguro para o miolo do peito.", equip: "maquina" },
+    { name: "Crucifixo Reto Halteres", focus: "peito_esternocostal", desc: "Alongamento e contração do miolo.", equip: "halter" },
+    { name: "Voador (Peck Deck)", focus: "peito_esternocostal", desc: "Isolamento da porção esternal.", equip: "maquina" },
+    { name: "Crossover Polia Média", focus: "peito_esternocostal", desc: "Foco na linha média do peitoral.", equip: "cabo" },
+    { name: "Flexão de Braço Tradicional", focus: "peito_esternocostal", desc: "Desenvolvimento global do peito.", equip: "peso_corporal" },
+    { name: "Flexão de Braço (Joelhos)", focus: "peito_esternocostal", desc: "Versão adaptada para espessura.", equip: "peso_corporal" },
+    { name: "Supino Declinado Barra", focus: "peito_costal", desc: "Foco na parte inferior do peitoral.", equip: "barra" },
+    { name: "Flexão Inclinada no Banco", focus: "peito_costal", desc: "Mãos no banco (foco parte inferior).", equip: "calistenia" },
+    { name: "Pullover com Halter", focus: "peito_hibrido, costa_largura", desc: "Expansão torácica dividindo peito e costas.", equip: "halter" },
+
+    // ==========================================
+    // 4. COSTAS [Subníveis: costa_largura, costa_espessura, costa_isolado]
+    // ==========================================
+    { name: "Barra Fixa", focus: "costa_largura", desc: "Puxada vertical para expansão do grande dorsal.", equip: "calistenia" },
+    { name: "Puxada Alta (Livre)", focus: "costa_largura", desc: "Expansão lateral das costas.", equip: "cabo" },
+    { name: "Puxada Alta Máquina", focus: "costa_largura", desc: "Trabalho focado na largura.", equip: "maquina" },
+    { name: "Barra Fixa Supinada (Chin-up)", focus: "costa_largura, biceps_global", desc: "Largura e forte ação do bíceps.", equip: "calistenia" },
+    { name: "Puxada Frente Supinada", focus: "costa_largura, biceps_global", desc: "Expansão com auxílio do bíceps.", equip: "cabo" },
+    { name: "Remada Baixa Triângulo", focus: "costa_espessura", desc: "Foco no miolo das costas e romboides.", equip: "cabo" },
+    { name: "Remada Cavalinho Livre", focus: "costa_espessura", desc: "Construtor de volume (espessura dorsal).", equip: "barra" },
+    { name: "Remada Curvada Livre", focus: "costa_espessura", desc: "Trabalha toda a espessura das costas.", equip: "barra" },
+    { name: "Remada Máquina", focus: "costa_espessura", desc: "Espessura com peito apoiado.", equip: "maquina" },
+    { name: "Remada Unilateral (Serrote)", focus: "costa_espessura", desc: "Trabalho unilateral de espessura.", equip: "halter" },
+    { name: "Remada Australiana (Barra Baixa)", focus: "costa_espessura", desc: "Espessura com peso do corpo.", equip: "calistenia" },
+    { name: "Remada na Porta/Lençol", focus: "costa_espessura", desc: "Espessura em casa.", equip: "peso_corporal" },
+    { name: "Pulldown no Cabo", focus: "costa_isolado", desc: "Desativa o bíceps e foca 100% no grande dorsal.", equip: "cabo" },
+
+    // ==========================================
+    // 5. OMBROS E TRAPÉZIO [Subníveis: ombro_anterior, ombro_lateral, ombro_posterior, trapezio]
+    // ==========================================
+    { name: "Desenvolvimento Halteres", focus: "ombro_anterior", desc: "Construtor primário da parte frontal.", equip: "halter" },
+    { name: "Desenvolvimento Militar", focus: "ombro_anterior", desc: "Foco em força para o deltoide anterior.", equip: "barra" },
+    { name: "Desenvolvimento Máquina", focus: "ombro_anterior", desc: "Trabalho seguro para deltoide anterior.", equip: "maquina" },
+    { name: "Elevação Frontal Anilha", focus: "ombro_anterior", desc: "Isola e esgota a porção anterior.", equip: "halter" },
+    { name: "Elevação Lateral Halteres", focus: "ombro_lateral", desc: "Ativação do feixe lateral (ombros largos).", equip: "halter" },
+    { name: "Elevação Lateral Isométrica", focus: "ombro_lateral", desc: "Tensão constante no deltoide lateral.", equip: "peso_corporal" },
+    { name: "Remada Alta no Cabo", focus: "ombro_lateral, trapezio", desc: "Movimento híbrido: lateral do ombro e trapézio.", equip: "cabo" },
+    { name: "Crucifixo Invertido Livre", focus: "ombro_posterior, costa_espessura", desc: "Isola a cabeça posterior e romboides.", equip: "halter" },
+    { name: "Encolhimento Halteres", focus: "trapezio", desc: "Hipertrofia e espessura do trapézio.", equip: "halter" },
+
+    // ==========================================
+    // 6. PERNAS E GLÚTEOS [Subníveis: perna_quadriceps, perna_posterior_gluteo, perna_adutor_abdutor, panturrilha_gastro, panturrilha_soleo]
+    // ==========================================
+    { name: "Agachamento Livre", focus: "perna_quadriceps, perna_posterior_gluteo", desc: "Ativação fortíssima global das pernas.", equip: "barra" },
+    { name: "Agachamento no Smith", focus: "perna_quadriceps", desc: "Foco direcional no quadríceps.", equip: "maquina" },
+    { name: "Leg Press 45°", focus: "perna_quadriceps, perna_posterior_gluteo", desc: "Empurre focado em massa bruta.", equip: "maquina" },
+    { name: "Leg Press Máquina", focus: "perna_quadriceps", desc: "Trabalho focado frontal.", equip: "maquina" },
+    { name: "Agachamento Búlgaro", focus: "perna_quadriceps, perna_posterior_gluteo", desc: "Trabalho unilateral corretivo.", equip: "halter" },
+    { name: "Afundo / Avanço", focus: "perna_quadriceps, perna_posterior_gluteo", desc: "Desenvolvimento unilateral dinâmico.", equip: "halter" },
+    { name: "Pistol Squat", focus: "perna_quadriceps", desc: "Foco intenso no quadríceps.", equip: "peso_corporal" },
+    { name: "Agachamento com Salto", focus: "perna_quadriceps", desc: "Explosão para quadríceps.", equip: "peso_corporal" },
+    { name: "Cadeira Extensora", focus: "perna_quadriceps", desc: "Isolamento total do quadríceps.", equip: "maquina" },
+    { name: "Stiff (Terra Romeno)", focus: "perna_posterior_gluteo, core_profundo", desc: "Alonga e contrai isquiotibiais e glúteos.", equip: "barra" },
+    { name: "Elevação Pélvica", focus: "perna_posterior_gluteo", desc: "Focado no volume do glúteo máximo.", equip: "barra" },
+    { name: "Mesa Flexora", focus: "perna_posterior_gluteo", desc: "Isola os isquiotibiais (posterior da coxa).", equip: "maquina" },
+    { name: "Flexão Nórdica", focus: "perna_posterior_gluteo", desc: "Exigência extrema do posterior da coxa.", equip: "peso_corporal" },
+    { name: "Cadeira Adutora", focus: "perna_adutor_abdutor", desc: "Trabalha a parte interna da coxa.", equip: "maquina" },
+    { name: "Cadeira Abdutora", focus: "perna_adutor_abdutor", desc: "Trabalha a lateral do quadril (glúteos médio).", equip: "maquina" },
+    { name: "Panturrilha no Leg Press", focus: "panturrilha_gastro", desc: "Pernas esticadas focam no gastrocnêmio.", equip: "maquina" },
+    { name: "Panturrilha no Degrau", focus: "panturrilha_gastro", desc: "Trabalho livre para gastrocnêmio.", equip: "peso_corporal" },
+    { name: "Panturrilha Sentado", focus: "panturrilha_soleo", desc: "Joelhos dobrados focam no músculo sóleo.", equip: "maquina" },
+
+    // ==========================================
+    // 7. CORE E ABDÔMEN [Subníveis: core_supra, core_infra, core_obliquo, core_profundo]
+    // ==========================================
+    { name: "Abdominal Supra", focus: "core_supra", desc: "Trabalho focado na porção superior.", equip: "peso_corporal" },
+    { name: "Abdominal Supra com Carga", focus: "core_supra", desc: "Construção de volume na parede frontal.", equip: "halter" },
+    { name: "Abdominal Supra Solo", focus: "core_supra", desc: "Versão de solo sem carga.", equip: "peso_corporal" },
+    { name: "Abdominal Declinado", focus: "core_supra", desc: "Volume na parede frontal com declínio.", equip: "maquina" },
+    { name: "Abdominal Máquina", focus: "core_supra", desc: "Trabalho guiado da parede frontal.", equip: "maquina" },
+    { name: "Abdominal Infra", focus: "core_infra", desc: "Pelve em movimento, foco inferior.", equip: "peso_corporal" },
+    { name: "Elevação Pernas Pendurado", focus: "core_infra", desc: "Alto pico de contração inferior.", equip: "calistenia" },
+    { name: "Abdominal Canivete", focus: "core_infra", desc: "Ativação simultânea focando no inferior.", equip: "peso_corporal" },
+    { name: "V-Up (Abdominal em V)", focus: "core_infra", desc: "Dinâmico para porção inferior.", equip: "peso_corporal" },
+    { name: "Abdominal Oblíquo", focus: "core_obliquo", desc: "Trabalha as fibras laterais.", equip: "peso_corporal" },
+    { name: "Abdominal Bicicleta", focus: "core_obliquo", desc: "Rotação contínua ativando laterais.", equip: "peso_corporal" },
+    { name: "Russian Twist", focus: "core_obliquo", desc: "Trabalha as paredes diagonais do core.", equip: "peso_corporal" },
+    { name: "Toque no Calcanhar", focus: "core_obliquo", desc: "Flexão lateral blindando o tronco.", equip: "peso_corporal" },
+    { name: "Prancha Lateral", focus: "core_obliquo, core_profundo", desc: "Isometria estabilizando as laterais.", equip: "peso_corporal" },
+    { name: "Prancha Isométrica", focus: "core_profundo", desc: "Fortalece o transverso de forma profunda.", equip: "peso_corporal" },
+    { name: "Hollow Body Hold", focus: "core_profundo", desc: "Estabilidade avançada do core profundo.", equip: "peso_corporal" },
+    { name: "Roda Abdominal", focus: "core_profundo", desc: "Estiramento de toda a parede abdominal.", equip: "halter" },
+    { name: "Escalador (Mountain Climber)", focus: "core_profundo", desc: "Cardio e estabilidade do transverso.", equip: "peso_corporal" },
+    { name: "Superman (Solo)", focus: "core_profundo", desc: "Foco nos eretores da espinha e glúteos.", equip: "peso_corporal" },
+    { name: "Extensão Lombar Máquina", focus: "core_profundo", desc: "Equilíbrio muscular para a lombar.", equip: "maquina" }
 ];
 
 // // 1. BANCO DE DADOS EXPANDIDO (Modo Bi-set e Modo Tradicional)
