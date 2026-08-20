@@ -282,10 +282,17 @@ var FitApp = (() => {
         const level = els.levelSelector ? els.levelSelector.value : 'intermediario';
         const type = currentWorkoutType;
 
-        let pool = dictionaryData.filter(d => getMuscleGroup(d.focus) === currentGroup && d.name !== currentName);
+        // PONTO 7: Busca hierárquica no Swap
+        let pool = dictionaryData.filter(d => d.focus.includes(currentDict.focus) && d.name !== currentName);
+        
+        // Se a busca cirúrgica falhar (ex: nenhum outro exercício específico de peito_clavicular), busca o nível pai
+        if (pool.length === 0) {
+            pool = dictionaryData.filter(d => getMuscleGroup(d.focus) === currentGroup && d.name !== currentName);
+        }
 
-        // NOVO: Blindagem de ambiente para o Treino em Casa
-        if (type === 'Casa') {
+        // Blindagem de ambiente para Calistenia/Casa
+        const method = document.getElementById('mainMethodSelector') ? document.getElementById('mainMethodSelector').value : '';
+        if (type === 'Casa' || method === 'calistenia') {
             pool = pool.filter(d => d.equip === 'peso_corporal' || d.equip === 'calistenia');
         }
         
@@ -850,6 +857,10 @@ function removeExercise(bIndex, eIndex) {
         if (header) header.style.display = 'block';
         currentWorkoutType = '';
         currentRoutine = [];
+        
+        // Restaura o painel biomecânico
+        const bioPanel = document.querySelector('div[style*="Inteligência Biomecânica"]');
+        if (bioPanel) bioPanel.style.display = 'block';
     }
 
     let snapActive = false; // Memória tática da aposta
@@ -891,7 +902,11 @@ function removeExercise(bIndex, eIndex) {
         if (globalTimer) clearInterval(globalTimer);
         globalTimer = setInterval(updateGlobalTimer, 1000);
         updateGlobalTimer(); 
-
+        
+        // PONTO 8: Esconde o seletor biomecânico durante o treino
+        const bioPanel = document.querySelector('div[style*="Inteligência Biomecânica"]');
+        if (bioPanel) bioPanel.style.display = 'none';
+        
         renderCurrentRoutine();
         saveWorkoutState(); 
     }
@@ -913,7 +928,11 @@ function removeExercise(bIndex, eIndex) {
             if (!isBiset) card.style.borderLeft = '4px solid #44aaff'; 
             
             card.innerHTML = `<div class="biset-title">${bloco.title}</div>`;
-            
+            card.querySelector('.biset-title').addEventListener('click', () => {
+                if (card.classList.contains('collapsed-block')) {
+                    card.classList.remove('collapsed-block');
+                }
+            });
             bloco.exercises.forEach((ex, eIndex) => {
                 const blockDiv = document.createElement('div'); blockDiv.className = 'exercise-block';
                 const linkIcon = (isBiset && eIndex < bloco.exercises.length - 1) ? ' <span style="color:#00ff88;">🔗</span>' : '';
@@ -1009,13 +1028,15 @@ function removeExercise(bIndex, eIndex) {
 
                     const row = document.createElement('div'); row.className = 'set-row';
                     
-                    // NOVO: Criando uma "Dog Tag" única para que o Piloto Automático localize o alvo
                     const chkId = `chk_set_${bIndex}_${eIndex}_${s}`;
-                    row.innerHTML = `<div class="set-label">S${s}</div><input type="number" class="kg-val" placeholder="Kg" value="${data.kg}"><input type="number" class="rp-val" placeholder="Reps / s" value="${data.reps}"><button class="btn-iso" style="background:none; border:none; cursor:pointer; font-size:16px; padding:0 5px;" title="Iniciar Isometria">⏱️</button><input type="checkbox" id="${chkId}" class="chk-set" ${data.checked ? 'checked' : ''}>`;
+                    const kgId = `kg_set_${bIndex}_${eIndex}_${s}`;
+                    const rpId = `rp_set_${bIndex}_${eIndex}_${s}`;
+                    
+                    row.innerHTML = `<div class="set-label">S${s}</div><input type="number" id="${kgId}" class="kg-val" placeholder="Kg" value="${data.kg}"><input type="number" id="${rpId}" class="rp-val" placeholder="Reps / s" value="${data.reps}"><button class="btn-iso" style="background:none; border:none; cursor:pointer; font-size:16px; padding:0 5px;" title="Iniciar Isometria">⏱️</button><input type="checkbox" id="${chkId}" class="chk-set" ${data.checked ? 'checked' : ''}>`;
                     
                     const chk = row.querySelector('.chk-set');
-                    const kgInp = row.querySelector('.kg-val');
-                    const rpInp = row.querySelector('.rp-val');
+                    const kgInp = document.getElementById(kgId);
+                    const rpInp = document.getElementById(rpId);
                     const btnIso = row.querySelector('.btn-iso'); 
 
                     const updateState = () => {
@@ -1046,17 +1067,27 @@ function removeExercise(bIndex, eIndex) {
                     rpInp.addEventListener('input', updateState);
 
                     chk.addEventListener('change', () => {
-                        if (localIsoTimer) {
-                            clearInterval(localIsoTimer);
-                            localIsoTimer = null;
-                            btnIso.textContent = '⏱️';
-                            btnIso.style.textShadow = 'none';
-                        }
+                        if (localIsoTimer) { clearInterval(localIsoTimer); localIsoTimer = null; btnIso.textContent = '⏱️'; btnIso.style.textShadow = 'none'; }
                         
                         if (chk.checked) { 
                             checkedSets++; 
-                            // O cronômetro recebe o 'blockDiv' visual E o 'ex.name' para puxar a dica de áudio do dicionário
-                            if(checkedSets < totalSets) startRestTimer(blockDiv, ex.name);
+                            
+                            // PONTO 10: Efeito Cascata (Copia para a linha de baixo se estiver vazia)
+                            if (s < ex.sets) {
+                                const nextKgInp = document.getElementById(`kg_set_${bIndex}_${eIndex}_${s+1}`);
+                                const nextRpInp = document.getElementById(`rp_set_${bIndex}_${eIndex}_${s+1}`);
+                                if (nextKgInp && nextRpInp && !nextKgInp.value && !nextRpInp.value) {
+                                    nextKgInp.value = kgInp.value; nextRpInp.value = rpInp.value;
+                                    ex.setsData[s] = { kg: kgInp.value, reps: rpInp.value, checked: false };
+                                }
+                            }
+
+                            // PONTO 1: Trava do Bi-Set (O timer só inicia se todas as séries 's' do bloco estiverem marcadas)
+                            const allInSetChecked = currentRoutine[bIndex].exercises.every(e => e.setsData[s-1] && e.setsData[s-1].checked);
+                            if (allInSetChecked && checkedSets < totalSets) {
+                                startRestTimer(card, ex.name);
+                            }
+
                             todayLog.push({ exercise: ex.name, set: s, kg: parseSafeFloat(kgInp.value), reps: parseInt(rpInp.value) || 0 });
                         } else { 
                             checkedSets--; 
@@ -1065,6 +1096,11 @@ function removeExercise(bIndex, eIndex) {
                         }
                         updateState();
                         updateProgress();
+
+                        // PONTO 4: Encolhimento Automático do Bloco
+                        const allBlockChecked = currentRoutine[bIndex].exercises.every(e => e.setsData.every(sd => sd && sd.checked));
+                        if (allBlockChecked) card.classList.add('collapsed-block');
+                        else card.classList.remove('collapsed-block');
                     });
                     blockDiv.appendChild(row);
                 }
@@ -1156,6 +1192,8 @@ function removeExercise(bIndex, eIndex) {
         if (typeof renderMetricsChart === 'function') renderMetricsChart(); 
 
         if(isComplete) { FitGamification.showPackModal(snapActive); snapActive = false; } else { showToast('Treino salvo no sistema.'); switchTab('tab-evolucao', 'nav-evolucao'); }
+        const bioPanel = document.getElementById('biomechanicsPanel');
+        if (bioPanel) bioPanel.style.display = 'block';
     }
 // ==========================================
 // ROTA DE FUGA: CANCELAMENTO DE TREINO
@@ -1182,6 +1220,10 @@ window.abortarMissao = function() {
         if(navBar) navBar.style.display = 'flex';
         const header = document.querySelector('.dashboard-header');
         if (header) header.style.display = 'block';
+
+        // Restaura o painel biomecânico
+        const bioPanel = document.querySelector('div[style*="Inteligência Biomecânica"]');
+        if (bioPanel) bioPanel.style.display = 'block';
 
         // 5. Confirmação Visual
         showToast('Missão abortada. O combate não foi registrado.');
@@ -1569,7 +1611,9 @@ window.encerrarSessao = function() {
             return;
         }
 
-        history.slice().reverse().forEach((log) => {
+        // PONTO 11: Inverte apenas a ordem dos dias, mas mantém a ordem dos exercícios intacta
+        const reversedHistory = history.slice().reverse();
+        reversedHistory.forEach((log) => {
             const dateObj = new Date(log.date + 'T12:00:00'); 
             const dateStr = dateObj.toLocaleDateString('pt-BR');
             const durationStr = log.duration_secs ? Math.floor(log.duration_secs / 60) + ' min' : '--';
@@ -1593,7 +1637,7 @@ window.encerrarSessao = function() {
                     <div style="font-weight: bold; color: #fff;">Treino ${log.tipo}</div>
                     <div style="font-size: 12px; color: #aaa;">${dateStr} • ⏱️ ${durationStr}</div>
                 </div>
-                <div style="color: #888; font-size: 12px; transition: transform 0.3s;">▼</div>
+                <div class="toggle-arrow" style="color: #888; font-size: 12px; transition: transform 0.3s;">▼</div>
             `;
 
             const body = document.createElement('div');
@@ -1626,7 +1670,8 @@ window.encerrarSessao = function() {
             header.onclick = () => {
                 const isVisible = body.style.display === 'block';
                 body.style.display = isVisible ? 'none' : 'block';
-                header.querySelector('div:last-child').style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
+                const arrow = header.querySelector('.toggle-arrow');
+                if(arrow) arrow.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
             };
 
             block.appendChild(header);
@@ -2186,6 +2231,7 @@ function renderMetricsChart() {
         
         checkSequence(); 
         updateDynamicCards(); // NOVO: Atualiza o nome dos cartões ao iniciar
+        checkCompletedCards(); // NOVO: Checa se há cartões concluídos hoje
         FitGamification.renderAlbum();
         renderWeeklyCalendar();
         renderCustomWorkouts(); 
@@ -2761,6 +2807,43 @@ function updateDynamicCards() {
         } 
     };
 })();
+function checkCompletedCards() {
+        const history = JSON.parse(safeGet('fitapp_week_log') || '[]');
+        if (history.length === 0) return;
+
+        const d = new Date();
+        const offset = d.getTimezoneOffset() * 60000;
+        const dataHoje = (new Date(d.getTime() - offset)).toISOString().split('T')[0];
+
+        // Filtra apenas os treinos feitos HOJE
+        const treinosHoje = history.filter(h => h.date === dataHoje).map(h => h.tipo);
+        
+        // Remove a classe de todos os cartões primeiro
+        ['A', 'B', 'C', 'D'].forEach(t => {
+            const card = document.getElementById('card-' + t);
+            if (card) card.classList.remove('completed-card');
+        });
+
+        // Aplica a opacidade apenas nos treinos concluídos hoje
+        treinosHoje.forEach(tipo => {
+            const card = document.getElementById('card-' + tipo);
+            if (card) card.classList.add('completed-card');
+        });
+        
+        // Regra do Ciclo: Se ele fez A, B e C hoje (improvável, mas possível), reseta as cartas para o usuário poder clicar livremente.
+        const method = document.getElementById('mainMethodSelector') ? document.getElementById('mainMethodSelector').value : 'ppl';
+        let cycleComplete = false;
+        
+        if (method === 'abcd' && treinosHoje.includes('A') && treinosHoje.includes('B') && treinosHoje.includes('C') && treinosHoje.includes('D')) cycleComplete = true;
+        else if (method !== 'abcd' && treinosHoje.includes('A') && treinosHoje.includes('B') && treinosHoje.includes('C')) cycleComplete = true;
+
+        if (cycleComplete) {
+            ['A', 'B', 'C', 'D'].forEach(t => {
+                const card = document.getElementById('card-' + t);
+                if (card) card.classList.remove('completed-card');
+            });
+        }
+    }
 
 // ==========================================
 // 📡 UPLINK COM A TORRE DE CONTROLE (B2B)

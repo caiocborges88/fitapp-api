@@ -644,3 +644,42 @@ select:focus, textarea:focus, input[type="text"]:focus {
     70% { box-shadow: 0 0 0 15px rgba(0, 255, 136, 0); }
     100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
 }
+/* --- PONTO 6: Cartões Concluídos do Ciclo --- */
+.card-treino.completed-card {
+    opacity: 0.5;
+    border-color: #555;
+    box-shadow: none;
+    transition: opacity 0.3s;
+}
+.card-treino.completed-card::after {
+    content: '✅ Feito';
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 11px;
+    color: #00ff88;
+    background: rgba(0,255,136,0.1);
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #00ff88;
+}
+
+/* --- PONTO 4: Encolhimento do Bloco no Treino (Sanfona) --- */
+.collapsed-block {
+    cursor: pointer;
+    background-color: #1a1a1a;
+}
+.collapsed-block .exercise-block {
+    display: none; /* Esconde os exercícios */
+}
+.collapsed-block .biset-title {
+    color: #00ff88;
+    border-bottom: none;
+    margin-bottom: 0;
+}
+.collapsed-block .biset-title::after {
+    content: ' ✅ (Concluído - Toque para reabrir)';
+    font-size: 11px;
+    color: #888;
+    font-weight: normal;
+}
