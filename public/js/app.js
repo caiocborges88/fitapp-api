@@ -1030,9 +1030,9 @@ function removeExercise(bIndex, eIndex) {
                     row.innerHTML = `<div class="set-label">S${s}</div><input type="number" id="${kgId}" class="kg-val" placeholder="Kg" value="${data.kg}"><input type="number" id="${rpId}" class="rp-val" placeholder="Reps / s" value="${data.reps}"><button class="btn-iso" style="background:none; border:none; cursor:pointer; font-size:16px; padding:0 5px;" title="Iniciar Isometria">⏱️</button><input type="checkbox" id="${chkId}" class="chk-set" ${data.checked ? 'checked' : ''}>`;
                     
                     const chk = row.querySelector('.chk-set');
-                    const kgInp = document.getElementById(kgId);
-                    const rpInp = document.getElementById(rpId);
-                    const btnIso = row.querySelector('.btn-iso'); 
+                    const kgInp = row.querySelector('.kg-val');
+                    const rpInp = row.querySelector('.rp-val');
+                    const btnIso = row.querySelector('.btn-iso');
 
                     const updateState = () => {
                         ex.setsData[s-1] = { kg: kgInp.value, reps: rpInp.value, checked: chk.checked };
@@ -2804,7 +2804,7 @@ function updateDynamicCards() {
     };
 })();
 function checkCompletedCards() {
-        const history = JSON.parse(safeGet('fitapp_week_log') || '[]');
+        const history = JSON.parse(FitApp.safeGet('fitapp_week_log') || '[]');
         if (history.length === 0) return;
 
         const d = new Date();
