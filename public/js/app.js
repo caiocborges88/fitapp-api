@@ -862,6 +862,10 @@ function removeExercise(bIndex, eIndex) {
         const mainSelector = document.getElementById('mainMethodSelector');
         const bioPanel = mainSelector ? mainSelector.closest('div') : null;
         if (bioPanel) bioPanel.style.display = 'block';
+
+        // Restaura o bloco de Treino Pessoal
+        const templatesFront = document.getElementById('templatesFrontline');
+        if (templatesFront) templatesFront.style.display = 'block';
     }
 
     let snapActive = false; // Memória tática da aposta
@@ -895,11 +899,15 @@ function removeExercise(bIndex, eIndex) {
         els.workoutArea.style.display = 'block'; 
         els.btnFinishArea.style.display = 'block';
 
-        // ATIVA MODO FOCO: Oculta o Menu Inferior e o Cabeçalho (Treino Pessoal)
+        // ATIVA MODO FOCO: Oculta o Menu Inferior e o Cabeçalho
         const navBar = document.querySelector('nav');
         if(navBar) navBar.style.display = 'none';
         const header = document.querySelector('.dashboard-header');
         if(header) header.style.display = 'none';
+
+        // Oculta o bloco de Treino Pessoal
+        const templatesFront = document.getElementById('templatesFrontline');
+        if (templatesFront) templatesFront.style.display = 'none';
 
         workoutStartTime = Date.now();
         if (globalTimer) clearInterval(globalTimer);
@@ -1181,13 +1189,20 @@ function removeExercise(bIndex, eIndex) {
         const header = document.querySelector('.dashboard-header');
         if (header) header.style.display = 'block';
 
+        // Restaura o bloco de Treino Pessoal
+        const templatesFront = document.getElementById('templatesFrontline');
+        if (templatesFront) templatesFront.style.display = 'block';
+
         currentWorkoutType = '';
         checkSequence(); 
         renderWeeklyCalendar(); 
         if (typeof renderMetricsChart === 'function') renderMetricsChart(); 
 
         if(isComplete) { FitGamification.showPackModal(snapActive); snapActive = false; } else { showToast('Treino salvo no sistema.'); switchTab('tab-evolucao', 'nav-evolucao'); }
-        const bioPanel = document.getElementById('biomechanicsPanel');
+        
+        // Restaura o painel biomecânico
+        const mainSelector = document.getElementById('mainMethodSelector');
+        const bioPanel = mainSelector ? mainSelector.closest('div') : null;
         if (bioPanel) bioPanel.style.display = 'block';
     }
 // ==========================================
@@ -1220,6 +1235,10 @@ window.abortarMissao = function() {
         const mainSelector = document.getElementById('mainMethodSelector');
         const bioPanel = mainSelector ? mainSelector.closest('div') : null;
         if (bioPanel) bioPanel.style.display = 'block';
+
+        // Restaura o bloco de Treino Pessoal
+        const templatesFront = document.getElementById('templatesFrontline');
+        if (templatesFront) templatesFront.style.display = 'block';
 
         // 5. Confirmação Visual
         showToast('Missão abortada. O combate não foi registrado.');

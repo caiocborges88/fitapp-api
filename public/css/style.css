@@ -140,7 +140,7 @@ select:focus, textarea:focus, input[type="text"]:focus {
     opacity: 0.7; background-color: rgba(0, 255, 136, 0.05); border-color: rgba(0, 255, 136, 0.15); 
 }
 
-.btn-finish-area { position: sticky; bottom: 70px; margin-top: 20px; display: none; }
+.btn-finish-area { position: relative; margin-top: 30px; padding-bottom: 20px; display: none; }
 .btn-action { width: 100%; padding: 18px; font-size: 16px; font-weight: bold; border-radius: var(--border-radius); border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
 .btn-success { background-color: var(--success-color); color: white; }
 .btn-warning { background-color: var(--warning-color); color: #000; }
