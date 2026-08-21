@@ -2270,6 +2270,14 @@ function renderMetricsChart() {
             const navBar = document.querySelector('nav');
             if(navBar) navBar.style.display = 'none';
             
+            // Restaura o foco ocultando painéis secundários
+            const mainSelector = document.getElementById('mainMethodSelector');
+            const bioPanel = mainSelector ? mainSelector.closest('div') : null;
+            if (bioPanel) bioPanel.style.display = 'none';
+            
+            const templatesFront = document.getElementById('templatesFrontline');
+            if (templatesFront) templatesFront.style.display = 'none';
+            
             if (globalTimer) clearInterval(globalTimer);
             globalTimer = setInterval(updateGlobalTimer, 1000);
             updateGlobalTimer();
