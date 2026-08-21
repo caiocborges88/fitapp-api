@@ -859,7 +859,8 @@ function removeExercise(bIndex, eIndex) {
         currentRoutine = [];
         
         // Restaura o painel biomecânico
-        const bioPanel = document.querySelector('div[style*="Inteligência Biomecânica"]');
+        const mainSelector = document.getElementById('mainMethodSelector');
+        const bioPanel = mainSelector ? mainSelector.closest('div') : null;
         if (bioPanel) bioPanel.style.display = 'block';
     }
 
@@ -894,17 +895,20 @@ function removeExercise(bIndex, eIndex) {
         els.workoutArea.style.display = 'block'; 
         els.btnFinishArea.style.display = 'block';
 
-        // ATIVA MODO FOCO: Oculta o Menu Inferior
+        // ATIVA MODO FOCO: Oculta o Menu Inferior e o Cabeçalho (Treino Pessoal)
         const navBar = document.querySelector('nav');
         if(navBar) navBar.style.display = 'none';
+        const header = document.querySelector('.dashboard-header');
+        if(header) header.style.display = 'none';
 
         workoutStartTime = Date.now();
         if (globalTimer) clearInterval(globalTimer);
         globalTimer = setInterval(updateGlobalTimer, 1000);
         updateGlobalTimer(); 
         
-        // PONTO 8: Esconde o seletor biomecânico durante o treino
-        const bioPanel = document.querySelector('div[style*="Inteligência Biomecânica"]');
+        // PONTO 8: Esconde o seletor biomecânico de forma segura
+        const mainSelector = document.getElementById('mainMethodSelector');
+        const bioPanel = mainSelector ? mainSelector.closest('div') : null;
         if (bioPanel) bioPanel.style.display = 'none';
         
         renderCurrentRoutine();
@@ -917,7 +921,6 @@ function removeExercise(bIndex, eIndex) {
         checkedSets = 0; 
         todayLog = [];
         
-        // NOVO: Spotter Digital (Motor de Busca do Histórico)
         const historyLog = JSON.parse(safeGet('fitapp_week_log') || '[]');
         
         currentRoutine.forEach((bloco, bIndex) => {
@@ -928,43 +931,39 @@ function removeExercise(bIndex, eIndex) {
             if (!isBiset) card.style.borderLeft = '4px solid #44aaff'; 
             
             card.innerHTML = `<div class="biset-title">${bloco.title}</div>`;
+            
+            // PONTO 4: Permite reabrir o bloco sanfona com um clique
             card.querySelector('.biset-title').addEventListener('click', () => {
                 if (card.classList.contains('collapsed-block')) {
                     card.classList.remove('collapsed-block');
                 }
             });
+            
             bloco.exercises.forEach((ex, eIndex) => {
                 const blockDiv = document.createElement('div'); blockDiv.className = 'exercise-block';
                 const linkIcon = (isBiset && eIndex < bloco.exercises.length - 1) ? ' <span style="color:#00ff88;">🔗</span>' : '';
                 
-                // Higienização
                 const safeName = escapeHTML(ex.name);
                 const safeTarget = escapeHTML(ex.target);
                 const ytQuery = encodeURIComponent(`Como executar o exercício ${safeName}`);
                 const ytLink = `https://www.youtube.com/results?search_query=${ytQuery}`;
-                
                 const savedNotes = ex.notes ? escapeHTML(ex.notes) : '';
                 
-                // NOVO: Spotter Digital (Cálculo da Progressão Preditiva)
                 let aiSuggestionHTML = '';
-                // Busca de trás pra frente (mais recente primeiro)
                 const lastWorkoutMatch = historyLog.slice().reverse().find(log => 
                     log.data && log.data.some(d => d.exercise === ex.name)
                 );
 
                 if (lastWorkoutMatch) {
-                    // Pega a carga e repetições da ÚLTIMA SÉRIE desse exercício no treino passado
                     const lastSets = lastWorkoutMatch.data.filter(d => d.exercise === ex.name);
                     if (lastSets.length > 0) {
                         const finalSet = lastSets[lastSets.length - 1]; 
                         let suggestedKg = parseFloat(finalSet.kg) || 0;
                         const repsDone = parseInt(finalSet.reps) || 0;
                         
-                        // Extrai a meta do formato "10-12 rep" ou "12"
-                        const targetStr = ex.target.replace(/[^0-9-]/g, '');
-                        let targetHigh = parseInt(targetStr.split('-').pop()) || 10; // Pega o limite superior
+                        const targetStr = ex.target ? ex.target.replace(/[^0-9-]/g, '') : "10";
+                        let targetHigh = parseInt(targetStr.split('-').pop()) || 10; 
                         
-                        // REGRA: Se bateu o teto de repetições, IA sugere progressão de +2kg
                         if (repsDone >= targetHigh && suggestedKg > 0) {
                             suggestedKg += 2;
                         }
@@ -980,13 +979,11 @@ function removeExercise(bIndex, eIndex) {
                         <span class="ex-name" onclick="FitApp.openDict('${safeName.replace(/'/g, "\\'")}')">${safeName}${linkIcon}</span>
                         <div class="ex-controls" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                             ${aiSuggestionHTML}
-                            <!-- NOVO: Controles de Edição de Série Dinâmica -->
                             <div style="display: flex; align-items: center; background: #222; border-radius: 12px; padding: 2px 6px; border: 1px solid #444;">
                                 <button class="btn-edit-set" onclick="FitApp.changeSets(${bIndex}, ${eIndex}, -1)" style="background: none; border: none; color: #ff4444; font-weight: bold; font-size: 16px; padding: 0 5px; cursor: pointer;">-</button>
                                 <span style="font-size: 12px; color: #ccc; margin: 0 5px;">${ex.sets}x</span>
                                 <button class="btn-edit-set" onclick="FitApp.changeSets(${bIndex}, ${eIndex}, 1)" style="background: none; border: none; color: #00ff88; font-weight: bold; font-size: 16px; padding: 0 5px; cursor: pointer;">+</button>
                             </div>
-                            <!-- NOVO: Botão Piloto Automático -->
                             <button id="btnAuto_${bIndex}_${eIndex}" onclick="FitApp.toggleAutoPilot(${bIndex}, ${eIndex})" style="background: rgba(0, 255, 136, 0.1); border: 1px solid #00ff88; color: #00ff88; border-radius: 8px; padding: 4px 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin-left: 5px; transition: all 0.2s;" title="Modo Hands-Free">🤖 Auto</button>
                             
                             <button class="btn-notes" style="background: none; border: none; cursor: pointer; font-size: 16px; padding: 0;" title="Log de Combate (Anotações)">📝</button>
@@ -999,7 +996,6 @@ function removeExercise(bIndex, eIndex) {
                         <textarea class="ex-notes-input" placeholder="Anotações táticas (ex: banco inclinado no nível 3, fadiga no ombro...)" style="width: 100%; background: transparent; border: none; color: #ccc; font-size: 12px; resize: vertical; min-height: 45px; outline: none;">${savedNotes}</textarea>
                     </div>`;
                 
-                // Motor de Eventos da Sanfona de Anotações
                 const btnNotes = blockDiv.querySelector('.btn-notes');
                 const notesContainer = blockDiv.querySelector('.notes-container');
                 const notesInput = blockDiv.querySelector('.ex-notes-input');
@@ -1027,7 +1023,6 @@ function removeExercise(bIndex, eIndex) {
                     }
 
                     const row = document.createElement('div'); row.className = 'set-row';
-                    
                     const chkId = `chk_set_${bIndex}_${eIndex}_${s}`;
                     const kgId = `kg_set_${bIndex}_${eIndex}_${s}`;
                     const rpId = `rp_set_${bIndex}_${eIndex}_${s}`;
@@ -1072,7 +1067,7 @@ function removeExercise(bIndex, eIndex) {
                         if (chk.checked) { 
                             checkedSets++; 
                             
-                            // PONTO 10: Efeito Cascata (Copia para a linha de baixo se estiver vazia)
+                            // PONTO 10: Efeito Cascata (Auto-preenchimento para a linha abaixo)
                             if (s < ex.sets) {
                                 const nextKgInp = document.getElementById(`kg_set_${bIndex}_${eIndex}_${s+1}`);
                                 const nextRpInp = document.getElementById(`rp_set_${bIndex}_${eIndex}_${s+1}`);
@@ -1082,7 +1077,7 @@ function removeExercise(bIndex, eIndex) {
                                 }
                             }
 
-                            // PONTO 1: Trava do Bi-Set (O timer só inicia se todas as séries 's' do bloco estiverem marcadas)
+                            // PONTO 1: Trava de Descanso do Bi-Set
                             const allInSetChecked = currentRoutine[bIndex].exercises.every(e => e.setsData[s-1] && e.setsData[s-1].checked);
                             if (allInSetChecked && checkedSets < totalSets) {
                                 startRestTimer(card, ex.name);
@@ -1097,16 +1092,16 @@ function removeExercise(bIndex, eIndex) {
                         updateState();
                         updateProgress();
 
-                        // PONTO 4: Encolhimento Automático do Bloco
+                        // PONTO 4: Encolhimento Automático do Bloco Sanfona
                         const allBlockChecked = currentRoutine[bIndex].exercises.every(e => e.setsData.every(sd => sd && sd.checked));
                         if (allBlockChecked) card.classList.add('collapsed-block');
                         else card.classList.remove('collapsed-block');
                     });
                     blockDiv.appendChild(row);
                 }
-                card.appendChild(blockDiv);
+                card.appendChild(blockDiv); // <-- Garante a injeção do bloco no cartão
             });
-            els.exerciseList.appendChild(card);
+            els.exerciseList.appendChild(card); // <-- Garante a injeção do cartão na tela
         });
         updateProgress();
     }
@@ -1222,7 +1217,8 @@ window.abortarMissao = function() {
         if (header) header.style.display = 'block';
 
         // Restaura o painel biomecânico
-        const bioPanel = document.querySelector('div[style*="Inteligência Biomecânica"]');
+        const mainSelector = document.getElementById('mainMethodSelector');
+        const bioPanel = mainSelector ? mainSelector.closest('div') : null;
         if (bioPanel) bioPanel.style.display = 'block';
 
         // 5. Confirmação Visual
