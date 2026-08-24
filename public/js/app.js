@@ -72,17 +72,19 @@ var FitApp = (() => {
         return parseFloat(str) || 0;
     };
 
-    // NOVO: Motor de Classificação Muscular Universal
-    const getMuscleGroup = (focusString) => {
-        if (!focusString) return 'outros';
-        const f = focusString.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-        if (f.includes('peito') || f.includes('peitoral')) return 'peito';
-        if (f.includes('costa') || f.includes('dorsal') || f.includes('lombar')) return 'costas';
-        if (f.includes('perna') || f.includes('gluteo') || f.includes('panturrilha') || f.includes('quadriceps') || f.includes('posterior') || f.includes('adutor') || f.includes('abdutor') || f.includes('coxa')) return 'pernas';
-        if (f.includes('ombro') || f.includes('deltoide') || f.includes('trapezio')) return 'ombros';
-        if (f.includes('triceps')) return 'triceps';
-        if (f.includes('biceps') || f.includes('antebraco')) return 'biceps';
-        if (f.includes('core') || f.includes('abdom') || f.includes('obliquo')) return 'core';
+    // NOVO: Motor de Classificação Muscular Universal (Adaptado CSV)
+    const getMuscleGroup = (item) => {
+        const text = typeof item === 'string' ? item : (item.group || item.focus || '');
+        if (!text) return 'outros';
+        const g = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        if (g.includes('peito') || g.includes('peitoral')) return 'peito';
+        if (g.includes('costa') || g.includes('dorsal') || g.includes('lombar') || g.includes('trapézio')) return 'costas';
+        if (g.includes('perna') || g.includes('gluteo') || g.includes('panturrilha') || g.includes('quadriceps') || g.includes('isquio') || g.includes('adutor')) return 'pernas';
+        if (g.includes('ombro') || g.includes('deltoide')) return 'ombros';
+        if (g.includes('triceps') || g.includes('tríceps')) return 'triceps';
+        if (g.includes('biceps') || g.includes('bíceps') || g.includes('antebraço')) return 'biceps';
+        if (g.includes('core') || g.includes('abdom') || g.includes('obliquo') || g.includes('estabilização')) return 'core';
+        if (g.includes('mobilidade') || g.includes('cardio') || g.includes('deslocamento')) return 'outros';
         return 'outros';
     };
 
@@ -276,24 +278,24 @@ var FitApp = (() => {
         const ex = currentRoutine[bIndex].exercises[eIndex];
         const currentName = ex.name;
         const currentDict = dictionaryData.find(d => d.name === currentName);
-        const currentGroup = getMuscleGroup(currentDict ? currentDict.focus : "");
+        const currentGroup = currentDict ? currentDict.group : "Geral";
         
         const style = els.styleSelector ? els.styleSelector.value : 'biset';
         const level = els.levelSelector ? els.levelSelector.value : 'intermediario';
         const type = currentWorkoutType;
 
-        // PONTO 7: Busca hierárquica no Swap
-        let pool = dictionaryData.filter(d => d.focus.includes(currentDict.focus) && d.name !== currentName);
+        // PONTO 7: Busca hierárquica no Swap (Escudo Duplo)
+        let pool = dictionaryData.filter(d => d.focus === (currentDict ? currentDict.focus : '') && d.name !== currentName);
         
-        // Se a busca cirúrgica falhar (ex: nenhum outro exercício específico de peito_clavicular), busca o nível pai
+        // Se a busca cirúrgica falhar, busca pelo Grupo Muscular pai
         if (pool.length === 0) {
-            pool = dictionaryData.filter(d => getMuscleGroup(d.focus) === currentGroup && d.name !== currentName);
+            pool = dictionaryData.filter(d => d.group === currentGroup && d.name !== currentName);
         }
 
-        // Blindagem de ambiente para Calistenia/Casa
+        // Blindagem de Ambiente
         const method = document.getElementById('mainMethodSelector') ? document.getElementById('mainMethodSelector').value : '';
         if (type === 'Casa' || method === 'calistenia') {
-            pool = pool.filter(d => d.equip === 'peso_corporal' || d.equip === 'calistenia');
+            pool = pool.filter(d => d.equip.includes('Peso_Corporal') || d.equip.includes('Calistenia'));
         }
         
         let originalName = currentName; 
@@ -338,7 +340,8 @@ var FitApp = (() => {
                 html += `
                     <div class="swap-item" onclick="FitApp.confirmSwap(${bIndex}, ${eIndex}, '${item.name}')">
                         <div class="swap-item-name">${item.name}</div>
-                        <div class="swap-item-focus">${item.focus}</div>
+                        <div class="swap-item-focus">🎯 Foco: ${item.focus}</div>
+                        <div class="swap-item-focus" style="color: #00ff88; margin-top: 4px;">🎒 Requer: ${item.equip ? item.equip.replace(/_/g, ' ') : 'N/A'}</div>
                     </div>
                 `;
             });
@@ -2618,25 +2621,40 @@ function updateDynamicCards() {
         const includeAbs = document.getElementById('toggleAbs') ? document.getElementById('toggleAbs').checked : false;
 
         const getEx = (focusTerms, equipPref, avoidNames, allowBodyweight = false) => {
+            // A Pedra de Roseta: Traduz os termos estruturais antigos para as novas Tags do CSV
+            const mapFocus = {
+                'peito_esternocostal': ['Fibras Médias'], 'peito_clavicular': ['Fibras Superiores'], 'peito_costal': ['Fibras Inferiores'], 'peito': ['Fibras Médias', 'Fibras Superiores', 'Fibras Inferiores'],
+                'costa_largura': ['Latíssimo (Largura)'], 'costa_espessura': ['Romboides/Miolo (Espessura)'], 'costa_isolado': ['Latíssimo (Largura)'], 'costa': ['Latíssimo (Largura)', 'Romboides/Miolo (Espessura)'],
+                'ombro_anterior': ['Deltoide Anterior'], 'ombro_lateral': ['Deltoide Lateral'], 'ombro_posterior': ['Deltoide Posterior'], 'ombro': ['Deltoide Anterior', 'Deltoide Lateral'], 'trapezio': ['Trapézio Superior'],
+                'perna_quadriceps': ['Quadríceps'], 'perna_posterior_gluteo': ['Isquiotibiais', 'Glúteos/Abdutores'], 'perna_adutor_abdutor': ['Adutores', 'Glúteos/Abdutores'], 'perna': ['Quadríceps', 'Isquiotibiais'],
+                'panturrilha_gastro': ['Panturrilhas'], 'panturrilha_soleo': ['Panturrilhas'], 'panturrilha': ['Panturrilhas'],
+                'triceps_longa': ['Cabeça Longa'], 'triceps_lateral_medial': ['Lateral/Medial'], 'triceps_global': ['Todas'], 'triceps': ['Todas', 'Lateral/Medial', 'Cabeça Longa'],
+                'biceps_longa': ['Cabeça Curta/Longa'], 'biceps_curta': ['Cabeça Curta/Longa'], 'biceps_braquial': ['Braquial/Antebraço'], 'biceps_global': ['Cabeça Curta/Longa'], 'biceps': ['Cabeça Curta/Longa'],
+                'core_supra': ['Superior'], 'core_infra': ['Inferior'], 'core_obliquo': ['Oblíquos / Rotação'], 'core_profundo': ['Estabilização/Anti-extensão'], 'core': ['Superior', 'Inferior', 'Estabilização/Anti-extensão']
+            };
+            const mapEquip = { 'barra': 'Barras_Anilhas', 'halter': 'Pesos_Livres', 'maquina': 'Maquinas_Polias', 'cabo': 'Maquinas_Polias', 'peso_corporal': 'Peso_Corporal', 'calistenia': 'Calistenia' };
+
             let pool = dictionaryData.filter(d => {
-                const f = removeAccents(d.focus);
-                const matchFocus = focusTerms.some(term => f.includes(term));
+                const validFocuses = focusTerms.flatMap(term => mapFocus[term] || [term]);
+                const matchFocus = validFocuses.includes(d.focus) || validFocuses.some(f => d.group.includes(f));
                 
-                // Blindagem anti-mistura
-                let isCalisthenics = d.equip === 'peso_corporal' || d.equip === 'calistenia';
+                let isCalisthenics = d.equip.includes('Peso_Corporal') || d.equip.includes('Calistenia');
                 if (!allowBodyweight && isCalisthenics) return false;
 
                 let matchEquip = true;
-                if (equipPref) matchEquip = (d.equip === equipPref);
-                
+                if (equipPref) {
+                    const translatedEquip = mapEquip[equipPref] || equipPref;
+                    matchEquip = d.equip.includes(translatedEquip);
+                }
                 return matchFocus && matchEquip && !avoidNames.includes(d.name);
             });
-            // Fallback flexível
+
             if (pool.length === 0) {
                 pool = dictionaryData.filter(d => {
-                    let isCalisthenics = d.equip === 'peso_corporal' || d.equip === 'calistenia';
+                    let isCalisthenics = d.equip.includes('Peso_Corporal') || d.equip.includes('Calistenia');
                     if (!allowBodyweight && isCalisthenics) return false;
-                    return focusTerms.some(term => removeAccents(d.focus).includes(term)) && !avoidNames.includes(d.name);
+                    const validFocuses = focusTerms.flatMap(term => mapFocus[term] || [term]);
+                    return (validFocuses.includes(d.focus) || validFocuses.some(f => d.group.includes(f))) && !avoidNames.includes(d.name);
                 });
             }
             return pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : null;
