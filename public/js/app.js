@@ -825,18 +825,39 @@ function removeExercise(bIndex, eIndex) {
                     if(nameInput) nameInput.value = customWorkout.name;
                 }
             }
-        } else if (type === 'A' || type === 'B' || type === 'C') {
-            // INTERCEPTAÇÃO: Gera o treino dinamicamente com base na seleção da tela inicial
+        } else if (type === 'A' || type === 'B' || type === 'C' || type === 'D') {
             const method = document.getElementById('mainMethodSelector') ? document.getElementById('mainMethodSelector').value : 'ppl';
             
-            let subOpt = '';
-            if (method === 'ppl') subOpt = type === 'A' ? 'push' : (type === 'B' ? 'pull' : 'legs');
-            else if (method === 'biset_antagonista') subOpt = type === 'A' ? 'peito_costa' : (type === 'B' ? 'biceps_triceps' : 'quad_post');
-            else if (method === 'biset_agonista') subOpt = type === 'A' ? 'peito' : (type === 'B' ? 'costa' : 'perna');
-            else subOpt = type;
+            // TRAVA DE MESOCICLO: Congela o treino para garantir a Sobrecarga Progressiva
+            const campaignKey = 'fitapp_campaign_data';
+            const savedCampaignStr = safeGet(campaignKey);
+            let campaignData = savedCampaignStr ? JSON.parse(savedCampaignStr) : { method: method, level: level, workouts: {}, startDate: new Date().toISOString() };
 
-            // Chama o motor da forja sem abrir o modal
-            currentRoutine = executeForgeLogic(method, subOpt);
+            // Se o usuário alterou o método ou nível manualmente na tela, quebra a campanha atual
+            if (campaignData.method !== method || campaignData.level !== level) {
+                campaignData = { method: method, level: level, workouts: {}, startDate: new Date().toISOString() };
+                safeSet('fitapp_campaign_count', 0);
+            }
+
+            if (campaignData.workouts[type]) {
+                currentRoutine = campaignData.workouts[type];
+            } else {
+                let subOpt = '';
+                if (method === 'ppl' || method === 'abc') subOpt = type === 'A' ? 'push' : (type === 'B' ? 'pull' : 'legs');
+                else if (method === 'biset_antagonista') subOpt = type === 'A' ? 'peito_costa' : (type === 'B' ? 'biceps_triceps' : 'quad_post');
+                else if (method === 'biset_agonista') subOpt = type === 'A' ? 'peito' : (type === 'B' ? 'costa' : 'perna');
+                else subOpt = type;
+
+                // Carrega a Lista Negra (Exercícios do Mesociclo Anterior)
+                let blacklist = JSON.parse(safeGet('fitapp_blacklist') || '[]');
+                
+                // Chama o motor da forja com a Lista Negra
+                currentRoutine = executeForgeLogic(method, subOpt, blacklist);
+                
+                // Salva o treino gerado na Campanha Atual
+                campaignData.workouts[type] = currentRoutine;
+                safeSet(campaignKey, JSON.stringify(campaignData));
+            }
             
             if(preview) {
                 const cardRef = document.getElementById('card-' + type);
@@ -1193,9 +1214,52 @@ function removeExercise(bIndex, eIndex) {
         }
 
         safeSet('fitapp_week_log', JSON.stringify(weekLog));
+        
+        // --- INÍCIO DO SISTEMA DE GATILHO DUPLO (Ponto 9) ---
+        let campCount = parseInt(safeGet('fitapp_campaign_count') || '0');
+        campCount++;
+        safeSet('fitapp_campaign_count', campCount);
+        
+        let campaignDataStr = safeGet('fitapp_campaign_data');
+        let isPromotionTime = false;
+        
+        if (campaignDataStr) {
+            let campData = JSON.parse(campaignDataStr);
+            let startDate = new Date(campData.startDate || Date.now());
+            let daysPassed = Math.floor((Date.now() - startDate) / (1000 * 60 * 60 * 24));
+            
+            // Verifica Gatilhos (24 Treinos ou 56 Dias)
+            if (campCount >= 24 || daysPassed >= 56) {
+                isPromotionTime = true;
+                
+                // 1. Envia as armas do ciclo atual para a Lista Negra
+                let newBlacklist = [];
+                Object.values(campData.workouts).forEach(routine => {
+                    routine.forEach(bloco => {
+                        bloco.exercises.forEach(ex => {
+                            if (!newBlacklist.includes(ex.name)) newBlacklist.push(ex.name);
+                        });
+                    });
+                });
+                safeSet('fitapp_blacklist', JSON.stringify(newBlacklist));
+                
+                // 2. Destrói a campanha atual
+                safeSet('fitapp_campaign_data', '');
+                safeSet('fitapp_campaign_count', 0);
+                
+                // 3. Sobe a Patente Oficial
+                if (els.levelSelector) {
+                    if (els.levelSelector.value === 'iniciante') els.levelSelector.value = 'intermediario';
+                    else if (els.levelSelector.value === 'intermediario') els.levelSelector.value = 'avancado';
+                    safeSet('fitapp_level', els.levelSelector.value);
+                }
+            }
+        }
+        // --- FIM DO SISTEMA DE GATILHO DUPLO ---
+
         clearWorkoutState(); 
 
-        els.workoutArea.style.display = 'none'; 
+        els.workoutArea.style.display = 'none';
         els.btnFinishArea.style.display = 'none';
         document.getElementById('workoutCards').style.display = 'flex';
         
@@ -1220,6 +1284,16 @@ function removeExercise(bIndex, eIndex) {
         const mainSelector = document.getElementById('mainMethodSelector');
         const bioPanel = mainSelector ? mainSelector.closest('div') : null;
         if (bioPanel) bioPanel.style.display = 'block';
+        
+        // Dispara o Evento de Promoção
+        if (isPromotionTime) {
+            setTimeout(() => {
+                alert("🎖️ MESOCICLO CONCLUÍDO!\n\nAdaptação neural máxima atingida.\nSua patente foi elevada e seu arsenal anterior enviado para a Lista Negra.\n\nEscolha seu novo destino tático na Forja.");
+                switchTab('tab-treino', 'nav-treino');
+                openForgeModal();
+                if(typeof audioEnabled !== 'undefined' && audioEnabled) speak("Adaptação neural máxima atingida. Patente elevada. Iniciando protocolo de nova forja.");
+            }, 1500);
+        }
     }
 // ==========================================
 // ROTA DE FUGA: CANCELAMENTO DE TREINO
@@ -2645,7 +2719,7 @@ function updateDynamicCards() {
         if(cD && cD.querySelector('h3')) { cD.querySelector('h3').textContent = tD; cD.querySelector('p').textContent = sD; }
     }
 
-    function executeForgeLogic(method, subOpt) {
+    function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
         const removeAccents = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
         const includeAbs = document.getElementById('toggleAbs') ? document.getElementById('toggleAbs').checked : false;
 
@@ -2700,7 +2774,7 @@ function updateDynamicCards() {
         };
 
         let generatedBlocks = [];
-        let used = [];
+        let used = [...avoidNamesGlobal]; // Injeta a Lista Negra
 
         // --- SISTEMA ABC (Push / Pull / Legs) ---
         if (method === 'abc' || method === 'ppl') {
