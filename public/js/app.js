@@ -1357,44 +1357,43 @@ window.encerrarSessao = function() {
         if (!grid) return;
         grid.innerHTML = '';
 
-        const groups = {
-            'Peito': [], 'Costas': [], 'Pernas': [], 'Ombros': [], 
-            'Tríceps': [], 'Bíceps': [], 'Core': [], 'Mobilidade / Cardio': [], 'Outros': []
-        };
-
-        const groupIcons = {
-            'Peito': '🦍', 'Costas': '🛡️', 'Pernas': '🦵', 'Ombros': '🥥', 
-            'Tríceps': '🐎', 'Bíceps': '💪', 'Core': '🧱', 'Mobilidade / Cardio': '🏃', 'Outros': '🔧'
-        };
-
+        // NOVO: Leitura Dinâmica do Banco de Dados 
+        const groups = {};
+        
         dictionaryData.forEach(ex => {
-            // BLINDAGEM: Garante que os campos existem antes de dar .toLowerCase()
             const exName = ex.name || 'Exercício Desconhecido';
-            const exFocus = ex.focus || ex.group || 'Outros'; 
+            const exGroup = ex.group || 'Outros'; 
+            const exFocus = ex.focus || 'Geral';
+            const exEquip = ex.equip || '';
             
-            if (query && !exName.toLowerCase().includes(query) && !exFocus.toLowerCase().includes(query)) return;
+            // Motor de Busca Rápida (pesquisa por nome, grupo, subnível ou equipamento)
+            if (query && !exName.toLowerCase().includes(query) && 
+                !exGroup.toLowerCase().includes(query) && 
+                !exFocus.toLowerCase().includes(query) &&
+                !exEquip.toLowerCase().includes(query)) return;
             
-            const focusLow = exFocus.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-            let cat = 'Outros';
+            // Agrupador 3D: Grupo > Subnível > Array de Exercícios
+            if (!groups[exGroup]) groups[exGroup] = {};
+            if (!groups[exGroup][exFocus]) groups[exGroup][exFocus] = [];
             
-            if (focusLow.includes('peito') || focusLow.includes('peitoral')) cat = 'Peito';
-            else if (focusLow.includes('costa') || focusLow.includes('dorsal') || focusLow.includes('lombar')) cat = 'Costas';
-            else if (focusLow.includes('perna') || focusLow.includes('gluteo') || focusLow.includes('panturrilha') || focusLow.includes('quadriceps') || focusLow.includes('posterior') || focusLow.includes('adutor') || focusLow.includes('abdutor') || focusLow.includes('coxa')) cat = 'Pernas';
-            else if (focusLow.includes('ombro') || focusLow.includes('deltoide') || focusLow.includes('trapezio')) cat = 'Ombros';
-            else if (focusLow.includes('triceps')) cat = 'Tríceps';
-            else if (focusLow.includes('biceps') || focusLow.includes('antebraco')) cat = 'Bíceps';
-            else if (focusLow.includes('core') || focusLow.includes('abdom') || focusLow.includes('obliquo')) cat = 'Core';
-            else if (focusLow.includes('mobilidade') || focusLow.includes('cardio')) cat = 'Mobilidade / Cardio';
-            
-            groups[cat].push({
-                ...ex,
-                name: exName,
-                focus: exFocus
-            });
+            groups[exGroup][exFocus].push(ex);
         });
 
-        for (const [groupName, exercises] of Object.entries(groups)) {
-            if (exercises.length === 0) continue;
+        // Mapeamento Tático de Ícones para a Nova Base
+        const groupIcons = {
+            'Peitoral': '🦍', 'Costas': '🛡️', 'Pernas': '🦵', 'Ombros': '🥥', 
+            'Tríceps': '🐎', 'Bíceps': '💪', 'Core': '🧱', 'Mobilidade': '🧘', 
+            'Cardio/HIIT': '🏃', 'Deslocamento/Esporte': '⚡', 'Antebraço': '🦾', 'Outros': '🔧'
+        };
+
+        const orderedGroups = Object.keys(groups).sort();
+
+        orderedGroups.forEach(groupName => {
+            const subGroups = groups[groupName];
+            let groupTotal = 0;
+            for(let sub in subGroups) groupTotal += subGroups[sub].length;
+
+            if (groupTotal === 0) return;
 
             const groupContainer = document.createElement('div');
             groupContainer.style.marginBottom = '10px';
@@ -1415,7 +1414,7 @@ window.encerrarSessao = function() {
             
             const isOpen = query.length > 0;
             const icon = groupIcons[groupName] || '🏋️';
-            header.innerHTML = `<span style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 18px;">${icon}</span> ${groupName} <span style="color: #666; font-size: 12px; font-weight: normal;">(${exercises.length})</span></span> <span style="transform: ${isOpen ? 'rotate(180deg)' : 'rotate(0deg)'}; transition: transform 0.3s; color: #fff;">▼</span>`;
+            header.innerHTML = `<span style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 18px;">${icon}</span> ${groupName} <span style="color: #666; font-size: 12px; font-weight: normal;">(${groupTotal})</span></span> <span style="transform: ${isOpen ? 'rotate(180deg)' : 'rotate(0deg)'}; transition: transform 0.3s; color: #fff;">▼</span>`;
             
             const listContainer = document.createElement('div');
             listContainer.style.display = isOpen ? 'block' : 'none';
@@ -1428,42 +1427,59 @@ window.encerrarSessao = function() {
                 header.querySelector('span:last-child').style.transform = isCurrentlyOpen ? 'rotate(0deg)' : 'rotate(180deg)';
             };
 
-            exercises.forEach(ex => {
-                const exDiv = document.createElement('div');
-                exDiv.style.background = '#111';
-                exDiv.style.padding = '12px';
-                exDiv.style.marginBottom = '8px';
-                exDiv.style.borderRadius = '6px';
-                exDiv.style.border = '1px solid #444';
+            // Renderiza os Subníveis Musculares DENTRO do Grupo
+            const orderedSubGroups = Object.keys(subGroups).sort();
+            orderedSubGroups.forEach(subName => {
                 
-                let equipIcon = "🏋️";
-                if(ex.equip === "peso_corporal") equipIcon = "🏠";
-                if(ex.equip === "calistenia") equipIcon = "🏖️";
-                if(ex.equip === "cabo") equipIcon = "⛓️";
+                // Título Separador do Subnível (ex: Fibras Superiores)
+                const subTitle = document.createElement('div');
+                subTitle.style.color = '#4da3ff';
+                subTitle.style.fontSize = '13px';
+                subTitle.style.fontWeight = 'bold';
+                subTitle.style.borderBottom = '1px dashed #333';
+                subTitle.style.paddingBottom = '4px';
+                subTitle.style.marginBottom = '10px';
+                subTitle.style.marginTop = '10px';
+                subTitle.textContent = `🎯 ${subName}`;
+                listContainer.appendChild(subTitle);
 
-                const ytQuery = encodeURIComponent(`Como executar o exercício ${ex.name}`);
-                const ytLink = `https://www.youtube.com/results?search_query=${ytQuery}`;
+                subGroups[subName].forEach(ex => {
+                    const exDiv = document.createElement('div');
+                    exDiv.style.background = '#111';
+                    exDiv.style.padding = '12px';
+                    exDiv.style.marginBottom = '8px';
+                    exDiv.style.borderRadius = '6px';
+                    exDiv.style.border = '1px solid #444';
+                    
+                    let equipIcon = "🏋️";
+                    if(ex.equip && ex.equip.includes("Peso_Corporal")) equipIcon = "🏠";
+                    if(ex.equip && ex.equip.includes("Calistenia")) equipIcon = "🏖️";
+                    if(ex.equip && ex.equip.includes("Maquinas")) equipIcon = "⛓️";
 
-                exDiv.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div style="flex: 1; padding-right: 10px;">
-                            <div style="font-weight: bold; color: #fff; font-size: 14px; margin-bottom: 5px;">
-                                ${ex.name}
+                    const ytQuery = encodeURIComponent(`Como executar o exercício ${ex.name}`);
+                    const ytLink = `https://www.youtube.com/results?search_query=${ytQuery}`;
+
+                    exDiv.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div style="flex: 1; padding-right: 10px;">
+                                <div style="font-weight: bold; color: #fff; font-size: 14px; margin-bottom: 5px;">
+                                    ${ex.name}
+                                </div>
+                                <div style="font-size: 11px; color: #aaa; margin-bottom: 8px;">${ex.desc || 'Instrução pendente.'}</div>
+                                <span style="font-size: 10px; background: #333; padding: 2px 6px; border-radius: 4px; color: #00ff88;">${ex.focus}</span>
+                                <span style="font-size: 10px; background: #333; padding: 2px 6px; border-radius: 4px; color: #aaa; margin-left: 5px;">${equipIcon} ${ex.equip ? ex.equip.replace(/_/g, ' ') : 'N/A'}</span>
                             </div>
-                            <div style="font-size: 11px; color: #aaa; margin-bottom: 8px;">${ex.desc || 'Instrução pendente.'}</div>
-                            <span style="font-size: 10px; background: #333; padding: 2px 6px; border-radius: 4px; color: #00ff88;">${ex.focus}</span>
-                            <span style="font-size: 10px; background: #333; padding: 2px 6px; border-radius: 4px; color: #aaa; margin-left: 5px;">${equipIcon} ${ex.equip ? ex.equip.replace('_', ' ') : 'academia'}</span>
+                            <a href="${ytLink}" target="_blank" style="text-decoration: none; font-size: 22px; padding: 8px; background: rgba(255, 0, 0, 0.1); border-radius: 6px; border: 1px solid rgba(255,0,0,0.3); transition: all 0.2s; display: flex; align-items: center; justify-content: center;" title="Ver no YouTube">🎥</a>
                         </div>
-                        <a href="${ytLink}" target="_blank" style="text-decoration: none; font-size: 22px; padding: 8px; background: rgba(255, 0, 0, 0.1); border-radius: 6px; border: 1px solid rgba(255,0,0,0.3); transition: all 0.2s; display: flex; align-items: center; justify-content: center;" title="Ver no YouTube">🎥</a>
-                    </div>
-                `;
-                listContainer.appendChild(exDiv);
+                    `;
+                    listContainer.appendChild(exDiv);
+                });
             });
 
             groupContainer.appendChild(header);
             groupContainer.appendChild(listContainer);
             grid.appendChild(groupContainer);
-        }
+        });
     }
 
     function switchTab(tabId, navId) {
