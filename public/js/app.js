@@ -1038,7 +1038,20 @@ function removeExercise(bIndex, eIndex) {
                     const kgId = `kg_set_${bIndex}_${eIndex}_${s}`;
                     const rpId = `rp_set_${bIndex}_${eIndex}_${s}`;
                     
-                    row.innerHTML = `<div class="set-label">S${s}</div><input type="number" id="${kgId}" class="kg-val" placeholder="Kg" value="${data.kg}"><input type="number" id="${rpId}" class="rp-val" placeholder="Reps / s" value="${data.reps}"><button class="btn-iso" style="background:none; border:none; cursor:pointer; font-size:16px; padding:0 5px;" title="Iniciar Isometria">⏱️</button><input type="checkbox" id="${chkId}" class="chk-set" ${data.checked ? 'checked' : ''}>`;
+                    // CÉREBRO TÁTICO: Resgate da Meta Fantasma (Último Treino)
+                    let ghostKg = 'Kg';
+                    let ghostReps = 'Reps';
+                    if (lastWorkoutMatch) {
+                        const lastSets = lastWorkoutMatch.data.filter(d => d.exercise === ex.name);
+                        // Procura a exata mesma série (S1 com S1, S2 com S2), ou pega a última registrada
+                        const pastSet = lastSets.find(d => parseInt(d.set) === s) || lastSets[lastSets.length - 1];
+                        if (pastSet) {
+                            if (pastSet.kg) ghostKg = `${pastSet.kg} kg`;
+                            if (pastSet.reps) ghostReps = `${pastSet.reps} rep`;
+                        }
+                    }
+                    
+                    row.innerHTML = `<div class="set-label">S${s}</div><input type="number" id="${kgId}" class="kg-val" placeholder="${ghostKg}" value="${data.kg}"><input type="number" id="${rpId}" class="rp-val" placeholder="${ghostReps}" value="${data.reps}"><button class="btn-iso" style="background:none; border:none; cursor:pointer; font-size:16px; padding:0 5px;" title="Iniciar Isometria">⏱️</button><input type="checkbox" id="${chkId}" class="chk-set" ${data.checked ? 'checked' : ''}>`;
                     
                     const chk = row.querySelector('.chk-set');
                     const kgInp = row.querySelector('.kg-val');
