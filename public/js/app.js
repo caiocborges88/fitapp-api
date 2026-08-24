@@ -1137,15 +1137,30 @@ function removeExercise(bIndex, eIndex) {
                         updateState();
                         updateProgress();
 
-                        // PONTO 4: Encolhimento Automático do Bloco Sanfona
-                        const allBlockChecked = currentRoutine[bIndex].exercises.every(e => e.setsData.every(sd => sd && sd.checked));
+                        // PONTO 4: Encolhimento Automático do Bloco Sanfona (Corrigido)
+                        const allBlockChecked = currentRoutine[bIndex].exercises.every(e => {
+                            // Conta exatamente quantas caixas verdadeiras existem na memória
+                            const checkedCount = e.setsData ? e.setsData.filter(sd => sd && sd.checked).length : 0;
+                            return checkedCount === e.sets; // Só fecha se a contagem bater com a meta de séries
+                        });
+                        
                         if (allBlockChecked) card.classList.add('collapsed-block');
                         else card.classList.remove('collapsed-block');
                     });
                     blockDiv.appendChild(row);
-                }
+                } // fim do laço de séries (s)
                 card.appendChild(blockDiv); // <-- Garante a injeção do bloco no cartão
             });
+            
+            // NOVO: Verifica se o bloco já foi 100% concluído ao recarregar a tela (Impede reabertura)
+            const isBlockFinishedOnLoad = currentRoutine[bIndex].exercises.every(e => {
+                const checkedCount = e.setsData ? e.setsData.filter(sd => sd && sd.checked).length : 0;
+                return checkedCount === e.sets;
+            });
+            if (isBlockFinishedOnLoad && currentRoutine[bIndex].exercises.length > 0) {
+                card.classList.add('collapsed-block');
+            }
+
             els.exerciseList.appendChild(card); // <-- Garante a injeção do cartão na tela
         });
         updateProgress();
