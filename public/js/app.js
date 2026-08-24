@@ -2651,26 +2651,36 @@ function updateDynamicCards() {
             const mapEquip = { 'barra': 'Barras_Anilhas', 'halter': 'Pesos_Livres', 'maquina': 'Maquinas_Polias', 'cabo': 'Maquinas_Polias', 'peso_corporal': 'Peso_Corporal', 'calistenia': 'Calistenia' };
 
             let pool = dictionaryData.filter(d => {
+                // Escudo Anti-Crash: Garante que os campos existam mesmo se vierem vazios do Firebase
+                const exEquip = d.equip || '';
+                const exGroup = d.group || '';
+                const exFocus = d.focus || '';
+
                 const validFocuses = focusTerms.flatMap(term => mapFocus[term] || [term]);
-                const matchFocus = validFocuses.includes(d.focus) || validFocuses.some(f => d.group.includes(f));
+                const matchFocus = validFocuses.includes(exFocus) || validFocuses.some(f => exGroup.includes(f));
                 
-                let isCalisthenics = d.equip.includes('Peso_Corporal') || d.equip.includes('Calistenia');
+                let isCalisthenics = exEquip.includes('Peso_Corporal') || exEquip.includes('Calistenia');
                 if (!allowBodyweight && isCalisthenics) return false;
 
                 let matchEquip = true;
                 if (equipPref) {
                     const translatedEquip = mapEquip[equipPref] || equipPref;
-                    matchEquip = d.equip.includes(translatedEquip);
+                    matchEquip = exEquip.includes(translatedEquip);
                 }
                 return matchFocus && matchEquip && !avoidNames.includes(d.name);
             });
 
             if (pool.length === 0) {
                 pool = dictionaryData.filter(d => {
-                    let isCalisthenics = d.equip.includes('Peso_Corporal') || d.equip.includes('Calistenia');
+                    const exEquip = d.equip || '';
+                    const exGroup = d.group || '';
+                    const exFocus = d.focus || '';
+
+                    let isCalisthenics = exEquip.includes('Peso_Corporal') || exEquip.includes('Calistenia');
                     if (!allowBodyweight && isCalisthenics) return false;
+                    
                     const validFocuses = focusTerms.flatMap(term => mapFocus[term] || [term]);
-                    return (validFocuses.includes(d.focus) || validFocuses.some(f => d.group.includes(f))) && !avoidNames.includes(d.name);
+                    return (validFocuses.includes(exFocus) || validFocuses.some(f => exGroup.includes(f))) && !avoidNames.includes(d.name);
                 });
             }
             return pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : null;
