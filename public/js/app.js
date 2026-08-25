@@ -302,7 +302,12 @@ var FitApp = (() => {
         const isStandardWorkout = !type.startsWith('custom_') && type !== 'Livre' && type !== 'Casa' && type !== 'novo_customizado';
         
         if (isStandardWorkout && typeof dbWorkouts !== 'undefined') {
-            originalName = dbWorkouts[style][level][type][bIndex].exercises[eIndex].name;
+            // ESCUDO ANTI-CRASH: Se a campanha foi gerada dinamicamente, não haverá "Original" na base legada.
+            try {
+                originalName = dbWorkouts[style][level][type][bIndex].exercises[eIndex].name;
+            } catch (error) {
+                originalName = currentName; 
+            }
         }
 
         let modal = document.getElementById('swapModal');
@@ -654,136 +659,15 @@ function removeExercise(bIndex, eIndex) {
                 if(nameContainer) nameContainer.style.display = 'block';
             }
         } else if (type === 'Casa') {
-
-            const removeAccents = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
-
-            // Inteligência de Busca: Pesca o melhor exercício cruzando Músculo + Equipamento
-            const getEx = (focusTerms, equipPref, avoidNames) => {
-                let pool = dictionaryData.filter(d => {
-                    const f = removeAccents(d.focus);
-                    const matchFocus = focusTerms.some(term => f.includes(term));
-                    const matchEquip = equipPref ? d.equip === equipPref : true;
-                    return matchFocus && matchEquip && !avoidNames.includes(d.name);
-                });
-                // Fallback de Contingência: Se não achar o equipamento ideal, puxa qualquer um válido daquele músculo
-                if (pool.length === 0) {
-                    pool = dictionaryData.filter(d => {
-                        const f = removeAccents(d.focus);
-                        return focusTerms.some(term => f.includes(term)) && !avoidNames.includes(d.name);
-                    });
-                }
-                return pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : null;
-            };
-
-            let generatedBlocks = [];
-            let used = [];
-            let splitTitle = "";
-
-            if (nextSplit === 'push') {
-                splitTitle = "Push (Empurrar) - Peito, Ombro e Tríceps";
-                
-                // Bloco 1: Força Base e Tensão Mecânica (Compostos / Barras)
-                let ex1 = getEx(['peito', 'peitoral'], 'barra', used); if(ex1) used.push(ex1.name);
-                let ex2 = getEx(['ombro', 'deltoide'], 'haltere', used); if(ex2) used.push(ex2.name);
-                if(ex1) generatedBlocks.push({ title: "Bloco 1: Força Base (Bi-Set Sinergista)", exercises: [ 
-                    {name: ex1.name, sets: 4, target: "8-10 rep"}, 
-                    ...(ex2 ? [{name: ex2.name, sets: 4, target: "10-12 rep"}] : []) 
-                ]});
-                
-                // Bloco 2: Dano Muscular Isolado (Halteres/Cabos)
-                let ex3 = getEx(['peito'], 'haltere', used); if(ex3) used.push(ex3.name);
-                let ex4 = getEx(['triceps'], 'cabo', used) || getEx(['triceps'], null, used); if(ex4) used.push(ex4.name);
-                if(ex3) generatedBlocks.push({ title: "Bloco 2: Hipertrofia Focada", exercises: [ 
-                    {name: ex3.name, sets: 4, target: "10-12 rep"}, 
-                    ...(ex4 ? [{name: ex4.name, sets: 4, target: "10-12 rep"}] : []) 
-                ]});
-                
-                // Bloco 3: Estresse Metabólico e Pump
-                let ex5 = getEx(['peito'], 'maquina', used) || getEx(['peito'], 'cabo', used); if(ex5) used.push(ex5.name);
-                let ex6 = getEx(['triceps'], null, used); if(ex6) used.push(ex6.name);
-                if(ex5) generatedBlocks.push({ title: "Bloco 3: Pump Metabólico", exercises: [ 
-                    {name: ex5.name, sets: 3, target: "12-15 rep"}, 
-                    ...(ex6 ? [{name: ex6.name, sets: 3, target: "Até a falha"}] : []) 
-                ]});
-
-            } else if (nextSplit === 'pull') {
-                splitTitle = "Pull (Puxar) - Dorsais, Trapézio e Bíceps";
-                
-                // Bloco 1: Força de Tração
-                let ex1 = getEx(['costa', 'dorsal'], 'barra', used) || getEx(['costa'], 'peso_corporal', used); if(ex1) used.push(ex1.name);
-                let ex2 = getEx(['costa', 'trapezio'], 'haltere', used); if(ex2) used.push(ex2.name);
-                if(ex1) generatedBlocks.push({ title: "Bloco 1: Tração Pesada (Sinergia)", exercises: [ 
-                    {name: ex1.name, sets: 4, target: "8-10 rep"}, 
-                    ...(ex2 ? [{name: ex2.name, sets: 4, target: "10-12 rep"}] : []) 
-                ]});
-                
-                // Bloco 2: Volume de Dano
-                let ex3 = getEx(['costa', 'dorsal'], 'cabo', used) || getEx(['costa'], 'maquina', used); if(ex3) used.push(ex3.name);
-                let ex4 = getEx(['biceps'], 'barra', used) || getEx(['biceps'], 'haltere', used); if(ex4) used.push(ex4.name);
-                if(ex3) generatedBlocks.push({ title: "Bloco 2: Dano Muscular", exercises: [ 
-                    {name: ex3.name, sets: 4, target: "10-12 rep"}, 
-                    ...(ex4 ? [{name: ex4.name, sets: 4, target: "10-12 rep"}] : []) 
-                ]});
-                
-                // Bloco 3: Falha Muscular
-                let ex5 = getEx(['costa', 'posterior'], 'cabo', used); if(ex5) used.push(ex5.name);
-                let ex6 = getEx(['biceps'], 'cabo', used) || getEx(['biceps'], 'maquina', used); if(ex6) used.push(ex6.name);
-                if(ex5) generatedBlocks.push({ title: "Bloco 3: Exaustão Total", exercises: [ 
-                    {name: ex5.name, sets: 3, target: "12-15 rep"}, 
-                    ...(ex6 ? [{name: ex6.name, sets: 3, target: "Até a falha"}] : []) 
-                ]});
-
-            } else {
-                splitTitle = "Legs & Core (Pernas e Abdômen)";
-                
-                // Bloco 1: Cadeia Cinética e Eixos Pesados
-                let ex1 = getEx(['perna', 'quadriceps', 'gluteo'], 'barra', used); if(ex1) used.push(ex1.name);
-                let ex2 = getEx(['posterior', 'isquiotibial'], 'barra', used) || getEx(['posterior'], 'haltere', used); if(ex2) used.push(ex2.name);
-                if(ex1) generatedBlocks.push({ title: "Bloco 1: Eixos de Força", exercises: [ 
-                    {name: ex1.name, sets: 4, target: "8-10 rep"}, 
-                    ...(ex2 ? [{name: ex2.name, sets: 4, target: "10-12 rep"}] : []) 
-                ]});
-                
-                // Bloco 2: Isolamento Articular
-                let ex3 = getEx(['perna', 'quadriceps'], 'maquina', used); if(ex3) used.push(ex3.name);
-                let ex4 = getEx(['panturrilha'], null, used); if(ex4) used.push(ex4.name);
-                if(ex3) generatedBlocks.push({ title: "Bloco 2: Isolamento Articular", exercises: [ 
-                    {name: ex3.name, sets: 4, target: "12-15 rep"}, 
-                    ...(ex4 ? [{name: ex4.name, sets: 4, target: "15-20 rep"}] : []) 
-                ]});
-                
-                // Bloco 3: Base do Atleta
-                let ex5 = getEx(['gluteo', 'adutor', 'abdutor'], 'maquina', used) || getEx(['gluteo'], null, used); if(ex5) used.push(ex5.name);
-                let ex6 = getEx(['core', 'abdom', 'obliquo'], 'peso_corporal', used) || getEx(['core'], null, used); if(ex6) used.push(ex6.name);
-                if(ex5) generatedBlocks.push({ title: "Bloco 3: Core e Transferência", exercises: [ 
-                    {name: ex5.name, sets: 3, target: "12-15 rep"}, 
-                    ...(ex6 ? [{name: ex6.name, sets: 3, target: "1 min / Falha"}] : []) 
-                ]});
-            }
-
-            // Fallback de segurança para não quebrar a tela
-            if(generatedBlocks.length === 0) generatedBlocks = [{ title: "Treino Personalizado", exercises: [] }];
-
-            currentRoutine = generatedBlocks;
-            safeSet('fitapp_last_split', nextSplit); // Marca a posição da catraca
-            
-            if(preview) {
-                document.getElementById('previewTitle').textContent = `🧬 Treino Inteligente: ${splitTitle.split(' ')[0]}`;
-                document.getElementById('previewDesc').textContent = `Foco: ${splitTitle}. Periodização automática aplicada.`;
-                if(customControls) customControls.style.display = 'flex';
-                if(nameContainer) nameContainer.style.display = 'block';
-                if(nameInput) nameInput.value = `Template: ${splitTitle.split(' ')[0]}`; 
-            }
-        } else if (type === 'Casa') {
             // CÉREBRO TÁTICO: Gerador Dinâmico de Treino em Casa por Nível
             const removeAccents = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
-            const isHomeReady = (item) => item.equip === 'peso_corporal' || item.equip === 'calistenia';
+            const isHomeReady = (item) => item.equip && (item.equip.includes('Peso_Corporal') || item.equip.includes('Calistenia'));
             
             // Separa o arsenal da nuvem/local por grupamentos
-            const poolPeito = dictionaryData.filter(d => isHomeReady(d) && removeAccents(d.focus).includes('peito'));
-            const poolPernas = dictionaryData.filter(d => isHomeReady(d) && (removeAccents(d.focus).includes('perna') || removeAccents(d.focus).includes('quadriceps') || removeAccents(d.focus).includes('gluteo')));
-            const poolCore = dictionaryData.filter(d => isHomeReady(d) && (removeAccents(d.focus).includes('core') || removeAccents(d.focus).includes('abdom')));
-            const poolCardio = dictionaryData.filter(d => isHomeReady(d) && (removeAccents(d.focus).includes('cardio') || removeAccents(d.focus).includes('mobilidade')));
+            const poolPeito = dictionaryData.filter(d => isHomeReady(d) && getMuscleGroup(d) === 'peito');
+            const poolPernas = dictionaryData.filter(d => isHomeReady(d) && getMuscleGroup(d) === 'pernas');
+            const poolCore = dictionaryData.filter(d => isHomeReady(d) && getMuscleGroup(d) === 'core');
+            const poolCardio = dictionaryData.filter(d => isHomeReady(d) && (getMuscleGroup(d) === 'outros'));
             
             // Função para pescar um exercício aleatório com redundância (fallback)
             const getRandom = (arr, fallbackName) => arr.length > 0 ? arr[Math.floor(Math.random() * arr.length)].name : fallbackName;
@@ -796,11 +680,11 @@ function removeExercise(bIndex, eIndex) {
             currentRoutine = [{
                 title: `Circuito Corporal (${level.charAt(0).toUpperCase() + level.slice(1)})`,
                 exercises: [
-                    { name: getRandom(poolCardio, "Polichinelo (Aquecimento)"), sets: 3, target: timeLevel },
-                    { name: getRandom(poolPeito, "Flexão de Braço"), sets: setsLevel, target: repLevel },
-                    { name: getRandom(poolPernas, "Agachamento Livre"), sets: setsLevel, target: repLevel },
-                    { name: getRandom(poolPernas, "Afundo Alternado"), sets: setsLevel, target: "12/perna" },
-                    { name: getRandom(poolCore, "Prancha Isométrica"), sets: setsLevel, target: timeLevel }
+                    { name: getRandom(poolCardio, "Polichinelos (Jumping Jacks)"), sets: 3, target: timeLevel },
+                    { name: getRandom(poolPeito, "Flexão de Braço (Padrão)"), sets: setsLevel, target: repLevel },
+                    { name: getRandom(poolPernas, "Agachamento Livre (Back/Front Squat)"), sets: setsLevel, target: repLevel },
+                    { name: getRandom(poolPernas, "Afundo / Avanço"), sets: setsLevel, target: "12/perna" },
+                    { name: getRandom(poolCore, "Prancha Isométrica (Frontal/Lateral)"), sets: setsLevel, target: timeLevel }
                 ]
             }];
 
