@@ -724,7 +724,8 @@ function removeExercise(bIndex, eIndex) {
             }
 
             if (campaignData.workouts[type]) {
-                currentRoutine = campaignData.workouts[type];
+                // CLONAGEM PROFUNDA: Garante que alterações de "Casa" não salvem por cima do treino Oficial
+                currentRoutine = JSON.parse(JSON.stringify(campaignData.workouts[type])); 
             } else {
                 let subOpt = '';
                 if (method === 'ppl' || method === 'abc') subOpt = type === 'A' ? 'push' : (type === 'B' ? 'pull' : 'legs');
@@ -738,11 +739,14 @@ function removeExercise(bIndex, eIndex) {
                 // Chama o motor da forja com a Lista Negra
                 currentRoutine = executeForgeLogic(method, subOpt, blacklist);
                 
-                // Salva o treino gerado na Campanha Atual
                 campaignData.workouts[type] = currentRoutine;
                 safeSet(campaignKey, JSON.stringify(campaignData));
             }
-            
+            // GATILHO GLOBAL DE TERRENO: Se o botão estiver em "Casa", adapta as armas silenciosamente!
+            const currentEnv = safeGet('fitapp_global_env') || 'academia';
+            if (currentEnv === 'casa') {
+                silentAdaptToHome();
+            }
             if(preview) {
                 const cardRef = document.getElementById('card-' + type);
                 document.getElementById('previewTitle').textContent = cardRef ? cardRef.querySelector('h3').textContent : `Treino ${type}`;
@@ -774,6 +778,7 @@ function removeExercise(bIndex, eIndex) {
         // Restaura o bloco de Treino Pessoal
         const templatesFront = document.getElementById('templatesFrontline');
         if (templatesFront) templatesFront.style.display = 'block';
+        updateCampaignDashboard();
     }
 
     let snapActive = false; // Memória tática da aposta
@@ -1193,7 +1198,9 @@ function removeExercise(bIndex, eIndex) {
                 if(typeof audioEnabled !== 'undefined' && audioEnabled) speak("Adaptação neural máxima atingida. Patente elevada. Iniciando protocolo de nova forja.");
             }, 1500);
         }
+    updateCampaignDashboard();
     }
+
 // ==========================================
 // ROTA DE FUGA: CANCELAMENTO DE TREINO
 // ==========================================
@@ -2291,7 +2298,9 @@ function renderMetricsChart() {
             showToast('Treino em andamento restaurado.');
         }
 
-        // NOVO: Chama o satélite para atualizar o dicionário de áudio com as dicas B2B
+       
+        updateEnvUI();
+        updateCampaignDashboard();
         syncTacticalDictionary(); 
         
     } // <-- A função init() termina aqui
@@ -2840,9 +2849,157 @@ function updateDynamicCards() {
         if(generatedBlocks.length === 0) generatedBlocks = [{ title: "Rotina de Contingência", exercises: [] }];
         return generatedBlocks;
     }
+// --- NOVO: FUNÇÕES DE TERRENO E CAMPANHA ---
+    function toggleGlobalEnv() {
+        let currentEnv = safeGet('fitapp_global_env') || 'academia';
+        currentEnv = currentEnv === 'academia' ? 'casa' : 'academia';
+        safeSet('fitapp_global_env', currentEnv);
+        updateEnvUI();
+        if(typeof audioEnabled !== 'undefined' && audioEnabled) speak(currentEnv === 'academia' ? "Modo Academia ativado." : "Modo Casa ativado.");
+        showToast(`Terreno alterado para: ${currentEnv === 'academia' ? 'Academia' : 'Casa'}`);
+    }
+
+    function updateEnvUI() {
+        let currentEnv = safeGet('fitapp_global_env') || 'academia';
+        const icon = document.getElementById('envIcon');
+        const text = document.getElementById('envText');
+        const btn = document.getElementById('btnEnvToggle');
+        if(icon && text && btn) {
+            if(currentEnv === 'academia') {
+                icon.textContent = '🏋️';
+                text.textContent = 'Academia';
+                btn.style.borderColor = '#00ff88';
+                btn.style.color = '#00ff88';
+                btn.style.background = 'rgba(0, 255, 136, 0.1)';
+            } else {
+                icon.textContent = '🏠';
+                text.textContent = 'Casa';
+                btn.style.borderColor = '#ffaa00';
+                btn.style.color = '#ffaa00';
+                btn.style.background = 'rgba(255, 170, 0, 0.1)';
+            }
+        }
+    }
+
+    function updateCampaignDashboard() {
+        const campaignStr = safeGet('fitapp_campaign_data');
+        const bioPanel = document.getElementById('biomechanicsPanel');
+        const dash = document.getElementById('campaignDashboard');
+        
+        if (campaignStr && campaignStr.trim() !== '') {
+            if(bioPanel) bioPanel.style.display = 'none';
+            if(dash) dash.style.display = 'block';
+            
+            const campData = JSON.parse(campaignStr);
+            let count = parseInt(safeGet('fitapp_campaign_count') || '0');
+            
+            const title = document.getElementById('campaignDashTitle');
+            const subtitle = document.getElementById('campaignDashSubtitle');
+            const countText = document.getElementById('campaignDashCount');
+            const bar = document.getElementById('campaignDashBar');
+            
+            if(title) title.textContent = `Operação: ${campData.method ? campData.method.toUpperCase() : 'LIVRE'}`;
+            if(subtitle) subtitle.textContent = `Nível: ${campData.level || 'Padrão'}`;
+            if(countText) countText.textContent = `${count}/24`;
+            if(bar) bar.style.width = `${Math.min(100, (count / 24) * 100)}%`;
+
+            // HERO CARD (Destaque Visual da Próxima Missão)
+            const history = JSON.parse(safeGet('fitapp_week_log') || '[]');
+            const total = history.length;
+            const lastType = total > 0 ? history[total - 1].tipo : null;
+            const method = safeGet('fitapp_main_method') || 'abc';
+            
+            let nextType = 'A';
+            if (lastType === 'A') nextType = 'B';
+            else if (lastType === 'B') nextType = 'C';
+            else if (lastType === 'C' && method === 'abcd') nextType = 'D';
+            else if (lastType === 'C') nextType = 'A';
+            else if (lastType === 'D') nextType = 'A';
+
+            ['A', 'B', 'C', 'D'].forEach(t => {
+                const card = document.getElementById('card-' + t);
+                if (card) {
+                    card.style.transform = 'scale(1)';
+                    card.style.border = '1px solid #333';
+                    card.style.opacity = '1';
+                    const heroBtn = card.querySelector('.hero-btn');
+                    if(heroBtn) heroBtn.remove();
+                    
+                    if (t === nextType) {
+                        card.style.transform = 'scale(1.03)';
+                        card.style.border = '2px solid #a64dff';
+                        card.style.boxShadow = '0 0 20px rgba(166, 77, 255, 0.2)';
+                        card.innerHTML += `<div class="hero-btn" style="background: #a64dff; color: #fff; text-align: center; padding: 8px; border-radius: 6px; font-weight: bold; margin-top: 10px; text-transform: uppercase; font-size: 12px; pointer-events: none;">▶ Próxima Missão</div>`;
+                    }
+                }
+            });
+        } else {
+            if(bioPanel) bioPanel.style.display = 'block';
+            if(dash) dash.style.display = 'none';
+            
+            ['A', 'B', 'C', 'D'].forEach(t => {
+                const card = document.getElementById('card-' + t);
+                if (card) {
+                    card.style.transform = 'scale(1)';
+                    card.style.border = '1px solid #333';
+                    const heroBtn = card.querySelector('.hero-btn');
+                    if(heroBtn) heroBtn.remove();
+                }
+            });
+        }
+    }
+
+    function resetCampaign() {
+        if(confirm("ATENÇÃO: Deseja abortar a campanha atual? O mesociclo será zerado e você poderá forjar um novo plano.")) {
+            safeSet('fitapp_campaign_data', '');
+            safeSet('fitapp_campaign_count', 0);
+            updateCampaignDashboard();
+            showToast("Campanha abortada. O Cérebro Biomecânico foi liberado.");
+        }
+    }
+
+    function silentAdaptToHome() {
+        let usedSubstitutes = []; 
+        const removeAccents = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
+        const getBroadGroup = (focusString) => {
+            const f = removeAccents(focusString || '');
+            if (f.includes('peito')) return 'peitoral';
+            if (f.includes('costa') || f.includes('dorsal') || f.includes('lombar') || f.includes('trap')) return 'costas';
+            if (f.includes('perna') || f.includes('quadriceps') || f.includes('gluteo') || f.includes('isquio') || f.includes('panturrilha') || f.includes('adutor') || f.includes('abdutor')) return 'pernas';
+            if (f.includes('ombro') || f.includes('deltoide')) return 'ombros';
+            if (f.includes('triceps') || f.includes('biceps') || f.includes('antebraço')) return 'bracos';
+            if (f.includes('core') || f.includes('abdom')) return 'core';
+            return 'geral';
+        };
+
+        currentRoutine.forEach(bloco => {
+            bloco.exercises.forEach(ex => {
+                const dictItem = dictionaryData.find(d => d.name === ex.name);
+                if (dictItem) {
+                    const isForbidden = !dictItem.equip.includes('Peso_Corporal') && !dictItem.equip.includes('Calistenia');
+                    if (isForbidden) {
+                        const targetGroup = getBroadGroup(dictItem.group + " " + dictItem.focus);
+                        let pool = dictionaryData.filter(d => 
+                            getBroadGroup(d.group + " " + d.focus) === targetGroup && 
+                            (d.equip.includes('Peso_Corporal') || d.equip.includes('Calistenia')) &&
+                            !usedSubstitutes.includes(d.name)
+                        );
+                        if(pool.length === 0) pool = dictionaryData.filter(d => getBroadGroup(d.group + " " + d.focus) === targetGroup && (d.equip.includes('Peso_Corporal') || d.equip.includes('Calistenia')));
+                        
+                        if(pool.length > 0) {
+                            const newEx = pool[Math.floor(Math.random() * pool.length)];
+                            ex.name = newEx.name;
+                            usedSubstitutes.push(newEx.name);
+                        }
+                    }
+                }
+            });
+        });
+    }
     return { 
         init, filterLibrary, openSwapModal, confirmSwap, startWorkout, openForgeModal, updateForgeOptions, generateForgedWorkout, updateDynamicCards,
         beginWorkoutExecution, acceptSnap, declineSnap, cancelWorkoutPreview, adaptWorkoutToHome,
+        toggleGlobalEnv, updateEnvUI, updateCampaignDashboard, resetCampaign,
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,
         adjustRestTime, changeSets, 
         toggleAutoPilot, startAutoPilot, stopAutoPilot, 
