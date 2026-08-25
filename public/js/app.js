@@ -743,10 +743,10 @@ function removeExercise(bIndex, eIndex) {
                 campaignData.workouts[type] = currentRoutine;
                 safeSet(campaignKey, JSON.stringify(campaignData));
             }
-            // GATILHO GLOBAL DE TERRENO: Se o botão estiver em "Casa", adapta as armas silenciosamente!
+            // GATILHO GLOBAL DE TERRENO: Se o botão estiver em Casa ou Praia, adapta as armas silenciosamente!
             const currentEnv = safeGet('fitapp_global_env') || 'academia';
-            if (currentEnv === 'casa') {
-                silentAdaptToHome();
+            if (currentEnv !== 'academia') {
+                silentAdaptToEnv(currentEnv);
             }
             if(preview) {
                 const cardRef = document.getElementById('card-' + type);
@@ -1935,100 +1935,6 @@ window.encerrarSessao = function() {
         if (preview) preview.style.display = 'block';
     }
 
-    function adaptWorkoutToHome() {
-    const envChoice = document.getElementById('envSelector') ? document.getElementById('envSelector').value : 'casa';
-    const allowedEquips = envChoice === 'praia' ? ['peso_corporal', 'calistenia'] : ['peso_corporal'];
-    const preferredEquip = envChoice === 'praia' ? 'calistenia' : 'peso_corporal';
-    
-    let changed = 0;
-    let usedSubstitutes = []; 
-    
-    const removeAccents = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-    
-    const getBroadGroup = (focusString) => {
-        if (!focusString) return 'geral';
-        const f = removeAccents(focusString);
-        if (f.includes('peito')) return 'peito';
-        if (f.includes('costa') || f.includes('dorsal') || f.includes('lombar')) return 'costas';
-        if (f.includes('perna') || f.includes('quadriceps') || f.includes('gluteo') || f.includes('posterior') || f.includes('panturrilha') || f.includes('adutor') || f.includes('abdutor') || f.includes('coxa')) return 'pernas';
-        if (f.includes('ombro') || f.includes('deltoide') || f.includes('trapezio')) return 'ombro';
-        if (f.includes('triceps')) return 'triceps';
-        if (f.includes('biceps') || f.includes('antebraco')) return 'biceps';
-        if (f.includes('core') || f.includes('abdom') || f.includes('obliquo')) return 'core';
-        return 'geral';
-    };
-    
-    currentRoutine.forEach(bloco => {
-        bloco.exercises.forEach(ex => {
-            const dictItem = dictionaryData.find(d => d.name === ex.name);
-            
-            if (dictItem) {
-                const isForbidden = !allowedEquips.includes(dictItem.equip);
-                const canUpgradeToCalisthenics = (envChoice === 'praia' && dictItem.equip === 'peso_corporal');
-                
-                if (isForbidden || canUpgradeToCalisthenics) {
-                    const targetGroup = getBroadGroup(dictItem.focus);
-                    
-                    let pool = dictionaryData.filter(d => 
-                        getBroadGroup(d.focus) === targetGroup && 
-                        d.equip === preferredEquip &&
-                        !usedSubstitutes.includes(d.name)
-                    );
-                    
-                    if (pool.length === 0) {
-                        pool = dictionaryData.filter(d => 
-                            getBroadGroup(d.focus) === targetGroup && 
-                            allowedEquips.includes(d.equip) &&
-                            !usedSubstitutes.includes(d.name)
-                        );
-                    }
-                    
-                    if (pool.length === 0) {
-                        pool = dictionaryData.filter(d => getBroadGroup(d.focus) === targetGroup && allowedEquips.includes(d.equip));
-                    }
-                    
-                    if (pool.length > 0) {
-                        const newEx = pool[Math.floor(Math.random() * pool.length)];
-                        if (ex.name !== newEx.name) {
-                            ex.name = newEx.name;
-                            usedSubstitutes.push(newEx.name); 
-                            changed++;
-                        }
-                    }
-                }
-            }
-        });
-    });
-    
-    if (changed > 0) {
-            const nameInput = document.getElementById('customWorkoutName');
-            const envName = envChoice === 'praia' ? 'Praia/Praça' : 'Quarto/Casa';
-            
-            // Trava de conversão para modo Livre
-            if (currentWorkoutType !== 'Livre' && !currentWorkoutType.startsWith('custom_')) {
-                currentWorkoutType = 'Livre';
-                const customControls = document.getElementById('customWorkoutControls');
-                const nameContainer = document.getElementById('customWorkoutNameContainer');
-                
-                if(customControls) customControls.style.display = 'flex';
-                if(nameContainer) nameContainer.style.display = 'block';
-            }
-            
-            // A atualização do nome agora ocorre livremente fora da trava
-            if(nameInput) nameInput.value = `Treino Adaptado (${envName})`;
-            
-            document.getElementById('previewTitle').textContent = `⚡ Adaptação Concluída`;
-            document.getElementById('previewDesc').textContent = `${changed} exercícios alterados para o terreno: ${envName}.`;
-            renderPreviewList();
-            
-            if(typeof audioEnabled !== 'undefined' && audioEnabled) speak("Protocolo de ambiente executado.");
-            showToast(`Adaptação para ${envName} aplicada!`);
-        } else {
-            const envName = envChoice === 'praia' ? 'Praia/Praça' : 'Quarto/Casa';
-            showToast(`A rotina já está alinhada para ${envName}. Mude o seletor para trocar.`);
-        }
-    }
-
     async function syncOfflineWorkouts() {
         let syncQueue = JSON.parse(safeGet('fitapp_sync_queue') || '[]');
         if (syncQueue.length === 0) return;
@@ -2883,12 +2789,28 @@ function updateDynamicCards() {
     }
 // --- NOVO: FUNÇÕES DE TERRENO E CAMPANHA ---
     function toggleGlobalEnv() {
+        if (isWorkoutActive) {
+            showToast("⚠️ Operação Negada: O cronômetro está rodando. Cancele o combate primeiro.");
+            return;
+        }
+
         let currentEnv = safeGet('fitapp_global_env') || 'academia';
-        currentEnv = currentEnv === 'academia' ? 'casa' : 'academia';
+        
+        if (currentEnv === 'academia') currentEnv = 'casa';
+        else if (currentEnv === 'casa') currentEnv = 'praia';
+        else currentEnv = 'academia';
+        
         safeSet('fitapp_global_env', currentEnv);
         updateEnvUI();
-        if(typeof audioEnabled !== 'undefined' && audioEnabled) speak(currentEnv === 'academia' ? "Modo Academia ativado." : "Modo Casa ativado.");
-        showToast(`Terreno alterado para: ${currentEnv === 'academia' ? 'Academia' : 'Casa'}`);
+        
+        let envText = currentEnv === 'academia' ? 'Academia' : (currentEnv === 'casa' ? 'Casa' : 'Praia');
+        if(typeof audioEnabled !== 'undefined' && audioEnabled) speak(`Modo ${envText} ativado.`);
+        showToast(`Terreno alterado para: ${envText}`);
+
+        // Recarregamento Automático
+        if (currentWorkoutType && !isWorkoutActive) {
+            loadWorkout();
+        }
     }
 
     function updateEnvUI() {
@@ -2898,17 +2820,14 @@ function updateDynamicCards() {
         const btn = document.getElementById('btnEnvToggle');
         if(icon && text && btn) {
             if(currentEnv === 'academia') {
-                icon.textContent = '🏋️';
-                text.textContent = 'Academia';
-                btn.style.borderColor = '#00ff88';
-                btn.style.color = '#00ff88';
-                btn.style.background = 'rgba(0, 255, 136, 0.1)';
+                icon.textContent = '🏋️'; text.textContent = 'Academia';
+                btn.style.borderColor = '#00ff88'; btn.style.color = '#00ff88'; btn.style.background = 'rgba(0, 255, 136, 0.1)';
+            } else if (currentEnv === 'casa') {
+                icon.textContent = '🏠'; text.textContent = 'Casa';
+                btn.style.borderColor = '#ffaa00'; btn.style.color = '#ffaa00'; btn.style.background = 'rgba(255, 170, 0, 0.1)';
             } else {
-                icon.textContent = '🏠';
-                text.textContent = 'Casa';
-                btn.style.borderColor = '#ffaa00';
-                btn.style.color = '#ffaa00';
-                btn.style.background = 'rgba(255, 170, 0, 0.1)';
+                icon.textContent = '🏖️'; text.textContent = 'Praia';
+                btn.style.borderColor = '#4da3ff'; btn.style.color = '#4da3ff'; btn.style.background = 'rgba(77, 163, 255, 0.1)';
             }
         }
     }
@@ -2990,7 +2909,7 @@ function updateDynamicCards() {
         }
     }
 
-    function silentAdaptToHome() {
+    function silentAdaptToEnv(envTarget) {
         let usedSubstitutes = []; 
         const removeAccents = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
         const getBroadGroup = (focusString) => {
@@ -3004,19 +2923,40 @@ function updateDynamicCards() {
             return 'geral';
         };
 
+        const allowedEquips = envTarget === 'praia' ? ['Peso_Corporal', 'Calistenia'] : ['Peso_Corporal'];
+        const preferredEquip = envTarget === 'praia' ? 'Calistenia' : 'Peso_Corporal';
+
         currentRoutine.forEach(bloco => {
             bloco.exercises.forEach(ex => {
                 const dictItem = dictionaryData.find(d => d.name === ex.name);
                 if (dictItem) {
-                    const isForbidden = !dictItem.equip.includes('Peso_Corporal') && !dictItem.equip.includes('Calistenia');
-                    if (isForbidden) {
+                    const exEquip = dictItem.equip || '';
+                    const isForbidden = !allowedEquips.some(eq => exEquip.includes(eq));
+                    const canUpgradeToCalisthenics = (envTarget === 'praia' && exEquip.includes('Peso_Corporal') && !exEquip.includes('Calistenia'));
+                    
+                    if (isForbidden || canUpgradeToCalisthenics) {
                         const targetGroup = getBroadGroup(dictItem.group + " " + dictItem.focus);
+                        
                         let pool = dictionaryData.filter(d => 
                             getBroadGroup(d.group + " " + d.focus) === targetGroup && 
-                            (d.equip.includes('Peso_Corporal') || d.equip.includes('Calistenia')) &&
+                            (d.equip || '').includes(preferredEquip) &&
                             !usedSubstitutes.includes(d.name)
                         );
-                        if(pool.length === 0) pool = dictionaryData.filter(d => getBroadGroup(d.group + " " + d.focus) === targetGroup && (d.equip.includes('Peso_Corporal') || d.equip.includes('Calistenia')));
+                        
+                        if(pool.length === 0) {
+                            pool = dictionaryData.filter(d => 
+                                getBroadGroup(d.group + " " + d.focus) === targetGroup && 
+                                allowedEquips.some(eq => (d.equip || '').includes(eq)) &&
+                                !usedSubstitutes.includes(d.name)
+                            );
+                        }
+
+                        if(pool.length === 0) {
+                            pool = dictionaryData.filter(d => 
+                                getBroadGroup(d.group + " " + d.focus) === targetGroup && 
+                                allowedEquips.some(eq => (d.equip || '').includes(eq))
+                            );
+                        }
                         
                         if(pool.length > 0) {
                             const newEx = pool[Math.floor(Math.random() * pool.length)];
@@ -3030,7 +2970,7 @@ function updateDynamicCards() {
     }
     return { 
         init, filterLibrary, openSwapModal, confirmSwap, startWorkout, openForgeModal, updateForgeOptions, generateForgedWorkout, updateDynamicCards,
-        beginWorkoutExecution, acceptSnap, declineSnap, cancelWorkoutPreview, adaptWorkoutToHome,
+        beginWorkoutExecution, acceptSnap, declineSnap, cancelWorkoutPreview,
         toggleGlobalEnv, updateEnvUI, updateCampaignDashboard, resetCampaign,
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,
         adjustRestTime, changeSets, 
