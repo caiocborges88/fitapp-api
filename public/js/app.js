@@ -41,7 +41,9 @@ var FitApp = (() => {
     let filaDeTreinosIA = [];
     
     // Variáveis do Gráfico e Relógio Global
-    let metricsChartInstance = null; // Guarda a memória do gráfico
+    let metricsChartInstance = null; // Obsoleto (mantido por segurança)
+    let radarChartInstance = null;   // NOVO: Memória do Radar
+    let isolationChartInstance = null; // NOVO: Memória do Gráfico de Isolamento
     let globalTimer = null;
     let workoutStartTime = null;
     let isWorkoutActive = false; 
@@ -1965,63 +1967,148 @@ window.encerrarSessao = function() {
     }
 
 function renderMetricsChart() {
-        const ctx = document.getElementById('metricsChart');
-        const container = document.getElementById('metricsContainer');
-        if (!ctx || !container) return;
-
-        // Resgata o histórico do banco de dados local
-        let history = JSON.parse(safeGet('fitapp_week_log') || '[]');
+        const history = JSON.parse(safeGet('fitapp_week_log') || '[]');
+        const radarCtx = document.getElementById('radarChart');
+        const radarContainer = document.getElementById('radarContainer');
+        const isolationContainer = document.getElementById('isolationContainer');
+        const exSelect = document.getElementById('exerciseIsolationSelect');
         
-        // Se houver menos de 2 treinos, o gráfico não tem o que comparar, então fica oculto
-        if (history.length < 2) {
-            container.style.display = 'none';
+        if (!radarCtx || !radarContainer || !isolationContainer || history.length === 0) {
+            if(radarContainer) radarContainer.style.display = 'none';
+            if(isolationContainer) isolationContainer.style.display = 'none';
             return;
         }
 
-        container.style.display = 'block';
+        radarContainer.style.display = 'block';
+        isolationContainer.style.display = 'block';
 
-        // Filtra apenas os últimos 7 treinos para não espremer o gráfico no celular
-        const recentHistory = history.slice(-7);
+        // --- MATRIZ 1: RADAR DE SIMETRIA (Últimos 30 Dias) ---
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         
-        // Extrai as datas para o eixo X
-        const labels = recentHistory.map(h => {
-            const dateObj = new Date(h.date + 'T12:00:00');
-            return dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-        });
+        const muscleCounts = { 'Peitoral': 0, 'Costas': 0, 'Pernas': 0, 'Ombros': 0, 'Braços': 0, 'Core': 0 };
+        const allExecutedExercises = new Set(); // Para popular o seletor do Gráfico 2
 
-        // Calcula o Volume Total (Carga x Repetições) para o eixo Y
-        const dataPoints = recentHistory.map(h => {
-            let volume = 0;
-            if (h.data && h.data.length > 0) {
-                h.data.forEach(set => {
-                    volume += (parseFloat(set.kg) || 0) * (parseInt(set.reps) || 0);
+        history.forEach(log => {
+            const logDate = new Date(log.date + 'T12:00:00');
+            const isRecent = logDate >= thirtyDaysAgo;
+
+            if (log.data && log.data.length > 0) {
+                log.data.forEach(set => {
+                    allExecutedExercises.add(set.exercise); // Adiciona ao arsenal usado
+                    
+                    if (isRecent) {
+                        const dictItem = typeof dictionaryData !== 'undefined' ? dictionaryData.find(d => d.name === set.exercise) : null;
+                        const focus = dictItem ? dictItem.focus : set.exercise;
+                        const broadGroup = getMuscleGroup(focus);
+                        
+                        if (broadGroup === 'peito') muscleCounts['Peitoral']++;
+                        else if (broadGroup === 'costas') muscleCounts['Costas']++;
+                        else if (broadGroup === 'pernas') muscleCounts['Pernas']++;
+                        else if (broadGroup === 'ombros') muscleCounts['Ombros']++;
+                        else if (broadGroup === 'triceps' || broadGroup === 'biceps') muscleCounts['Braços']++;
+                        else if (broadGroup === 'core') muscleCounts['Core']++;
+                    }
                 });
             }
-            return volume;
         });
 
-        // Destrói o gráfico anterior caso ele já exista para evitar sobreposição
-        if (metricsChartInstance) {
-            metricsChartInstance.destroy();
+        if (radarChartInstance) radarChartInstance.destroy();
+
+        radarChartInstance = new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: Object.keys(muscleCounts),
+                datasets: [{
+                    label: 'Séries no Mês',
+                    data: Object.values(muscleCounts),
+                    backgroundColor: 'rgba(0, 255, 136, 0.2)',
+                    borderColor: '#00ff88',
+                    pointBackgroundColor: '#a64dff',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#a64dff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        pointLabels: { color: '#aaa', font: { size: 10, weight: 'bold' } },
+                        ticks: { display: false, backdropColor: 'transparent' }
+                    }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // --- PREPARAÇÃO DO SELETOR: RASTREADOR DE SOBRECARGA ---
+        if (exSelect) {
+            const currentSelection = exSelect.value;
+            exSelect.innerHTML = '<option value="">Selecione um exercício do histórico...</option>';
+            Array.from(allExecutedExercises).sort().forEach(ex => {
+                exSelect.innerHTML += `<option value="${ex}">${ex}</option>`;
+            });
+            if (currentSelection && allExecutedExercises.has(currentSelection)) {
+                exSelect.value = currentSelection;
+            }
+            renderIsolationChart(); // Dispara a renderização inicial do segundo gráfico
+        }
+    }
+
+    function renderIsolationChart() {
+        const ctx = document.getElementById('isolationChart');
+        const select = document.getElementById('exerciseIsolationSelect');
+        const history = JSON.parse(safeGet('fitapp_week_log') || '[]');
+        
+        if (!ctx || !select || !select.value) {
+            if (isolationChartInstance) isolationChartInstance.destroy();
+            return;
         }
 
-        // Constrói o novo gráfico de elite
-        metricsChartInstance = new Chart(ctx, {
+        const targetExercise = select.value;
+        const chartDataMap = {}; // Agrupar por data para achar a Carga Máxima do dia
+
+        history.forEach(log => {
+            if (log.data) {
+                const setsOfExercise = log.data.filter(set => set.exercise === targetExercise);
+                if (setsOfExercise.length > 0) {
+                    const dateStr = new Date(log.date + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+                    // Encontra a maior carga levantada naquele dia específico para este exercício
+                    const maxKg = Math.max(...setsOfExercise.map(s => parseFloat(s.kg) || 0));
+                    
+                    if (maxKg > 0) {
+                        chartDataMap[dateStr] = maxKg;
+                    }
+                }
+            }
+        });
+
+        const labels = Object.keys(chartDataMap);
+        const dataPoints = Object.values(chartDataMap);
+
+        if (isolationChartInstance) isolationChartInstance.destroy();
+
+        if (labels.length === 0) return;
+
+        isolationChartInstance = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Volume Total (Kg x Reps)',
+                    label: 'Carga Máxima (Kg)',
                     data: dataPoints,
-                    borderColor: '#a64dff', // Roxo elétrico da nossa identidade
-                    backgroundColor: 'rgba(166, 77, 255, 0.2)', // Fundo de vidro translúcido
+                    borderColor: '#a64dff',
+                    backgroundColor: 'rgba(166, 77, 255, 0.1)',
                     borderWidth: 3,
-                    pointBackgroundColor: '#00ff88', // Ponto verde neon
-                    pointBorderColor: '#00ff88',
-                    pointRadius: 5,
-                    pointHoverRadius: 8,
+                    pointBackgroundColor: '#00ff88',
+                    pointRadius: 4,
                     fill: true,
-                    tension: 0.4 // Curvatura suave e futurista
+                    tension: 0.3
                 }]
             },
             options: {
@@ -2029,24 +2116,11 @@ function renderMetricsChart() {
                 maintainAspectRatio: false,
                 plugins: {
                     legend: { display: false },
-                    tooltip: {
-                        backgroundColor: 'rgba(0,0,0,0.8)',
-                        titleColor: '#00ff88',
-                        bodyColor: '#fff',
-                        borderColor: '#a64dff',
-                        borderWidth: 1
-                    }
+                    tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', titleColor: '#00ff88', bodyColor: '#fff', borderColor: '#a64dff', borderWidth: 1 }
                 },
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                        ticks: { color: '#888' }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { color: '#888' }
-                    }
+                    y: { beginAtZero: false, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#888' } },
+                    x: { grid: { display: false }, ticks: { color: '#888', maxTicksLimit: 6 } }
                 }
             }
         });
@@ -2973,6 +3047,7 @@ function updateDynamicCards() {
         beginWorkoutExecution, acceptSnap, declineSnap, cancelWorkoutPreview,
         toggleGlobalEnv, updateEnvUI, updateCampaignDashboard, resetCampaign,
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,
+        renderIsolationChart,
         adjustRestTime, changeSets, 
         toggleAutoPilot, startAutoPilot, stopAutoPilot, 
         openHistoryModal, switchHistoryTab,

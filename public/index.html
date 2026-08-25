@@ -174,10 +174,23 @@
                     <span class="stat-label">Último Treino</span>
                 </div>
             </div>
-            <div class="weekly-calendar" style="background: #1e1e1e; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #333; display: none;" id="metricsContainer">
-                <div style="font-size: 13px; font-weight: bold; color: #a64dff; margin-bottom: 10px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">Evolução de Cargas Máximas</div>
+            <!-- NOVO 1: Radar de Simetria Muscular -->
+            <div class="weekly-calendar" style="background: #1e1e1e; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #333; display: none;" id="radarContainer">
+                <div style="font-size: 13px; font-weight: bold; color: #00ff88; margin-bottom: 5px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">Radar de Simetria (30 Dias)</div>
+                <p style="font-size: 11px; color: #aaa; text-align: center; margin-bottom: 15px;">Volume de séries concluídas por grupamento.</p>
                 <div style="position: relative; height: 250px; width: 100%;">
-                    <canvas id="metricsChart"></canvas>
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- NOVO 2: Rastreador de Arma Específica (Isolamento de Carga) -->
+            <div class="weekly-calendar" style="background: #1e1e1e; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #333; display: none;" id="isolationContainer">
+                <div style="font-size: 13px; font-weight: bold; color: #a64dff; margin-bottom: 15px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">Rastreador de Sobrecarga</div>
+                <select id="exerciseIsolationSelect" class="select-level" style="width: 100%; border-color: #a64dff; margin-bottom: 15px; font-size: 13px;" onchange="FitApp.renderIsolationChart()">
+                    <option value="">Selecione um exercício do histórico...</option>
+                </select>
+                <div style="position: relative; height: 200px; width: 100%;">
+                    <canvas id="isolationChart"></canvas>
                 </div>
             </div>
             <div class="weekly-calendar" style="background: #1e1e1e; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #333;">
