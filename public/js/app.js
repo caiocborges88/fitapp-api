@@ -731,6 +731,7 @@ function removeExercise(bIndex, eIndex) {
                 if (method === 'ppl' || method === 'abc') subOpt = type === 'A' ? 'push' : (type === 'B' ? 'pull' : 'legs');
                 else if (method === 'biset_antagonista') subOpt = type === 'A' ? 'peito_costa' : (type === 'B' ? 'biceps_triceps' : 'quad_post');
                 else if (method === 'biset_agonista') subOpt = type === 'A' ? 'peito' : (type === 'B' ? 'costa' : 'perna');
+                else if (method === 'biset_sinergista') subOpt = type === 'A' ? 'peito_triceps' : (type === 'B' ? 'costa_biceps' : 'perna_ombro');
                 else subOpt = type;
 
                 // Carrega a Lista Negra (Exercícios do Mesociclo Anterior)
@@ -2441,6 +2442,13 @@ function renderMetricsChart() {
                 <option value="costa_triceps">Costas (Grande) + Tríceps (Pequeno)</option>
                 <option value="ombro_perna">Ombros + Pernas</option>
             `;
+        } else if (method === 'biset_sinergista') {
+            subLabel.textContent = "Pares Sinergistas (Principal + Auxiliar):";
+            subSelect.innerHTML = `
+                <option value="peito_triceps">Peito + Tríceps</option>
+                <option value="costa_biceps">Costas + Bíceps</option>
+                <option value="perna_ombro">Pernas + Ombros</option>
+            `;
         } else {
             subBox.style.display = 'none'; // Circuito e Calistenia não precisam de sub-opção
         }
@@ -2615,6 +2623,10 @@ function updateDynamicCards() {
             tA="Antagonista A"; sA="Peito + Costas";
             tB="Antagonista B"; sB="Bíceps + Tríceps";
             tC="Antagonista C"; sC="Quadríceps + Posterior";
+        } else if (method === 'biset_sinergista') {
+            tA="Sinergista A"; sA="Peito & Tríceps";
+            tB="Sinergista B"; sB="Costas & Bíceps";
+            tC="Sinergista C"; sC="Pernas & Ombros";
         } else if (method === 'circuito') {
             tA="Circuito 1"; sA="Metabólico FullBody";
             tB="Circuito 2"; sB="Cardio & Força";
@@ -2806,6 +2818,26 @@ function updateDynamicCards() {
                 if(e1 && e2) generatedBlocks.push({ title: `Bi-Set Exaustão ${i}`, exercises: [ {name: e1.name, sets: 3, target: "10 rep"}, {name: e2.name, sets: 3, target: "Até a falha"} ]});
             }
         } 
+        // --- NOVO: BI-SETS SINERGISTA ---
+        else if (method === 'biset_sinergista') {
+            let isA = (subOpt === 'A' || subOpt === 'peito_triceps');
+            let isB = (subOpt === 'B' || subOpt === 'costa_biceps');
+            
+            let g1 = isA ? ['peito_esternocostal', 'peito_clavicular', 'peito_costal'] : (isB ? ['costa_largura', 'costa_espessura', 'costa_isolado'] : ['perna_quadriceps', 'perna_posterior_gluteo', 'perna_adutor_abdutor']);
+            let g2 = isA ? ['triceps_longa', 'triceps_lateral_medial', 'triceps_global'] : (isB ? ['biceps_longa', 'biceps_curta', 'biceps_braquial'] : ['ombro_anterior', 'ombro_lateral', 'ombro_posterior']);
+            
+            for(let i=1; i<=3; i++) {
+                let e1 = getEx(g1, null, used); if(e1) used.push(e1.name); 
+                let e2 = getEx(g2, null, used); if(e2) used.push(e2.name);
+                if(e1 && e2) generatedBlocks.push({ 
+                    title: `Bi-Set Sinergista ${i}`, 
+                    exercises: [ 
+                        {name: e1.name, sets: 4, target: "10-12 rep"}, 
+                        {name: e2.name, sets: 4, target: "10-12 rep"} 
+                    ]
+                });
+            }
+        }
         // --- CIRCUITO ---
         else if (method === 'circuito') {
             let cExs = [];
