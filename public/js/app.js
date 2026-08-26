@@ -3235,87 +3235,96 @@ function updateDynamicCards() {
                 if (validExs.length > 0) generatedBlocks.push({ title: b.title, exercises: validExs });
             });
         }
-        // --- CIRCUITO ---
+        // --- CIRCUITO METABÓLICO (FullBody - 8 Estações) ---
         else if (method === 'circuito') {
-            let cExs = [];
+            let blueprint = [];
+            
             if (rawProfile === 'definicao') {
                 // Circuito Extremo de Definição (8 Estações para Secar)
-                let f1 = getEx(['esporte_aceleracao'], 'peso_corporal', used, true) || getEx(['cardio_motor'], null, used); if(f1) { used.push(f1.name); cExs.push({name: f1.name, sets: 4, target: "30 seg"}); }
-                let f2 = getEx(['perna_quadriceps'], 'peso_corporal', used, true) || getEx(['perna_quadriceps'], null, used); if(f2) { used.push(f2.name); cExs.push({name: f2.name, sets: 4, target: "15-20 rep"}); }
-                let f3 = getEx(['costa_largura'], 'maquina', used) || getEx(['costa_espessura'], null, used); if(f3) { used.push(f3.name); cExs.push({name: f3.name, sets: 4, target: "15-20 rep"}); }
-                let f4 = getEx(['perna_posterior_gluteo'], 'halter', used) || getEx(['perna_posterior_gluteo'], null, used); if(f4) { used.push(f4.name); cExs.push({name: f4.name, sets: 4, target: "15-20 rep"}); }
-                let f5 = getEx(['peito_esternocostal'], 'peso_corporal', used, true) || getEx(['peito_esternocostal'], null, used); if(f5) { used.push(f5.name); cExs.push({name: f5.name, sets: 4, target: "15-20 rep"}); }
-                let f6 = getEx(['esporte_pliometria'], 'peso_corporal', used, true) || getEx(['cardio_resistencia'], null, used); if(f6) { used.push(f6.name); cExs.push({name: f6.name, sets: 4, target: "45 seg"}); }
-                let f7 = getEx(['core_profundo', 'core_supra'], 'peso_corporal', used, true) || getEx(['core_supra'], null, used); if(f7) { used.push(f7.name); cExs.push({name: f7.name, sets: 4, target: "1 min"}); }
-                let f8 = getEx(['cardio_resistencia'], 'peso_corporal', used, true) || getEx(['cardio_motor'], null, used); if(f8) { used.push(f8.name); cExs.push({name: f8.name, sets: 4, target: "Até a falha"}); }
-                if(cExs.length > 0) generatedBlocks.push({ title: "Circuito Extremo (Derretedor)", exercises: cExs });
+                blueprint = [{
+                    title: "Circuito Extremo (Derretedor)",
+                    slots: [
+                        safeSlot(['esporte_aceleracao', 'cardio_motor'], 'peso_corporal', "30 seg"),
+                        safeSlot(['perna_quadriceps'], 'peso_corporal', "15-20 rep"),
+                        safeSlot(['costa_largura'], 'maquina', "15-20 rep"),
+                        safeSlot(['perna_posterior_gluteo'], 'halter', "15-20 rep"),
+                        safeSlot(['peito_esternocostal'], 'peso_corporal', "15-20 rep"),
+                        safeSlot(['esporte_pliometria'], 'peso_corporal', "45 seg"),
+                        safeSlot(['core_profundo', 'core_supra'], 'peso_corporal', "1 min"),
+                        safeSlot(['cardio_resistencia'], 'peso_corporal', "Até a falha")
+                    ]
+                }];
             } else {
                 // Circuito FullBody Padrão
-                let fP = getEx(['perna_quadriceps'], 'peso_corporal', used, true) || getEx(['perna_quadriceps'], null, used); if(fP) { used.push(fP.name); cExs.push({name: fP.name, sets: 4, target: "15-20 rep"}); }
-                let fC = getEx(routeProfile === 'feminino' ? ['perna_posterior_gluteo'] : ['peito_esternocostal'], 'peso_corporal', used, true) || getEx(routeProfile === 'feminino' ? ['perna_posterior_gluteo'] : ['peito_esternocostal'], null, used); if(fC) { used.push(fC.name); cExs.push({name: fC.name, sets: 4, target: "15-20 rep"}); }
-                let fB = getEx(['costa_espessura', 'costa_largura'], 'maquina', used) || getEx(['costa_espessura'], null, used); if(fB) { used.push(fB.name); cExs.push({name: fB.name, sets: 4, target: "15-20 rep"}); }
-                let fS = getEx(['ombro_anterior', 'ombro_lateral'], 'halter', used) || getEx(['ombro_anterior'], null, used); if(fS) { used.push(fS.name); cExs.push({name: fS.name, sets: 4, target: "15-20 rep"}); }
-                if(cExs.length > 0) generatedBlocks.push({ title: "Rodada Metabólica", exercises: cExs });
+                blueprint = [{
+                    title: "Rodada Metabólica FullBody",
+                    slots: [
+                        safeSlot(['outros', 'mobilidade', 'cardio_motor'], null, "1 min"),
+                        safeSlot(['esporte_pliometria', 'cardio_motor'], 'peso_corporal', "45 seg"),
+                        safeSlot(['perna_quadriceps'], 'peso_corporal', "15-20 rep"),
+                        safeSlot(['costa_espessura', 'costa_largura'], 'maquina', "15-20 rep"),
+                        safeSlot(['perna_posterior_gluteo'], 'halter', "15-20 rep"),
+                        safeSlot(['peito_esternocostal', 'ombro_anterior'], 'peso_corporal', "15-20 rep"),
+                        safeSlot(['core_obliquo', 'core_supra'], 'peso_corporal', "15-20 rep"),
+                        safeSlot(['cardio_resistencia', 'cardio_motor'], 'peso_corporal', "1 min")
+                    ]
+                }];
             }
+
+            blueprint.forEach(b => {
+                const validExs = b.slots.filter(s => s !== null);
+                if (validExs.length > 0) generatedBlocks.push({ title: b.title, exercises: validExs });
+            });
         }
-        // --- CALISTENIA ---
+        
+        // --- CALISTENIA (Peso do Corpo e Barras) ---
         else if (method === 'calistenia') {
+            let blueprint = [];
             let isA = (subOpt === 'A' || subOpt === 'push');
             let isB = (subOpt === 'B' || subOpt === 'pull');
             
-            let f1;
             if (routeProfile === 'feminino') {
-                f1 = isA ? ['perna_quadriceps', 'perna_posterior_gluteo'] : (isB ? ['core_supra', 'core_infra', 'perna_adutor_abdutor'] : ['perna_quadriceps', 'perna_posterior_gluteo']);
+                if (isA) {
+                    blueprint = [
+                        { title: "Força Inferior Frontal", slots: [ safeSlot(['perna_quadriceps'], 'peso_corporal', "Falha"), safeSlot(['perna_quadriceps'], 'peso_corporal', "Falha") ] },
+                        { title: "Força Inferior Posterior", slots: [ safeSlot(['perna_posterior_gluteo'], 'peso_corporal', "Falha"), safeSlot(['perna_posterior_gluteo'], 'peso_corporal', "Falha") ] },
+                        { title: "Core Isométrico", slots: [ safeSlot(['core_profundo'], 'peso_corporal', "Isometria Máx") ] }
+                    ];
+                } else if (isB) {
+                    blueprint = [
+                        { title: "Core Dinâmico", slots: [ safeSlot(['core_supra'], 'peso_corporal', "20 rep"), safeSlot(['core_infra'], 'peso_corporal', "20 rep") ] },
+                        { title: "Estabilidade Inferior", slots: [ safeSlot(['perna_adutor_abdutor'], 'peso_corporal', "20 rep"), safeSlot(['panturrilha_gastro'], 'peso_corporal', "Falha") ] }
+                    ];
+                } else {
+                    blueprint = [
+                        { title: "FullBody Calistenia", slots: [ safeSlot(['perna_quadriceps'], 'peso_corporal', "Falha"), safeSlot(['perna_posterior_gluteo'], 'peso_corporal', "Falha"), safeSlot(['core_supra'], 'peso_corporal', "Falha") ] }
+                    ];
+                }
             } else {
-                f1 = isA ? ['peito_esternocostal', 'peito_clavicular', 'triceps_global'] : (isB ? ['costa_largura', 'costa_espessura', 'biceps_global'] : ['perna_quadriceps', 'perna_posterior_gluteo']);
+                if (isA) { // Push
+                    blueprint = [
+                        { title: "Força Relativa (Empurrar)", slots: [ safeSlot(['peito_esternocostal', 'peito_clavicular'], 'calistenia', "Falha"), safeSlot(['triceps_global'], 'peso_corporal', "Falha") ] },
+                        { title: "Isolamento Corporal", slots: [ safeSlot(['peito_esternocostal'], 'peso_corporal', "Falha") ] },
+                        { title: "Core Isométrico", slots: [ safeSlot(['core_profundo'], 'peso_corporal', "Isometria Máx") ] }
+                    ];
+                } else if (isB) { // Pull
+                    blueprint = [
+                        { title: "Força Relativa (Puxar)", slots: [ safeSlot(['costa_largura'], 'calistenia', "Falha"), safeSlot(['biceps_global'], 'calistenia', "Falha") ] },
+                        { title: "Sinergia Corporal", slots: [ safeSlot(['costa_espessura'], 'calistenia', "Falha") ] },
+                        { title: "Core Dinâmico", slots: [ safeSlot(['core_supra', 'core_infra'], 'peso_corporal', "Falha") ] }
+                    ];
+                } else { // Legs
+                    blueprint = [
+                        { title: "Base Inferior", slots: [ safeSlot(['perna_quadriceps'], 'peso_corporal', "Falha"), safeSlot(['perna_posterior_gluteo'], 'peso_corporal', "Falha") ] },
+                        { title: "Resistência", slots: [ safeSlot(['panturrilha_gastro'], 'peso_corporal', "Falha") ] }
+                    ];
+                }
             }
-            
-            let cal1 = getEx(f1, 'calistenia', used, true) || getEx(f1, 'peso_corporal', used, true); if(cal1) used.push(cal1.name);
-            let cal2 = getEx(f1, 'peso_corporal', used, true); if(cal2) used.push(cal2.name);
-            let cal3 = getEx(['core_profundo', 'core_infra'], 'peso_corporal', used, true); if(cal3) used.push(cal3.name);
-            
-            if(cal1) generatedBlocks.push({ title: "Força Relativa Primária", exercises: [ {name: cal1.name, sets: 4, target: "Falha"}, ...(cal2 ? [{name: cal2.name, sets: 4, target: "Falha"}] : []) ]});
-            if(cal3) generatedBlocks.push({ title: "Core Isométrico", exercises: [ {name: cal3.name, sets: 3, target: "Isometria Máx"} ]});
-        }
 
-        // ==========================================================
-        // 🔥 MÓDULO DE PÓS-PROCESSAMENTO PARA DEFINIÇÃO (CUTTING)
-        // ==========================================================
-        if (rawProfile === 'definicao' && method !== 'circuito' && method !== 'calistenia') {
-            // 1. Aumenta os alvos de repetição em todo o treino para esgotamento
-            generatedBlocks.forEach(b => {
-                b.exercises.forEach(ex => {
-                    const t = ex.target.toLowerCase();
-                    if (t.includes('8-10')) ex.target = '12-15 rep';
-                    else if (t.includes('10-12')) ex.target = '15-20 rep';
-                    else if (t.includes('12-15')) ex.target = '15-20 rep';
-                    else if (!t.includes('falha') && !t.includes('seg') && !t.includes('min')) ex.target = '15-20 rep';
-                });
+            blueprint.forEach(b => {
+                const validExs = b.slots.filter(s => s !== null);
+                if (validExs.length > 0) generatedBlocks.push({ title: b.title, exercises: validExs });
             });
-
-            // 2. Anexa o "Finisher" Metabólico de forma contextual
-            let fName = "";
-            let fFocus = [];
-            
-            if (subOpt === 'push' || subOpt === 'A' || subOpt === 'peito_costa' || subOpt === 'peito_triceps' || subOpt === 'peito') {
-                fFocus = ['cardio_motor', 'cardio_resistencia'];
-                fName = "🔥 Finisher: Esgotamento Aeróbico";
-            } else if (subOpt === 'pull' || subOpt === 'B' || subOpt === 'biceps_triceps' || subOpt === 'costa_biceps' || subOpt === 'costa') {
-                fFocus = ['cardio_resistencia', 'core_obliquo'];
-                fName = "🔥 Finisher: Queima Anaeróbica";
-            } else { 
-                fFocus = ['esporte_pliometria', 'esporte_agilidade', 'esporte_aceleracao'];
-                fName = "🔥 Finisher: Pliometria e Esporte";
-            }
-            
-            let finisherEx = getEx(fFocus, 'peso_corporal', used, true) || getEx(fFocus, null, used);
-            if (finisherEx) {
-                used.push(finisherEx.name);
-                generatedBlocks.push({
-                    title: fName,
-                    exercises: [{ name: finisherEx.name, sets: 4, target: "45-60 seg (Máxima Intensidade)" }]
-                });
-            }
         }
 
         // ==========================================================
@@ -3328,18 +3337,17 @@ function updateDynamicCards() {
             }
         }, 500);
 
-        // ADIÇÃO DO BLOCO DE ABDÔMEN (Se a chave estiver ativada e já não for circuito)
+        // ==========================================================
+        // 🛡️ ADIÇÃO DO BLOCO DE ABDÔMEN (Bônus Opcional)
+        // ==========================================================
         if (includeAbs && method !== 'circuito') {
-            let abs1 = getEx(['core_supra', 'core_infra'], 'peso_corporal', used, true) || getEx(['core_supra'], null, used, true); if(abs1) used.push(abs1.name);
-            let abs2 = getEx(['core_obliquo'], 'peso_corporal', used, true) || getEx(['core_profundo'], 'peso_corporal', used, true); if(abs2 && abs2.name !== (abs1?abs1.name:'')) used.push(abs2.name);
+            let abs1 = safeSlot(['core_supra', 'core_infra'], 'peso_corporal', "15-20 rep");
+            let abs2 = safeSlot(['core_obliquo', 'core_profundo'], 'peso_corporal', "Até a falha");
             
             if (abs1) {
                 generatedBlocks.push({ 
                     title: "Bloco Bônus: Core & Abdômen", 
-                    exercises: [ 
-                        {name: abs1.name, sets: 3, target: "15-20 rep"}, 
-                        ...(abs2 ? [{name: abs2.name, sets: 3, target: "Até a falha"}] : []) 
-                    ]
+                    exercises: abs2 ? [abs1, abs2] : [abs1]
                 });
             }
         }
