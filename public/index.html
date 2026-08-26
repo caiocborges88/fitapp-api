@@ -13,6 +13,43 @@
 
     <!-- Chamando o CSS -->
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- 🎨 NOVO: MOTOR DE TEMAS (Cyber Rose) -->
+    <style id="femaleThemeCSS">
+        body.theme-feminino {
+            --pink-primary: #ff1a75;   /* Rosa Choque Escuro (Substitui Verde) */
+            --pink-secondary: #ff99ff; /* Rosa Claro (Substitui Roxo) */
+        }
+        
+        /* 1. Substituição Brutal de Cores Inline (Sequestro de Atributo) */
+        body.theme-feminino [style*="color: #00ff88"] { color: var(--pink-primary) !important; text-shadow: 0 0 10px rgba(255, 26, 117, 0.3) !important; }
+        body.theme-feminino [style*="color: #a64dff"] { color: var(--pink-secondary) !important; }
+        
+        body.theme-feminino [style*="background: #00ff88"] { background: var(--pink-primary) !important; color: #fff !important; }
+        body.theme-feminino [style*="background: #a64dff"] { background: var(--pink-secondary) !important; color: #111 !important; }
+        
+        body.theme-feminino [style*="border-color: #00ff88"], 
+        body.theme-feminino [style*="border: 1px solid #00ff88"] { border-color: var(--pink-primary) !important; }
+        
+        body.theme-feminino [style*="border-color: #a64dff"], 
+        body.theme-feminino [style*="border: 1px solid #a64dff"], 
+        body.theme-feminino [style*="border: 2px solid #a64dff"] { border-color: var(--pink-secondary) !important; }
+        
+        body.theme-feminino [style*="border-left: 4px solid #00ff88"] { border-left-color: var(--pink-primary) !important; }
+        body.theme-feminino [style*="border-left: 4px solid #a64dff"],
+        body.theme-feminino [style*="border-left-color: #a64dff"] { border-left-color: var(--pink-secondary) !important; }
+        
+        body.theme-feminino [style*="rgba(0, 255, 136, 0.1)"] { background: rgba(255, 26, 117, 0.1) !important; }
+        body.theme-feminino [style*="rgba(166, 77, 255, 0.1)"] { background: rgba(255, 153, 255, 0.1) !important; }
+        body.theme-feminino [style*="rgba(166, 77, 255, 0.2)"] { background: rgba(255, 153, 255, 0.2) !important; }
+        
+        /* 2. Overrides de Classes Padrão (Navegação, Barras e Botões) */
+        body.theme-feminino .btn-start-pulse { background: var(--pink-primary) !important; box-shadow: 0 0 15px rgba(255, 26, 117, 0.5) !important; color: #fff !important; }
+        body.theme-feminino .progress-bar { background: var(--pink-primary) !important; box-shadow: 0 0 10px var(--pink-primary) !important; }
+        body.theme-feminino nav button.active { color: var(--pink-primary) !important; border-top: 3px solid var(--pink-primary) !important; background: rgba(255, 26, 117, 0.1) !important; }
+        body.theme-feminino .stat-box { border-color: var(--pink-primary) !important; background: rgba(255, 26, 117, 0.05) !important; }
+        body.theme-feminino .stat-value { color: var(--pink-primary) !important; }
+    </style>
 </head>
 <body>
     <!-- NOVO: Escudo de Autenticação -->

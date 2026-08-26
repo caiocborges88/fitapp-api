@@ -2126,8 +2126,17 @@ function renderMetricsChart() {
         });
     }
     
+    function applyTheme() {
+        const profile = safeGet('fitapp_profile') || 'masculino';
+        if (profile === 'feminino') {
+            document.body.classList.add('theme-feminino');
+        } else {
+            document.body.classList.remove('theme-feminino');
+        }
+    }
+
     function init() {
-        els.profileSelector = document.getElementById('profileSelector'); 
+        els.profileSelector = document.getElementById('profileSelector');
         els.styleSelector = document.getElementById('styleSelector');
         els.levelSelector = document.getElementById('levelSelector'); 
         els.workoutArea = document.getElementById('workoutArea'); 
@@ -2161,7 +2170,7 @@ function renderMetricsChart() {
         // NOVO: Resgata o perfil salvo no cache do celular
         const savedProfile = safeGet('fitapp_profile');
         if (savedProfile && els.profileSelector) els.profileSelector.value = savedProfile;
-
+        applyTheme(); // 🎨 Aplica a identidade visual instantaneamente no boot do app
         const savedStyle = safeGet('fitapp_style');
         if (savedStyle && els.styleSelector) els.styleSelector.value = savedStyle;
         
@@ -2197,6 +2206,7 @@ function renderMetricsChart() {
         // NOVO: Ouve as mudanças no seletor de perfil, salva e recarrega o treino
         if (els.profileSelector) els.profileSelector.addEventListener('change', () => {
             safeSet('fitapp_profile', els.profileSelector.value);
+            applyTheme(); // 🎨 Troca a paleta de cores em tempo real
             if(currentWorkoutType) loadWorkout(); 
             showToast(els.profileSelector.value === 'feminino' ? 'Perfil Feminino ativado.' : 'Perfil Padrão ativado.');
         });
