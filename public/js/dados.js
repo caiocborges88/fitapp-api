@@ -169,7 +169,58 @@ const dictionaryData = [
     { name: "Bear Crawl (Caminhada do Urso)", group: "Core", focus: "Estabilização/Anti-extensão", env: "Ar_Livre, Casa", equip: "Peso_Corporal", desc: "Trabalho focado em estabilização/anti-extensão (core)." },
     { name: "Drills de Coordenação na Escada (Icky Shuffle, In-In-Out-Out)", group: "Deslocamento/Esporte", focus: "Agilidade e Frenagem", env: "Ar_Livre", equip: "Funcional_Esportivo", desc: "Trabalho focado em agilidade e frenagem (deslocamento/esporte)." },
     { name: "Sprints Vai-e-Vem / Suicídios", group: "Deslocamento/Esporte", focus: "Agilidade e Frenagem", env: "Ar_Livre", equip: "Peso_Corporal", desc: "Trabalho focado em agilidade e frenagem (deslocamento/esporte)." },
-    { name: "Saltos Unilaterais com Estabilização", group: "Deslocamento/Esporte", focus: "Pliometria", env: "Ar_Livre", equip: "Peso_Corporal", desc: "Trabalho focado em pliometria (deslocamento/esporte)." }
+    { name: "Saltos Unilaterais com Estabilização", group: "Deslocamento/Esporte", focus: "Pliometria", env: "Ar_Livre", equip: "Peso_Corporal", desc: "Trabalho focado em pliometria (deslocamento/esporte)." },
+    // --- COMPLEXO GLÚTEO ---
+    { name: "Elevação Pélvica (Barra/Máquina/Halter)", group: "Pernas", focus: "Glúteo Máximo", env: "Academia", equip: "Maquinas_Polias, Barras_Anilhas, Pesos_Livres", desc: "Foco total na contração de pico do glúteo máximo." },
+    { name: "Ponte de Glúteos (Anilha no quadril)", group: "Pernas", focus: "Glúteo Máximo", env: "Academia, Casa", equip: "Pesos_Livres", desc: "Variação de solo para isolamento do glúteo." },
+    { name: "Agachamento Búlgaro (Tronco inclinado)", group: "Pernas", focus: "Glúteo Máximo", env: "Academia", equip: "Maquinas_Polias, Pesos_Livres", desc: "Inclinar o tronco joga a tensão do quadríceps para o glúteo." },
+    { name: "Extensão de Quadril na Polia", group: "Pernas", focus: "Glúteo Máximo", env: "Academia", equip: "Maquinas_Polias", desc: "Isolamento contínuo em cabo." },
+    { name: "Coice na Máquina", group: "Pernas", focus: "Glúteo Máximo", env: "Academia", equip: "Maquinas_Polias", desc: "Isolamento pesado de glúteo." },
+    { name: "Reverse Hyper", group: "Pernas", focus: "Glúteo Máximo", env: "Academia", equip: "Maquinas_Polias", desc: "Máquina específica para cadeia posterior." },
+    { name: "Pull-through na Polia Baixa", group: "Pernas", focus: "Glúteo Máximo", env: "Academia", equip: "Maquinas_Polias", desc: "Extensão de quadril com vetor horizontal." },
+    
+    // --- GLÚTEO MÉDIO/MÍNIMO ---
+    { name: "Cadeira Abdutora (Tronco Inclinado)", group: "Pernas", focus: "Glúteo Médio/Mínimo", env: "Academia", equip: "Maquinas_Polias", desc: "Isolamento lateral do quadril." },
+    { name: "Abdução em Pé na Polia", group: "Pernas", focus: "Glúteo Médio/Mínimo", env: "Academia", equip: "Maquinas_Polias", desc: "Trabalho unilateral de abdução." },
+    { name: "Elevação Lateral Deitada (Caneleira/Halter)", group: "Pernas", focus: "Glúteo Médio/Mínimo", env: "Academia, Casa", equip: "Pesos_Livres", desc: "Trabalho isolado de glúteo médio." },
+    { name: "Ostra / Clamshell", group: "Pernas", focus: "Glúteo Médio/Mínimo", env: "Academia, Casa", equip: "Pesos_Livres, Funcional_Esportivo", desc: "Rotação externa do quadril." },
+    { name: "Passada Lateral com Elástico (Band)", group: "Pernas", focus: "Glúteo Médio/Mínimo", env: "Academia, Ar_Livre", equip: "Funcional_Esportivo", desc: "Ativação dinâmica do glúteo médio." },
+
+    // --- QUADRÍCEPS (VASTOS) ---
+    { name: "Agachamento Frontal (Barra)", group: "Pernas", focus: "Quadríceps", env: "Academia", equip: "Barras_Anilhas", desc: "Desloca o centro de gravidade para os vastos." },
+    { name: "Pendulum Squat", group: "Pernas", focus: "Quadríceps", env: "Academia", equip: "Maquinas_Polias", desc: "Máquina avançada de isolamento de quadríceps." },
+    { name: "Agachamento no Smith (Pés à frente)", group: "Pernas", focus: "Quadríceps", env: "Academia", equip: "Maquinas_Polias", desc: "Isola o quadríceps tirando a ação do glúteo." },
+    { name: "Step-up na Caixa (Halteres)", group: "Pernas", focus: "Quadríceps", env: "Academia, Ar_Livre", equip: "Pesos_Livres", desc: "Força unilateral e estabilidade." },
+
+    // --- QUADRÍCEPS (RETO FEMORAL) ---
+    { name: "Extensão de Joelho Unilateral (Polia)", group: "Pernas", focus: "Reto Femoral", env: "Academia", equip: "Maquinas_Polias", desc: "Tensão constante do cabo no reto femoral." },
+    { name: "Sissy Squat (Avançado)", group: "Pernas", focus: "Reto Femoral", env: "Academia, Casa", equip: "Peso_Corporal, Pesos_Livres", desc: "Alongamento extremo sob tensão do quadríceps." },
+
+    // --- ISQUIOTIBIAIS (PORÇÃO ALONGADA) ---
+    { name: "Levantamento Terra Romeno (RDL)", group: "Pernas", focus: "Isquiotibiais (Porção Alongada)", env: "Academia", equip: "Barras_Anilhas, Pesos_Livres", desc: "Foco no alongamento da cadeia posterior." },
+    { name: "RDL Unilateral (Halter/Kettlebell)", group: "Pernas", focus: "Isquiotibiais (Porção Alongada)", env: "Academia", equip: "Pesos_Livres", desc: "Trabalho unilateral de estabilidade e alongamento." },
+
+    // --- ISQUIOTIBIAIS (PORÇÃO ENCURTADA) ---
+    { name: "Flexora em Pé (Máquina/Cabo)", group: "Pernas", focus: "Isquiotibiais (Porção Encurtada)", env: "Academia", equip: "Maquinas_Polias", desc: "Pico de contração na flexão de joelho." },
+    { name: "Flexão de Pernas Deitado (Halter entre os pés)", group: "Pernas", focus: "Isquiotibiais (Porção Encurtada)", env: "Academia, Casa", equip: "Pesos_Livres", desc: "Alternativa caseira para mesa flexora." },
+
+    // --- ADUTORES ---
+    { name: "Adução em Pé na Polia", group: "Pernas", focus: "Adutores", env: "Academia", equip: "Maquinas_Polias", desc: "Trabalho unilateral para a parte interna da coxa." },
+    { name: "Agachamento Sumô", group: "Pernas", focus: "Adutores", env: "Academia", equip: "Barras_Anilhas, Pesos_Livres", desc: "Ampla abertura recruta fortemente os adutores." },
+    { name: "Prancha de Copenhagen", group: "Pernas", focus: "Adutores", env: "Academia, Casa", equip: "Peso_Corporal, Pesos_Livres", desc: "Trabalho de força isométrica/dinâmica avançada para adutores." },
+
+    // --- PANTURRILHAS (GASTROCNÊMIOS) ---
+    { name: "Elevação no Smith (Com Step)", group: "Pernas", focus: "Panturrilhas (Gastrocnêmios)", env: "Academia", equip: "Maquinas_Polias", desc: "Amplitude máxima com pernas estendidas." },
+    { name: "Elevação Unilateral com Halter (No Step)", group: "Pernas", focus: "Panturrilhas (Gastrocnêmios)", env: "Academia, Casa", equip: "Pesos_Livres", desc: "Trabalho isolado para corrigir assimetrias." },
+
+    // --- PANTURRILHAS (SÓLEO) ---
+    { name: "Máquina de Gêmeos Sentado", group: "Pernas", focus: "Panturrilhas (Sóleo)", env: "Academia", equip: "Maquinas_Polias", desc: "Joelhos flexionados desativam o gastrocnêmio e focam no sóleo." },
+    { name: "Elevação Sentado com Halteres nos Joelhos", group: "Pernas", focus: "Panturrilhas (Sóleo)", env: "Academia, Casa", equip: "Pesos_Livres", desc: "Alternativa livre para desenvolvimento do sóleo." },
+    { name: "Elevação Isométrica no Agachamento Baixo", group: "Pernas", focus: "Panturrilhas (Sóleo)", env: "Academia, Casa", equip: "Peso_Corporal", desc: "Trabalho de força na posição profunda." },
+
+    // --- TIBIAL ANTERIOR ---
+    { name: "Flexão Dorsal na Máquina/Polia Baixa", group: "Pernas", focus: "Tibial Anterior", env: "Academia", equip: "Maquinas_Polias", desc: "Trabalha a parte frontal da canela, prevenindo canelite." },
+    { name: "Levantamento com Tib Bar", group: "Pernas", focus: "Tibial Anterior", env: "Academia", equip: "Barras_Anilhas", desc: "Isolamento avançado de tibial." },
 ];
 
 // // 1. BANCO DE DADOS EXPANDIDO (Modo Bi-set e Modo Tradicional)
