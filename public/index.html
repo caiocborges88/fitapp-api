@@ -14,41 +14,71 @@
     <!-- Chamando o CSS -->
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- 🎨 NOVO: MOTOR DE TEMAS (Cyber Rose) -->
-    <style id="femaleThemeCSS">
-        body.theme-feminino {
-            --pink-primary: #ff1a75;   /* Rosa Choque Escuro (Substitui Verde) */
-            --pink-secondary: #ff99ff; /* Rosa Claro (Substitui Roxo) */
+    <!-- 🎨 MOTOR DE TEMAS DINÂMICOS -->
+    <style id="dynamicThemesCSS">
+        /* Variáveis Base (Não ativadas até que a classe chame) */
+        :root {
+            --theme-primary: #00ff88;
+            --theme-secondary: #a64dff;
+            --theme-primary-rgb: 0, 255, 136;
+            --theme-secondary-rgb: 166, 77, 255;
         }
+
+        /* 👩 Tema: Feminino (Cyber Rose) */
+        body.theme-feminino {
+            --theme-primary: #ff1a75;
+            --theme-secondary: #ff99ff;
+            --theme-primary-rgb: 255, 26, 117;
+            --theme-secondary-rgb: 255, 153, 255;
+        }
+
+        /* 🔥 Tema: Definição (Cutting Fire) */
+        body.theme-definicao {
+            --theme-primary: #ff4444;
+            --theme-secondary: #ffaa00;
+            --theme-primary-rgb: 255, 68, 68;
+            --theme-secondary-rgb: 255, 170, 0;
+        }
+
+        /* 🪖 Tema: Tático (Stealth Blue) */
+        body.theme-tatico {
+            --theme-primary: #4da3ff;
+            --theme-secondary: #888888;
+            --theme-primary-rgb: 77, 163, 255;
+            --theme-secondary-rgb: 136, 136, 136;
+        }
+
+        /* 1. SEQUESTRO DE ATRIBUTOS (Intervenção Inline) */
+        /* Só é ativado se o body tiver alguma classe que comece com "theme-" */
+        body[class*="theme-"] [style*="color: #00ff88"] { color: var(--theme-primary) !important; text-shadow: 0 0 10px rgba(var(--theme-primary-rgb), 0.3) !important; }
+        body[class*="theme-"] [style*="color: #a64dff"] { color: var(--theme-secondary) !important; }
         
-        /* 1. Substituição Brutal de Cores Inline (Sequestro de Atributo) */
-        body.theme-feminino [style*="color: #00ff88"] { color: var(--pink-primary) !important; text-shadow: 0 0 10px rgba(255, 26, 117, 0.3) !important; }
-        body.theme-feminino [style*="color: #a64dff"] { color: var(--pink-secondary) !important; }
+        body[class*="theme-"] [style*="background: #00ff88"] { background: var(--theme-primary) !important; color: #fff !important; }
+        body[class*="theme-"] [style*="background: #a64dff"] { background: var(--theme-secondary) !important; color: #111 !important; }
         
-        body.theme-feminino [style*="background: #00ff88"] { background: var(--pink-primary) !important; color: #fff !important; }
-        body.theme-feminino [style*="background: #a64dff"] { background: var(--pink-secondary) !important; color: #111 !important; }
+        body[class*="theme-"] [style*="border-color: #00ff88"], 
+        body[class*="theme-"] [style*="border: 1px solid #00ff88"] { border-color: var(--theme-primary) !important; }
         
-        body.theme-feminino [style*="border-color: #00ff88"], 
-        body.theme-feminino [style*="border: 1px solid #00ff88"] { border-color: var(--pink-primary) !important; }
+        body[class*="theme-"] [style*="border-color: #a64dff"], 
+        body[class*="theme-"] [style*="border: 1px solid #a64dff"], 
+        body[class*="theme-"] [style*="border: 2px solid #a64dff"] { border-color: var(--theme-secondary) !important; }
         
-        body.theme-feminino [style*="border-color: #a64dff"], 
-        body.theme-feminino [style*="border: 1px solid #a64dff"], 
-        body.theme-feminino [style*="border: 2px solid #a64dff"] { border-color: var(--pink-secondary) !important; }
+        body[class*="theme-"] [style*="border-left: 4px solid #00ff88"] { border-left-color: var(--theme-primary) !important; }
+        body[class*="theme-"] [style*="border-left: 4px solid #a64dff"],
+        body[class*="theme-"] [style*="border-left-color: #a64dff"] { border-left-color: var(--theme-secondary) !important; }
         
-        body.theme-feminino [style*="border-left: 4px solid #00ff88"] { border-left-color: var(--pink-primary) !important; }
-        body.theme-feminino [style*="border-left: 4px solid #a64dff"],
-        body.theme-feminino [style*="border-left-color: #a64dff"] { border-left-color: var(--pink-secondary) !important; }
+        /* Tratamento de Transparências (RGBA) */
+        body[class*="theme-"] [style*="rgba(0, 255, 136, 0.1)"] { background: rgba(var(--theme-primary-rgb), 0.1) !important; }
+        body[class*="theme-"] [style*="rgba(0, 255, 136, 0.2)"] { background: rgba(var(--theme-primary-rgb), 0.2) !important; }
+        body[class*="theme-"] [style*="rgba(166, 77, 255, 0.1)"] { background: rgba(var(--theme-secondary-rgb), 0.1) !important; }
+        body[class*="theme-"] [style*="rgba(166, 77, 255, 0.2)"] { background: rgba(var(--theme-secondary-rgb), 0.2) !important; }
         
-        body.theme-feminino [style*="rgba(0, 255, 136, 0.1)"] { background: rgba(255, 26, 117, 0.1) !important; }
-        body.theme-feminino [style*="rgba(166, 77, 255, 0.1)"] { background: rgba(255, 153, 255, 0.1) !important; }
-        body.theme-feminino [style*="rgba(166, 77, 255, 0.2)"] { background: rgba(255, 153, 255, 0.2) !important; }
-        
-        /* 2. Overrides de Classes Padrão (Navegação, Barras e Botões) */
-        body.theme-feminino .btn-start-pulse { background: var(--pink-primary) !important; box-shadow: 0 0 15px rgba(255, 26, 117, 0.5) !important; color: #fff !important; }
-        body.theme-feminino .progress-bar { background: var(--pink-primary) !important; box-shadow: 0 0 10px var(--pink-primary) !important; }
-        body.theme-feminino nav button.active { color: var(--pink-primary) !important; border-top: 3px solid var(--pink-primary) !important; background: rgba(255, 26, 117, 0.1) !important; }
-        body.theme-feminino .stat-box { border-color: var(--pink-primary) !important; background: rgba(255, 26, 117, 0.05) !important; }
-        body.theme-feminino .stat-value { color: var(--pink-primary) !important; }
+        /* 2. OVERRIDES DE CLASSES NATIVAS */
+        body[class*="theme-"] .btn-start-pulse { background: var(--theme-primary) !important; box-shadow: 0 0 15px rgba(var(--theme-primary-rgb), 0.5) !important; color: #fff !important; }
+        body[class*="theme-"] .progress-bar { background: var(--theme-primary) !important; box-shadow: 0 0 10px var(--theme-primary) !important; }
+        body[class*="theme-"] nav button.active { color: var(--theme-primary) !important; border-top: 3px solid var(--theme-primary) !important; background: rgba(var(--theme-primary-rgb), 0.1) !important; }
+        body[class*="theme-"] .stat-box { border-color: var(--theme-primary) !important; background: rgba(var(--theme-primary-rgb), 0.05) !important; }
+        body[class*="theme-"] .stat-value { color: var(--theme-primary) !important; }
     </style>
 </head>
 <body>

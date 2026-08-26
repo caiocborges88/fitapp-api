@@ -2127,11 +2127,20 @@ function renderMetricsChart() {
     }
     
     function applyTheme() {
-        const profile = safeGet('fitapp_profile') || 'masculino';
+        // Fallback agora é hipertrofia
+        const profile = safeGet('fitapp_profile') || 'hipertrofia';
+        
+        // 1. Zera a prancheta de pintura
+        document.body.classList.remove('theme-feminino', 'theme-definicao', 'theme-tatico');
+        
+        // 2. Aplica a classe correspondente. 
+        // Nota: O perfil 'hipertrofia' NÃO recebe classe extra, caindo nas cores Verde/Roxo padrão do sistema.
         if (profile === 'feminino') {
             document.body.classList.add('theme-feminino');
-        } else {
-            document.body.classList.remove('theme-feminino');
+        } else if (profile === 'definicao') {
+            document.body.classList.add('theme-definicao');
+        } else if (profile === 'tatico') {
+            document.body.classList.add('theme-tatico');
         }
     }
 
