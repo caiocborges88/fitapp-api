@@ -276,6 +276,25 @@ var FitApp = (() => {
         if(audioEnabled && delta > 0) speak("Série adicionada.");
     }
 
+    function cloneFirstSet(bIndex, eIndex) {
+        const ex = currentRoutine[bIndex].exercises[eIndex];
+        if (!ex.setsData || ex.setsData.length === 0) return;
+        
+        const baseKg = ex.setsData[0].kg;
+        const baseReps = ex.setsData[0].reps;
+        
+        for (let i = 1; i < ex.sets; i++) {
+            if (!ex.setsData[i]) ex.setsData[i] = { kg: '', reps: '', checked: false };
+            if (!ex.setsData[i].checked) { // Só substitui as séries que não foram concluídas ainda
+                ex.setsData[i].kg = baseKg;
+                ex.setsData[i].reps = baseReps;
+            }
+        }
+        saveWorkoutState();
+        renderCurrentRoutine(); 
+        showToast("Cargas da S1 replicadas.");
+        if(audioEnabled) speak("Cargas replicadas.");
+    }
     function openSwapModal(bIndex, eIndex) {
         const ex = currentRoutine[bIndex].exercises[eIndex];
         const currentName = ex.name;
@@ -681,7 +700,12 @@ function removeExercise(bIndex, eIndex) {
         const header = document.querySelector('.dashboard-header');
         if (header) header.style.display = 'none';
         
-        isWorkoutActive = false; 
+        // NOVO: Esconde o painel biomecânico para limpar a visão de revisão
+        const mainSelector = document.getElementById('mainMethodSelector');
+        const bioPanel = mainSelector ? mainSelector.closest('div') : null;
+        if (bioPanel) bioPanel.style.display = 'none';
+        
+        isWorkoutActive = false;
         
         const preview = document.getElementById('workoutPreview');
         const customControls = document.getElementById('customWorkoutControls');
@@ -947,6 +971,7 @@ function removeExercise(bIndex, eIndex) {
                             </div>
                             <button id="btnAuto_${bIndex}_${eIndex}" onclick="FitApp.toggleAutoPilot(${bIndex}, ${eIndex})" style="background: rgba(0, 255, 136, 0.1); border: 1px solid #00ff88; color: #00ff88; border-radius: 8px; padding: 4px 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin-left: 5px; transition: all 0.2s;" title="Modo Hands-Free">🤖 Auto</button>
                             
+                            <button onclick="FitApp.cloneFirstSet(${bIndex}, ${eIndex})" style="background: none; border: none; cursor: pointer; font-size: 16px; padding: 0; filter: grayscale(100%) brightness(200%);" title="Replicar valores da Série 1 em todas">📋</button>
                             <button class="btn-notes" style="background: none; border: none; cursor: pointer; font-size: 16px; padding: 0;" title="Log de Combate (Anotações)">📝</button>
                             <a href="${ytLink}" target="_blank" style="text-decoration: none; font-size: 18px;" title="Ver execução no YouTube">🎥</a>
                             <span class="target-reps">${safeTarget}</span>
@@ -988,20 +1013,26 @@ function removeExercise(bIndex, eIndex) {
                     const kgId = `kg_set_${bIndex}_${eIndex}_${s}`;
                     const rpId = `rp_set_${bIndex}_${eIndex}_${s}`;
                     
-                    // CÉREBRO TÁTICO: Resgate da Meta Fantasma (Último Treino)
-                    let ghostKg = 'Kg';
-                    let ghostReps = 'Reps';
+                    // CÉREBRO TÁTICO: Auto-Preenchimento Fantasma (Sobrecarga Progressiva)
+                    let ghostKg = '';
+                    let ghostReps = '';
                     if (lastWorkoutMatch) {
                         const lastSets = lastWorkoutMatch.data.filter(d => d.exercise === ex.name);
-                        // Procura a exata mesma série (S1 com S1, S2 com S2), ou pega a última registrada
                         const pastSet = lastSets.find(d => parseInt(d.set) === s) || lastSets[lastSets.length - 1];
                         if (pastSet) {
-                            if (pastSet.kg) ghostKg = `${pastSet.kg} kg`;
-                            if (pastSet.reps) ghostReps = `${pastSet.reps} rep`;
+                            if (pastSet.kg) ghostKg = pastSet.kg;
+                            if (pastSet.reps) ghostReps = pastSet.reps;
                         }
                     }
                     
-                    row.innerHTML = `<div class="set-label">S${s}</div><input type="number" id="${kgId}" class="kg-val" placeholder="${ghostKg}" value="${data.kg}"><input type="number" id="${rpId}" class="rp-val" placeholder="${ghostReps}" value="${data.reps}"><button class="btn-iso" style="background:none; border:none; cursor:pointer; font-size:16px; padding:0 5px;" title="Iniciar Isometria">⏱️</button><input type="checkbox" id="${chkId}" class="chk-set" ${data.checked ? 'checked' : ''}>`;
+                    // Se o usuário não preencheu ainda, o input herda a carga da sessão anterior automaticamente
+                    let displayKg = data.kg;
+                    let displayReps = data.reps;
+                    
+                    if (displayKg === '' && ghostKg !== '') { displayKg = ghostKg; ex.setsData[s-1].kg = ghostKg; }
+                    if (displayReps === '' && ghostReps !== '') { displayReps = ghostReps; ex.setsData[s-1].reps = ghostReps; }
+
+                    row.innerHTML = `<div class="set-label">S${s}</div><input type="number" id="${kgId}" class="kg-val" placeholder="Kg" value="${displayKg}"><input type="number" id="${rpId}" class="rp-val" placeholder="Reps" value="${displayReps}"><button class="btn-iso" style="background:none; border:none; cursor:pointer; font-size:16px; padding:0 5px;" title="Iniciar Isometria">⏱️</button><input type="checkbox" id="${chkId}" class="chk-set" ${data.checked ? 'checked' : ''}>`;
                     
                     const chk = row.querySelector('.chk-set');
                     const kgInp = row.querySelector('.kg-val');
@@ -1681,8 +1712,9 @@ window.encerrarSessao = function() {
         // PONTO 11: Inverte apenas a ordem dos dias, mas mantém a ordem dos exercícios intacta
         const reversedHistory = history.slice().reverse();
         reversedHistory.forEach((log) => {
-            const dateObj = new Date(log.date + 'T12:00:00'); 
-            const dateStr = dateObj.toLocaleDateString('pt-BR');
+            // NOVO: Desmembramento bruto da data (YYYY-MM-DD para DD/MM/YYYY)
+            const parts = log.date.split('-');
+            const dateStr = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : log.date;
             const durationStr = log.duration_secs ? Math.floor(log.duration_secs / 60) + ' min' : '--';
             
             const block = document.createElement('div');
@@ -3305,6 +3337,7 @@ function updateDynamicCards() {
         toggleGlobalEnv, updateEnvUI, updateCampaignDashboard, resetCampaign,
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,
         renderIsolationChart,
+        adjustRestTime, changeSets, cloneFirstSet,
         adjustRestTime, changeSets, 
         toggleAutoPilot, startAutoPilot, stopAutoPilot, 
         openHistoryModal, switchHistoryTab,
