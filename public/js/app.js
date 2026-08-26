@@ -2586,7 +2586,8 @@ function updateDynamicCards() {
         const method = selector.value;
         safeSet('fitapp_main_method', method);
         
-        const profile = document.getElementById('profileSelector') ? document.getElementById('profileSelector').value : 'masculino';
+        // NOVO: Padrão fallback agora é hipertrofia
+        const profile = document.getElementById('profileSelector') ? document.getElementById('profileSelector').value : 'hipertrofia';
         
         const cA = document.getElementById('card-A'); const cB = document.getElementById('card-B');
         const cC = document.getElementById('card-C'); const cD = document.getElementById('card-D');
@@ -2602,7 +2603,11 @@ function updateDynamicCards() {
                 tA="Treino A (Posterior)"; sA="Glúteos & Isquiotibiais";
                 tB="Treino B (Superiores)"; sB="Costas, Peito & Braços";
                 tC="Treino C (Anterior)"; sC="Quadríceps & Panturrilhas";
-            } else {
+            } else if (profile === 'definicao') {
+                tA="Push + Cardio"; sA="Peito, Ombro, Tri & Motor";
+                tB="Pull + Core"; sB="Costas, Bi, Trapézio & Abs";
+                tC="Legs + Agilidade"; sC="Pernas Completas & Sprint";
+            } else { // Hipertrofia (Padrão)
                 tA="Treino Push"; sA="Peito, Ombro, Tríceps";
                 tB="Treino Pull"; sB="Costas, Trapézio, Bíceps";
                 tC="Treino Legs"; sC="Pernas & Panturrilhas";
@@ -2613,46 +2618,69 @@ function updateDynamicCards() {
                 tB="Treino B (Superiores)"; sB="Tônus Superior Completo";
                 tC="Treino C (Posterior)"; sC="Isquiotibiais & Lombar";
                 tD="Treino D (Glúteos)"; sD="Foco Glúteo Máximo & Médio";
-            } else {
+            } else if (profile === 'definicao') {
+                tA="Peito & Tríceps"; sA="Hipertrofia Clássica";
+                tB="Anterior + Pliometria"; sB="Quadríceps, Panturrilha & Salto";
+                tC="Costas & Bíceps"; sC="Puxadas & Motor Aeróbico";
+                tD="Posterior + Esporte"; sD="Posterior, Glúteo & Arrancada";
+            } else { // Hipertrofia (Padrão)
                 tA="Treino A (Push)"; sA="Peito & Tríceps";
-                tB="Treino B (Pull)"; sB="Costas & Bíceps";
-                tC="Treino C (Legs 1)"; sC="Quadríceps & Panturrilha";
-                tD="Treino D (Legs 2)"; sD="Glúteo, Posterior & Ombros";
+                tB="Treino B (Foco Anterior)"; sB="Quadríceps & Panturrilhas";
+                tC="Treino C (Pull)"; sC="Costas & Bíceps";
+                tD="Treino D (Foco Posterior)"; sD="Isquiotibiais & Ombros";
             }
         } else if (method === 'biset_agonista') {
             if (profile === 'feminino') {
                 tA="Fritura Posterior"; sA="Glúteos & Isquiotibiais";
                 tB="Fritura Superior"; sB="Superiores (Tônus)";
                 tC="Fritura Anterior"; sC="Quadríceps & Panturrilha";
-            } else {
-                tA="Bi-Set A"; sA="Peitoral & Ombros";
-                tB="Bi-Set B"; sB="Dorsais & Trapézio";
-                tC="Bi-Set C"; sC="Pernas & Braços";
+            } else if (profile === 'definicao') {
+                tA="Exaustão Push"; sA="Peito/Ombro/Tri + Core";
+                tB="Exaustão Pull"; sB="Costas/Bi + Metabólico";
+                tC="Exaustão Legs"; sC="Pernas Completas + Cardio";
+            } else { // Hipertrofia (Padrão)
+                tA="Bi-Set Push"; sA="Peitoral, Ombro & Tríceps";
+                tB="Bi-Set Pull"; sB="Dorsais, Trapézio & Bíceps";
+                tC="Bi-Set Legs"; sC="Pernas Completas";
             }
         } else if (method === 'biset_antagonista') {
             if (profile === 'feminino') {
                 tA="Pernas Opostas"; sA="Quadríceps vs Posterior";
                 tB="Superiores Opostos"; sB="Costas vs Peito";
                 tC="Glúteo & Core"; sC="Glúteos vs Estabilizadores";
-            } else {
+            } else if (profile === 'definicao') {
+                tA="Derretedor A"; sA="Peito/Costas + Cardio";
+                tB="Derretedor B"; sB="Pernas/Core + Pliometria";
+                tC="Derretedor C"; sC="Ombros/Braços + Resistência";
+            } else { // Hipertrofia (Padrão)
                 tA="Antagonista A"; sA="Peito + Costas";
-                tB="Antagonista B"; sB="Bíceps + Tríceps";
-                tC="Antagonista C"; sC="Quadríceps + Posterior";
+                tB="Antagonista B"; sB="Pernas + Core";
+                tC="Antagonista C"; sC="Ombros + Braços";
             }
         } else if (method === 'biset_sinergista') {
             if (profile === 'feminino') {
                 tA="Sinergia Posterior"; sA="Glúteo + Posterior";
                 tB="Sinergia Superior"; sB="Costas/Bíceps & Peito/Tríceps";
                 tC="Sinergia Anterior"; sC="Quadríceps + Adutores";
-            } else {
-                tA="Sinergista A"; sA="Peito & Tríceps";
-                tB="Sinergista B"; sB="Costas & Bíceps";
-                tC="Sinergista C"; sC="Pernas & Ombros";
+            } else if (profile === 'definicao') {
+                tA="Sinergista A"; sA="Peito/Tri + Metabólico";
+                tB="Sinergista B"; sB="Costas/Bi + Aeróbico";
+                tC="Sinergista C"; sC="Pernas/Ombro + Agilidade";
+            } else { // Hipertrofia (Padrão)
+                tA="Sinergista Push"; sA="Peito + Tríceps + Ombro";
+                tB="Sinergista Pull"; sB="Costas + Bíceps + Trapézio";
+                tC="Sinergista Legs"; sC="Pernas Completas";
             }
         } else if (method === 'circuito') {
-            tA="Circuito 1"; sA="Metabólico FullBody";
-            tB="Circuito 2"; sB="Cardio & Força";
-            tC="Circuito 3"; sC="Resistência Extrema";
+            if (profile === 'definicao') {
+                tA="Seca Extrema 1"; sA="Cardio & Pliometria Base";
+                tB="Seca Extrema 2"; sB="FullBody Dinâmico";
+                tC="Seca Extrema 3"; sC="Resistência Anaeróbica";
+            } else {
+                tA="Circuito 1"; sA="Metabólico FullBody";
+                tB="Circuito 2"; sB="Cardio & Força";
+                tC="Circuito 3"; sC="Resistência Extrema";
+            }
         }
 
         if(cA.querySelector('h3')) { cA.querySelector('h3').textContent = tA; cA.querySelector('p').textContent = sA; }
@@ -2666,7 +2694,7 @@ function updateDynamicCards() {
         const includeAbs = document.getElementById('toggleAbs') ? document.getElementById('toggleAbs').checked : false;
 
         const getEx = (focusTerms, equipPref, avoidNames, allowBodyweight = false) => {
-            // A Pedra de Roseta: Expandida para abranger a biomecânica avançada de Inferiores
+            // A Pedra de Roseta: Expandida para abranger a biomecânica avançada e metabólica
             const mapFocus = {
                 'peito_esternocostal': ['Fibras Médias'], 'peito_clavicular': ['Fibras Superiores'], 'peito_costal': ['Fibras Inferiores'], 'peito': ['Fibras Médias', 'Fibras Superiores', 'Fibras Inferiores'],
                 'costa_largura': ['Latíssimo (Largura)'], 'costa_espessura': ['Romboides/Miolo (Espessura)'], 'costa_isolado': ['Latíssimo (Largura)'], 'costa': ['Latíssimo (Largura)', 'Romboides/Miolo (Espessura)'],
@@ -2680,12 +2708,18 @@ function updateDynamicCards() {
                 'panturrilha': ['Panturrilhas', 'Panturrilhas (Gastrocnêmios)', 'Panturrilhas (Sóleo)', 'Tibial Anterior'],
                 'triceps_longa': ['Cabeça Longa'], 'triceps_lateral_medial': ['Lateral/Medial'], 'triceps_global': ['Todas'], 'triceps': ['Todas', 'Lateral/Medial', 'Cabeça Longa'],
                 'biceps_longa': ['Cabeça Curta/Longa'], 'biceps_curta': ['Cabeça Curta/Longa'], 'biceps_braquial': ['Braquial/Antebraço'], 'biceps_global': ['Cabeça Curta/Longa'], 'biceps': ['Cabeça Curta/Longa'],
-                'core_supra': ['Superior'], 'core_infra': ['Inferior'], 'core_obliquo': ['Oblíquos / Rotação'], 'core_profundo': ['Estabilização/Anti-extensão'], 'core': ['Superior', 'Inferior', 'Estabilização/Anti-extensão']
+                'core_supra': ['Superior'], 'core_infra': ['Inferior'], 'core_obliquo': ['Oblíquos / Rotação'], 'core_profundo': ['Estabilização/Anti-extensão'], 'core': ['Superior', 'Inferior', 'Estabilização/Anti-extensão'],
+                
+                // NOVO: Integração Metabólica (Cutting)
+                'cardio_motor': ['Motor Aeróbico'],
+                'cardio_resistencia': ['Resistência Anaeróbica'],
+                'esporte_pliometria': ['Pliometria'],
+                'esporte_agilidade': ['Agilidade e Frenagem'],
+                'esporte_aceleracao': ['Aceleração e Velocidade']
             };
             const mapEquip = { 'barra': 'Barras_Anilhas', 'halter': 'Pesos_Livres', 'maquina': 'Maquinas_Polias', 'cabo': 'Maquinas_Polias', 'peso_corporal': 'Peso_Corporal', 'calistenia': 'Calistenia' };
 
             let pool = dictionaryData.filter(d => {
-                // Escudo Anti-Crash: Garante que os campos existam mesmo se vierem vazios do Firebase
                 const exEquip = d.equip || '';
                 const exGroup = d.group || '';
                 const exFocus = d.focus || '';
@@ -2722,11 +2756,14 @@ function updateDynamicCards() {
 
         let generatedBlocks = [];
         let used = [...avoidNamesGlobal]; 
-        const profile = document.getElementById('profileSelector') ? document.getElementById('profileSelector').value : 'masculino';
+        
+        const rawProfile = document.getElementById('profileSelector') ? document.getElementById('profileSelector').value : 'hipertrofia';
+        // Interceptor Tático: Trata Definição temporariamente como Hipertrofia para herdar a biomecânica bruta
+        const routeProfile = (rawProfile === 'definicao' || rawProfile === 'masculino') ? 'hipertrofia' : rawProfile;
 
         // --- SISTEMA ABC (Push / Pull / Legs & Feminino) ---
         if (method === 'abc' || method === 'ppl') {
-            if (profile === 'feminino') {
+            if (routeProfile === 'feminino') {
                 if (subOpt === 'push' || subOpt === 'A') { // A: Posterior
                     let e1 = getEx(['perna_posterior_gluteo'], 'barra', used) || getEx(['perna_posterior_gluteo'], null, used); if(e1) used.push(e1.name);
                     let e2 = getEx(['perna_posterior_gluteo'], 'maquina', used) || getEx(['perna_posterior_gluteo'], 'halter', used); if(e2) used.push(e2.name);
@@ -2752,7 +2789,7 @@ function updateDynamicCards() {
                     if(e3) generatedBlocks.push({ title: "Bloco 2: Panturrilhas", exercises: [ {name: e3.name, sets: 4, target: "15-20 rep"}, ...(e4 ? [{name: e4.name, sets: 4, target: "Até a falha"}] : []) ]});
                 }
             } else {
-                // Modo Masculino
+                // MODO HIPERTROFIA (Padrão Original e Base para Definição)
                 if (subOpt === 'push' || subOpt === 'A') {
                     let e1 = getEx(['peito_esternocostal'], 'barra', used) || getEx(['peito_esternocostal'], null, used); if(e1) used.push(e1.name);
                     let e2 = getEx(['ombro_anterior'], 'halter', used) || getEx(['ombro_anterior'], null, used); if(e2) used.push(e2.name);
@@ -2792,7 +2829,7 @@ function updateDynamicCards() {
         } 
         // --- SISTEMA ABCD ---
         else if (method === 'abcd') {
-            if (profile === 'feminino') {
+            if (routeProfile === 'feminino') {
                 if (subOpt === 'A') { // Anterior
                     let e1 = getEx(['perna_quadriceps'], 'barra', used) || getEx(['perna_quadriceps'], null, used); if(e1) used.push(e1.name);
                     let e2 = getEx(['perna_quadriceps'], 'maquina', used) || getEx(['perna_quadriceps'], 'halter', used); if(e2) used.push(e2.name);
@@ -2821,7 +2858,7 @@ function updateDynamicCards() {
                     if(e3) generatedBlocks.push({ title: "Bloco 2: Core Frontal", exercises: [ {name: e3.name, sets: 3, target: "15-20 rep"} ]});
                 }
             } else {
-                // Modo Masculino (ABCD)
+                // MODO HIPERTROFIA ABCD
                 if (subOpt === 'A') { 
                     let e1 = getEx(['peito_esternocostal'], 'barra', used) || getEx(['peito_esternocostal'], null, used); if(e1) used.push(e1.name);
                     let e2 = getEx(['peito_clavicular'], 'halter', used) || getEx(['peito_clavicular'], null, used); if(e2) used.push(e2.name);
@@ -2873,7 +2910,7 @@ function updateDynamicCards() {
             let isB = (subOpt === 'B' || subOpt === 'biceps_triceps');
             
             let g1, g2;
-            if (profile === 'feminino') {
+            if (routeProfile === 'feminino') {
                 g1 = isA ? ['perna_quadriceps'] : (isB ? ['costa_largura', 'costa_espessura'] : ['perna_posterior_gluteo']);
                 g2 = isA ? ['perna_posterior_gluteo'] : (isB ? ['peito_esternocostal', 'peito_clavicular'] : ['core_supra', 'perna_adutor_abdutor']);
             } else {
@@ -2892,7 +2929,7 @@ function updateDynamicCards() {
             let isB = (subOpt === 'B' || subOpt === 'costa');
             
             let focus;
-            if (profile === 'feminino') {
+            if (routeProfile === 'feminino') {
                 focus = isA ? ['perna_posterior_gluteo'] : (isB ? ['costa_largura', 'costa_espessura', 'ombro_lateral'] : ['perna_quadriceps', 'panturrilha_gastro']);
             } else {
                 focus = isA ? ['peito_esternocostal', 'peito_clavicular'] : (isB ? ['costa_largura', 'costa_espessura'] : ['perna_quadriceps', 'perna_posterior_gluteo']);
@@ -2909,7 +2946,7 @@ function updateDynamicCards() {
             let isB = (subOpt === 'B' || subOpt === 'costa_biceps');
             
             let g1, g2;
-            if (profile === 'feminino') {
+            if (routeProfile === 'feminino') {
                 g1 = isA ? ['perna_posterior_gluteo'] : (isB ? ['costa_largura', 'costa_espessura'] : ['perna_quadriceps']);
                 g2 = isA ? ['perna_posterior_gluteo'] : (isB ? ['peito_esternocostal', 'peito_clavicular'] : ['perna_adutor_abdutor']);
             } else {
@@ -2926,12 +2963,25 @@ function updateDynamicCards() {
         // --- CIRCUITO ---
         else if (method === 'circuito') {
             let cExs = [];
-            let fP = getEx(['perna_quadriceps'], 'peso_corporal', used, true) || getEx(['perna_quadriceps'], null, used); if(fP) { used.push(fP.name); cExs.push({name: fP.name, sets: 4, target: "15-20 rep"}); }
-            let fC = getEx(profile === 'feminino' ? ['perna_posterior_gluteo'] : ['peito_esternocostal'], 'peso_corporal', used, true) || getEx(profile === 'feminino' ? ['perna_posterior_gluteo'] : ['peito_esternocostal'], null, used); if(fC) { used.push(fC.name); cExs.push({name: fC.name, sets: 4, target: "15-20 rep"}); }
-            let fB = getEx(['costa_espessura', 'costa_largura'], 'maquina', used) || getEx(['costa_espessura'], null, used); if(fB) { used.push(fB.name); cExs.push({name: fB.name, sets: 4, target: "15-20 rep"}); }
-            let fS = getEx(['ombro_anterior', 'ombro_lateral'], 'halter', used) || getEx(['ombro_anterior'], null, used); if(fS) { used.push(fS.name); cExs.push({name: fS.name, sets: 4, target: "15-20 rep"}); }
-            if(cExs.length > 0) generatedBlocks.push({ title: "Rodada Metabólica", exercises: cExs });
-            FitApp.adjustRestTime(45);
+            if (rawProfile === 'definicao') {
+                // Circuito Extremo de Definição (8 Estações para Secar)
+                let f1 = getEx(['esporte_aceleracao'], 'peso_corporal', used, true) || getEx(['cardio_motor'], null, used); if(f1) { used.push(f1.name); cExs.push({name: f1.name, sets: 4, target: "30 seg"}); }
+                let f2 = getEx(['perna_quadriceps'], 'peso_corporal', used, true) || getEx(['perna_quadriceps'], null, used); if(f2) { used.push(f2.name); cExs.push({name: f2.name, sets: 4, target: "15-20 rep"}); }
+                let f3 = getEx(['costa_largura'], 'maquina', used) || getEx(['costa_espessura'], null, used); if(f3) { used.push(f3.name); cExs.push({name: f3.name, sets: 4, target: "15-20 rep"}); }
+                let f4 = getEx(['perna_posterior_gluteo'], 'halter', used) || getEx(['perna_posterior_gluteo'], null, used); if(f4) { used.push(f4.name); cExs.push({name: f4.name, sets: 4, target: "15-20 rep"}); }
+                let f5 = getEx(['peito_esternocostal'], 'peso_corporal', used, true) || getEx(['peito_esternocostal'], null, used); if(f5) { used.push(f5.name); cExs.push({name: f5.name, sets: 4, target: "15-20 rep"}); }
+                let f6 = getEx(['esporte_pliometria'], 'peso_corporal', used, true) || getEx(['cardio_resistencia'], null, used); if(f6) { used.push(f6.name); cExs.push({name: f6.name, sets: 4, target: "45 seg"}); }
+                let f7 = getEx(['core_profundo', 'core_supra'], 'peso_corporal', used, true) || getEx(['core_supra'], null, used); if(f7) { used.push(f7.name); cExs.push({name: f7.name, sets: 4, target: "1 min"}); }
+                let f8 = getEx(['cardio_resistencia'], 'peso_corporal', used, true) || getEx(['cardio_motor'], null, used); if(f8) { used.push(f8.name); cExs.push({name: f8.name, sets: 4, target: "Até a falha"}); }
+                if(cExs.length > 0) generatedBlocks.push({ title: "Circuito Extremo (Derretedor)", exercises: cExs });
+            } else {
+                // Circuito FullBody Padrão
+                let fP = getEx(['perna_quadriceps'], 'peso_corporal', used, true) || getEx(['perna_quadriceps'], null, used); if(fP) { used.push(fP.name); cExs.push({name: fP.name, sets: 4, target: "15-20 rep"}); }
+                let fC = getEx(routeProfile === 'feminino' ? ['perna_posterior_gluteo'] : ['peito_esternocostal'], 'peso_corporal', used, true) || getEx(routeProfile === 'feminino' ? ['perna_posterior_gluteo'] : ['peito_esternocostal'], null, used); if(fC) { used.push(fC.name); cExs.push({name: fC.name, sets: 4, target: "15-20 rep"}); }
+                let fB = getEx(['costa_espessura', 'costa_largura'], 'maquina', used) || getEx(['costa_espessura'], null, used); if(fB) { used.push(fB.name); cExs.push({name: fB.name, sets: 4, target: "15-20 rep"}); }
+                let fS = getEx(['ombro_anterior', 'ombro_lateral'], 'halter', used) || getEx(['ombro_anterior'], null, used); if(fS) { used.push(fS.name); cExs.push({name: fS.name, sets: 4, target: "15-20 rep"}); }
+                if(cExs.length > 0) generatedBlocks.push({ title: "Rodada Metabólica", exercises: cExs });
+            }
         }
         // --- CALISTENIA ---
         else if (method === 'calistenia') {
@@ -2939,7 +2989,7 @@ function updateDynamicCards() {
             let isB = (subOpt === 'B' || subOpt === 'pull');
             
             let f1;
-            if (profile === 'feminino') {
+            if (routeProfile === 'feminino') {
                 f1 = isA ? ['perna_quadriceps', 'perna_posterior_gluteo'] : (isB ? ['core_supra', 'core_infra', 'perna_adutor_abdutor'] : ['perna_quadriceps', 'perna_posterior_gluteo']);
             } else {
                 f1 = isA ? ['peito_esternocostal', 'peito_clavicular', 'triceps_global'] : (isB ? ['costa_largura', 'costa_espessura', 'biceps_global'] : ['perna_quadriceps', 'perna_posterior_gluteo']);
@@ -2953,7 +3003,57 @@ function updateDynamicCards() {
             if(cal3) generatedBlocks.push({ title: "Core Isométrico", exercises: [ {name: cal3.name, sets: 3, target: "Isometria Máx"} ]});
         }
 
-        // ADIÇÃO DO BLOCO DE ABDÔMEN (Se a chave estiver ativada)
+        // ==========================================================
+        // 🔥 MÓDULO DE PÓS-PROCESSAMENTO PARA DEFINIÇÃO (CUTTING)
+        // ==========================================================
+        if (rawProfile === 'definicao' && method !== 'circuito' && method !== 'calistenia') {
+            // 1. Aumenta os alvos de repetição em todo o treino para esgotamento
+            generatedBlocks.forEach(b => {
+                b.exercises.forEach(ex => {
+                    const t = ex.target.toLowerCase();
+                    if (t.includes('8-10')) ex.target = '12-15 rep';
+                    else if (t.includes('10-12')) ex.target = '15-20 rep';
+                    else if (t.includes('12-15')) ex.target = '15-20 rep';
+                    else if (!t.includes('falha') && !t.includes('seg') && !t.includes('min')) ex.target = '15-20 rep';
+                });
+            });
+
+            // 2. Anexa o "Finisher" Metabólico de forma contextual
+            let fName = "";
+            let fFocus = [];
+            
+            if (subOpt === 'push' || subOpt === 'A' || subOpt === 'peito_costa' || subOpt === 'peito_triceps' || subOpt === 'peito') {
+                fFocus = ['cardio_motor', 'cardio_resistencia'];
+                fName = "🔥 Finisher: Esgotamento Aeróbico";
+            } else if (subOpt === 'pull' || subOpt === 'B' || subOpt === 'biceps_triceps' || subOpt === 'costa_biceps' || subOpt === 'costa') {
+                fFocus = ['cardio_resistencia', 'core_obliquo'];
+                fName = "🔥 Finisher: Queima Anaeróbica";
+            } else { 
+                fFocus = ['esporte_pliometria', 'esporte_agilidade', 'esporte_aceleracao'];
+                fName = "🔥 Finisher: Pliometria e Esporte";
+            }
+            
+            let finisherEx = getEx(fFocus, 'peso_corporal', used, true) || getEx(fFocus, null, used);
+            if (finisherEx) {
+                used.push(finisherEx.name);
+                generatedBlocks.push({
+                    title: fName,
+                    exercises: [{ name: finisherEx.name, sets: 4, target: "45-60 seg (Máxima Intensidade)" }]
+                });
+            }
+        }
+
+        // ==========================================================
+        // 🕒 MANIPULAÇÃO DINÂMICA DO RELÓGIO DE DESCANSO
+        // ==========================================================
+        setTimeout(() => {
+            if (typeof FitApp !== 'undefined' && FitApp.adjustRestTime) {
+                if (rawProfile === 'definicao') FitApp.adjustRestTime(method === 'circuito' ? 30 : 45);
+                else FitApp.adjustRestTime(method === 'circuito' ? 45 : 60);
+            }
+        }, 500);
+
+        // ADIÇÃO DO BLOCO DE ABDÔMEN (Se a chave estiver ativada e já não for circuito)
         if (includeAbs && method !== 'circuito') {
             let abs1 = getEx(['core_supra', 'core_infra'], 'peso_corporal', used, true) || getEx(['core_supra'], null, used, true); if(abs1) used.push(abs1.name);
             let abs2 = getEx(['core_obliquo'], 'peso_corporal', used, true) || getEx(['core_profundo'], 'peso_corporal', used, true); if(abs2 && abs2.name !== (abs1?abs1.name:'')) used.push(abs2.name);
