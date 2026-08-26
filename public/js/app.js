@@ -521,9 +521,19 @@ function saveWorkoutState() {
         if (!list) return;
         list.innerHTML = '';
         
+        // 1. Apaga as luzes de todo o Corpo Humano primeiro
+        const allMuscles = ['svg-peito', 'svg-ombro', 'svg-biceps', 'svg-triceps', 'svg-costas', 'svg-trapezio', 'svg-core', 'svg-quadriceps', 'svg-posterior', 'svg-gluteo', 'svg-panturrilha'];
+        allMuscles.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) { el.style.fill = '#222'; el.style.stroke = '#444'; }
+        });
+
+        // 2. Rastreador de Músculos (Quais músculos serão usados hoje?)
+        const activeMuscles = new Set();
+        
         currentRoutine.forEach((bloco, bIndex) => {
             const blockTitle = document.createElement('h4');
-            blockTitle.style.color = '#a64dff';
+            blockTitle.style.color = 'var(--theme-secondary)';
             blockTitle.style.marginTop = '15px';
             blockTitle.style.marginBottom = '10px';
             blockTitle.style.borderBottom = '1px solid #333';
@@ -532,14 +542,32 @@ function saveWorkoutState() {
             list.appendChild(blockTitle);
 
             bloco.exercises.forEach((ex, eIndex) => {
-                const item = document.createElement('div');
-                item.className = 'preview-item'; // Conecta ao nosso novo CSS premium
+                
+                // 🧠 CÉREBRO ANATÔMICO: Descobre onde o exercício bate e aciona o Radar
+                const dictItem = typeof dictionaryData !== 'undefined' ? dictionaryData.find(d => d.name === ex.name) : null;
+                const focusStr = dictItem ? (dictItem.group + ' ' + dictItem.focus).toLowerCase() : ex.name.toLowerCase();
+                
+                // Remove acentos para facilitar o match
+                const f = focusStr.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                
+                if (f.includes('peito')) activeMuscles.add('svg-peito');
+                if (f.includes('ombro') || f.includes('deltoide')) activeMuscles.add('svg-ombro');
+                if (f.includes('biceps') || f.includes('braco')) activeMuscles.add('svg-biceps');
+                if (f.includes('triceps')) activeMuscles.add('svg-triceps');
+                if (f.includes('costa') || f.includes('dorsal') || f.includes('lombar')) activeMuscles.add('svg-costas');
+                if (f.includes('trapezio')) activeMuscles.add('svg-trapezio');
+                if (f.includes('core') || f.includes('abdom')) activeMuscles.add('svg-core');
+                if (f.includes('quadriceps') || f.includes('perna') && !f.includes('posterior') && !f.includes('gluteo')) activeMuscles.add('svg-quadriceps');
+                if (f.includes('posterior') || f.includes('isquio')) activeMuscles.add('svg-posterior');
+                if (f.includes('gluteo')) activeMuscles.add('svg-gluteo');
+                if (f.includes('panturrilha') || f.includes('gastro')) activeMuscles.add('svg-panturrilha');
 
-                // NOVO: Higienização de Variáveis Dinâmicas
+                const item = document.createElement('div');
+                item.className = 'preview-item';
+                
+                // NOVO: Higienização e montagem do UI do Exercício
                 const safeName = escapeHTML(ex.name);
                 const safeTarget = escapeHTML(ex.target);
-                
-                // O Motor de Busca Automática no YouTube
                 const ytQuery = encodeURIComponent(`Como executar o exercício ${safeName}`);
                 const ytLink = `https://www.youtube.com/results?search_query=${ytQuery}`;
 
@@ -549,7 +577,7 @@ function saveWorkoutState() {
                             ${safeName}
                             <a href="${ytLink}" target="_blank" title="Ver execução no YouTube" style="text-decoration: none; font-size: 16px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">🎥</a>
                         </div>
-                        <div style="font-size: 12px; color: #00ff88; margin-top: 4px; font-weight: bold;">${ex.sets}x ${safeTarget}</div>
+                        <div style="font-size: 12px; color: var(--theme-primary); margin-top: 4px; font-weight: bold;">${ex.sets}x ${safeTarget}</div>
                     </div>
                     <div style="display: flex; gap: 8px;">
                         <button onclick="FitApp.openSwapModal(${bIndex}, ${eIndex})" style="background: #333; border: none; color: #fff; padding: 6px 10px; border-radius: 4px; cursor: pointer;">🔄</button>
@@ -558,6 +586,15 @@ function saveWorkoutState() {
                 `;
                 list.appendChild(item);
             });
+        });
+
+        // 3. Acende o Heatmap com as cores do Tema Atual
+        activeMuscles.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) { 
+                el.style.fill = 'var(--theme-primary)'; 
+                el.style.stroke = '#fff';
+            }
         });
     }
 
