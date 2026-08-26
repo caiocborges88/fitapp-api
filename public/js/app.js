@@ -295,6 +295,67 @@ var FitApp = (() => {
         showToast("Cargas da S1 replicadas.");
         if(audioEnabled) speak("Cargas replicadas.");
     }
+async function exportStravaCard(historyIndex = -1) {
+        showToast("📸 Focando lente... aguarde.");
+        
+        let history = JSON.parse(safeGet('fitapp_week_log') || '[]');
+        if (history.length === 0) {
+            showToast("Nenhum treino encontrado.");
+            return;
+        }
+        
+        // Puxa o último treino (se -1) ou o treino específico da lista
+        let log = historyIndex === -1 ? history[history.length - 1] : history[historyIndex];
+        
+        // CÉREBRO TÁTICO: Cálculo de Volume Total (Séries x Reps x Kg)
+        let totalVolume = 0;
+        if (log.data) {
+            log.data.forEach(s => {
+                totalVolume += (parseFloat(s.kg) || 0) * (parseInt(s.reps) || 0);
+            });
+        }
+        
+        // Injeta os dados na placa (Card) escondida
+        document.getElementById('stravaWorkoutType').textContent = `Treino ${log.tipo}`;
+        document.getElementById('stravaDuration').textContent = log.duration_secs ? Math.floor(log.duration_secs / 60) + ' min' : '-- min';
+        document.getElementById('stravaVolume').textContent = totalVolume > 0 ? (totalVolume / 1000).toFixed(1) + 'k kg' : '0 kg';
+        
+        const card = document.getElementById('stravaCard');
+        
+        try {
+            // A mágica: Redesenha o HTML num Canvas invisível
+            const canvas = await html2canvas(card, { 
+                backgroundColor: '#121212', 
+                scale: 2, // Escala 2 garante alta resolução no Instagram
+                logging: false
+            });
+            
+            canvas.toBlob(async (blob) => {
+                const file = new File([blob], 'fitapp_treino.png', { type: 'image/png' });
+                
+                // Abre a gaveta nativa do celular (Web Share API)
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Relatório FitApp',
+                        text: 'Mais um combate finalizado no FitApp Elite! 💪🔥'
+                    });
+                } else {
+                    // PLANO B: Se for PC ou navegador antigo, força o Download
+                    const link = document.createElement('a');
+                    link.download = 'fitapp_treino.png';
+                    link.href = canvas.toDataURL();
+                    link.click();
+                    showToast("Imagem salva! Poste nos Stories.");
+                }
+            }, 'image/png');
+            
+        } catch(e) {
+            showToast("Falha ao revelar foto tática.");
+            console.error(e);
+        }
+    }
+
     function openSwapModal(bIndex, eIndex) {
         const ex = currentRoutine[bIndex].exercises[eIndex];
         const currentName = ex.name;
@@ -1732,10 +1793,11 @@ window.encerrarSessao = function() {
             header.style.borderLeft = log.tipo === 'Livre' ? '4px solid #a64dff' : '4px solid #00ff88';
             
             header.innerHTML = `
-                <div>
+                <div style="flex: 1;">
                     <div style="font-weight: bold; color: #fff;">Treino ${log.tipo}</div>
                     <div style="font-size: 12px; color: #aaa;">${dateStr} • ⏱️ ${durationStr}</div>
                 </div>
+                <button onclick="event.stopPropagation(); FitApp.exportStravaCard(${history.length - 1 - reversedHistory.indexOf(log)})" style="background: transparent; border: none; font-size: 20px; margin-right: 15px; cursor: pointer; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" title="Exportar para Instagram">📸</button>
                 <div class="toggle-arrow" style="color: #888; font-size: 12px; transition: transform 0.3s;">▼</div>
             `;
 
@@ -3337,7 +3399,7 @@ function updateDynamicCards() {
         toggleGlobalEnv, updateEnvUI, updateCampaignDashboard, resetCampaign,
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,
         renderIsolationChart,
-        adjustRestTime, changeSets, cloneFirstSet,
+        adjustRestTime, changeSets, cloneFirstSet, exportStravaCard,
         adjustRestTime, changeSets, 
         toggleAutoPilot, startAutoPilot, stopAutoPilot, 
         openHistoryModal, switchHistoryTab,
