@@ -2901,72 +2901,86 @@ function updateDynamicCards() {
         // Interceptor Tático: Trata Definição temporariamente como Hipertrofia para herdar a biomecânica bruta
         const routeProfile = (rawProfile === 'definicao' || rawProfile === 'masculino') ? 'hipertrofia' : rawProfile;
 
-        // --- SISTEMA ABC (Push / Pull / Legs & Feminino) ---
+        // --- SISTEMA ABC / PPL (Nova Arquitetura de Blueprints 7/8 Slots) ---
         if (method === 'abc' || method === 'ppl') {
+            
+            // 🛡️ O ESCUDO BIOMECÂNICO: Garante que o Slot NUNCA fique vazio
+            const safeSlot = (focusArr, equip = null, target = "10-12 rep") => {
+                let ex = getEx(focusArr, equip, used);
+                if (!ex && equip) ex = getEx(focusArr, null, used); // Fallback 1: Ignora o equipamento
+                if (!ex) ex = getEx(focusArr, null, []); // Fallback 2: Ignora a lista negra (Blacklist)
+                if (!ex) {
+                    // Fallback 3: Força Bruta no Grupo Pai (Se pedir Supra, puxa qualquer Core)
+                    const parentTerm = focusArr[0].split('_')[0]; 
+                    ex = getEx([parentTerm], null, []);
+                }
+                if (ex) used.push(ex.name);
+                return ex ? { name: ex.name, sets: 4, target: target } : null;
+            };
+
+            let blueprint = [];
+            
+            // 👩 ROTA FEMININA (Baseada 100% na Planilha Mestre - 8 Slots por dia)
             if (routeProfile === 'feminino') {
-                if (subOpt === 'push' || subOpt === 'A') { // A: Posterior
-                    let e1 = getEx(['perna_posterior_gluteo'], 'barra', used) || getEx(['perna_posterior_gluteo'], null, used); if(e1) used.push(e1.name);
-                    let e2 = getEx(['perna_posterior_gluteo'], 'maquina', used) || getEx(['perna_posterior_gluteo'], 'halter', used); if(e2) used.push(e2.name);
-                    if(e1) generatedBlocks.push({ title: "Bloco 1: Glúteos & Posteriores", exercises: [ {name: e1.name, sets: 4, target: "10-12 rep"}, ...(e2 ? [{name: e2.name, sets: 4, target: "10-12 rep"}] : []) ]});
-                    let e3 = getEx(['perna_adutor_abdutor'], 'maquina', used) || getEx(['perna_adutor_abdutor'], null, used); if(e3) used.push(e3.name);
-                    let e4 = getEx(['perna_adutor_abdutor'], 'cabo', used) || getEx(['perna_adutor_abdutor'], 'halter', used); if(e4) used.push(e4.name);
-                    if(e3) generatedBlocks.push({ title: "Bloco 2: Abdução & Isolamento", exercises: [ {name: e3.name, sets: 4, target: "12-15 rep"}, ...(e4 ? [{name: e4.name, sets: 3, target: "12-15 rep"}] : []) ]});
-                    let e5 = getEx(['perna_posterior_gluteo'], 'peso_corporal', used, true) || getEx(['perna_posterior_gluteo'], null, used); if(e5) used.push(e5.name);
-                    if(e5) generatedBlocks.push({ title: "Bloco 3: Finalização (Fadiga)", exercises: [ {name: e5.name, sets: 3, target: "Até a falha"} ]});
-                } else if (subOpt === 'pull' || subOpt === 'B') { // B: Superiores Tônus
-                    let e1 = getEx(['costa_largura', 'costa_espessura'], 'maquina', used) || getEx(['costa_largura'], null, used); if(e1) used.push(e1.name);
-                    let e2 = getEx(['peito_esternocostal'], 'halter', used) || getEx(['peito_esternocostal'], null, used); if(e2) used.push(e2.name);
-                    if(e1) generatedBlocks.push({ title: "Bloco 1: Dorsais e Peitoral", exercises: [ {name: e1.name, sets: 3, target: "12-15 rep"}, ...(e2 ? [{name: e2.name, sets: 3, target: "12-15 rep"}] : []) ]});
-                    let e3 = getEx(['ombro_lateral', 'ombro_anterior'], 'halter', used) || getEx(['ombro_lateral'], null, used); if(e3) used.push(e3.name);
-                    let e4 = getEx(['triceps_lateral_medial'], 'cabo', used) || getEx(['biceps_curta'], 'cabo', used); if(e4) used.push(e4.name);
-                    if(e3) generatedBlocks.push({ title: "Bloco 2: Ombros e Tônus", exercises: [ {name: e3.name, sets: 3, target: "12-15 rep"}, ...(e4 ? [{name: e4.name, sets: 3, target: "12-15 rep"}] : []) ]});
-                } else { // C: Anterior
-                    let e1 = getEx(['perna_quadriceps'], 'maquina', used) || getEx(['perna_quadriceps'], null, used); if(e1) used.push(e1.name);
-                    let e2 = getEx(['perna_quadriceps'], 'barra', used) || getEx(['perna_quadriceps'], 'halter', used); if(e2) used.push(e2.name);
-                    if(e1) generatedBlocks.push({ title: "Bloco 1: Foco Anterior (Quad)", exercises: [ {name: e1.name, sets: 4, target: "10-12 rep"}, ...(e2 ? [{name: e2.name, sets: 4, target: "10-12 rep"}] : []) ]});
-                    let e3 = getEx(['panturrilha_gastro'], 'maquina', used) || getEx(['panturrilha_gastro'], null, used); if(e3) used.push(e3.name);
-                    let e4 = getEx(['panturrilha_soleo'], 'maquina', used) || getEx(['panturrilha_gastro'], null, used); if(e4) used.push(e4.name);
-                    if(e3) generatedBlocks.push({ title: "Bloco 2: Panturrilhas", exercises: [ {name: e3.name, sets: 4, target: "15-20 rep"}, ...(e4 ? [{name: e4.name, sets: 4, target: "Até a falha"}] : []) ]});
+                if (subOpt === 'push' || subOpt === 'A') { // Treino A (Posterior Expandido)
+                    blueprint = [
+                        { title: "Bloco 1: Glúteos & Posteriores Base", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep") ] },
+                        { title: "Bloco 2: Abdução & Isolamento", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina', "12-15 rep"), safeSlot(['perna_adutor_abdutor'], 'cabo', "12-15 rep") ] },
+                        { title: "Bloco 3: Posteriores Encurtados", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'halter', "12-15 rep") ] },
+                        { title: "Bloco 4: Finalização & Core", slots: [ safeSlot(['perna_posterior_gluteo'], 'peso_corporal', "Até a falha"), safeSlot(['core_supra', 'core_infra'], null, "15-20 rep") ] }
+                    ];
+                } else if (subOpt === 'pull' || subOpt === 'B') { // Treino B (Superiores Completo)
+                    blueprint = [
+                        { title: "Bloco 1: Costas (Puxadas e Remadas)", slots: [ safeSlot(['costa_largura'], 'maquina', "10-12 rep"), safeSlot(['costa_espessura'], 'barra', "10-12 rep") ] },
+                        { title: "Bloco 2: Peitoral e Ombro Frontal", slots: [ safeSlot(['peito_esternocostal'], 'halter', "12-15 rep"), safeSlot(['ombro_anterior'], 'halter', "10-12 rep") ] },
+                        { title: "Bloco 3: Deltoides Lateral e Posterior", slots: [ safeSlot(['ombro_lateral'], 'halter', "12-15 rep"), safeSlot(['ombro_posterior', 'trapezio'], 'cabo', "12-15 rep") ] },
+                        { title: "Bloco 4: Braços e Core", slots: [ safeSlot(['triceps_global', 'biceps_global'], 'cabo', "12-15 rep"), safeSlot(['core_obliquo'], null, "15-20 rep") ] }
+                    ];
+                } else { // Treino C (Anterior Expandido)
+                    blueprint = [
+                        { title: "Bloco 1: Base Anterior (Quadríceps)", slots: [ safeSlot(['perna_quadriceps'], 'barra', "10-12 rep"), safeSlot(['perna_quadriceps'], 'halter', "10-12 rep") ] },
+                        { title: "Bloco 2: Isolamento Articular", slots: [ safeSlot(['perna_quadriceps'], 'maquina', "12-15 rep"), safeSlot(['perna_quadriceps'], 'maquina', "12-15 rep") ] },
+                        { title: "Bloco 3: Panturrilhas", slots: [ safeSlot(['panturrilha_gastro'], 'maquina', "15-20 rep"), safeSlot(['panturrilha_soleo'], 'maquina', "15-20 rep") ] },
+                        { title: "Bloco 4: Core e Estabilização", slots: [ safeSlot(['core_profundo'], 'peso_corporal', "1 min"), safeSlot(['panturrilha_gastro'], 'peso_corporal', "Até a falha") ] }
+                    ];
                 }
             } else {
-                // MODO HIPERTROFIA (Padrão Original e Base para Definição)
+                // 💪 ROTA HIPERTROFIA E 🔥 DEFINIÇÃO (7 ou 8 Slots)
                 if (subOpt === 'push' || subOpt === 'A') {
-                    let e1 = getEx(['peito_esternocostal'], 'barra', used) || getEx(['peito_esternocostal'], null, used); if(e1) used.push(e1.name);
-                    let e2 = getEx(['ombro_anterior'], 'halter', used) || getEx(['ombro_anterior'], null, used); if(e2) used.push(e2.name);
-                    if(e1) generatedBlocks.push({ title: "Bloco 1: Força de Empurre", exercises: [ {name: e1.name, sets: 4, target: "8-10 rep"}, ...(e2 ? [{name: e2.name, sets: 4, target: "10-12 rep"}] : []) ]});
-                    let e3 = getEx(['peito_clavicular'], 'halter', used) || getEx(['peito_clavicular'], null, used); if(e3) used.push(e3.name);
-                    let e4 = getEx(['triceps_longa'], 'halter', used) || getEx(['triceps_longa'], null, used); if(e4) used.push(e4.name);
-                    if(e3) generatedBlocks.push({ title: "Bloco 2: Fibras Superiores & Tríceps", exercises: [ {name: e3.name, sets: 4, target: "10-12 rep"}, ...(e4 ? [{name: e4.name, sets: 4, target: "10-12 rep"}] : []) ]});
-                    let e5 = getEx(['peito_esternocostal', 'peito_costal'], 'maquina', used) || getEx(['peito_esternocostal'], 'cabo', used); if(e5) used.push(e5.name);
-                    let e6 = getEx(['ombro_lateral'], 'halter', used) || getEx(['ombro_lateral'], 'cabo', used); if(e6) used.push(e6.name);
-                    if(e5) generatedBlocks.push({ title: "Bloco 3: Pump & Expansão", exercises: [ {name: e5.name, sets: 3, target: "12-15 rep"}, ...(e6 ? [{name: e6.name, sets: 3, target: "12-15 rep"}] : []) ]});
-                    let e7 = getEx(['triceps_lateral_medial'], 'cabo', used) || getEx(['triceps_global'], null, used); if(e7) used.push(e7.name);
-                    if(e7) generatedBlocks.push({ title: "Bloco 4: Isolamento Final", exercises: [ {name: e7.name, sets: 3, target: "Até a falha"} ]});
+                    blueprint = [
+                        { title: "Bloco 1: Peitoral Base", slots: [ safeSlot(['peito_clavicular'], 'barra', "8-10 rep"), safeSlot(['peito_esternocostal'], 'halter', "8-10 rep") ] },
+                        { title: "Bloco 2: Peitoral Isolado & Ombro Frontal", slots: [ safeSlot(['peito_costal'], 'cabo', "10-12 rep"), safeSlot(['ombro_anterior'], 'halter', "10-12 rep") ] },
+                        { title: "Bloco 3: Ombro Lateral & Tríceps Base", slots: [ safeSlot(['ombro_lateral'], 'halter', "12-15 rep"), safeSlot(['triceps_longa'], 'halter', "10-12 rep") ] },
+                        { title: "Bloco 4: Tríceps Foco", slots: [ safeSlot(['triceps_lateral_medial'], 'cabo', "12-15 rep") ] }
+                    ];
+                    if(rawProfile === 'definicao') blueprint[3].slots.push(safeSlot(['cardio_motor'], 'peso_corporal', "1 min"));
                 } else if (subOpt === 'pull' || subOpt === 'B') {
-                    let e1 = getEx(['costa_largura'], 'calistenia', used, true) || getEx(['costa_largura'], null, used); if(e1) used.push(e1.name);
-                    let e2 = getEx(['costa_espessura'], 'barra', used) || getEx(['costa_espessura'], null, used); if(e2) used.push(e2.name);
-                    if(e1) generatedBlocks.push({ title: "Bloco 1: Tração Base", exercises: [ {name: e1.name, sets: 4, target: "8-10 rep"}, ...(e2 ? [{name: e2.name, sets: 4, target: "8-10 rep"}] : []) ]});
-                    let e3 = getEx(['costa_espessura'], 'maquina', used) || getEx(['costa_espessura'], null, used); if(e3) used.push(e3.name);
-                    let e4 = getEx(['ombro_posterior', 'trapezio'], 'halter', used) || getEx(['ombro_posterior'], null, used); if(e4) used.push(e4.name);
-                    if(e3) generatedBlocks.push({ title: "Bloco 2: Miolo das Costas", exercises: [ {name: e3.name, sets: 4, target: "10-12 rep"}, ...(e4 ? [{name: e4.name, sets: 4, target: "10-12 rep"}] : []) ]});
-                    let e5 = getEx(['costa_isolado', 'costa_largura'], 'cabo', used); if(e5) used.push(e5.name);
-                    let e6 = getEx(['biceps_longa'], 'halter', used) || getEx(['biceps_global'], null, used); if(e6) used.push(e6.name);
-                    if(e5) generatedBlocks.push({ title: "Bloco 3: Isolamento Dorsal & Bíceps", exercises: [ {name: e5.name, sets: 3, target: "12-15 rep"}, ...(e6 ? [{name: e6.name, sets: 3, target: "10-12 rep"}] : []) ]});
-                    let e7 = getEx(['biceps_curta', 'biceps_braquial'], 'cabo', used) || getEx(['biceps_curta'], null, used); if(e7) used.push(e7.name);
-                    if(e7) generatedBlocks.push({ title: "Bloco 4: Braços (Exaustão)", exercises: [ {name: e7.name, sets: 3, target: "Até a falha"} ]});
-                } else {
-                    let e1 = getEx(['perna_quadriceps'], 'barra', used) || getEx(['perna_quadriceps'], 'maquina', used); if(e1) used.push(e1.name);
-                    let e2 = getEx(['perna_posterior_gluteo'], 'barra', used) || getEx(['perna_posterior_gluteo'], null, used); if(e2) used.push(e2.name);
-                    if(e1) generatedBlocks.push({ title: "Bloco 1: Eixos Pesados", exercises: [ {name: e1.name, sets: 4, target: "8-10 rep"}, ...(e2 ? [{name: e2.name, sets: 4, target: "8-10 rep"}] : []) ]});
-                    let e3 = getEx(['perna_quadriceps'], 'maquina', used) || getEx(['perna_quadriceps'], 'halter', used); if(e3) used.push(e3.name);
-                    let e4 = getEx(['perna_posterior_gluteo'], 'maquina', used) || getEx(['perna_posterior_gluteo'], 'halter', used); if(e4) used.push(e4.name);
-                    if(e3) generatedBlocks.push({ title: "Bloco 2: Isolamento Articular", exercises: [ {name: e3.name, sets: 4, target: "10-12 rep"}, ...(e4 ? [{name: e4.name, sets: 4, target: "10-12 rep"}] : []) ]});
-                    let e5 = getEx(['perna_adutor_abdutor'], 'maquina', used) || getEx(['perna_quadriceps'], null, used); if(e5) used.push(e5.name);
-                    let e6 = getEx(['panturrilha_gastro', 'panturrilha_soleo'], 'maquina', used) || getEx(['panturrilha_gastro'], null, used); if(e6) used.push(e6.name);
-                    if(e5) generatedBlocks.push({ title: "Bloco 3: Base & Panturrilhas", exercises: [ {name: e5.name, sets: 3, target: "12-15 rep"}, ...(e6 ? [{name: e6.name, sets: 4, target: "15-20 rep"}] : []) ]});
+                    blueprint = [
+                        { title: "Bloco 1: Dorsais Base", slots: [ safeSlot(['costa_largura'], 'barra', "8-10 rep"), safeSlot(['costa_espessura'], 'maquina', "8-10 rep") ] },
+                        { title: "Bloco 2: Posterior & Lombar", slots: [ safeSlot(['costa_isolado', 'costa'], 'cabo', "10-12 rep"), safeSlot(['ombro_posterior'], 'halter', "10-12 rep") ] },
+                        { title: "Bloco 3: Trapézio & Bíceps Base", slots: [ safeSlot(['trapezio'], 'halter', "12-15 rep"), safeSlot(['biceps_longa', 'biceps_curta'], 'barra', "10-12 rep") ] },
+                        { title: "Bloco 4: Braquial Foco", slots: [ safeSlot(['biceps_braquial'], 'cabo', "12-15 rep") ] }
+                    ];
+                    if(rawProfile === 'definicao') blueprint[3].slots.push(safeSlot(['cardio_resistencia'], 'peso_corporal', "1 min"));
+                } else { // Legs
+                    blueprint = [
+                        { title: "Bloco 1: Quadríceps Primário", slots: [ safeSlot(['perna_quadriceps'], 'barra', "8-10 rep"), safeSlot(['perna_quadriceps'], 'maquina', "10-12 rep") ] },
+                        { title: "Bloco 2: Cadeia Posterior", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep") ] },
+                        { title: "Bloco 3: Panturrilhas Sinergistas", slots: [ safeSlot(['panturrilha_gastro'], 'maquina', "15-20 rep"), safeSlot(['panturrilha_soleo'], 'maquina', "15-20 rep") ] },
+                        { title: "Bloco 4: Core & Estabilização", slots: [ safeSlot(['core_profundo', 'core_supra'], null, "15-20 rep") ] }
+                    ];
+                    if(rawProfile === 'definicao') blueprint[3].slots.push(safeSlot(['esporte_agilidade', 'cardio_motor'], 'peso_corporal', "1 min"));
                 }
             }
-        } 
+
+            // Construtor: Compila as Plantas Baixas e joga para o sistema renderizar
+            blueprint.forEach(b => {
+                const validExs = b.slots.filter(s => s !== null);
+                if (validExs.length > 0) {
+                    generatedBlocks.push({ title: b.title, exercises: validExs });
+                }
+            });
+        }
         // --- SISTEMA ABCD ---
         else if (method === 'abcd') {
             if (routeProfile === 'feminino') {
