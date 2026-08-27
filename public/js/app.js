@@ -976,13 +976,16 @@ function removeExercise(bIndex, eIndex) {
             const card = document.createElement('div'); card.className = cardClass; 
             if (!isBiset) card.style.borderLeft = '4px solid #44aaff'; 
             
-            card.innerHTML = `<div class="biset-title">${bloco.title}</div>`;
+            // NOVO: Adicionamos o botão de Chevron (setinha) e reorganizamos o título
+            card.innerHTML = `
+                <div class="biset-title" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+                    <span class="block-name">${bloco.title}</span>
+                    <span class="toggle-icon" style="transition: transform 0.3s; font-size: 14px; color: #888;">▲</span>
+                </div>`;
             
-            // PONTO 4: Permite reabrir o bloco sanfona com um clique
+            // PONTO 4: Permite recolher/expandir o bloco livremente ao clicar no cabeçalho
             card.querySelector('.biset-title').addEventListener('click', () => {
-                if (card.classList.contains('collapsed-block')) {
-                    card.classList.remove('collapsed-block');
-                }
+                card.classList.toggle('collapsed-block');
             });
             
             bloco.exercises.forEach((ex, eIndex) => {

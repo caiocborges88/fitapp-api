@@ -702,7 +702,6 @@ select:focus, textarea:focus, input[type="text"]:focus {
 
 /* --- PONTO 4: Encolhimento do Bloco no Treino (Sanfona) --- */
 .collapsed-block {
-    cursor: pointer;
     background-color: #1a1a1a;
 }
 .collapsed-block .exercise-block {
@@ -713,9 +712,12 @@ select:focus, textarea:focus, input[type="text"]:focus {
     border-bottom: none;
     margin-bottom: 0;
 }
-.collapsed-block .biset-title::after {
-    content: ' ✅ (Concluído - Toque para reabrir)';
-    font-size: 11px;
-    color: #888;
-    font-weight: normal;
+/* Coloca o ícone de Check limpo no título quando encolhido */
+.collapsed-block .biset-title .block-name::after {
+    content: ' ✅';
+    font-size: 14px;
+}
+/* Gira a setinha (Chevron) para baixo indicando que pode expandir */
+.collapsed-block .toggle-icon {
+    transform: rotate(180deg);
 }
