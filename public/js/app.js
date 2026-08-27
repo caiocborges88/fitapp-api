@@ -571,6 +571,94 @@ function renderWeeklyCalendar() {
         loadWorkout();
     }
 
+    // --- NOVO MOTOR DE AERÓBICO ---
+    let cardioTimerInterval = null;
+    let cardioElapsedSeconds = 0;
+    let isCardioRunning = false;
+
+    function startCardio() {
+        const tabTreino = document.getElementById('nav-treino');
+        if (tabTreino) tabTreino.click();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        currentWorkoutType = 'Cardio';
+        isWorkoutActive = true; 
+        
+        // Esconde painéis principais
+        document.getElementById('workoutCards').style.display = 'none';
+        const header = document.querySelector('.dashboard-header');
+        if (header) header.style.display = 'none';
+        const mainSelector = document.getElementById('mainMethodSelector');
+        const bioPanel = mainSelector ? mainSelector.closest('div') : null;
+        if (bioPanel) bioPanel.style.display = 'none';
+        const templatesFront = document.getElementById('templatesFrontline');
+        if (templatesFront) templatesFront.style.display = 'none';
+        const navBar = document.querySelector('nav');
+        if(navBar) navBar.style.display = 'none';
+
+        // Esconde HUD de hipertrofia
+        document.getElementById('workoutHud').style.display = 'none';
+        document.getElementById('exerciseList').style.display = 'none';
+        
+        // Mostra HUD de Cardio
+        els.workoutArea.style.display = 'block';
+        document.getElementById('cardioArea').style.display = 'block';
+        els.btnFinishArea.style.display = 'flex';
+        
+        // Ajusta botão de finalizar para ficar padrão
+        const btnFinish = document.getElementById('btnFinishAction');
+        if (btnFinish) {
+            btnFinish.className = 'btn-action btn-success'; 
+            btnFinish.textContent = '🏆 Salvar Aeróbico';
+        }
+
+        // Reseta variáveis e inputs
+        cardioElapsedSeconds = 0;
+        isCardioRunning = false;
+        clearInterval(cardioTimerInterval);
+        document.getElementById('cardioTimerDisplay').textContent = "00:00:00";
+        
+        const btnToggle = document.getElementById('btnToggleCardioTimer');
+        if(btnToggle) {
+            btnToggle.innerHTML = "▶ Iniciar Relógio";
+            btnToggle.style.color = '#4da3ff'; btnToggle.style.borderColor = '#4da3ff'; btnToggle.style.background = 'rgba(77, 163, 255, 0.2)';
+        }
+        
+        document.getElementById('cardioDist').value = '';
+        document.getElementById('cardioKcal').value = '';
+        document.getElementById('cardioBpm').value = '';
+        
+        workoutStartTime = Date.now();
+        if(audioEnabled) speak("Motor aeróbico ativado.");
+    }
+
+    function toggleCardioTimer() {
+        const btn = document.getElementById('btnToggleCardioTimer');
+        if (!btn) return;
+        
+        if (isCardioRunning) {
+            isCardioRunning = false;
+            clearInterval(cardioTimerInterval);
+            btn.innerHTML = "▶ Retomar Relógio";
+            btn.style.color = '#00ff88'; btn.style.borderColor = '#00ff88'; btn.style.background = 'rgba(0, 255, 136, 0.2)';
+            if(audioEnabled) speak("Relógio pausado.");
+        } else {
+            isCardioRunning = true;
+            btn.innerHTML = "⏸ Pausar Relógio";
+            btn.style.color = '#ffaa00'; btn.style.borderColor = '#ffaa00'; btn.style.background = 'rgba(255, 170, 0, 0.2)';
+            if(audioEnabled) speak("Ação.");
+            
+            cardioTimerInterval = setInterval(() => {
+                cardioElapsedSeconds++;
+                const h = Math.floor(cardioElapsedSeconds / 3600).toString().padStart(2, '0');
+                const m = Math.floor((cardioElapsedSeconds % 3600) / 60).toString().padStart(2, '0');
+                const s = (cardioElapsedSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('cardioTimerDisplay').textContent = `${h}:${m}:${s}`;
+            }, 1000);
+        }
+    }
+    // ----------------------------
+
     function updateGlobalTimer() {
         if (!workoutStartTime) return;
         const now = Date.now();
@@ -1210,20 +1298,34 @@ function removeExercise(bIndex, eIndex) {
             tempTotalTimeSecs = Math.floor((Date.now() - workoutStartTime) / 1000);
         }
 
-        // Bloqueio 1: Treino vazio
-        if (checkedSets === 0) {
-            showToast("⚠️ Comando Negado: Marque ao menos uma série para registrar combate.");
-            return; 
-        }
-
-        // Bloqueio 2: Speedrun (Menos de 2 minutos)
-        if (tempTotalTimeSecs < 120) {
-            showToast("⚠️ Abortado: Tempo operacional mínimo não atingido (2 minutos).");
-            return; 
+        // NOVO: Ramificação Tática (Cardio vs Hipertrofia)
+        if (currentWorkoutType === 'Cardio') {
+            const dist = parseSafeFloat(document.getElementById('cardioDist').value);
+            const kcal = parseInt(document.getElementById('cardioKcal').value) || 0;
+            const bpm = parseInt(document.getElementById('cardioBpm').value) || 0;
+            
+            if (cardioElapsedSeconds < 120 && dist === 0 && kcal === 0) {
+                showToast("⚠️ Comando Negado: Insira os dados do relógio ou corra pelo menos 2 minutos.");
+                return;
+            }
+            
+            // Empacota os dados sem interferir na hipertrofia
+            todayLog = [{ exercise: 'Cardio', dist_km: dist, kcal: kcal, bpm_medio: bpm, tempo_segundos: cardioElapsedSeconds }];
+            checkedSets = 1; totalSets = 1; // Hack para liberar gamificação
+            clearInterval(cardioTimerInterval);
+        } else {
+            if (checkedSets === 0) {
+                showToast("⚠️ Comando Negado: Marque ao menos uma série para registrar combate.");
+                return; 
+            }
+            if (tempTotalTimeSecs < 120) {
+                showToast("⚠️ Abortado: Tempo operacional mínimo não atingido (2 minutos).");
+                return; 
+            }
         }
         // --- FIM DA TRAVA ANTI-EXPLOIT ---
 
-        stopRestTimer(); // NOVO: Garante a destruição do cronômetro ao sair da tela de combate
+        stopRestTimer(); 
         
         const isComplete = checkedSets === totalSets;
         const tipoTreino = currentWorkoutType; 
@@ -1306,6 +1408,9 @@ function removeExercise(bIndex, eIndex) {
         clearWorkoutState(); 
 
         els.workoutArea.style.display = 'none';
+        document.getElementById('cardioArea').style.display = 'none'; 
+        document.getElementById('workoutHud').style.display = 'block'; 
+        document.getElementById('exerciseList').style.display = 'block'; 
         els.btnFinishArea.style.display = 'none';
         document.getElementById('workoutCards').style.display = 'flex';
         
@@ -1352,6 +1457,7 @@ window.abortarMissao = function() {
         // 1. Desliga os Motores
         stopRestTimer();
         if (globalTimer) clearInterval(globalTimer);
+        clearInterval(cardioTimerInterval);
         workoutStartTime = null;
         
         // 2. Limpa o Estado de Combate
@@ -1360,6 +1466,9 @@ window.abortarMissao = function() {
         
         // 3. Restaura o Esconderijo Visual
         els.workoutArea.style.display = 'none'; 
+        document.getElementById('cardioArea').style.display = 'none'; 
+        document.getElementById('workoutHud').style.display = 'block'; 
+        document.getElementById('exerciseList').style.display = 'block'; 
         els.btnFinishArea.style.display = 'none';
         document.getElementById('workoutCards').style.display = 'flex';
         
@@ -1861,8 +1970,17 @@ window.encerrarSessao = function() {
                     exDiv.style.marginBottom = '8px';
                     exDiv.innerHTML = `<div style="color: #4da3ff; font-size: 13px; font-weight: bold;">${exName}</div>`;
                     
-                    const setStr = sets.map(s => `<span style="font-size: 11px; color: #ccc; background: #111; padding: 2px 6px; border-radius: 4px; margin-right: 4px; border: 1px solid #333;">S${s.set}: ${s.kg}kg x ${s.reps}</span>`).join('');
-                    exDiv.innerHTML += `<div style="margin-top: 4px; line-height: 1.8;">${setStr}</div>`;
+                    if (exName === 'Cardio') {
+                        const c = sets[0];
+                        const distStr = c.dist_km > 0 ? `<span style="background: #111; padding: 2px 6px; border-radius: 4px; margin-right: 4px; border: 1px solid #333; color: #4da3ff;">🏃 ${c.dist_km} km</span>` : '';
+                        const kcalStr = c.kcal > 0 ? `<span style="background: #111; padding: 2px 6px; border-radius: 4px; margin-right: 4px; border: 1px solid #333; color: #ffaa00;">🔥 ${c.kcal} kcal</span>` : '';
+                        const bpmStr = c.bpm_medio > 0 ? `<span style="background: #111; padding: 2px 6px; border-radius: 4px; margin-right: 4px; border: 1px solid #333; color: #ff4444;">❤️ ${c.bpm_medio} bpm</span>` : '';
+                        const timeStr = c.tempo_segundos > 0 ? `<span style="background: #111; padding: 2px 6px; border-radius: 4px; margin-right: 4px; border: 1px solid #333; color: #ccc;">⏱️ ${Math.floor(c.tempo_segundos/60)} min</span>` : '';
+                        exDiv.innerHTML += `<div style="margin-top: 6px;">${distStr}${kcalStr}${bpmStr}${timeStr}</div>`;
+                    } else {
+                        const setStr = sets.map(s => `<span style="font-size: 11px; color: #ccc; background: #111; padding: 2px 6px; border-radius: 4px; margin-right: 4px; border: 1px solid #333;">S${s.set}: ${s.kg}kg x ${s.reps}</span>`).join('');
+                        exDiv.innerHTML += `<div style="margin-top: 4px; line-height: 1.8;">${setStr}</div>`;
+                    }
                     body.appendChild(exDiv);
                 }
             } else {
@@ -3585,7 +3703,7 @@ function updateDynamicCards() {
         });
     }
     return { 
-        init, filterLibrary, openSwapModal, confirmSwap, startWorkout, openForgeModal, updateForgeOptions, generateForgedWorkout, updateDynamicCards,
+        init, filterLibrary, openSwapModal, confirmSwap, startWorkout, startCardio, toggleCardioTimer, openForgeModal, updateForgeOptions, generateForgedWorkout, updateDynamicCards,
         beginWorkoutExecution, acceptSnap, declineSnap, cancelWorkoutPreview,
         toggleGlobalEnv, updateEnvUI, updateCampaignDashboard, resetCampaign,
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,

@@ -178,7 +178,11 @@
                     <p>Foco Posterior</p>
                     <div class="lock-overlay" id="lock-D">🔒</div>
                 </div>
-                <!-- Cartão 'Treino em Casa' removido. O controle de terreno agora é Global no cabeçalho. -->
+                <!-- NOVO: Módulo Aeróbico -->
+                <div class="card-treino" id="card-Cardio" onclick="FitApp.startCardio()" style="border-left-color: #4da3ff; background: linear-gradient(145deg, #182230, #121822);">
+                    <h3 style="color: #4da3ff;">🏃 Motor Aeróbico</h3>
+                    <p>Corrida, Bike, Elíptico...</p>
+                </div>
             </div>
 
             <!-- NOVO: Meus Templates na Linha de Frente -->
@@ -258,6 +262,38 @@
                 </div>
                 <div id="exerciseList" style="padding-top: 10px;"></div>
             </div>
+
+            <!-- NOVO: Painel de Controle Aeróbico (Isolado da Hipertrofia) -->
+            <div id="cardioArea" style="display: none; padding-top: 10px; margin-bottom: 20px;">
+                <div style="background: #151515; border: 1px solid #4da3ff; border-radius: 16px; padding: 20px; box-shadow: 0 10px 25px rgba(77, 163, 255, 0.1);">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h2 style="color: #4da3ff; margin: 0; text-transform: uppercase;">Monitoramento</h2>
+                        <p style="color: #aaa; font-size: 13px;">Inicie o cronômetro ou insira os dados do relógio no final</p>
+                    </div>
+
+                    <div id="cardioTimerDisplay" style="text-align: center; font-size: 55px; font-weight: bold; color: #4da3ff; margin-bottom: 20px; font-family: monospace; text-shadow: 0 0 15px rgba(77, 163, 255, 0.5);">00:00:00</div>
+                    
+                    <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+                        <button id="btnToggleCardioTimer" onclick="FitApp.toggleCardioTimer()" class="btn-action" style="flex: 1; background: rgba(77, 163, 255, 0.2); border: 1px solid #4da3ff; color: #4da3ff; padding: 12px; font-size: 14px; text-transform: uppercase;">▶ Iniciar Relógio</button>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div style="background: #1e1e1e; padding: 15px; border-radius: 12px; border: 1px solid #333;">
+                            <label style="color: #888; font-size: 11px; text-transform: uppercase; font-weight: bold;">Distância (Km)</label>
+                            <input type="number" id="cardioDist" placeholder="Ex: 5.2" style="width: 100%; background: transparent; border: none; border-bottom: 2px solid #4da3ff; color: #fff; font-size: 24px; font-weight: bold; text-align: center; margin-top: 5px; padding: 5px 0; outline: none;">
+                        </div>
+                        <div style="background: #1e1e1e; padding: 15px; border-radius: 12px; border: 1px solid #333;">
+                            <label style="color: #888; font-size: 11px; text-transform: uppercase; font-weight: bold;">Calorias (Kcal)</label>
+                            <input type="number" id="cardioKcal" placeholder="Ex: 350" style="width: 100%; background: transparent; border: none; border-bottom: 2px solid #ffaa00; color: #fff; font-size: 24px; font-weight: bold; text-align: center; margin-top: 5px; padding: 5px 0; outline: none;">
+                        </div>
+                        <div style="background: #1e1e1e; padding: 15px; border-radius: 12px; border: 1px solid #333; grid-column: span 2;">
+                            <label style="color: #888; font-size: 11px; text-transform: uppercase; font-weight: bold;">Frequência Cardíaca (BPM Médio)</label>
+                            <input type="number" id="cardioBpm" placeholder="Ex: 145" style="width: 100%; background: transparent; border: none; border-bottom: 2px solid #ff4444; color: #fff; font-size: 24px; font-weight: bold; text-align: center; margin-top: 5px; padding: 5px 0; outline: none;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="btn-finish-area" id="btnFinishArea" style="display: none; flex-direction: column; gap: 10px;">
                 <button id="btnFinishAction" class="btn-action btn-warning">⚠️ Encerrar e Salvar Dados</button>
                 <button onclick="abortarMissao()" class="btn-action" style="background: transparent; color: #ff4444; border: 1px solid #ff4444; font-size: 14px;">❌ Abortar Missão (Não Salvar)</button>
