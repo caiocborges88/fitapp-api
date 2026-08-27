@@ -1760,7 +1760,13 @@ window.encerrarSessao = function() {
     function switchTab(tabId, navId) {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active'); document.getElementById(navId).classList.add('active');
+        
+        // NOVO: Travas de segurança para evitar erro de classList null
+        const tabEl = document.getElementById(tabId);
+        if (tabEl) tabEl.classList.add('active'); 
+        
+        const navEl = document.getElementById(navId);
+        if (navEl) navEl.classList.add('active');
         
         // Distribuição tática das renderizações
         if (tabId === 'tab-arena') FitGamification.loadLeaderboard(); // Injeta o carregamento do Ranking
