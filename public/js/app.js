@@ -1230,7 +1230,9 @@ function removeExercise(bIndex, eIndex) {
             workoutStartTime = null;
         }
 
-        const payload = { date: dataHoje, tipo: tipoTreino, duration_secs: totalTimeSecs, data: todayLog };
+        // NOVO: Registra qual foi o método utilizado para não misturar marcações de 'Feito'
+        const currentMethod = document.getElementById('mainMethodSelector') ? document.getElementById('mainMethodSelector').value : 'ppl';
+        const payload = { date: dataHoje, tipo: tipoTreino, method: currentMethod, duration_secs: totalTimeSecs, data: todayLog };
 
         try {
             document.getElementById('btnFinishAction').textContent = "⏳ Salvando...";
@@ -2347,6 +2349,7 @@ function renderMetricsChart() {
         if (els.profileSelector) els.profileSelector.addEventListener('change', () => {
             safeSet('fitapp_profile', els.profileSelector.value);
             applyTheme(); // 🎨 Troca a paleta de cores em tempo real
+            updateDynamicCards(); // NOVO: Força a atualização imediata dos textos dos cartões
             if(currentWorkoutType) loadWorkout(); 
             showToast(els.profileSelector.value === 'feminino' ? 'Perfil Feminino ativado.' : 'Perfil Padrão ativado.');
         });
@@ -2827,6 +2830,9 @@ function updateDynamicCards() {
         if(cB.querySelector('h3')) { cB.querySelector('h3').textContent = tB; cB.querySelector('p').textContent = sB; }
         if(cC.querySelector('h3')) { cC.querySelector('h3').textContent = tC; cC.querySelector('p').textContent = sC; }
         if(cD && cD.querySelector('h3')) { cD.querySelector('h3').textContent = tD; cD.querySelector('p').textContent = sD; }
+
+        // NOVO: Reavalia as marcações de "Feito" sempre que os cartões mudarem
+        if (typeof checkCompletedCards === 'function') checkCompletedCards();
     }
 
     function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
@@ -3564,33 +3570,33 @@ function updateDynamicCards() {
 })();
 function checkCompletedCards() {
         const history = JSON.parse(FitApp.safeGet('fitapp_week_log') || '[]');
-        if (history.length === 0) return;
-
-        const d = new Date();
-        const offset = d.getTimezoneOffset() * 60000;
-        const dataHoje = (new Date(d.getTime() - offset)).toISOString().split('T')[0];
-
-        // Filtra apenas os treinos feitos HOJE
-        const treinosHoje = history.filter(h => h.date === dataHoje).map(h => h.tipo);
         
-        // Remove a classe de todos os cartões primeiro
+        // 1. Remove a classe de todos os cartões primeiro para resetar a tela
         ['A', 'B', 'C', 'D'].forEach(t => {
             const card = document.getElementById('card-' + t);
             if (card) card.classList.remove('completed-card');
         });
 
-        // Aplica a opacidade apenas nos treinos concluídos hoje
+        if (history.length === 0) return;
+
+        const d = new Date();
+        const offset = d.getTimezoneOffset() * 60000;
+        const dataHoje = (new Date(d.getTime() - offset)).toISOString().split('T')[0];
+        const currentMethod = document.getElementById('mainMethodSelector') ? document.getElementById('mainMethodSelector').value : 'ppl';
+
+        // 2. Filtra apenas os treinos feitos HOJE e do MESMO MÉTODO selecionado
+        const treinosHoje = history.filter(h => h.date === dataHoje && (h.method === currentMethod || !h.method)).map(h => h.tipo);
+
+        // 3. Aplica a opacidade apenas nos treinos válidos
         treinosHoje.forEach(tipo => {
             const card = document.getElementById('card-' + tipo);
             if (card) card.classList.add('completed-card');
         });
         
-        // Regra do Ciclo: Se ele fez A, B e C hoje (improvável, mas possível), reseta as cartas para o usuário poder clicar livremente.
-        const method = document.getElementById('mainMethodSelector') ? document.getElementById('mainMethodSelector').value : 'ppl';
+        // 4. Regra do Ciclo: Se completou a matriz, reseta visualmente
         let cycleComplete = false;
-        
-        if (method === 'abcd' && treinosHoje.includes('A') && treinosHoje.includes('B') && treinosHoje.includes('C') && treinosHoje.includes('D')) cycleComplete = true;
-        else if (method !== 'abcd' && treinosHoje.includes('A') && treinosHoje.includes('B') && treinosHoje.includes('C')) cycleComplete = true;
+        if (currentMethod === 'abcd' && treinosHoje.includes('A') && treinosHoje.includes('B') && treinosHoje.includes('C') && treinosHoje.includes('D')) cycleComplete = true;
+        else if (currentMethod !== 'abcd' && treinosHoje.includes('A') && treinosHoje.includes('B') && treinosHoje.includes('C')) cycleComplete = true;
 
         if (cycleComplete) {
             ['A', 'B', 'C', 'D'].forEach(t => {
