@@ -3405,12 +3405,15 @@ function updateDynamicCards() {
         const bioPanel = document.getElementById('biomechanicsPanel');
         const dash = document.getElementById('campaignDashboard');
         
-        if (campaignStr && campaignStr.trim() !== '') {
+        // 1. Puxamos a leitura da contagem para ANTES do IF
+        let count = parseInt(safeGet('fitapp_campaign_count') || '0');
+        
+        // 2. Adicionamos a trava "&& count > 0" para evitar o bloqueio precoce
+        if (campaignStr && campaignStr.trim() !== '' && count > 0) {
             if(bioPanel) bioPanel.style.display = 'none';
             if(dash) dash.style.display = 'block';
             
             const campData = JSON.parse(campaignStr);
-            let count = parseInt(safeGet('fitapp_campaign_count') || '0');
             
             const title = document.getElementById('campaignDashTitle');
             const subtitle = document.getElementById('campaignDashSubtitle');
