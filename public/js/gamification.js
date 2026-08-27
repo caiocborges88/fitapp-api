@@ -45,21 +45,43 @@ var FitGamification = (() => {
 
     function showPackModal(snapActive = false) { 
         isSnapRewardActive = snapActive; // Grava se o desafio foi aceito
-        document.getElementById('packEnvelope').style.display = 'flex'; 
+        
+        const envelope = document.getElementById('packEnvelope');
+        
+        // Injeta o Design Premium da Caixa de Suprimentos via JS
+        envelope.innerHTML = `
+            <div style="z-index: 2; position: relative;">
+                <div style="font-size: 55px; filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.8)); margin-bottom: 10px;">📦</div>
+                <div style="font-size: 15px; text-transform: uppercase; letter-spacing: 2px; color: #fff; font-weight: 900;">Drop Tático</div>
+                <div style="font-size: 10px; color: #00ff88; margin-top: 15px; letter-spacing: 3px; animation: pulse 1s infinite;">TOCAR PARA ABRIR</div>
+            </div>
+        `;
+        
+        envelope.style.display = 'flex'; 
         document.getElementById('packRevealArea').style.display = 'none'; 
         document.getElementById('btnClosePack').style.display = 'none'; 
         document.getElementById('packModal').style.display = 'flex'; 
     }
     
     async function openPack() {
-        FitAudio.packRip(); // NOVO: Som do pacote abrindo
-        document.getElementById('packEnvelope').style.display = 'none'; 
+        FitAudio.packRip(); // Som do pacote abrindo
+        const envelope = document.getElementById('packEnvelope');
         const revealArea = document.getElementById('packRevealArea'); 
         
-        // Status visual de comunicação militar com a nuvem
-        revealArea.innerHTML = '<div style="color: #a64dff; font-weight: bold; margin-top: 20px;">Sincronizando com a Base de Dados... 📡</div>';
+        // 💥 EFEITO FLASH DE EXPLOSÃO (Imersão 100%)
+        const flash = document.createElement('div');
+        flash.style.position = 'fixed'; flash.style.top = '0'; flash.style.left = '0'; flash.style.width = '100%'; flash.style.height = '100%';
+        flash.style.background = '#fff'; flash.style.zIndex = '3000'; flash.style.transition = 'opacity 0.8s ease-out'; flash.style.pointerEvents = 'none';
+        document.body.appendChild(flash);
+        
+        setTimeout(() => { flash.style.opacity = '0'; }, 50);
+        setTimeout(() => { flash.remove(); }, 850);
+
+        envelope.style.display = 'none'; 
+        
+        // Status visual de comunicação militar
+        revealArea.innerHTML = '<div style="color: #00ff88; font-weight: bold; margin-top: 20px; font-family: monospace; letter-spacing: 1px;">Descriptografando... 📡</div>';
         revealArea.style.display = 'flex';
-        revealArea.style.flexDirection = 'column';
         
         const profile = await getPlayerProfile();
         let savedCollection = profile.album || [];
@@ -69,11 +91,9 @@ var FitGamification = (() => {
         let targetRarity = 'comum';
         
         if (isSnapRewardActive) {
-            // PROTOCOLO SNAP: Hackeia o drop rate garantindo recompensa máxima
             targetRarity = roll > 0.70 ? 'holografico' : 'ouro';
-            isSnapRewardActive = false; // Reseta a memória após o pagamento
+            isSnapRewardActive = false; 
         } else {
-            // Drop Padrão
             if (roll > 0.95) targetRarity = 'holografico'; 
             else if (roll > 0.85) targetRarity = 'ouro'; 
             else if (roll > 0.60) targetRarity = 'prata';
@@ -100,44 +120,48 @@ var FitGamification = (() => {
             repetidas++;
         }
         
-        // Grava o resultado permanentemente no Firestore (Resgate Concluído)
         await savePlayerProfile(savedCollection, repetidas);
 
         revealArea.innerHTML = ''; // Limpa o aviso de sincronização
         
         const div = document.createElement('div'); 
         div.className = `sticker-slot filled ${drawn.rarity}`; 
-        div.innerHTML = `<div class="sticker-icon">${drawn.icon}</div><div>${drawn.name}</div>`; 
+        div.innerHTML = `<div class="sticker-icon">${drawn.icon}</div><div style="font-size: 13px; font-weight: 800; text-transform: uppercase;">${drawn.name}</div>`; 
         revealArea.appendChild(div);
         
-        // NOVO: Avaliação Tática de Áudio
         if (isRepeated) {
-            FitAudio.repeated(); // Som de desapontamento/repetida
+            FitAudio.repeated(); 
             const repMsg = document.createElement('div');
             repMsg.style.color = '#ffaa00';
-            repMsg.style.marginTop = '15px';
+            repMsg.style.marginTop = '45px'; 
             repMsg.style.fontSize = '14px';
             repMsg.style.fontWeight = 'bold';
             repMsg.style.textAlign = 'center';
+            repMsg.style.animation = 'popInDelayed 0.5s forwards';
+            repMsg.style.animationDelay = '1s';
+            repMsg.style.opacity = '0';
             repMsg.textContent = "⚠️ Conquista Repetida! (+1 Ponto de Suor)";
             revealArea.appendChild(repMsg);
         } else {
             if (drawn.rarity === 'ouro' || drawn.rarity === 'holografico') {
-                FitAudio.revealEpic(); // Som de glória para raras
+                FitAudio.revealEpic(); 
             } else {
-                FitAudio.revealNormal(); // Som de confirmação padrão
+                FitAudio.revealNormal(); 
             }
         }
         
-        // Motor de Compartilhamento Nativo (Efeito Strava) preservado
+        // Motor de Compartilhamento Nativo
         const shareBtn = document.createElement('button');
         shareBtn.className = 'btn-action btn-start-pulse';
-        shareBtn.style.marginTop = '25px';
+        shareBtn.style.marginTop = isRepeated ? '15px' : '50px'; 
         shareBtn.style.background = '#25D366'; 
         shareBtn.style.color = '#000';
         shareBtn.style.border = 'none';
         shareBtn.style.width = '100%';
         shareBtn.style.maxWidth = '300px';
+        shareBtn.style.animation = 'popInDelayed 0.5s forwards';
+        shareBtn.style.animationDelay = '1.2s';
+        shareBtn.style.opacity = '0';
         shareBtn.innerHTML = '📲 Compartilhar Vitória';
         
         shareBtn.onclick = async () => {
@@ -163,7 +187,12 @@ var FitGamification = (() => {
         
         revealArea.appendChild(shareBtn);
 
-        document.getElementById('btnClosePack').style.display = 'block'; 
+        const btnClose = document.getElementById('btnClosePack');
+        btnClose.style.display = 'block'; 
+        btnClose.style.animation = 'popInDelayed 0.5s forwards';
+        btnClose.style.animationDelay = '1.5s';
+        btnClose.style.opacity = '0';
+
         if(window.FitApp) FitApp.speak(isRepeated ? "Conquista repetida detectada." : "Nova conquista revelada.");
     }
 
