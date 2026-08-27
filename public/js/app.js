@@ -467,35 +467,9 @@ async function exportStravaCard(historyIndex = -1) {
         const statLast = document.getElementById('statLast');
         if(statTotal) statTotal.textContent = total;
         if(statLast) statLast.textContent = lastType ? 'Treino ' + lastType : 'Nenhum';
-
-        // Lê a preferência do usuário (Livre por padrão)
-        const seqMode = safeGet('fitapp_sequence_mode') || 'livre';
-
-        // Destranca todos ou tranca todos inicialmente com base no modo
-        ['A', 'B', 'C'].forEach(t => {
-            const card = document.getElementById('card-' + t);
-            if(card) {
-                if (seqMode === 'livre') {
-                    card.classList.remove('locked');
-                } else {
-                    card.classList.add('locked');
-                }
-            }
-        });
-
-        // Se o modo for estrito, destranca apenas o próximo da fila
-        if (seqMode === 'estrita') {
-            let nextType = 'A'; 
-            if (lastType === 'A') nextType = 'B';
-            if (lastType === 'B') nextType = 'C';
-            if (lastType === 'C') nextType = 'A';
-
-            const nextCard = document.getElementById('card-' + nextType);
-            if (nextCard) nextCard.classList.remove('locked');
-        }
     }
 
-function renderWeeklyCalendar() {
+    function renderWeeklyCalendar() {
         const grid = document.getElementById('weeklyGrid');
         if (!grid) return;
         grid.innerHTML = '';
@@ -552,19 +526,11 @@ function renderWeeklyCalendar() {
     }
 
     function startWorkout(type) {
-        const card = document.getElementById('card-' + type);
-        if (card && card.classList.contains('locked')) {
-            showToast("Sequência bloqueada. Conclua o treino anterior.");
-            return;
-        }
-        
-        // NOVO: Força o redirecionamento tático para a linha de frente (Aba Treinar)
         const tabTreino = document.getElementById('nav-treino');
         if (tabTreino) {
             tabTreino.click();
         }
         
-        // Garante que o scroll volte para o topo ao trocar de tela
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
         currentWorkoutType = type;
@@ -2481,19 +2447,6 @@ function renderMetricsChart() {
         
         const savedLevel = safeGet('fitapp_level');
         if (savedLevel && els.levelSelector) els.levelSelector.value = savedLevel;
-
-        // NOVO: Resgata e escuta a Chave Seletora de Bloqueio
-        const sequenceSelector = document.getElementById('sequenceSelector');
-        const savedSeq = safeGet('fitapp_sequence_mode');
-        if (savedSeq && sequenceSelector) sequenceSelector.value = savedSeq;
-
-        if (sequenceSelector) {
-            sequenceSelector.addEventListener('change', () => {
-                safeSet('fitapp_sequence_mode', sequenceSelector.value);
-                checkSequence(); // Atualiza os cadeados instantaneamente
-                showToast(sequenceSelector.value === 'livre' ? 'Ordem livre ativada.' : 'Sequência estrita ativada.');
-            });
-        }
 
         // Mapeia todas as 6 abas da nova arquitetura (incluindo a Arena)
         ['treino', 'evolucao', 'conquistas', 'arena', 'biblioteca', 'perfil'].forEach(tab => { 

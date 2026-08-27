@@ -137,46 +137,24 @@
                 <button onclick="FitApp.resetCampaign()" style="background: transparent; color: #ff4444; border: 1px solid #ff4444; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; display: block; width: 100%;">🛑 Abortar e Reforjar Plano</button>
             </div>
 
-        <!-- O Cérebro Biomecânico (Oculto durante a Campanha) -->
-            <div id="biomechanicsPanel" style="background: #151515; padding: 15px; border-radius: 12px; border: 1px solid #a64dff; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(166, 77, 255, 0.1);">
-                <label style="color: #a64dff; font-size: 11px; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 8px;">🧬 Inteligência Biomecânica</label>
-                <select id="mainMethodSelector" class="select-level" style="width: 100%; border-color: #a64dff; font-size: 14px; margin-bottom: 15px;" onchange="FitApp.updateDynamicCards()">
-                    <option value="abc" selected>Treino ABC (Push / Pull / Legs)</option>
-                    <option value="abcd">Treino ABCD (Pernas Divididas)</option>
-                    <option value="biset_agonista">Bi-Set Agonista (Pré-Exaustão)</option>
-                    <option value="biset_antagonista">Bi-Set Antagônico & Misto</option>
-                    <option value="biset_sinergista">Bi-Set Sinergista (Peito/Tri, Costas/Bi)</option>
-                    <option value="circuito">Circuito Metabólico (FullBody)</option>
-                </select>
-
-                <!-- NOVO: Chave Seletora de Abdômen -->
-                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #333; padding-top: 12px;">
-                    <label style="color: #aaa; font-size: 13px; font-weight: bold; cursor: pointer;" for="toggleAbs">Incluir Bloco de Abdômen?</label>
-                    <input type="checkbox" id="toggleAbs" style="width: 22px; height: 22px; accent-color: #00ff88; cursor: pointer;">
-                </div>
-            </div>
-
+        
             <div class="workout-cards" id="workoutCards">
                 <div class="card-treino" id="card-A" onclick="FitApp.startWorkout('A')">
                     <h3>Treino A</h3>
                     <p>Peito & Tríceps</p>
-                    <div class="lock-overlay" id="lock-A">🔒</div>
                 </div>
                 <div class="card-treino" id="card-B" onclick="FitApp.startWorkout('B')">
                     <h3>Treino B</h3>
                     <p>Costas & Bíceps</p>
-                    <div class="lock-overlay" id="lock-B">🔒</div>
                 </div>
                 <div class="card-treino" id="card-C" onclick="FitApp.startWorkout('C')">
                     <h3>Treino C</h3>
                     <p>Pernas & Ombros</p>
-                    <div class="lock-overlay" id="lock-C">🔒</div>
                 </div>
                 <!-- Cartão D (Oculto por Padrão) -->
                 <div class="card-treino" id="card-D" onclick="FitApp.startWorkout('D')" style="display: none; border-left-color: #ffaa00;">
                     <h3>Treino D</h3>
                     <p>Foco Posterior</p>
-                    <div class="lock-overlay" id="lock-D">🔒</div>
                 </div>
                 <!-- NOVO: Módulo Aeróbico -->
                 <div class="card-treino" id="card-Cardio" onclick="FitApp.startCardio()" style="border-left-color: #4da3ff; background: linear-gradient(145deg, #182230, #121822);">
@@ -438,29 +416,51 @@
             </div>
 
             <!-- PLANO TÁTICO (Parâmetros do Motor) -->
-            <div class="config-section">
+            <div class="config-section" id="biomechanicsPanel">
                 <div class="section-title">🎯 Plano Tático</div>
+                
                 <div class="input-group">
-                    <label>Foco Principal</label>
-                    <select id="configFoco" class="form-select">
-                        <option value="hipertrofia">💪 Hipertrofia (Ganho de Massa)</option>
-                        <option value="condicionamento">🔥 Condicionamento (Queima)</option>
+                    <label>Divisão de Treino (Método)</label>
+                    <select id="mainMethodSelector" class="form-select" style="border-color: #a64dff;" onchange="FitApp.updateDynamicCards()">
+                        <option value="abc" selected>Treino ABC (Push / Pull / Legs)</option>
+                        <option value="abcd">Treino ABCD (Pernas Divididas)</option>
+                        <option value="biset_agonista">Bi-Set Agonista (Pré-Exaustão)</option>
+                        <option value="biset_antagonista">Bi-Set Antagônico & Misto</option>
+                        <option value="biset_sinergista">Bi-Set Sinergista (Peito/Tri, Costas/Bi)</option>
+                        <option value="circuito">Circuito Metabólico (FullBody)</option>
                     </select>
                 </div>
+
+                <div class="input-group">
+                    <label>Foco Biomecânico</label>
+                    <select id="profileSelector" class="form-select">
+                        <option value="hipertrofia">💪 Hipertrofia (Ganho de Massa)</option>
+                        <option value="definicao">🔥 Definição (Metabólico)</option>
+                        <option value="feminino">🍑 Foco Inferiores (Feminino)</option>
+                        <option value="tatico">🪖 Condicionamento Tático</option>
+                    </select>
+                </div>
+
                 <div class="input-group">
                     <label>Nível de Dificuldade</label>
-                    <select id="configNivel" class="form-select">
+                    <select id="levelSelector" class="form-select">
                         <option value="iniciante">🟢 Iniciante</option>
                         <option value="intermediario">🟡 Intermediário</option>
                         <option value="avancado">🔴 Avançado</option>
                     </select>
                 </div>
+
                 <div class="input-group">
                     <label>Ordem de Execução</label>
-                    <select id="configOrdem" class="form-select">
-                        <option value="aberta">🔓 Aberta (Recomendado)</option>
-                        <option value="sequencial">🔒 Sequencial (Rígida)</option>
+                    <select id="sequenceSelector" class="form-select">
+                        <option value="livre">🔓 Aberta (Recomendado)</option>
+                        <option value="estrita">🔒 Sequencial (Rígida)</option>
                     </select>
+                </div>
+
+                <div class="input-group" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; margin-top: 5px;">
+                    <label style="margin: 0;">Incluir Bloco de Abdômen na Forja?</label>
+                    <input type="checkbox" id="toggleAbs" style="width: 22px; height: 22px; accent-color: #00ff88; cursor: pointer;">
                 </div>
             </div>
 
