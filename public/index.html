@@ -417,39 +417,84 @@
             </div>
         </main>
 
-        <!-- 5. ABA PERFIL (Configurações) -->
-        <main id="tab-perfil" class="tab-content">
-            <h2 style="color: #fff; margin-bottom: 20px; text-align: center;">⚙️ Configurações</h2>
-            <div class="dashboard-header" style="background: #1e1e1e; padding: 20px; border-radius: 8px; border: 1px solid #333;">
-                
-                <!-- NOVO: Seletor de Perfil -->
-                <select id="profileSelector" class="select-level" style="width: 100%; border-color: #00ff88; margin-bottom: 15px;">
-                    <option value="hipertrofia">💪 Hipertrofia (Ganho de Massa)</option>
-                    <option value="definicao">🔥 Definição (Queima / Cutting)</option>
-                    <option value="feminino">👩 Feminino (Foco Inferiores)</option>
-                    <option value="tatico">🪖 Tático (Condicionamento)</option>
-                </select>
-
-                <label style="color: #aaa; font-size: 12px; display: block; margin-bottom: 5px;">Nível de Dificuldade</label>
-                <select id="levelSelector" class="select-level" style="width: 100%;">
-                    <option value="iniciante">🟢 Iniciante</option>
-                    <option value="intermediario" selected>🟡 Intermediário</option>
-                    <option value="avancado">🔴 Avançado</option>
-                </select>
-
-                <!-- NOVO: Chave Seletora de Bloqueio -->
-                <label style="color: #aaa; font-size: 12px; display: block; margin-bottom: 5px; margin-top: 15px;">Ordem de Treino</label>
-                <select id="sequenceSelector" class="select-level" style="width: 100%;">
-                    <option value="livre" selected>🔓 Aberta (Recomendado)</option>
-                    <option value="estrita">🔒 Sequência Estrita (A-B-C)</option>
-                </select>
+        <!-- 5. ABA CONFIGURAÇÕES (Central de Comando) -->
+        <main id="tab-config" class="tab-content">
+            <div class="config-header">
+                <h2>Central de Comando</h2>
             </div>
-            <div style="text-align: center; margin-top: 30px; display: flex; flex-direction: column; gap: 15px; align-items: center;">
-                <!-- Botão de Log Out -->
-                <button class="btn-text" onclick="encerrarSessao()" style="color: #ff4444; background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; width: 80%; max-width: 300px;">🚪 Sair (Log Out)</button>
+
+            <!-- CARTÃO DE IDENTIDADE (Identificação do Atleta) -->
+            <div class="profile-card">
+                <div class="profile-avatar">C</div>
+                <div class="profile-info">
+                    <h3>Caio César Borges Teodoro</h3>
+                    <p>Atleta de Elite <span>•</span> Nível <span id="profileLevelDisplay">Iniciante</span></p>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat"><span id="statWorkouts">0</span>Missões</div>
+                    <div class="stat"><span id="statSweat" style="color: #ffaa00;">0</span>Suor</div>
+                    <div class="stat"><span id="statCards" style="color: #a64dff;">0</span>Cartas</div>
+                </div>
+            </div>
+
+            <!-- PLANO TÁTICO (Parâmetros do Motor) -->
+            <div class="config-section">
+                <div class="section-title">🎯 Plano Tático</div>
+                <div class="input-group">
+                    <label>Foco Principal</label>
+                    <select id="configFoco" class="form-select">
+                        <option value="hipertrofia">💪 Hipertrofia (Ganho de Massa)</option>
+                        <option value="condicionamento">🔥 Condicionamento (Queima)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Nível de Dificuldade</label>
+                    <select id="configNivel" class="form-select">
+                        <option value="iniciante">🟢 Iniciante</option>
+                        <option value="intermediario">🟡 Intermediário</option>
+                        <option value="avancado">🔴 Avançado</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Ordem de Execução</label>
+                    <select id="configOrdem" class="form-select">
+                        <option value="aberta">🔓 Aberta (Recomendado)</option>
+                        <option value="sequencial">🔒 Sequencial (Rígida)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- INTEGRAÇÕES E SENSORES (Preparação para Fase 3) -->
+            <div class="config-section">
+                <div class="section-title">📡 Integrações & Sensores</div>
+                
+                <div class="integration-item">
+                    <div class="int-icon" style="color: #4da3ff;">⌚</div>
+                    <div class="int-details">
+                        <h4>Samsung Galaxy Watch7</h4>
+                        <p>Telemetria e Biossensores Android</p>
+                    </div>
+                    <button class="btn-toggle active">ON</button>
+                </div>
+
+                <div class="integration-item">
+                    <div class="int-icon" style="color: #fc4c02;">🔥</div>
+                    <div class="int-details">
+                        <h4>Strava Network</h4>
+                        <p>Exportação de Relatórios de Combate</p>
+                    </div>
+                    <button class="btn-toggle active">Sync</button>
+                </div>
+            </div>
+
+            <!-- SISTEMA -->
+            <div class="config-section" style="border-color: #441111; background: rgba(255,0,0,0.02);">
+                <div class="section-title" style="color: #ff4444; border-bottom-color: #441111;">⚙️ Segurança</div>
+                <button class="btn-action btn-danger" onclick="FitApp.logout()" style="width: 100%; margin-top: 5px;">
+                    🚪 Encerrar Turno (Log Out)
+                </button>
             </div>
         </main>
-    </div>
 
     <!-- ZONA DE MODAIS (JANELAS FLUTUANTES) -->
 <!-- NOVO: A Forja de Treinos (Gerador Fisiológico) -->
