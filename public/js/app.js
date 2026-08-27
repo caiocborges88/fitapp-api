@@ -1062,7 +1062,12 @@ function removeExercise(bIndex, eIndex) {
                 
                 for(let s = 1; s <= ex.sets; s++) {
                     totalSets++; 
-                    const data = ex.setsData[s-1] || { kg: '', reps: '', checked: false };
+                    
+                    // CORREÇÃO: Garante que o slot da série exista na memória ANTES de tentar injetar dados fantasmas
+                    if (!ex.setsData[s-1]) {
+                        ex.setsData[s-1] = { kg: '', reps: '', checked: false };
+                    }
+                    const data = ex.setsData[s-1];
                     
                     if (data.checked) {
                         checkedSets++;
