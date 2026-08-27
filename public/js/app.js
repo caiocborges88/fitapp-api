@@ -1494,6 +1494,7 @@ window.encerrarSessao = function() {
 
         // NOVO: Leitura Dinâmica do Banco de Dados 
         const groups = {};
+        const activeMuscles = new Set(); // Rastreia os músculos visíveis no momento
         
         dictionaryData.forEach(ex => {
             const exName = ex.name || 'Exercício Desconhecido';
@@ -1507,11 +1508,41 @@ window.encerrarSessao = function() {
                 !exFocus.toLowerCase().includes(query) &&
                 !exEquip.toLowerCase().includes(query)) return;
             
+            // Rastreamento para o Heatmap (Se o exercício passou no filtro, captura o músculo)
+            const f = (exGroup + ' ' + exFocus).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            if (f.includes('peito')) activeMuscles.add('lib-svg-peito');
+            if (f.includes('ombro') || f.includes('deltoide')) activeMuscles.add('lib-svg-ombro');
+            if (f.includes('biceps') || f.includes('braco')) activeMuscles.add('lib-svg-biceps');
+            if (f.includes('triceps')) activeMuscles.add('lib-svg-triceps');
+            if (f.includes('costa') || f.includes('dorsal') || f.includes('lombar')) activeMuscles.add('lib-svg-costas');
+            if (f.includes('trapezio')) activeMuscles.add('lib-svg-trapezio');
+            if (f.includes('core') || f.includes('abdom')) activeMuscles.add('lib-svg-core');
+            if (f.includes('quadriceps') || f.includes('perna') && !f.includes('posterior') && !f.includes('gluteo')) activeMuscles.add('lib-svg-quadriceps');
+            if (f.includes('posterior') || f.includes('isquio')) activeMuscles.add('lib-svg-posterior');
+            if (f.includes('gluteo')) activeMuscles.add('lib-svg-gluteo');
+            if (f.includes('panturrilha') || f.includes('gastro')) activeMuscles.add('lib-svg-panturrilha');
+            
             // Agrupador 3D: Grupo > Subnível > Array de Exercícios
             if (!groups[exGroup]) groups[exGroup] = {};
             if (!groups[exGroup][exFocus]) groups[exGroup][exFocus] = [];
             
             groups[exGroup][exFocus].push(ex);
+        });
+
+        // 1. Apaga todo o Heatmap da Base antes de acender os novos
+        const allMuscles = ['lib-svg-peito', 'lib-svg-ombro', 'lib-svg-biceps', 'lib-svg-triceps', 'lib-svg-costas', 'lib-svg-trapezio', 'lib-svg-core', 'lib-svg-quadriceps', 'lib-svg-posterior', 'lib-svg-gluteo', 'lib-svg-panturrilha'];
+        allMuscles.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) { el.style.fill = '#222'; el.style.stroke = '#444'; }
+        });
+
+        // 2. Acende os músculos relevantes com base na paleta do tema atual
+        activeMuscles.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) { 
+                el.style.fill = 'var(--theme-primary)'; 
+                el.style.stroke = '#fff';
+            }
         });
 
         // Mapeamento Tático de Ícones para a Nova Base
