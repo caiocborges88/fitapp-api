@@ -3811,11 +3811,11 @@ function updateDynamicCards() {
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,
         renderIsolationChart,
         adjustRestTime, changeSets, cloneFirstSet, exportStravaCard,
-        adjustRestTime, changeSets, 
         toggleAutoPilot, startAutoPilot, stopAutoPilot, 
         openHistoryModal, switchHistoryTab,
         saveCustomWorkout, deleteCustomWorkout,
         openImportAiModal, processWorkoutWithAI,
+        startPrepPhase, startCooldownTimer, skipCooldown, finalizeSession, // NOVO: As chaves das novas Fases liberadas para o HTML
         safeGet, safeSet, showToast, speak,
         openDict: (name) => { 
             switchTab('tab-biblioteca', 'nav-biblioteca'); 
