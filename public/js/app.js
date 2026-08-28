@@ -2971,20 +2971,30 @@ function updateDynamicCards() {
                 'triceps_longa': ['Cabeça Longa'], 'triceps_lateral_medial': ['Lateral/Medial'], 'triceps_global': ['Todas'], 'triceps': ['Todas', 'Lateral/Medial', 'Cabeça Longa'],
                 'biceps_longa': ['Cabeça Curta/Longa'], 'biceps_curta': ['Cabeça Curta/Longa'], 'biceps_braquial': ['Braquial/Antebraço'], 'biceps_global': ['Cabeça Curta/Longa'], 'biceps': ['Cabeça Curta/Longa'],
                 'core_supra': ['Superior'], 'core_infra': ['Inferior'], 'core_obliquo': ['Oblíquos / Rotação'], 'core_profundo': ['Estabilização/Anti-extensão'], 'core': ['Superior', 'Inferior', 'Estabilização/Anti-extensão'],
-                
-                // NOVO: Integração Metabólica (Cutting)
-                'cardio_motor': ['Motor Aeróbico'],
-                'cardio_resistencia': ['Resistência Anaeróbica'],
-                'esporte_pliometria': ['Pliometria'],
-                'esporte_agilidade': ['Agilidade e Frenagem'],
-                'esporte_aceleracao': ['Aceleração e Velocidade']
+                'cardio_motor': ['Motor Aeróbico'], 'cardio_resistencia': ['Resistência Anaeróbica'], 'esporte_pliometria': ['Pliometria'], 'esporte_agilidade': ['Agilidade e Frenagem'], 'esporte_aceleracao': ['Aceleração e Velocidade']
             };
             const mapEquip = { 'barra': 'Barras_Anilhas', 'halter': 'Pesos_Livres', 'maquina': 'Maquinas_Polias', 'cabo': 'Maquinas_Polias', 'peso_corporal': 'Peso_Corporal', 'calistenia': 'Calistenia' };
+
+            // NOVO: Função validadora de Grupo Muscular Base
+            const checkBaseGroup = (dGroup, fTerms) => {
+                const prefix = fTerms[0].split('_')[0]; // Extrai "ombro" de "ombro_posterior"
+                const expectedGroup = { 'peito': 'peito', 'costa': 'costas', 'trapezio': 'costas', 'ombro': 'ombros', 'perna': 'pernas', 'panturrilha': 'pernas', 'triceps': 'triceps', 'biceps': 'biceps', 'core': 'core' }[prefix] || 'outros';
+                
+                // Utiliza a função getMuscleGroup que já existe no seu app.js para ler com precisão
+                const actualGroup = typeof getMuscleGroup === 'function' ? getMuscleGroup(dGroup) : 'outros';
+                
+                if (expectedGroup === 'outros') return true; // Libera aeróbicos e pliometria
+                if (prefix === 'trapezio' && (actualGroup === 'costas' || actualGroup === 'ombros')) return true; // Tolerância anatômica para trapézio
+                return actualGroup === expectedGroup;
+            };
 
             let pool = dictionaryData.filter(d => {
                 const exEquip = d.equip || '';
                 const exGroup = d.group || '';
                 const exFocus = d.focus || '';
+
+                // ESCUDO PRIMÁRIO: O exercício pertence à macro-região certa?
+                if (!checkBaseGroup(exGroup, focusTerms)) return false;
 
                 const validFocuses = focusTerms.flatMap(term => mapFocus[term] || [term]);
                 const matchFocus = validFocuses.includes(exFocus) || validFocuses.some(f => exGroup.includes(f));
@@ -3005,6 +3015,9 @@ function updateDynamicCards() {
                     const exEquip = d.equip || '';
                     const exGroup = d.group || '';
                     const exFocus = d.focus || '';
+
+                    // ESCUDO PRIMÁRIO NO FALLBACK TAMBÉM
+                    if (!checkBaseGroup(exGroup, focusTerms)) return false;
 
                     let isCalisthenics = exEquip.includes('Peso_Corporal') || exEquip.includes('Calistenia');
                     if (!allowBodyweight && isCalisthenics) return false;
