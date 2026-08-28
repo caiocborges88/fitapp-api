@@ -40,6 +40,9 @@ var FitApp = (() => {
     let currentWorkoutType = ''; 
     let filaDeTreinosIA = [];
     
+    let cooldownTimerInterval = null; // NOVO: Relógio da Fase 3
+    let isPromotionPending = false; // NOVO: Gatilho de Promoção isolado
+    
     // Variáveis do Gráfico e Relógio Global
     let metricsChartInstance = null; // Obsoleto (mantido por segurança)
     let radarChartInstance = null;   // NOVO: Memória do Radar
@@ -943,6 +946,7 @@ function removeExercise(bIndex, eIndex) {
 
     function cancelWorkoutPreview() {
         document.getElementById('workoutPreview').style.display = 'none';
+        document.getElementById('prepArea').style.display = 'none'; // Trava de segurança
         document.getElementById('workoutCards').style.display = 'flex';
         const header = document.querySelector('.dashboard-header');
         if (header) header.style.display = 'block';
@@ -983,11 +987,14 @@ function removeExercise(bIndex, eIndex) {
         executeWorkoutStart();
     }
 
-    // A função original que realmente inicia o cronômetro
+    // A função original que realmente inicia o cronômetro (Fase 2)
     function executeWorkoutStart() {
         isWorkoutActive = true; 
         
+        // Garante que todas as telas de staging fechem
         document.getElementById('workoutPreview').style.display = 'none';
+        document.getElementById('prepArea').style.display = 'none';
+        
         els.workoutArea.style.display = 'block'; 
         els.btnFinishArea.style.display = 'block';
 
@@ -1372,46 +1379,152 @@ function removeExercise(bIndex, eIndex) {
         // --- FIM DO SISTEMA DE GATILHO DUPLO ---
 
         clearWorkoutState(); 
+        isPromotionPending = isPromotionTime; // Guarda o status de promoção para depois da Fase 3
 
         els.workoutArea.style.display = 'none';
         document.getElementById('cardioArea').style.display = 'none'; 
+        els.btnFinishArea.style.display = 'none';
+
+        // ROTEAMENTO DE FASE: Direciona para a Volta à Calma
+        if (isComplete && currentWorkoutType !== 'Cardio') {
+            document.getElementById('workoutHud').style.display = 'none'; 
+            document.getElementById('exerciseList').style.display = 'none'; 
+            document.getElementById('cooldownArea').style.display = 'block';
+            
+            document.getElementById('cooldownTimerDisplay').textContent = "01:30";
+            const btnCd = document.getElementById('btnStartCooldown');
+            btnCd.style.display = 'block';
+            btnCd.textContent = "▶️ Iniciar Alongamento";
+        } else {
+            // Se for cardio ou treino incompleto, vai direto para as recompensas
+            finalizeSession(false, isComplete);
+        }
+    }
+// ==========================================
+    // FASE 3: VOLTA À CALMA & FINALIZAÇÃO
+    // ==========================================
+    function startCooldownTimer() {
+        const btn = document.getElementById('btnStartCooldown');
+        btn.style.display = 'none'; // Esconde o botão para não dar cliques duplos
+        
+        let timeLeft = 90;
+        const display = document.getElementById('cooldownTimerDisplay');
+        if(audioEnabled) speak("Protocolo de recuperação iniciado. Respire.");
+        
+        cooldownTimerInterval = setInterval(() => {
+            timeLeft--;
+            let m = Math.floor(timeLeft/60).toString().padStart(2,'0');
+            let s = (timeLeft%60).toString().padStart(2,'0');
+            display.textContent = `${m}:${s}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(cooldownTimerInterval);
+                showToast("Volta à calma concluída! Bônus Adquirido.");
+                if(audioEnabled) speak("Recuperação finalizada. Excelente combate.");
+                finalizeSession(true, true); // True = Ganhou bônus
+            }
+        }, 1000);
+    }
+
+    function skipCooldown() {
+        if(cooldownTimerInterval) clearInterval(cooldownTimerInterval);
+        finalizeSession(false, true); // False = Pulou, sem bônus extra
+    }
+
+    function finalizeSession(earnedBonus, showPack) {
+        document.getElementById('cooldownArea').style.display = 'none';
+        
+        // Restaura a Interface Padrão
         document.getElementById('workoutHud').style.display = 'block'; 
         document.getElementById('exerciseList').style.display = 'block'; 
-        els.btnFinishArea.style.display = 'none';
         document.getElementById('workoutCards').style.display = 'flex';
         
-        // DESATIVA MODO FOCO: Devolve o Menu Inferior
         const navBar = document.querySelector('nav');
         if(navBar) navBar.style.display = 'flex';
         const header = document.querySelector('.dashboard-header');
         if (header) header.style.display = 'block';
 
-        // Restaura o bloco de Treino Pessoal
         const templatesFront = document.getElementById('templatesFrontline');
         if (templatesFront) templatesFront.style.display = 'block';
+
+        const mainSelector = document.getElementById('mainMethodSelector');
+        const bioPanel = mainSelector ? mainSelector.closest('div') : null;
+        if (bioPanel) bioPanel.style.display = 'block';
 
         currentWorkoutType = '';
         checkSequence(); 
         renderWeeklyCalendar(); 
         if (typeof renderMetricsChart === 'function') renderMetricsChart(); 
+        updateCampaignDashboard();
 
-        if(isComplete) { FitGamification.showPackModal(snapActive); snapActive = false; } else { showToast('Treino salvo no sistema.'); switchTab('tab-evolucao', 'nav-evolucao'); }
+        // 🧠 SISTEMA DE RECOMPENSAS
+        if (earnedBonus) {
+            let pts = parseInt(safeGet('fitapp_sweat_points') || '0');
+            safeSet('fitapp_sweat_points', pts + 1); // Ponto de Suor Fantasma Bônus
+        }
+
+        if (showPack) { 
+            FitGamification.showPackModal(snapActive || earnedBonus); 
+            snapActive = false; 
+        } else { 
+            showToast('Treino salvo no sistema.'); 
+            switchTab('tab-evolucao', 'nav-evolucao'); 
+        }
         
-        // Restaura o painel biomecânico
-        const mainSelector = document.getElementById('mainMethodSelector');
-        const bioPanel = mainSelector ? mainSelector.closest('div') : null;
-        if (bioPanel) bioPanel.style.display = 'block';
-        
-        // Dispara o Evento de Promoção
-        if (isPromotionTime) {
+        // Disparo de Promoção de Patente (Atrasado para não conflitar com a tela final)
+        if (isPromotionPending) {
             setTimeout(() => {
                 alert("🎖️ MESOCICLO CONCLUÍDO!\n\nAdaptação neural máxima atingida.\nSua patente foi elevada e seu arsenal anterior enviado para a Lista Negra.\n\nEscolha seu novo destino tático na Forja.");
                 switchTab('tab-treino', 'nav-treino');
                 openForgeModal();
-                if(typeof audioEnabled !== 'undefined' && audioEnabled) speak("Adaptação neural máxima atingida. Patente elevada. Iniciando protocolo de nova forja.");
+                if(typeof audioEnabled !== 'undefined' && audioEnabled) speak("Adaptação neural máxima atingida. Patente elevada.");
             }, 1500);
+            isPromotionPending = false;
         }
-    updateCampaignDashboard();
+    }
+
+    // ==========================================
+    // FASE 1: INTELIGÊNCIA DE PREPARAÇÃO
+    // ==========================================
+    function startPrepPhase() {
+        document.getElementById('workoutPreview').style.display = 'none';
+        document.getElementById('prepArea').style.display = 'block';
+        
+        const prepList = document.getElementById('prepList');
+        prepList.innerHTML = '';
+        
+        // Puxa exercícios de mobilidade do Dicionário (Com Contingência)
+        let mobilityPool = dictionaryData.filter(d => 
+            (d.group || '').toLowerCase().includes('mobilidade') || 
+            (d.focus || '').toLowerCase().includes('mobilidade') || 
+            (d.group || '').toLowerCase().includes('alongamento')
+        );
+        
+        // FALLBACK TÁTICO: Se o Dicionário falhar, injeta o protocolo raiz.
+        if(mobilityPool.length < 3) {
+            mobilityPool = [
+                {name: "Rotação Articular (Ombros e Punhos)", desc: "Gire os braços lentamente. 20s cada lado.", equip: "Peso Corporal"},
+                {name: "Mobilidade de Tornozelo e Quadril", desc: "Agachamento profundo segurando a posição por 30s.", equip: "Peso Corporal"},
+                {name: "Ativação de Core (Prancha Curta)", desc: "Acorde os estabilizadores sem fatigar. 30s.", equip: "Peso Corporal"},
+                {name: "Gato-Vaca (Mobilidade Torácica)", desc: "Flexão e extensão da coluna no chão. 10 repetições.", equip: "Peso Corporal"}
+            ];
+        }
+
+        // Embaralha e pesca 3
+        let selectedPrep = mobilityPool.sort(() => 0.5 - Math.random()).slice(0, 3);
+        
+        selectedPrep.forEach(ex => {
+            prepList.innerHTML += `
+                <div style="background: #1a1a1a; padding: 15px; border-radius: 8px; border-left: 3px solid #4da3ff; display: flex; align-items: center; gap: 10px;">
+                    <div style="font-size: 24px;">🔄</div>
+                    <div>
+                        <div style="font-weight: bold; color: #fff; font-size: 14px;">${ex.name}</div>
+                        <div style="font-size: 11px; color: #aaa; margin-top: 4px;">${ex.desc || 'Realize movimentos controlados.'}</div>
+                    </div>
+                </div>
+            `;
+        });
+        if(audioEnabled) speak("Fase de preparação iniciada. Prepare as articulações.");
     }
 
 // ==========================================
@@ -1424,6 +1537,7 @@ window.abortarMissao = function() {
         stopRestTimer();
         if (globalTimer) clearInterval(globalTimer);
         clearInterval(cardioTimerInterval);
+        if (cooldownTimerInterval) clearInterval(cooldownTimerInterval); // Limpa relógio F3
         workoutStartTime = null;
         
         // 2. Limpa o Estado de Combate
@@ -1433,6 +1547,8 @@ window.abortarMissao = function() {
         // 3. Restaura o Esconderijo Visual
         els.workoutArea.style.display = 'none'; 
         document.getElementById('cardioArea').style.display = 'none'; 
+        document.getElementById('prepArea').style.display = 'none'; 
+        document.getElementById('cooldownArea').style.display = 'none';
         document.getElementById('workoutHud').style.display = 'block'; 
         document.getElementById('exerciseList').style.display = 'block'; 
         els.btnFinishArea.style.display = 'none';

@@ -224,14 +224,42 @@
                     <button class="btn-action" onclick="FitApp.saveCustomWorkout()" style="background: #a64dff; color: #fff; border: none; flex: 1; padding: 12px; font-size: 13px;">💾 Salvar Template</button>
                 </div>
 
-                <!-- Botão Iniciar (Destaque Primário) -->
-                <button id="btnStartWorkout" class="btn-action btn-start-pulse" onclick="FitApp.beginWorkoutExecution()">▶️ Iniciar Treino</button>
+                <!-- Botões de Início (Fricção Zero) -->
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                    <button id="btnStartPrep" class="btn-action btn-start-pulse" onclick="FitApp.startPrepPhase()" style="background: #4da3ff; box-shadow: 0 0 15px rgba(77, 163, 255, 0.4); color: #fff; border: none;">🧘 Preparação Recomendada (3 min)</button>
+                    <button id="btnStartWorkout" class="btn-action" onclick="FitApp.beginWorkoutExecution()" style="background: transparent; color: #888; border: 1px solid #444; padding: 12px; font-size: 12px; text-transform: uppercase;">▶️ Pular Direto para o Combate</button>
+                </div>
 
                 <!-- Lista de Exercícios -->
                 <div id="previewList" style="max-height: 40vh; overflow-y: auto; margin-bottom: 20px; padding-right: 5px;"></div>
                 
-                <button class="btn-action" onclick="FitApp.cancelWorkoutPreview()" style="background: transparent; border: 1px solid #444; color: #aaa; margin-top: 10px;">⬅️ Voltar ao Painel</button>
+                <button class="btn-action" onclick="FitApp.cancelWorkoutPreview()" style="background: transparent; border: 1px dashed #444; color: #aaa; margin-top: 10px;">⬅️ Cancelar e Voltar</button>
             </div>
+
+            <!-- FASE 1: ÁREA DE PREPARAÇÃO (Oculta por padrão) -->
+            <div id="prepArea" style="display: none; padding-top: 10px; padding-bottom: 20px;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 40px; margin-bottom: 5px;">🧘</div>
+                    <h2 style="color: #4da3ff; margin: 0; text-transform: uppercase; letter-spacing: 1px; font-size: 1.4rem;">Preparação</h2>
+                    <p style="color: #aaa; font-size: 12px;">Lubrificação articular para a missão de hoje.</p>
+                </div>
+                <div id="prepList" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px;"></div>
+                <button class="btn-action btn-start-pulse" onclick="FitApp.beginWorkoutExecution()" style="width: 100%; background: #00ff88; color: #000; font-weight: bold; border: none;">🔥 Iniciar Combate (Força)</button>
+            </div>
+
+            <!-- FASE 3: VOLTA À CALMA (Oculta por padrão) -->
+            <div id="cooldownArea" style="display: none; padding-top: 30px; text-align: center; padding-bottom: 20px;">
+                <h2 style="color: #a64dff; margin-bottom: 10px; font-size: 2rem; text-transform: uppercase;">Missão Cumprida!</h2>
+                <p style="color: #aaa; font-size: 13px; margin-bottom: 25px; max-width: 90%; margin-left: auto; margin-right: auto; line-height: 1.5;">O combate foi salvo. Reduza o batimento por 90s para ganhar <strong style="color:#00ff88;">+1 Ponto de Suor</strong>.</p>
+                
+                <div id="cooldownTimerDisplay" style="font-size: 55px; font-weight: bold; color: #a64dff; font-family: monospace; text-shadow: 0 0 20px rgba(166, 77, 255, 0.4); margin-bottom: 30px;">01:30</div>
+                
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <button id="btnStartCooldown" class="btn-action" onclick="FitApp.startCooldownTimer()" style="background: rgba(166, 77, 255, 0.2); color: #a64dff; border: 1px solid #a64dff; padding: 15px; font-size: 14px;">▶️ Iniciar Alongamento</button>
+                    <button class="btn-action" onclick="FitApp.skipCooldown()" style="background: transparent; color: #666; border: none; font-size: 12px; text-transform: uppercase;">Pular e Abrir Recompensas ➔</button>
+                </div>
+            </div>
+
             <div id="workoutArea" style="display: none;">
                 <!-- NOVO: Cápsula HUD Tático -->
                 <div id="workoutHud" class="workout-hud">
@@ -450,13 +478,7 @@
                     </select>
                 </div>
 
-                <div class="input-group">
-                    <label>Ordem de Execução</label>
-                    <select id="sequenceSelector" class="form-select">
-                        <option value="livre">🔓 Aberta (Recomendado)</option>
-                        <option value="estrita">🔒 Sequencial (Rígida)</option>
-                    </select>
-                </div>
+                <!-- Seletor de Ordem Removido -->
 
                 <div class="input-group" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; margin-top: 5px;">
                     <label style="margin: 0;">Incluir Bloco de Abdômen na Forja?</label>
