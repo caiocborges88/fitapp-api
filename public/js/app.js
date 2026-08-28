@@ -1572,8 +1572,10 @@ window.abortarMissao = function() {
         // 5. Confirmação Visual
         showToast('Missão abortada. O combate não foi registrado.');
         
-        // Atualiza a tela base se necessário
+        // Atualiza a tela base se necessário e restaura a gamificação visual
         checkSequence(); 
+        if (typeof checkCompletedCards === 'function') checkCompletedCards();
+        if (typeof updateCampaignDashboard === 'function') updateCampaignDashboard();
     }
 };
 // ==========================================
@@ -3881,24 +3883,37 @@ async function syncTacticalDictionary() {
 
         snapshot.forEach(doc => {
             const data = doc.data();
-            const exerciseName = data.nome;
-            const newTip = data.dica;
-            const newGroup = data.grupo;
+            const exerciseName = data.nome || data.name; // Flexibilidade na chave
+            if (!exerciseName) return; // Trava de segurança contra documentos vazios
+            
+            const newTip = data.dica || data.desc;
+            const newGroup = data.grupo || data.group;
+            
+            // NOVO: Coleta as novas tags biomecânicas da Nuvem
+            const newFocus = data.foco || data.focus || 'Geral';
+            const newEquip = data.equipamento || data.equip || 'Peso_Corporal';
+            const newNivel = parseInt(data.nivel) || 1;
 
             // Procura se o exercício já existe no 'dados.js'
             const existingIndex = dictionaryData.findIndex(item => item.name.toLowerCase() === exerciseName.toLowerCase());
 
             if (existingIndex !== -1) {
                 // OVERRIDE: Substitui a dica de fábrica pela diretriz da Nuvem
-                dictionaryData[existingIndex].desc = newTip;
+                if(newTip) dictionaryData[existingIndex].desc = newTip;
                 if(newGroup) dictionaryData[existingIndex].group = newGroup;
+                if(data.foco || data.focus) dictionaryData[existingIndex].focus = newFocus;
+                if(data.equipamento || data.equip) dictionaryData[existingIndex].equip = newEquip;
+                if(data.nivel) dictionaryData[existingIndex].nivel = newNivel;
                 atualizados++;
             } else {
-                // ADD: Se for uma arma nova criada na Torre de Controle, adiciona ao arsenal
+                // ADD: Se for uma arma nova criada na Torre de Controle, adiciona com o esqueleto completo
                 dictionaryData.push({
                     name: exerciseName,
                     group: newGroup || 'Geral',
-                    desc: newTip
+                    focus: newFocus,
+                    equip: newEquip,
+                    desc: newTip || 'Instrução pendente.',
+                    nivel: newNivel
                 });
                 novos++;
             }
