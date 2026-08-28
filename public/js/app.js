@@ -946,7 +946,7 @@ function removeExercise(bIndex, eIndex) {
 
     function cancelWorkoutPreview() {
         document.getElementById('workoutPreview').style.display = 'none';
-        document.getElementById('prepArea').style.display = 'none'; // Trava de segurança
+        document.getElementById('prepArea').style.display = 'none';
         document.getElementById('workoutCards').style.display = 'flex';
         const header = document.querySelector('.dashboard-header');
         if (header) header.style.display = 'block';
@@ -3070,6 +3070,10 @@ function updateDynamicCards() {
     function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
         const removeAccents = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
         const includeAbs = document.getElementById('toggleAbs') ? document.getElementById('toggleAbs').checked : false;
+        
+        // NOVO: Captura o Nível do Atleta (Limita o SNC)
+        const userLevel = els.levelSelector ? els.levelSelector.value : 'intermediario';
+        const maxAllowedLevel = userLevel === 'iniciante' ? 1 : (userLevel === 'intermediario' ? 2 : 3);
 
         const getEx = (focusTerms, equipPref, avoidNames, allowBodyweight = false) => {
             // A Pedra de Roseta: Expandida para abranger a biomecânica avançada e metabólica
@@ -3109,6 +3113,10 @@ function updateDynamicCards() {
                 const exGroup = d.group || '';
                 const exFocus = d.focus || '';
 
+                // FILTRO DE DIFICULDADE (SNC)
+                const exNivel = d.nivel || 1;
+                if (exNivel > maxAllowedLevel) return false;
+
                 // ESCUDO PRIMÁRIO: O exercício pertence à macro-região certa?
                 if (!checkBaseGroup(exGroup, focusTerms)) return false;
 
@@ -3131,6 +3139,10 @@ function updateDynamicCards() {
                     const exEquip = d.equip || '';
                     const exGroup = d.group || '';
                     const exFocus = d.focus || '';
+
+                    // FILTRO DE DIFICULDADE (SNC) FALLBACK
+                    const exNivel = d.nivel || 1;
+                    if (exNivel > maxAllowedLevel) return false;
 
                     // ESCUDO PRIMÁRIO NO FALLBACK TAMBÉM
                     if (!checkBaseGroup(exGroup, focusTerms)) return false;
