@@ -35,10 +35,14 @@ var FitAPI = (() => {
         }
     });
 
-    // 4. FUNÇÃO DE LOGIN (Fricção Zero para Celulares/PWAs)
-    function loginComGoogle() {
-        // Redireciona na mesma aba. O Monitor de Radar (onAuthStateChanged) cuida do retorno.
-        auth.signInWithRedirect(googleProvider);
+    // 4. FUNÇÃO DE LOGIN
+    async function loginComGoogle() {
+        try {
+            await auth.signInWithPopup(googleProvider);
+        } catch (error) {
+            console.error("Falha na biometria do Google:", error);
+            alert("Não foi possível acessar. Tente novamente.");
+        }
     }
 
     // Interceptador global de respostas
