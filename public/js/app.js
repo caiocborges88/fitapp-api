@@ -2582,20 +2582,26 @@ function renderMetricsChart() {
         // NOVO: Ouve as mudanças no seletor de perfil, salva e recarrega o treino
         if (els.profileSelector) els.profileSelector.addEventListener('change', () => {
             safeSet('fitapp_profile', els.profileSelector.value);
+            safeSet('fitapp_onboarding_done', 'true'); // NOVO
             applyTheme(); // 🎨 Troca a paleta de cores em tempo real
             updateDynamicCards(); // NOVO: Força a atualização imediata dos textos dos cartões
             if(currentWorkoutType) loadWorkout(); 
             showToast(els.profileSelector.value === 'feminino' ? 'Perfil Feminino ativado.' : 'Perfil Padrão ativado.');
+            updateCampaignDashboard(); // NOVO
         });
 
         if (els.styleSelector) els.styleSelector.addEventListener('change', () => {
             safeSet('fitapp_style', els.styleSelector.value);
+            safeSet('fitapp_onboarding_done', 'true'); // NOVO
             if(currentWorkoutType) loadWorkout(); 
+            updateCampaignDashboard(); // NOVO
         }); 
 
         if (els.levelSelector) els.levelSelector.addEventListener('change', () => {
             safeSet('fitapp_level', els.levelSelector.value);
+            safeSet('fitapp_onboarding_done', 'true'); // NOVO
             if(currentWorkoutType) loadWorkout(); 
+            updateCampaignDashboard(); // NOVO
         }); 
         
         const btnAudio = document.getElementById('btnAudio');
@@ -2962,6 +2968,7 @@ function updateDynamicCards() {
         
         const method = selector.value;
         safeSet('fitapp_main_method', method);
+        safeSet('fitapp_onboarding_done', 'true'); // NOVO: Desarma o banner de onboarding
         
         // NOVO: Padrão fallback agora é hipertrofia
         const profile = document.getElementById('profileSelector') ? document.getElementById('profileSelector').value : 'hipertrofia';
@@ -3067,6 +3074,7 @@ function updateDynamicCards() {
 
         // NOVO: Reavalia as marcações de "Feito" sempre que os cartões mudarem
         if (typeof checkCompletedCards === 'function') checkCompletedCards();
+        if (typeof updateCampaignDashboard === 'function') updateCampaignDashboard(); // NOVO: Força a atualização do banner
     }
 
     function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
@@ -3669,6 +3677,9 @@ function updateDynamicCards() {
         const campaignStr = safeGet('fitapp_campaign_data');
         const bioPanel = document.getElementById('biomechanicsPanel');
         const dash = document.getElementById('campaignDashboard');
+        const banner = document.getElementById('smartBannerSetup'); // NOVO
+        const history = JSON.parse(safeGet('fitapp_week_log') || '[]'); // NOVO
+        const onboardingDone = safeGet('fitapp_onboarding_done') === 'true'; // NOVO
         
         // 1. Puxamos a leitura da contagem para ANTES do IF
         let count = parseInt(safeGet('fitapp_campaign_count') || '0');
@@ -3677,6 +3688,7 @@ function updateDynamicCards() {
         if (campaignStr && campaignStr.trim() !== '' && count > 0) {
             if(bioPanel) bioPanel.style.display = 'none';
             if(dash) dash.style.display = 'block';
+            if(banner) banner.style.display = 'none'; // Esconde banner na campanha
             
             const campData = JSON.parse(campaignStr);
             
@@ -3723,6 +3735,15 @@ function updateDynamicCards() {
         } else {
             if(bioPanel) bioPanel.style.display = 'block';
             if(dash) dash.style.display = 'none';
+            
+            // LÓGICA DO SMART BANNER
+            if (banner) {
+                if (!onboardingDone && history.length === 0) {
+                    banner.style.display = 'block'; // Mostra apenas para novatos absolutos
+                } else {
+                    banner.style.display = 'none'; // Esconde se já treinou ou configurou
+                }
+            }
             
             ['A', 'B', 'C', 'D'].forEach(t => {
                 const card = document.getElementById('card-' + t);

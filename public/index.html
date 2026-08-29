@@ -137,6 +137,13 @@
                 <button onclick="FitApp.resetCampaign()" style="background: transparent; color: #ff4444; border: 1px solid #ff4444; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; display: block; width: 100%;">🛑 Abortar e Reforjar Plano</button>
             </div>
 
+            <!-- NOVO: Smart Banner de Onboarding (Fricção Zero) -->
+            <div id="smartBannerSetup" style="display: none; background: linear-gradient(135deg, rgba(166, 77, 255, 0.1), rgba(0, 255, 136, 0.1)); border: 1px solid #a64dff; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(166, 77, 255, 0.2);">
+                <div style="font-size: 30px; margin-bottom: 10px;">🛡️</div>
+                <h3 style="color: #fff; margin-bottom: 8px; text-transform: uppercase; font-size: 16px;">Plano Tático Ausente</h3>
+                <p style="color: #aaa; font-size: 13px; margin-bottom: 15px; line-height: 1.4;">Defina seu método e nível de combate na Central de Comando antes de iniciar.</p>
+                <button onclick="document.getElementById('nav-perfil').click()" style="background: #a64dff; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;">⚙️ Configurar Agora</button>
+            </div>
         
             <div class="workout-cards" id="workoutCards">
                 <div class="card-treino" id="card-A" onclick="FitApp.startWorkout('A')">
