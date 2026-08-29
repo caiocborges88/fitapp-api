@@ -89,10 +89,47 @@ var FitAPI = (() => {
         return handleResponse(response);
     }
 
+    // 6. RESGATE DE MEMÓRIA (Amnésia Resolvida)
+    async function carregarHistoricoNuvem() {
+        try {
+            const user = auth.currentUser;
+            if (!user) return [];
+
+            // Puxa todos os treinos daquele usuário específico
+            const snapshot = await db.collection("treinos_concluidos")
+                .where("userId", "==", user.uid)
+                .get();
+
+            let historico = [];
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                historico.push({
+                    date: data.date,
+                    tipo: data.tipo,
+                    method: data.method,
+                    duration_secs: data.duration_secs,
+                    data: data.data,
+                    // Usa o timestamp para ordenar. Se for null (ainda gravando), usa Date.now
+                    _ts: data.timestamp ? data.timestamp.toMillis() : Date.now() 
+                });
+            });
+
+            // Ordena localmente do mais antigo para o mais novo (Evita erro de Índice no Firebase)
+            historico.sort((a, b) => a._ts - b._ts);
+            
+            // Retorna limpando a variável temporária
+            return historico.map(h => { delete h._ts; return h; });
+        } catch (error) {
+            console.error("Erro ao resgatar histórico da nuvem:", error);
+            return [];
+        }
+    }
+
     return {
         salvarTreino,
         getCoachFeedback,
         importarTreinoIA,
+        carregarHistoricoNuvem, // NOVO: Expõe a função de resgate
         loginComGoogle // Expõe a função para o botão do index.html
     };
 })();

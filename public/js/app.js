@@ -1458,10 +1458,11 @@ function removeExercise(bIndex, eIndex) {
         if (typeof renderMetricsChart === 'function') renderMetricsChart(); 
         updateCampaignDashboard();
 
-        // 🧠 SISTEMA DE RECOMPENSAS
+        // 🧠 SISTEMA DE RECOMPENSAS BLINDADO (Conectado à Nuvem)
         if (earnedBonus) {
-            let pts = parseInt(safeGet('fitapp_sweat_points') || '0');
-            safeSet('fitapp_sweat_points', pts + 1); // Ponto de Suor Fantasma Bônus
+            if (typeof FitGamification !== 'undefined' && FitGamification.addBonusSweat) {
+                FitGamification.addBonusSweat(1);
+            }
         }
 
         if (showPack) { 
@@ -2541,7 +2542,7 @@ function renderMetricsChart() {
         });
         
         // Aguarda o sinal verde do Firebase Auth para iniciar a sincronização
-        firebase.auth().onAuthStateChanged((user) => {
+        firebase.auth().onAuthStateChanged(async (user) => {
             const loginOverlay = document.getElementById('loginOverlay');
             const bottomNav = document.getElementById('bottomNav');
             
@@ -2549,6 +2550,23 @@ function renderMetricsChart() {
                 // Usuário logado: Destrói o escudo de login, mostra a barra e sincroniza
                 if (loginOverlay) loginOverlay.style.display = 'none';
                 if (bottomNav) bottomNav.style.display = 'flex';
+                
+                // --- INÍCIO DO RESGATE DE MEMÓRIA CLOUD ---
+                try {
+                    const nuvemLogs = await FitAPI.carregarHistoricoNuvem();
+                    if (nuvemLogs && nuvemLogs.length > 0) {
+                        safeSet('fitapp_week_log', JSON.stringify(nuvemLogs));
+                        // Força a repintura das abas baseadas no histórico recém-baixado
+                        checkSequence();
+                        if (typeof checkCompletedCards === 'function') checkCompletedCards();
+                        renderWeeklyCalendar();
+                        if (typeof renderMetricsChart === 'function') renderMetricsChart();
+                    }
+                } catch(e) {
+                    console.error("Falha ao puxar histórico da nuvem na inicialização.", e);
+                }
+                // --- FIM DO RESGATE ---
+
                 syncOfflineWorkouts();
             } else {
                 // Deslogado: Levanta o escudo de login e oculta a barra

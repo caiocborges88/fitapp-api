@@ -41,7 +41,13 @@ var FitGamification = (() => {
             console.error("Erro ao selar o cofre na nuvem:", error);
         }
     }
-    // ----------------------------------------
+    // Adiciona moedas de suor diretamente no cofre (Usado pela Volta à Calma)
+    async function addBonusSweat(amount) {
+        const profile = await getPlayerProfile();
+        const currentSweat = profile.repetidas || 0;
+        await savePlayerProfile(profile.album || [], currentSweat + amount);
+        console.log(`[Gamificação] +${amount} Ponto(s) de Suor creditado(s) na nuvem.`);
+    }
 
     function showPackModal(snapActive = false) { 
         isSnapRewardActive = snapActive; // Grava se o desafio foi aceito
@@ -413,6 +419,7 @@ var FitGamification = (() => {
         openPack,
         renderAlbum,
         craftSticker,
-        loadLeaderboard // Expõe o motor do ranking para o app.js
+        loadLeaderboard,
+        addBonusSweat
     };
 })();
