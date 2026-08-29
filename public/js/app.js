@@ -1024,6 +1024,25 @@ function removeExercise(bIndex, eIndex) {
     }
 
     function renderCurrentRoutine() {
+        // --- INÍCIO DA FASE 2: BLINDAGEM DE ESTADO DE INTERFACE ---
+        // 1. Memoriza quem estava focado (inputs, textareas)
+        const activeEl = document.activeElement;
+        const activeId = activeEl && activeEl.id ? activeEl.id : null;
+        let caretPos = null;
+        try { caretPos = activeEl ? activeEl.selectionStart : null; } catch(e){}
+
+        // 2. Memoriza a posição do Scroll da página
+        const currentScroll = window.scrollY;
+
+        // 3. Memoriza quais anotações táticas estavam abertas
+        const openNotes = [];
+        document.querySelectorAll('.notes-container').forEach(container => {
+            if (container.style.display === 'block' && container.id) {
+                openNotes.push(container.id);
+            }
+        });
+        // --- FIM DA MEMORIZAÇÃO ---
+
         els.exerciseList.innerHTML = ''; 
         totalSets = 0; 
         checkedSets = 0; 
@@ -1038,14 +1057,12 @@ function removeExercise(bIndex, eIndex) {
             const card = document.createElement('div'); card.className = cardClass; 
             if (!isBiset) card.style.borderLeft = '4px solid #44aaff'; 
             
-            // NOVO: Adicionamos o botão de Chevron (setinha) e reorganizamos o título
             card.innerHTML = `
                 <div class="biset-title" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
                     <span class="block-name">${bloco.title}</span>
                     <span class="toggle-icon" style="transition: transform 0.3s; font-size: 14px; color: #888;">▲</span>
                 </div>`;
             
-            // PONTO 4: Permite recolher/expandir o bloco livremente ao clicar no cabeçalho
             card.querySelector('.biset-title').addEventListener('click', () => {
                 card.classList.toggle('collapsed-block');
             });
@@ -1085,6 +1102,10 @@ function removeExercise(bIndex, eIndex) {
                     }
                 }
                 
+                // Verifica se essa caixa de anotação estava aberta no ciclo de memória anterior
+                const noteContainerId = `notes_container_${bIndex}_${eIndex}`;
+                const isNoteOpen = openNotes.includes(noteContainerId) ? 'block' : 'none';
+
                 blockDiv.innerHTML = `
                     <div class="exercise-header">
                         <span class="ex-name" onclick="FitApp.openDict('${safeName.replace(/'/g, "\\'")}')">${safeName}${linkIcon}</span>
@@ -1104,8 +1125,8 @@ function removeExercise(bIndex, eIndex) {
                             <button class="btn-swap" onclick="FitApp.openSwapModal(${bIndex}, ${eIndex})" title="Substituir Exercício">🔄</button>
                         </div>
                     </div>
-                    <div class="notes-container" style="display: none; background: #1a1a1a; padding: 10px; border-radius: 6px; border-left: 2px solid #a64dff; margin-bottom: 12px; margin-top: 5px;">
-                        <textarea class="ex-notes-input" placeholder="Anotações táticas (ex: banco inclinado no nível 3, fadiga no ombro...)" style="width: 100%; background: transparent; border: none; color: #ccc; font-size: 12px; resize: vertical; min-height: 45px; outline: none;">${savedNotes}</textarea>
+                    <div id="${noteContainerId}" class="notes-container" style="display: ${isNoteOpen}; background: #1a1a1a; padding: 10px; border-radius: 6px; border-left: 2px solid #a64dff; margin-bottom: 12px; margin-top: 5px;">
+                        <textarea id="notes_input_${bIndex}_${eIndex}" class="ex-notes-input" placeholder="Anotações táticas (ex: banco inclinado no nível 3, fadiga no ombro...)" style="width: 100%; background: transparent; border: none; color: #ccc; font-size: 12px; resize: vertical; min-height: 45px; outline: none;">${savedNotes}</textarea>
                     </div>`;
                 
                 const btnNotes = blockDiv.querySelector('.btn-notes');
@@ -1128,7 +1149,6 @@ function removeExercise(bIndex, eIndex) {
                 for(let s = 1; s <= ex.sets; s++) {
                     totalSets++; 
                     
-                    // CORREÇÃO: Garante que o slot da série exista na memória ANTES de tentar injetar dados fantasmas
                     if (!ex.setsData[s-1]) {
                         ex.setsData[s-1] = { kg: '', reps: '', checked: false };
                     }
@@ -1144,7 +1164,6 @@ function removeExercise(bIndex, eIndex) {
                     const kgId = `kg_set_${bIndex}_${eIndex}_${s}`;
                     const rpId = `rp_set_${bIndex}_${eIndex}_${s}`;
                     
-                    // CÉREBRO TÁTICO: Auto-Preenchimento Fantasma (Sobrecarga Progressiva)
                     let ghostKg = '';
                     let ghostReps = '';
                     if (lastWorkoutMatch) {
@@ -1156,7 +1175,6 @@ function removeExercise(bIndex, eIndex) {
                         }
                     }
                     
-                    // Se o usuário não preencheu ainda, o input herda a carga da sessão anterior automaticamente
                     let displayKg = data.kg;
                     let displayReps = data.reps;
                     
@@ -1203,7 +1221,6 @@ function removeExercise(bIndex, eIndex) {
                         if (chk.checked) { 
                             checkedSets++; 
                             
-                            // PONTO 10: Efeito Cascata (Auto-preenchimento para a linha abaixo)
                             if (s < ex.sets) {
                                 const nextKgInp = document.getElementById(`kg_set_${bIndex}_${eIndex}_${s+1}`);
                                 const nextRpInp = document.getElementById(`rp_set_${bIndex}_${eIndex}_${s+1}`);
@@ -1213,7 +1230,6 @@ function removeExercise(bIndex, eIndex) {
                                 }
                             }
 
-                            // PONTO 1: Trava de Descanso do Bi-Set
                             const allInSetChecked = currentRoutine[bIndex].exercises.every(e => e.setsData[s-1] && e.setsData[s-1].checked);
                             if (allInSetChecked && checkedSets < totalSets) {
                                 startRestTimer(card, ex.name);
@@ -1228,22 +1244,19 @@ function removeExercise(bIndex, eIndex) {
                         updateState();
                         updateProgress();
 
-                        // PONTO 4: Encolhimento Automático do Bloco Sanfona (Corrigido)
                         const allBlockChecked = currentRoutine[bIndex].exercises.every(e => {
-                            // Conta exatamente quantas caixas verdadeiras existem na memória
                             const checkedCount = e.setsData ? e.setsData.filter(sd => sd && sd.checked).length : 0;
-                            return checkedCount === e.sets; // Só fecha se a contagem bater com a meta de séries
+                            return checkedCount === e.sets;
                         });
                         
                         if (allBlockChecked) card.classList.add('collapsed-block');
                         else card.classList.remove('collapsed-block');
                     });
                     blockDiv.appendChild(row);
-                } // fim do laço de séries (s)
-                card.appendChild(blockDiv); // <-- Garante a injeção do bloco no cartão
+                } 
+                card.appendChild(blockDiv); 
             });
             
-            // NOVO: Verifica se o bloco já foi 100% concluído ao recarregar a tela (Impede reabertura)
             const isBlockFinishedOnLoad = currentRoutine[bIndex].exercises.every(e => {
                 const checkedCount = e.setsData ? e.setsData.filter(sd => sd && sd.checked).length : 0;
                 return checkedCount === e.sets;
@@ -1252,9 +1265,23 @@ function removeExercise(bIndex, eIndex) {
                 card.classList.add('collapsed-block');
             }
 
-            els.exerciseList.appendChild(card); // <-- Garante a injeção do cartão na tela
+            els.exerciseList.appendChild(card); 
         });
         updateProgress();
+
+        // --- RESTAURAÇÃO DE ESTADO (Scroll e Foco) ---
+        window.scrollTo(0, currentScroll);
+        if (activeId) {
+            const restoredEl = document.getElementById(activeId);
+            if (restoredEl) {
+                restoredEl.focus();
+                try {
+                    if (caretPos !== null && (restoredEl.tagName === 'INPUT' || restoredEl.tagName === 'TEXTAREA')) {
+                        restoredEl.setSelectionRange(caretPos, caretPos);
+                    }
+                } catch(e) {} 
+            }
+        }
     }
 
     function updateProgress() {
