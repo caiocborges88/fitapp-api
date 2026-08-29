@@ -990,6 +990,7 @@ function removeExercise(bIndex, eIndex) {
     // A função original que realmente inicia o cronômetro (Fase 2)
     function executeWorkoutStart() {
         isWorkoutActive = true; 
+        safeSet('fitapp_onboarding_done', 'true'); // TRAVA BLINDADA: Se o usuário iniciou um combate, ele não é mais novato. Banner morto.
         
         // Garante que todas as telas de staging fechem
         document.getElementById('workoutPreview').style.display = 'none';
@@ -2968,7 +2969,6 @@ function updateDynamicCards() {
         
         const method = selector.value;
         safeSet('fitapp_main_method', method);
-        safeSet('fitapp_onboarding_done', 'true'); // NOVO: Desarma o banner de onboarding
         
         // NOVO: Padrão fallback agora é hipertrofia
         const profile = document.getElementById('profileSelector') ? document.getElementById('profileSelector').value : 'hipertrofia';
