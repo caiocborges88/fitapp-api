@@ -540,9 +540,11 @@ async function exportStravaCard(historyIndex = -1) {
         loadWorkout();
     }
 
-    // --- NOVO MOTOR DE AERÓBICO ---
+    // --- NOVO MOTOR DE AERÓBICO (Imune à Hibernação Mobile) ---
     let cardioTimerInterval = null;
     let cardioElapsedSeconds = 0;
+    let cardioStartTime = 0;
+    let cardioPausedTime = 0;
     let isCardioRunning = false;
 
     function startCardio() {
@@ -583,6 +585,7 @@ async function exportStravaCard(historyIndex = -1) {
 
         // Reseta variáveis e inputs
         cardioElapsedSeconds = 0;
+        cardioPausedTime = 0;
         isCardioRunning = false;
         clearInterval(cardioTimerInterval);
         document.getElementById('cardioTimerDisplay').textContent = "00:00:00";
@@ -608,21 +611,28 @@ async function exportStravaCard(historyIndex = -1) {
         if (isCardioRunning) {
             isCardioRunning = false;
             clearInterval(cardioTimerInterval);
+            cardioPausedTime = cardioElapsedSeconds; // Salva o tempo congelado
             btn.innerHTML = "▶ Retomar Relógio";
             btn.style.color = '#00ff88'; btn.style.borderColor = '#00ff88'; btn.style.background = 'rgba(0, 255, 136, 0.2)';
             if(audioEnabled) speak("Relógio pausado.");
         } else {
             isCardioRunning = true;
+            // Desloca o tempo de início baseado no quanto já foi percorrido (matemática pura)
+            cardioStartTime = Date.now() - (cardioPausedTime * 1000); 
+            
             btn.innerHTML = "⏸ Pausar Relógio";
             btn.style.color = '#ffaa00'; btn.style.borderColor = '#ffaa00'; btn.style.background = 'rgba(255, 170, 0, 0.2)';
             if(audioEnabled) speak("Ação.");
             
             cardioTimerInterval = setInterval(() => {
-                cardioElapsedSeconds++;
+                // Cálculo imune ao sono do celular
+                cardioElapsedSeconds = Math.floor((Date.now() - cardioStartTime) / 1000); 
                 const h = Math.floor(cardioElapsedSeconds / 3600).toString().padStart(2, '0');
                 const m = Math.floor((cardioElapsedSeconds % 3600) / 60).toString().padStart(2, '0');
                 const s = (cardioElapsedSeconds % 60).toString().padStart(2, '0');
-                document.getElementById('cardioTimerDisplay').textContent = `${h}:${m}:${s}`;
+                
+                const display = document.getElementById('cardioTimerDisplay');
+                if (display) display.textContent = `${h}:${m}:${s}`;
             }, 1000);
         }
     }
@@ -2621,7 +2631,17 @@ function renderMetricsChart() {
         // NOVO: Vigia de Visibilidade - Força ressincronização ao voltar pro app
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible') {
-                updateGlobalTimer(); // Acorda o relógio de cima
+                updateGlobalTimer(); // Acorda o relógio de cima (Hipertrofia)
+                
+                // Acorda o relógio Aeróbico
+                if (isCardioRunning) {
+                    cardioElapsedSeconds = Math.floor((Date.now() - cardioStartTime) / 1000);
+                    const h = Math.floor(cardioElapsedSeconds / 3600).toString().padStart(2, '0');
+                    const m = Math.floor((cardioElapsedSeconds % 3600) / 60).toString().padStart(2, '0');
+                    const s = (cardioElapsedSeconds % 60).toString().padStart(2, '0');
+                    const cardioDisplay = document.getElementById('cardioTimerDisplay');
+                    if (cardioDisplay) cardioDisplay.textContent = `${h}:${m}:${s}`;
+                }
             }
         });
 
