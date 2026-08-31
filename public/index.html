@@ -707,33 +707,58 @@
     <div id="importAiModal" class="swap-modal-overlay">
         <div class="swap-modal-content" style="display: flex; flex-direction: column; width: 95%; max-width: 500px;">
             <div class="swap-modal-header">
-                <h3 style="color: #00ff88;">🤖 Inteligência Artificial</h3>
+                <h3 style="color: #00ff88; margin: 0; display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 24px;">🧠</span> Mente Mestra IA
+                </h3>
                 <button class="btn-close-modal" onclick="document.getElementById('importAiModal').style.display='none'" style="display: block;">&times;</button>
             </div>
             
-            <p style="font-size: 13px; color: #aaa; margin-bottom: 15px;">Defina os dias para a IA montar sua rotina <strong>OU</strong> apenas cole o texto do WhatsApp enviado pelo seu personal.</p>
-            
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <select id="aiDays" class="select-level" style="flex: 1; border-color: #00ff88;">
-                    <option value="1">1 Dia Único</option>
-                    <option value="2">2 Dias (Fullbody)</option>
-                    <option value="3" selected>3 Dias (ABC)</option>
-                    <option value="4">4 Dias (ABCD)</option>
-                    <option value="5">5 Dias (ABCDE)</option>
-                </select>
-                
-                <select id="aiEnv" class="select-level" style="flex: 1; border-color: #00ff88;">
-                    <option value="academia" selected>🏋️ Academia</option>
-                    <option value="peso_corporal">🏠 Só Peso Corporal</option>
-                    <option value="calistenia">🏖️ Praça/Calistenia</option>
-                </select>
+            <!-- ABAS DE NAVEGAÇÃO -->
+            <div style="display: flex; gap: 5px; margin-bottom: 20px; background: #1a1a1a; padding: 5px; border-radius: 8px; border: 1px solid #333;">
+                <button id="btnTabAiCriar" onclick="FitApp.switchAiTab('criar')" style="flex: 1; background: #00ff88; color: #000; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.3s; font-size: 13px;">🛠️ Criar Periodização</button>
+                <button id="btnTabAiImportar" onclick="FitApp.switchAiTab('importar')" style="flex: 1; background: transparent; color: #888; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.3s; font-size: 13px;">📋 Colar Texto (WhatsApp)</button>
             </div>
 
-            <input type="text" id="aiWorkoutName" placeholder="Nome do Treino (Opcional se for de 2+ dias)" style="margin-bottom: 10px;">
-            <textarea id="aiWorkoutText" rows="4" placeholder="[OPCIONAL] Cole aqui o treino do WhatsApp, ou deixe em branco para a IA criar do zero." style="margin-bottom: 15px; resize: vertical;"></textarea>
+            <!-- ROTA A: CRIAR DO ZERO -->
+            <div id="aiRouteCriar" style="display: block;">
+                <p style="font-size: 13px; color: #aaa; margin-bottom: 15px; line-height: 1.4;">A IA montará uma grade de treinos perfeita usando apenas os exercícios do banco de dados para o equipamento escolhido.</p>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <div style="flex: 1;">
+                        <label style="color: #ccc; font-size: 11px; display: block; margin-bottom: 5px; text-transform: uppercase;">Metodologia</label>
+                        <select id="aiMethod" style="width: 100%; padding: 12px; background: #111; border: 1px solid #00ff88; color: #fff; border-radius: 8px; outline: none; font-size: 12px; font-weight: bold;">
+                            <option value="abc" selected>Treino ABC (Push / Pull / Legs)</option>
+                            <option value="abcd">Treino ABCD (Pernas Divididas)</option>
+                            <option value="biset_agonista">Bi-Set Agonista (Pré-Exaustão)</option>
+                            <option value="biset_antagonista">Bi-Set Antagônico & Misto</option>
+                            <option value="biset_sinergista">Bi-Set Sinergista (Peito/Tri, Costas/Bi)</option>
+                            <option value="circuito">Circuito Metabólico (FullBody)</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="color: #ccc; font-size: 11px; display: block; margin-bottom: 5px; text-transform: uppercase;">Terreno / Equipamento</label>
+                        <select id="aiEnv" style="width: 100%; padding: 12px; background: #111; border: 1px solid #00ff88; color: #fff; border-radius: 8px; outline: none; font-size: 14px;">
+                            <option value="academia" selected>🏋️ Academia Completa</option>
+                            <option value="peso_corporal">🏠 Apenas Peso Corporal</option>
+                            <option value="calistenia">🏖️ Calistenia e Barras</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROTA B: IMPORTAR (Oculta por padrão) -->
+            <div id="aiRouteImportar" style="display: none;">
+                <p style="font-size: 13px; color: #aaa; margin-bottom: 15px; line-height: 1.4;">Cole o texto enviado pelo seu treinador. A IA identificará os dias de treino automaticamente.</p>
+                
+                <label style="color: #ccc; font-size: 11px; display: block; margin-bottom: 5px; text-transform: uppercase;">Nome do Treino (Opcional)</label>
+                <input type="text" id="aiWorkoutName" placeholder="Ex: Treino de Férias" style="width: 100%; padding: 12px; background: #111; border: 1px solid #444; color: #fff; border-radius: 8px; outline: none; font-size: 14px; margin-bottom: 15px;">
+                
+                <label style="color: #ccc; font-size: 11px; display: block; margin-bottom: 5px; text-transform: uppercase;">Texto do Treino</label>
+                <textarea id="aiWorkoutText" rows="6" placeholder="Cole a mensagem aqui..." style="width: 100%; padding: 12px; background: #111; border: 1px solid #00ff88; color: #fff; border-radius: 8px; outline: none; font-size: 13px; margin-bottom: 20px; resize: vertical;"></textarea>
+            </div>
             
-            <button id="btnProcessAi" class="btn-action" onclick="FitApp.processWorkoutWithAI()" style="background: #00ff88; color: #000; font-weight: bold; margin-bottom: 10px;">⚡ Processar Comando IA</button>
-            <div id="aiImportLoader" class="loader" style="color: #00ff88; display: none;">O Gemini está processando...</div>
+            <button id="btnProcessAi" class="btn-action" onclick="FitApp.processWorkoutWithAI()" style="background: #00ff88; color: #000; font-weight: bold; margin-bottom: 10px; font-size: 15px; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0,255,136,0.3); padding: 14px;">⚡ Enviar para o Cérebro Neural</button>
+            <div id="aiImportLoader" class="loader" style="color: #00ff88; display: none; margin-bottom: 10px;">Forjando matrizes táticas...</div>
         </div>
     </div>
 

@@ -57,7 +57,9 @@ var FitApp = (() => {
 
     // ESCUDO ANTI-XSS: Neutraliza scripts maliciosos injetados via texto
     const escapeHTML = (str) => {
-        return str.replace(/[&<>'"]/g, 
+        if (str === null || str === undefined) return '';
+        // BLINDAGEM: Força a conversão para String antes de tentar ler
+        return String(str).replace(/[&<>'"]/g, 
             tag => ({
                 '&': '&amp;',
                 '<': '&lt;',
@@ -1095,12 +1097,13 @@ function removeExercise(bIndex, eIndex) {
                 if (lastWorkoutMatch) {
                     const lastSets = lastWorkoutMatch.data.filter(d => d.exercise === ex.name);
                     if (lastSets.length > 0) {
-                        const finalSet = lastSets[lastSets.length - 1]; 
-                        let suggestedKg = parseFloat(finalSet.kg) || 0;
-                        const repsDone = parseInt(finalSet.reps) || 0;
-                        
-                        const targetStr = ex.target ? ex.target.replace(/[^0-9-]/g, '') : "10";
-                        let targetHigh = parseInt(targetStr.split('-').pop()) || 10; 
+                            const finalSet = lastSets[lastSets.length - 1]; 
+                            let suggestedKg = parseFloat(finalSet.kg) || 0;
+                            const repsDone = parseInt(finalSet.reps) || 0;
+                            
+                            // BLINDAGEM: Força o String() antes de aplicar o filtro .replace()
+                            const targetStr = ex.target ? String(ex.target).replace(/[^0-9-]/g, '') : "10";
+                            let targetHigh = parseInt(targetStr.split('-').pop()) || 10;
                         
                         if (repsDone >= targetHigh && suggestedKg > 0) {
                             suggestedKg += 2;
@@ -2206,12 +2209,46 @@ window.encerrarSessao = function() {
         const textInput = document.getElementById('aiWorkoutText');
         if (nameInput) nameInput.value = '';
         if (textInput) textInput.value = '';
+        
+        // Sempre abre na aba de Criação por padrão
+        if(FitApp.switchAiTab) FitApp.switchAiTab('criar');
+    }
+
+    // NOVO: Controlador de Abas da IA
+    function switchAiTab(tab) {
+        const btnCriar = document.getElementById('btnTabAiCriar');
+        const btnImportar = document.getElementById('btnTabAiImportar');
+        const routeCriar = document.getElementById('aiRouteCriar');
+        const routeImportar = document.getElementById('aiRouteImportar');
+        const textInput = document.getElementById('aiWorkoutText');
+
+        // ESCUDO TÁTICO: Se o cache estiver usando o HTML antigo, aborta sem travar o aplicativo
+        if (!btnCriar || !btnImportar || !routeCriar || !routeImportar) {
+            console.warn("Aviso: HTML desatualizado detectado. Limpe o cache do navegador.");
+            return;
+        }
+
+        if (tab === 'criar') {
+            btnCriar.style.background = '#00ff88'; btnCriar.style.color = '#000';
+            btnImportar.style.background = 'transparent'; btnImportar.style.color = '#888';
+            routeCriar.style.display = 'block';
+            routeImportar.style.display = 'none';
+            if(textInput) textInput.value = ''; // Limpa o texto para garantir a rota de criação
+        } else {
+            btnImportar.style.background = '#00ff88'; btnImportar.style.color = '#000';
+            btnCriar.style.background = 'transparent'; btnCriar.style.color = '#888';
+            routeImportar.style.display = 'block';
+            routeCriar.style.display = 'none';
+        }
     }
 
     async function processWorkoutWithAI() {
-        const days = document.getElementById('aiDays').value;
+        const methodSelect = document.getElementById('aiMethod');
+        const aiMethod = methodSelect ? methodSelect.value : 'abc';
+        const methodName = methodSelect ? methodSelect.options[methodSelect.selectedIndex].text : 'IA';
+        
         const env = document.getElementById('aiEnv').value;
-        const workoutName = document.getElementById('aiWorkoutName').value || `Rotina IA (${days} Dias)`;
+        const workoutName = document.getElementById('aiWorkoutName').value || `Rotina - ${methodName}`;
         const pastedText = document.getElementById('aiWorkoutText').value.trim();
         
         const loader = document.getElementById('aiImportLoader');
@@ -2231,20 +2268,41 @@ window.encerrarSessao = function() {
             Retorne APENAS um JSON válido.
             `;
         } else {
+            let instruction = "";
+            switch(aiMethod) {
+                case 'abc':
+                    instruction = "Crie uma periodização de 3 dias (ABC). Dia 1: Push (Peito, Ombro, Tríceps). Dia 2: Pull (Costas, Trapézio, Bíceps). Dia 3: Legs (Quadríceps, Isquiotibiais, Panturrilhas, Core). Para cada dia, escolha de 5 a 6 exercícios clássicos.";
+                    break;
+                case 'abcd':
+                    instruction = "Crie uma periodização de 4 dias (ABCD). Dia 1: Peito e Tríceps. Dia 2: Foco Anterior (Quadríceps e Panturrilha). Dia 3: Costas e Bíceps. Dia 4: Foco Posterior (Isquiotibiais, Glúteos e Ombros). Para cada dia, escolha 5 a 6 exercícios.";
+                    break;
+                case 'biset_agonista':
+                    instruction = "Crie uma periodização de 3 dias (Push/Pull/Legs). OBRIGATÓRIO: Agrupe os movimentos em 'Bi-sets Agonistas' (2 exercícios seguidos para o MESMO músculo, ex: Supino reto + Crucifixo). Escolha 6 exercícios por dia formando 3 blocos de bi-sets.";
+                    break;
+                case 'biset_antagonista':
+                    instruction = "Crie uma periodização de 3 dias. OBRIGATÓRIO: Agrupe os movimentos em 'Bi-sets Antagônicos/Mistos' (2 exercícios seguidos para músculos OPOSTOS, ex: Peito + Costas, ou Quadríceps + Posterior). Escolha 6 exercícios por dia formando 3 blocos de bi-sets.";
+                    break;
+                case 'biset_sinergista':
+                    instruction = "Crie uma periodização de 3 dias. OBRIGATÓRIO: Agrupe os movimentos em 'Bi-sets Sinergistas' (ex: Peito + Tríceps, Costas + Bíceps, Pernas + Ombros). Escolha 6 exercícios por dia formando 3 blocos de bi-sets.";
+                    break;
+                case 'circuito':
+                    instruction = "Crie 1 único treino no formato Circuito Metabólico FullBody. Escolha de 6 a 8 exercícios trabalhando o corpo todo de forma dinâmica. O objetivo é alto gasto calórico com mínimo descanso.";
+                    break;
+            }
+
             const allowedExercises = dictionaryData.filter(d => {
-                // Modificado: Se for academia, barra estritamente o peso corporal e calistenia
                 if (env === 'academia') return d.equip !== 'peso_corporal' && d.equip !== 'calistenia'; 
                 if (env === 'calistenia') return d.equip === 'peso_corporal' || d.equip === 'calistenia';
                 return d.equip === 'peso_corporal';
             }).map(d => d.name).join(", ");
             
             megaPrompt = `
-            Crie uma rotina de treino de ${days} dias. 
+            ${instruction}
+            
             REGRA ABSOLUTA: Você SÓ PODE usar os exercícios exatos desta lista abaixo. Não invente nenhum outro nome.
             LISTA PERMITIDA: [${allowedExercises}].
             
-            Para cada dia, escolha de 5 a 6 exercícios coerentes com o grupamento muscular do dia.
-            Defina séries lógicas (ex: 3 ou 4) e repetições de hipertrofia (ex: 8-12).
+            Defina séries lógicas (ex: 3 ou 4) e repetições adequadas (ex: 8-12, ou 15-20 para circuito).
             Retorne APENAS o JSON válido.
             `;
         }
@@ -2256,13 +2314,45 @@ window.encerrarSessao = function() {
                 const parsed = JSON.parse(data.resultado);
                 currentWorkoutType = 'custom_ia'; 
                 
-                currentRoutine = parsed.map((dia, index) => {
-                    const idLetra = String.fromCharCode(65 + index); 
+                // ESCUDO DE DADOS: Força a extração da Lista (Array), ignorando objetos externos
+                let workoutArray = [];
+                if (Array.isArray(parsed)) {
+                    workoutArray = parsed;
+                } else {
+                    // Se a IA embrulhou num Objeto, procura a primeira Lista dentro dele
+                    workoutArray = Object.values(parsed).find(val => Array.isArray(val)) || [];
+                }
+
+                if (workoutArray.length === 0) {
+                    throw new Error("Formato de JSON inválido. A IA não devolveu uma lista.");
+                }
+                
+                // 1. Converte o pacote inteiro da IA para o padrão do aplicativo
+                const todosOsTreinos = workoutArray.map((dia, index) => {
+                    const idLetra = String.fromCharCode(65 + index);
+                    const nomeTreino = dia.nome_treino || dia.nome || `Dia ${index + 1}`;
+                    const exercicios = dia.exercicios || dia.exercises || [];
+
                     return {
-                        title: pastedText === "" && days > 1 ? `Treino ${idLetra} - ${dia.nome_treino}` : dia.nome_treino,
-                        exercises: dia.exercicios.map(ex => ({ name: ex.nome, sets: parseInt(ex.series) || 4, target: ex.repeticoes || "10-12 rep" }))
+                        nome_treino: pastedText === "" && workoutArray.length > 1 ? `Treino ${idLetra} - ${nomeTreino}` : nomeTreino,
+                        exercicios: exercicios.map(ex => ({ 
+                            nome: ex.nome || ex.name || "Exercício Não Mapeado", 
+                            series: parseInt(ex.series || ex.sets) || 4, 
+                            repeticoes: ex.repeticoes || ex.reps || "10-12 rep" 
+                        }))
                     };
                 });
+
+                // 2. Extrai o Dia 1 para a tela atual
+                const treinoDia1 = todosOsTreinos.shift(); 
+                currentRoutine = [{
+                    title: treinoDia1.nome_treino,
+                    exercises: treinoDia1.exercicios.map(ex => ({ name: ex.nome, sets: ex.series, target: ex.repeticoes }))
+                }];
+
+                // 3. Joga o resto na Fila e salva na Memória Persistente
+                filaDeTreinosIA = todosOsTreinos;
+                safeSet('fitapp_fila_ia', JSON.stringify(filaDeTreinosIA));
                 
                 document.getElementById('importAiModal').style.display = 'none';
                 
@@ -2305,6 +2395,7 @@ window.encerrarSessao = function() {
 
     function carregarProximoTreinoIA() {
         if (filaDeTreinosIA.length === 0) {
+            safeSet('fitapp_fila_ia', '[]'); // Limpa a memória
             showToast("Periodização importada e salva com sucesso!");
             cancelWorkoutPreview(); 
             renderCustomWorkouts();
@@ -2312,6 +2403,7 @@ window.encerrarSessao = function() {
         }
 
         const treinoAtual = filaDeTreinosIA.shift(); 
+        safeSet('fitapp_fila_ia', JSON.stringify(filaDeTreinosIA)); // Atualiza a memória física
 
         document.getElementById('workoutCards').style.display = 'none';
         const header = document.querySelector('.dashboard-header');
@@ -2738,6 +2830,19 @@ function renderMetricsChart() {
             showToast('Treino em andamento restaurado.');
         }
 
+        // NOVO: Recupera a Fila de Inteligência Artificial interrompida
+        const savedAIFila = safeGet('fitapp_fila_ia');
+        if (savedAIFila && savedAIFila !== '[]') {
+            try {
+                filaDeTreinosIA = JSON.parse(savedAIFila);
+                if (filaDeTreinosIA.length > 0) {
+                    showToast(`Detectado ${filaDeTreinosIA.length} treino(s) da IA pendentes para revisão.`);
+                    // Restaura a interface de continuação
+                    currentWorkoutType = 'novo_customizado';
+                    carregarProximoTreinoIA();
+                }
+            } catch(e) { console.error("Fila IA corrompida."); }
+        }
        
         updateEnvUI();
         updateCampaignDashboard();
@@ -3900,7 +4005,7 @@ function updateDynamicCards() {
         toggleAutoPilot, startAutoPilot, stopAutoPilot, 
         openHistoryModal, switchHistoryTab,
         saveCustomWorkout, deleteCustomWorkout,
-        openImportAiModal, processWorkoutWithAI,
+        openImportAiModal, processWorkoutWithAI, switchAiTab,
         startPrepPhase, startCooldownTimer, skipCooldown, finalizeSession, // NOVO: As chaves das novas Fases liberadas para o HTML
         safeGet, safeSet, showToast, speak,
         openDict: (name) => { 

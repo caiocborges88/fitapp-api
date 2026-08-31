@@ -48,9 +48,20 @@ var FitAPI = (() => {
     // Interceptador global de respostas
     async function handleResponse(response) {
         if (!response.ok) {
-            throw new Error(`Erro HTTP: ${response.status}`);
+            let errorMsg = `Erro HTTP: ${response.status}`;
+            try {
+                // Tenta extrair a mensagem real enviada pelo nosso Cérebro Neural
+                const errBody = await response.json();
+                if (errBody.error) {
+                    errorMsg = errBody.error;
+                }
+            } catch(e) {
+                // Se não conseguir ler o JSON, mantém o erro genérico
+            }
+            console.error("Mensagem real do Servidor:", errorMsg);
+            throw new Error(errorMsg);
         }
-        return await response.json();
+        return response.json();
     }
 
     // 5. SALVAMENTO COM ASSINATURA DIGITAL
