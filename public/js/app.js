@@ -1418,7 +1418,7 @@ function removeExercise(bIndex, eIndex) {
             }
         }
         // --- FIM DO SISTEMA DE GATILHO DUPLO ---
-
+        saveCampaignToCloud(); // NOVO: Atualiza a contagem de treinos do mesociclo na nuvem
         clearWorkoutState(); 
         isPromotionPending = isPromotionTime; // Guarda o status de promoção para depois da Fase 3
 
@@ -2691,6 +2691,11 @@ function renderMetricsChart() {
                         renderWeeklyCalendar();
                         if (typeof renderMetricsChart === 'function') renderMetricsChart();
                     }
+                    // NOVO: Resgata a Campanha Ativa (Frente 2)
+                    await loadCampaignFromCloud();
+                    applyTheme();
+                    updateDynamicCards();
+                    updateCampaignDashboard();
                 } catch(e) {
                     console.error("Falha ao puxar histórico da nuvem na inicialização.", e);
                 }
@@ -3138,7 +3143,7 @@ function lockCampaign() {
         applyTheme();
         updateDynamicCards();
         updateCampaignDashboard();
-        
+        saveCampaignToCloud(); // NOVO: Envia o plano recém-criado para a nuvem
         showToast("Plano Tático Travado com Sucesso!");
         if(audioEnabled) speak("Plano tático travado. Motor biomecânico atualizado.");
         
@@ -3901,6 +3906,7 @@ function updateDynamicCards() {
             safeSet('fitapp_campaign_data', '');
             safeSet('fitapp_campaign_count', 0);
             updateCampaignDashboard();
+            saveCampaignToCloud();
             showToast("Campanha abortada. O Cérebro Biomecânico foi liberado.");
         }
     }
@@ -4026,8 +4032,64 @@ function checkCompletedCards() {
     }
 
 // ==========================================
-// 📡 UPLINK COM A TORRE DE CONTROLE (B2B)
+// ☁️ UPLINK DA CAMPANHA (FRENTE 2)
 // ==========================================
+    async function saveCampaignToCloud() {
+        if (typeof firebase === 'undefined') return;
+        const user = firebase.auth().currentUser;
+        if (!user) return;
+        
+        const db = firebase.firestore();
+        const payload = {
+            campaign_data: safeGet('fitapp_campaign_data') || '',
+            campaign_count: safeGet('fitapp_campaign_count') || '0',
+            blacklist: safeGet('fitapp_blacklist') || '[]',
+            main_method: safeGet('fitapp_main_method') || 'abc',
+            profile: safeGet('fitapp_profile') || 'hipertrofia',
+            level: safeGet('fitapp_level') || 'intermediario'
+        };
+        
+        try {
+            await db.collection('usuarios').doc(user.uid).set({ campanha: payload }, { merge: true });
+        } catch (error) {
+            console.warn("Aviso Tático: Falha ao sincronizar campanha com a nuvem.", error);
+        }
+    }
+
+    async function loadCampaignFromCloud() {
+        if (typeof firebase === 'undefined') return;
+        const user = firebase.auth().currentUser;
+        if (!user) return;
+        
+        const db = firebase.firestore();
+        try {
+            const doc = await db.collection('usuarios').doc(user.uid).get();
+            if (doc.exists && doc.data().campanha) {
+                const data = doc.data().campanha;
+                
+                // Restaura o cofre
+                if (data.campaign_data) safeSet('fitapp_campaign_data', data.campaign_data);
+                if (data.campaign_count) safeSet('fitapp_campaign_count', data.campaign_count);
+                if (data.blacklist) safeSet('fitapp_blacklist', data.blacklist);
+                if (data.main_method) safeSet('fitapp_main_method', data.main_method);
+                if (data.profile) safeSet('fitapp_profile', data.profile);
+                if (data.level) safeSet('fitapp_level', data.level);
+                
+                // Atualiza os seletores da interface para refletirem a nuvem
+                const elsProfile = document.getElementById('profileSelector');
+                if (elsProfile && data.profile) elsProfile.value = data.profile;
+                
+                const elsMethod = document.getElementById('mainMethodSelector');
+                if (elsMethod && data.main_method) elsMethod.value = data.main_method;
+                
+                const elsLevel = document.getElementById('levelSelector');
+                if (elsLevel && data.level) elsLevel.value = data.level;
+            }
+        } catch (error) {
+            console.warn("Aviso Tático: Falha ao resgatar campanha da nuvem.", error);
+        }
+    }
+
 async function syncTacticalDictionary() {
     try {
         const db = firebase.firestore();
