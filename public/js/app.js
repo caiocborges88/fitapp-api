@@ -2737,31 +2737,6 @@ function renderMetricsChart() {
             }
         });
 
-        // NOVO: Ouve as mudanças no seletor de perfil, salva e recarrega o treino
-        if (els.profileSelector) els.profileSelector.addEventListener('change', () => {
-            safeSet('fitapp_profile', els.profileSelector.value);
-            safeSet('fitapp_onboarding_done', 'true'); // NOVO
-            applyTheme(); // 🎨 Troca a paleta de cores em tempo real
-            updateDynamicCards(); // NOVO: Força a atualização imediata dos textos dos cartões
-            if(currentWorkoutType) loadWorkout(); 
-            showToast(els.profileSelector.value === 'feminino' ? 'Perfil Feminino ativado.' : 'Perfil Padrão ativado.');
-            updateCampaignDashboard(); // NOVO
-        });
-
-        if (els.styleSelector) els.styleSelector.addEventListener('change', () => {
-            safeSet('fitapp_style', els.styleSelector.value);
-            safeSet('fitapp_onboarding_done', 'true'); // NOVO
-            if(currentWorkoutType) loadWorkout(); 
-            updateCampaignDashboard(); // NOVO
-        }); 
-
-        if (els.levelSelector) els.levelSelector.addEventListener('change', () => {
-            safeSet('fitapp_level', els.levelSelector.value);
-            safeSet('fitapp_onboarding_done', 'true'); // NOVO
-            if(currentWorkoutType) loadWorkout(); 
-            updateCampaignDashboard(); // NOVO
-        }); 
-        
         const btnAudio = document.getElementById('btnAudio');
         if (btnAudio) btnAudio.addEventListener('click', toggleAudio);
         
@@ -3132,6 +3107,44 @@ function renderMetricsChart() {
         
         FitApp.showToast("Rotina forjada com sucesso. Verifique o plano.");
         if(audioEnabled) FitApp.speak("Treino gerado conforme literatura biomecânica.");
+    }
+function lockCampaign() {
+        const methodSelector = document.getElementById('mainMethodSelector');
+        const profileSelector = document.getElementById('profileSelector');
+        const levelSelector = document.getElementById('levelSelector');
+        
+        if (!methodSelector || !profileSelector || !levelSelector) return;
+        
+        const method = methodSelector.value;
+        const profile = profileSelector.value;
+        const level = levelSelector.value;
+        
+        const currentMethod = safeGet('fitapp_main_method');
+        const currentLevel = safeGet('fitapp_level');
+        
+        // TRAVA TÁTICA: Só aborta e reseta o mesociclo se o Método ou Nível tiverem sido alterados
+        if (currentMethod && (currentMethod !== method || currentLevel !== level)) {
+            safeSet('fitapp_campaign_data', '');
+            safeSet('fitapp_campaign_count', 0);
+        }
+        
+        // Salva as escolhas definitivamente no cofre
+        safeSet('fitapp_main_method', method);
+        safeSet('fitapp_profile', profile);
+        safeSet('fitapp_level', level);
+        safeSet('fitapp_onboarding_done', 'true');
+        
+        // Aplica as mudanças no motor
+        applyTheme();
+        updateDynamicCards();
+        updateCampaignDashboard();
+        
+        showToast("Plano Tático Travado com Sucesso!");
+        if(audioEnabled) speak("Plano tático travado. Motor biomecânico atualizado.");
+        
+        // Roteamento automático para a Linha de Frente (Aba Treinar)
+        switchTab('tab-treino', 'nav-treino');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 function updateDynamicCards() {
         const selector = document.getElementById('mainMethodSelector');
@@ -3954,7 +3967,7 @@ function updateDynamicCards() {
     return { 
         init, filterLibrary, openSwapModal, confirmSwap, startWorkout, startCardio, toggleCardioTimer, openForgeModal, updateForgeOptions, generateForgedWorkout, updateDynamicCards,
         beginWorkoutExecution, acceptSnap, declineSnap, cancelWorkoutPreview,
-        toggleGlobalEnv, updateEnvUI, updateCampaignDashboard, resetCampaign,
+        toggleGlobalEnv, updateEnvUI, updateCampaignDashboard, resetCampaign, lockCampaign,
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,
         renderIsolationChart,
         adjustRestTime, changeSets, cloneFirstSet, exportStravaCard,
