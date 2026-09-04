@@ -3249,7 +3249,6 @@ function updateDynamicCards() {
 
     function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
         const removeAccents = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
-        const includeAbs = document.getElementById('toggleAbs') ? document.getElementById('toggleAbs').checked : false;
         
         // NOVO: Captura o Nível do Atleta (Limita o SNC)
         const userLevel = els.levelSelector ? els.levelSelector.value : 'intermediario';
@@ -3320,9 +3319,9 @@ function updateDynamicCards() {
                     const exGroup = d.group || '';
                     const exFocus = d.focus || '';
 
-                    // FILTRO DE DIFICULDADE (SNC) FALLBACK
+                    // FILTRO DE DIFICULDADE (SNC) FALLBACK - NOVO: Se o Nível 1 estiver vazio, libera Nível 2.
                     const exNivel = d.nivel || 1;
-                    if (exNivel > maxAllowedLevel) return false;
+                    if (exNivel > maxAllowedLevel && exNivel > (maxAllowedLevel + 1)) return false; 
 
                     // ESCUDO PRIMÁRIO NO FALLBACK TAMBÉM
                     if (!checkBaseGroup(exGroup, focusTerms)) return false;
@@ -3343,71 +3342,68 @@ function updateDynamicCards() {
         const rawProfile = document.getElementById('profileSelector') ? document.getElementById('profileSelector').value : 'hipertrofia';
         const routeProfile = (rawProfile === 'definicao' || rawProfile === 'masculino') ? 'hipertrofia' : rawProfile;
 
-        // 🛡️ O ESCUDO BIOMECÂNICO (Uso Global para as Plantas Baixas)
+        // 🛡️ O ESCUDO BIOMECÂNICO (Otimizado com Fallback Absoluto para não retornar NULL)
         const safeSlot = (focusArr, equip = null, target = "10-12 rep") => {
             let ex = getEx(focusArr, equip, used);
-            if (!ex && equip) ex = getEx(focusArr, null, used);
-            if (!ex) ex = getEx(focusArr, null, []); 
+            if (!ex && equip) ex = getEx(focusArr, null, used); // Tenta sem o equipamento restrito
+            if (!ex) ex = getEx(focusArr, null, []); // Tenta ignorando a trava de exercícios repetidos
             if (!ex) {
+                // Tenta puxar do grupo pai (ex: de 'peito_clavicular' para 'peito')
                 const parentTerm = focusArr[0].split('_')[0]; 
                 ex = getEx([parentTerm], null, []);
             }
             if (ex) used.push(ex.name);
-            return ex ? { name: ex.name, sets: 4, target: target } : null;
+            // Retorna um fallback vazio estruturado apenas se TUDO falhar (para não travar a UI)
+            return ex ? { name: ex.name, sets: 4, target: target } : { name: "Exercício Genérico (" + focusArr[0].split('_')[0] + ")", sets: 4, target: target };
         };
 
-        // --- SISTEMA ABC / PPL (Etapa Alpha: Plantas Baixas) ---
+        // --- SISTEMA ABC / PPL (Etapa Alpha: Distribuição 4/4/3/3/3/Completa) ---
         if (method === 'abc' || method === 'ppl') {
             let blueprint = [];
             
             if (routeProfile === 'feminino') {
                 if (subOpt === 'push' || subOpt === 'A') { // Treino A (Posterior Expandido)
                     blueprint = [
-                        { title: "Bloco 1: Glúteos & Posteriores Base", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep") ] },
-                        { title: "Bloco 2: Abdução & Isolamento", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina', "12-15 rep"), safeSlot(['perna_adutor_abdutor'], 'cabo', "12-15 rep") ] },
-                        { title: "Bloco 3: Posteriores Encurtados", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'halter', "12-15 rep") ] },
-                        { title: "Bloco 4: Finalização & Core", slots: [ safeSlot(['perna_posterior_gluteo'], 'peso_corporal', "Até a falha"), safeSlot(['core_supra', 'core_infra'], null, "15-20 rep") ] }
+                        { title: "Posteriores Base (2 Ex)", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep") ] },
+                        { title: "Glúteos & Isolamento (2 Ex)", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina', "12-15 rep"), safeSlot(['perna_posterior_gluteo'], 'cabo', "12-15 rep") ] },
+                        { title: "Panturrilhas", slots: [ safeSlot(['panturrilha_gastro'], 'maquina', "15-20 rep") ] },
+                        { title: "Core Finisher", slots: [ safeSlot(['core_supra', 'core_infra'], null, "15-20 rep") ] }
                     ];
                 } else if (subOpt === 'pull' || subOpt === 'B') { // Treino B (Superiores Completo)
                     blueprint = [
-                        { title: "Bloco 1: Costas (Puxadas e Remadas)", slots: [ safeSlot(['costa_largura'], 'maquina', "10-12 rep"), safeSlot(['costa_espessura'], 'barra', "10-12 rep") ] },
-                        { title: "Bloco 2: Peitoral e Ombro Frontal", slots: [ safeSlot(['peito_esternocostal'], 'halter', "12-15 rep"), safeSlot(['ombro_anterior'], 'halter', "10-12 rep") ] },
-                        { title: "Bloco 3: Deltoides Lateral e Posterior", slots: [ safeSlot(['ombro_lateral'], 'halter', "12-15 rep"), safeSlot(['ombro_posterior', 'trapezio'], 'cabo', "12-15 rep") ] },
-                        { title: "Bloco 4: Braços e Core", slots: [ safeSlot(['triceps_global', 'biceps_global'], 'cabo', "12-15 rep"), safeSlot(['core_obliquo'], null, "15-20 rep") ] }
+                        { title: "Costas (4 Exercícios)", slots: [ safeSlot(['costa_largura'], 'maquina', "10-12 rep"), safeSlot(['costa_espessura'], 'barra', "10-12 rep"), safeSlot(['costa_isolado'], 'cabo', "12-15 rep"), safeSlot(['costa'], 'halter', "12-15 rep") ] },
+                        { title: "Peitoral (4 Exercícios)", slots: [ safeSlot(['peito_clavicular'], 'halter', "12-15 rep"), safeSlot(['peito_esternocostal'], 'halter', "10-12 rep"), safeSlot(['peito_costal'], 'cabo', "12-15 rep"), safeSlot(['peito'], 'maquina', "10-12 rep") ] },
+                        { title: "Braços Isolados", slots: [ safeSlot(['triceps_global'], 'cabo', "12-15 rep"), safeSlot(['biceps_global'], 'halter', "12-15 rep") ] }
                     ];
                 } else { // Treino C (Anterior Expandido)
                     blueprint = [
-                        { title: "Bloco 1: Base Anterior (Quadríceps)", slots: [ safeSlot(['perna_quadriceps'], 'barra', "10-12 rep"), safeSlot(['perna_quadriceps'], 'halter', "10-12 rep") ] },
-                        { title: "Bloco 2: Isolamento Articular", slots: [ safeSlot(['perna_quadriceps'], 'maquina', "12-15 rep"), safeSlot(['perna_quadriceps'], 'maquina', "12-15 rep") ] },
-                        { title: "Bloco 3: Panturrilhas", slots: [ safeSlot(['panturrilha_gastro'], 'maquina', "15-20 rep"), safeSlot(['panturrilha_soleo'], 'maquina', "15-20 rep") ] },
-                        { title: "Bloco 4: Core e Estabilização", slots: [ safeSlot(['core_profundo'], 'peso_corporal', "1 min"), safeSlot(['panturrilha_gastro'], 'peso_corporal', "Até a falha") ] }
+                        { title: "Quadríceps (2 Exercícios)", slots: [ safeSlot(['perna_quadriceps'], 'barra', "10-12 rep"), safeSlot(['perna_quadriceps'], 'halter', "10-12 rep") ] },
+                        { title: "Adutores & Panturrilhas", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina', "12-15 rep"), safeSlot(['panturrilha_soleo'], 'maquina', "15-20 rep") ] },
+                        { title: "Ombros (3 Exercícios)", slots: [ safeSlot(['ombro_anterior'], 'halter', "10-12 rep"), safeSlot(['ombro_lateral'], 'halter', "12-15 rep"), safeSlot(['ombro_posterior'], 'cabo', "12-15 rep") ] }
                     ];
                 }
             } else {
-                if (subOpt === 'push' || subOpt === 'A') {
+                if (subOpt === 'push' || subOpt === 'A') { // PEITO (4), OMBRO (3), TRICEPS (3)
                     blueprint = [
-                        { title: "Bloco 1: Peitoral Base", slots: [ safeSlot(['peito_clavicular'], 'barra', "8-10 rep"), safeSlot(['peito_esternocostal'], 'halter', "8-10 rep") ] },
-                        { title: "Bloco 2: Peitoral Isolado & Ombro Frontal", slots: [ safeSlot(['peito_costal'], 'cabo', "10-12 rep"), safeSlot(['ombro_anterior'], 'halter', "10-12 rep") ] },
-                        { title: "Bloco 3: Ombro Lateral & Tríceps Base", slots: [ safeSlot(['ombro_lateral'], 'halter', "12-15 rep"), safeSlot(['triceps_longa'], 'halter', "10-12 rep") ] },
-                        { title: "Bloco 4: Tríceps Foco", slots: [ safeSlot(['triceps_lateral_medial'], 'cabo', "12-15 rep") ] }
+                        { title: "Peitoral Base", slots: [ safeSlot(['peito_clavicular'], 'barra', "8-10 rep"), safeSlot(['peito_esternocostal'], 'halter', "8-10 rep") ] },
+                        { title: "Peitoral Isolamento", slots: [ safeSlot(['peito_costal'], 'cabo', "10-12 rep"), safeSlot(['peito_esternocostal'], 'maquina', "10-12 rep") ] },
+                        { title: "Deltoides", slots: [ safeSlot(['ombro_anterior'], 'halter', "10-12 rep"), safeSlot(['ombro_lateral'], 'halter', "12-15 rep"), safeSlot(['ombro_posterior'], 'cabo', "12-15 rep") ] },
+                        { title: "Tríceps & Core", slots: [ safeSlot(['triceps_longa'], 'halter', "10-12 rep"), safeSlot(['triceps_lateral_medial'], 'cabo', "12-15 rep"), safeSlot(['triceps_global'], 'cabo', "12-15 rep"), safeSlot(['core_supra'], null, "15-20 rep") ] }
                     ];
-                    if(rawProfile === 'definicao') blueprint[3].slots.push(safeSlot(['cardio_motor'], 'peso_corporal', "1 min"));
-                } else if (subOpt === 'pull' || subOpt === 'B') {
+                } else if (subOpt === 'pull' || subOpt === 'B') { // COSTAS (4), BICEPS (3) + TRAPEZIO E CORE
                     blueprint = [
-                        { title: "Bloco 1: Dorsais Base", slots: [ safeSlot(['costa_largura'], 'barra', "8-10 rep"), safeSlot(['costa_espessura'], 'maquina', "8-10 rep") ] },
-                        { title: "Bloco 2: Posterior & Lombar", slots: [ safeSlot(['costa_isolado', 'costa'], 'cabo', "10-12 rep"), safeSlot(['ombro_posterior'], 'halter', "10-12 rep") ] },
-                        { title: "Bloco 3: Trapézio & Bíceps Base", slots: [ safeSlot(['trapezio'], 'halter', "12-15 rep"), safeSlot(['biceps_longa', 'biceps_curta'], 'barra', "10-12 rep") ] },
-                        { title: "Bloco 4: Braquial Foco", slots: [ safeSlot(['biceps_braquial'], 'cabo', "12-15 rep") ] }
+                        { title: "Dorsais Base", slots: [ safeSlot(['costa_largura'], 'barra', "8-10 rep"), safeSlot(['costa_espessura'], 'maquina', "8-10 rep") ] },
+                        { title: "Dorsais Isolamento", slots: [ safeSlot(['costa_isolado', 'costa'], 'cabo', "10-12 rep"), safeSlot(['costa_largura'], 'halter', "10-12 rep") ] },
+                        { title: "Bíceps", slots: [ safeSlot(['biceps_longa'], 'barra', "10-12 rep"), safeSlot(['biceps_curta'], 'halter', "10-12 rep"), safeSlot(['biceps_braquial'], 'cabo', "12-15 rep") ] },
+                        { title: "Trapézio & Core", slots: [ safeSlot(['trapezio'], 'halter', "12-15 rep"), safeSlot(['core_obliquo'], null, "15-20 rep") ] }
                     ];
-                    if(rawProfile === 'definicao') blueprint[3].slots.push(safeSlot(['cardio_resistencia'], 'peso_corporal', "1 min"));
-                } else { // Legs
+                } else { // LEGS COMPLETAS (2 Quad, 2 Post, 1 Glúteo, 1 Panturrilha) + CORE
                     blueprint = [
-                        { title: "Bloco 1: Quadríceps Primário", slots: [ safeSlot(['perna_quadriceps'], 'barra', "8-10 rep"), safeSlot(['perna_quadriceps'], 'maquina', "10-12 rep") ] },
-                        { title: "Bloco 2: Cadeia Posterior", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep") ] },
-                        { title: "Bloco 3: Panturrilhas Sinergistas", slots: [ safeSlot(['panturrilha_gastro'], 'maquina', "15-20 rep"), safeSlot(['panturrilha_soleo'], 'maquina', "15-20 rep") ] },
-                        { title: "Bloco 4: Core & Estabilização", slots: [ safeSlot(['core_profundo', 'core_supra'], null, "15-20 rep") ] }
+                        { title: "Anterior (Quadríceps)", slots: [ safeSlot(['perna_quadriceps'], 'barra', "8-10 rep"), safeSlot(['perna_quadriceps'], 'maquina', "10-12 rep") ] },
+                        { title: "Posterior (Isquiotibiais)", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep") ] },
+                        { title: "Glúteos & Panturrilhas", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina', "15-20 rep"), safeSlot(['panturrilha_gastro'], 'maquina', "15-20 rep") ] },
+                        { title: "Core Profundo", slots: [ safeSlot(['core_profundo'], null, "15-20 rep"), safeSlot(['core_infra'], null, "15-20 rep") ] }
                     ];
-                    if(rawProfile === 'definicao') blueprint[3].slots.push(safeSlot(['esporte_agilidade', 'cardio_motor'], 'peso_corporal', "1 min"));
                 }
             }
 
@@ -3419,72 +3415,62 @@ function updateDynamicCards() {
             });
         }
         
-        // --- SISTEMA ABCD (Etapa Bravo: Plantas Baixas) ---
+        // --- SISTEMA ABCD (Etapa Bravo: Distribuição 4/4/3/3/3/Completa) ---
         else if (method === 'abcd') {
             let blueprint = [];
             
             if (routeProfile === 'feminino') {
                 if (subOpt === 'A') { 
                     blueprint = [
-                        { title: "Bloco 1: Foco Frontal Base", slots: [ safeSlot(['perna_quadriceps'], 'barra', "10-12 rep"), safeSlot(['perna_quadriceps'], 'maquina', "10-12 rep") ] },
-                        { title: "Bloco 2: Isolamento Quadríceps", slots: [ safeSlot(['perna_quadriceps'], 'maquina', "12-15 rep"), safeSlot(['perna_quadriceps'], 'peso_corporal', "12-15 rep") ] },
-                        { title: "Bloco 3: Panturrilhas", slots: [ safeSlot(['panturrilha_gastro'], 'maquina', "15-20 rep"), safeSlot(['panturrilha_soleo'], 'maquina', "15-20 rep") ] },
-                        { title: "Bloco 4: Core & Estabilização", slots: [ safeSlot(['core_supra', 'core_infra'], 'peso_corporal', "15-20 rep") ] }
+                        { title: "Foco Frontal (Quadríceps)", slots: [ safeSlot(['perna_quadriceps'], 'barra', "10-12 rep"), safeSlot(['perna_quadriceps'], 'maquina', "10-12 rep") ] },
+                        { title: "Isolamento Quadríceps", slots: [ safeSlot(['perna_quadriceps'], 'halter', "12-15 rep"), safeSlot(['perna_quadriceps'], 'peso_corporal', "12-15 rep") ] },
+                        { title: "Panturrilhas & Core", slots: [ safeSlot(['panturrilha_gastro'], 'maquina', "15-20 rep"), safeSlot(['core_supra', 'core_infra'], 'peso_corporal', "15-20 rep") ] }
                     ];
                 } else if (subOpt === 'B') { 
                     blueprint = [
-                        { title: "Bloco 1: Costas e Peito", slots: [ safeSlot(['costa_largura'], 'maquina', "10-12 rep"), safeSlot(['peito_esternocostal'], 'halter', "10-12 rep") ] },
-                        { title: "Bloco 2: Ombros", slots: [ safeSlot(['ombro_lateral'], 'halter', "12-15 rep"), safeSlot(['ombro_anterior', 'ombro_posterior'], 'halter', "12-15 rep") ] },
-                        { title: "Bloco 3: Braços", slots: [ safeSlot(['triceps_lateral_medial'], 'cabo', "12-15 rep"), safeSlot(['biceps_curta'], 'halter', "12-15 rep") ] },
-                        { title: "Bloco 4: Postura", slots: [ safeSlot(['costa_espessura', 'trapezio'], 'maquina', "15-20 rep") ] }
+                        { title: "Costas (4 Movimentos)", slots: [ safeSlot(['costa_largura'], 'maquina', "10-12 rep"), safeSlot(['costa_espessura'], 'barra', "10-12 rep"), safeSlot(['costa_isolado'], 'cabo', "12-15 rep"), safeSlot(['costa'], 'halter', "12-15 rep") ] },
+                        { title: "Peitoral (4 Movimentos)", slots: [ safeSlot(['peito_clavicular'], 'halter', "12-15 rep"), safeSlot(['peito_esternocostal'], 'halter', "10-12 rep"), safeSlot(['peito_costal'], 'cabo', "12-15 rep"), safeSlot(['peito'], 'maquina', "10-12 rep") ] }
                     ];
                 } else if (subOpt === 'C') { 
                     blueprint = [
-                        { title: "Bloco 1: Cadeia Posterior", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep") ] },
-                        { title: "Bloco 2: Foco Isquiotibiais", slots: [ safeSlot(['perna_posterior_gluteo'], 'cabo', "12-15 rep"), safeSlot(['perna_posterior_gluteo'], 'peso_corporal', "15-20 rep") ] },
-                        { title: "Bloco 3: Lombar & Core", slots: [ safeSlot(['costa'], 'peso_corporal', "12-15 rep"), safeSlot(['core_obliquo'], 'peso_corporal', "15-20 rep") ] },
-                        { title: "Bloco 4: Finalização", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina', "Até a falha") ] }
+                        { title: "Posterior de Perna (Isquiotibiais)", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep") ] },
+                        { title: "Lombar & Isolamento Posterior", slots: [ safeSlot(['costa'], 'peso_corporal', "12-15 rep"), safeSlot(['perna_posterior_gluteo'], 'halter', "12-15 rep") ] },
+                        { title: "Ombros (3 Movimentos)", slots: [ safeSlot(['ombro_anterior'], 'halter', "12-15 rep"), safeSlot(['ombro_lateral'], 'halter', "12-15 rep"), safeSlot(['ombro_posterior'], 'cabo', "12-15 rep") ] }
                     ];
                 } else if (subOpt === 'D') { 
                     blueprint = [
-                        { title: "Bloco 1: Força Glútea", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep") ] },
-                        { title: "Bloco 2: Abdução e Adução", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina', "12-15 rep"), safeSlot(['perna_adutor_abdutor'], 'cabo', "12-15 rep") ] },
-                        { title: "Bloco 3: Isolamento Glúteo", slots: [ safeSlot(['perna_posterior_gluteo'], 'cabo', "12-15 rep"), safeSlot(['perna_posterior_gluteo'], 'peso_corporal', "15-20 rep") ] },
-                        { title: "Bloco 4: Core Frontal", slots: [ safeSlot(['core_supra', 'core_infra'], 'peso_corporal', "15-20 rep") ] }
+                        { title: "Força Glútea", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep") ] },
+                        { title: "Abdução e Adução", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina', "12-15 rep"), safeSlot(['perna_adutor_abdutor'], 'cabo', "12-15 rep") ] },
+                        { title: "Braços & Core Frontal", slots: [ safeSlot(['triceps_lateral_medial'], 'cabo', "12-15 rep"), safeSlot(['biceps_curta'], 'halter', "12-15 rep"), safeSlot(['core_supra', 'core_infra'], 'peso_corporal', "15-20 rep") ] }
                     ];
                 }
             } else {
-                if (subOpt === 'A') { // Peito e Tríceps
+                if (subOpt === 'A') { // Peito (4) e Tríceps (3)
                     blueprint = [
-                        { title: "Bloco 1: Peitoral", slots: [ safeSlot(['peito_clavicular'], 'barra', "8-10 rep"), safeSlot(['peito_esternocostal'], 'halter', "10-12 rep"), safeSlot(['peito_costal'], 'cabo', "12-15 rep") ] },
-                        { title: "Bloco 2: Tríceps", slots: [ safeSlot(['triceps_longa'], 'halter', "10-12 rep"), safeSlot(['triceps_lateral_medial'], 'cabo', "12-15 rep") ] },
-                        { title: "Bloco 3: Core Superior", slots: [ safeSlot(['core_supra'], null, "15-20 rep") ] }
+                        { title: "Peitoral", slots: [ safeSlot(['peito_clavicular'], 'barra', "8-10 rep"), safeSlot(['peito_esternocostal'], 'halter', "10-12 rep"), safeSlot(['peito_costal'], 'cabo', "12-15 rep"), safeSlot(['peito'], 'maquina', "10-12 rep") ] },
+                        { title: "Tríceps", slots: [ safeSlot(['triceps_longa'], 'halter', "10-12 rep"), safeSlot(['triceps_lateral_medial'], 'cabo', "12-15 rep"), safeSlot(['triceps_global'], 'cabo', "12-15 rep") ] },
+                        { title: "Core Superior", slots: [ safeSlot(['core_supra'], null, "15-20 rep") ] }
                     ];
-                    if(rawProfile === 'definicao') blueprint[2].slots.push(safeSlot(['cardio_motor'], 'peso_corporal', "1 min"));
                 }
-                else if (subOpt === 'B') { // Foco Anterior
+                else if (subOpt === 'B') { // Foco Anterior (Pernas Completas - 6)
                     blueprint = [
-                        { title: "Bloco 1: Quadríceps", slots: [ safeSlot(['perna_quadriceps'], 'barra', "8-10 rep"), safeSlot(['perna_quadriceps'], 'maquina', "10-12 rep") ] },
-                        { title: "Bloco 2: Adutores & Tibial", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina', "12-15 rep"), safeSlot(['panturrilha'], 'peso_corporal', "15-20 rep") ] },
-                        { title: "Bloco 3: Panturrilhas & Core", slots: [ safeSlot(['panturrilha_gastro'], 'maquina', "15-20 rep"), safeSlot(['panturrilha_soleo'], 'maquina', "15-20 rep") ] }
+                        { title: "Quadríceps & Glúteo", slots: [ safeSlot(['perna_quadriceps'], 'barra', "8-10 rep"), safeSlot(['perna_quadriceps'], 'maquina', "10-12 rep"), safeSlot(['perna_adutor_abdutor'], 'maquina', "12-15 rep") ] },
+                        { title: "Isquiotibiais & Panturrilhas", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina', "12-15 rep"), safeSlot(['perna_posterior_gluteo'], 'halter', "12-15 rep"), safeSlot(['panturrilha_gastro'], 'maquina', "15-20 rep") ] }
                     ];
-                    if(rawProfile === 'definicao') blueprint[2].slots.push(safeSlot(['esporte_pliometria'], 'peso_corporal', "1 min"));
                 }
-                else if (subOpt === 'C') { // Costas e Bíceps
+                else if (subOpt === 'C') { // Costas (4) e Bíceps (3)
                     blueprint = [
-                        { title: "Bloco 1: Dorsais", slots: [ safeSlot(['costa_largura'], 'barra', "8-10 rep"), safeSlot(['costa_espessura'], 'maquina', "10-12 rep"), safeSlot(['costa_isolado'], 'cabo', "12-15 rep") ] },
-                        { title: "Bloco 2: Trapézio & Bíceps", slots: [ safeSlot(['trapezio'], 'halter', "12-15 rep"), safeSlot(['biceps_longa', 'biceps_curta'], 'barra', "10-12 rep") ] },
-                        { title: "Bloco 3: Braquial", slots: [ safeSlot(['biceps_braquial'], 'cabo', "12-15 rep") ] }
+                        { title: "Dorsais", slots: [ safeSlot(['costa_largura'], 'barra', "8-10 rep"), safeSlot(['costa_espessura'], 'maquina', "10-12 rep"), safeSlot(['costa_isolado'], 'cabo', "12-15 rep"), safeSlot(['costa'], 'halter', "10-12 rep") ] },
+                        { title: "Bíceps & Trapézio", slots: [ safeSlot(['biceps_longa'], 'barra', "10-12 rep"), safeSlot(['biceps_curta'], 'halter', "10-12 rep"), safeSlot(['biceps_braquial'], 'cabo', "12-15 rep") ] },
+                        { title: "Core Inferior", slots: [ safeSlot(['core_infra'], null, "15-20 rep") ] }
                     ];
-                    if(rawProfile === 'definicao') blueprint[2].slots.push(safeSlot(['cardio_motor'], 'peso_corporal', "1 min"));
                 }
-                else if (subOpt === 'D') { // Ombros e Posterior
+                else if (subOpt === 'D') { // Ombros (3) e Perna Posterior Completa (6)
                     blueprint = [
-                        { title: "Bloco 1: Deltoides", slots: [ safeSlot(['ombro_anterior'], 'halter', "8-10 rep"), safeSlot(['ombro_lateral'], 'halter', "10-12 rep"), safeSlot(['ombro_posterior'], 'cabo', "12-15 rep") ] },
-                        { title: "Bloco 2: Glúteo & Isquio", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep") ] },
-                        { title: "Bloco 3: Posteriores Encurtados", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina', "12-15 rep") ] }
+                        { title: "Deltoides", slots: [ safeSlot(['ombro_anterior'], 'halter', "8-10 rep"), safeSlot(['ombro_lateral'], 'halter', "10-12 rep"), safeSlot(['ombro_posterior'], 'cabo', "12-15 rep") ] },
+                        { title: "Posterior e Glúteo", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep"), safeSlot(['perna_adutor_abdutor'], 'maquina', "12-15 rep") ] },
+                        { title: "Quadríceps e Panturrilha", slots: [ safeSlot(['perna_quadriceps'], 'maquina', "12-15 rep"), safeSlot(['perna_quadriceps'], 'halter', "12-15 rep"), safeSlot(['panturrilha_soleo'], 'maquina', "15-20 rep") ] }
                     ];
-                    if(rawProfile === 'definicao') blueprint[2].slots.push(safeSlot(['esporte_aceleracao'], 'peso_corporal', "1 min"));
                 }
             }
 
@@ -3493,11 +3479,9 @@ function updateDynamicCards() {
                 if (validExs.length > 0) generatedBlocks.push({ title: b.title, exercises: validExs });
             });
         } 
-        // --- BI-SETS ANTAGONISTA & MISTO ---
+        // --- BI-SETS ANTAGONISTA & MISTO (Paradoxo Resolvido: Opção B - Core Finisher) ---
         else if (method === 'biset_antagonista') {
             let blueprint = [];
-            
-            // Normalizando o Eixo (A, B ou C) baseado no legado do subOpt
             let isA = (subOpt === 'A' || subOpt.includes('peito_costa'));
             let isB = (subOpt === 'B' || subOpt.includes('biceps_triceps') || (routeProfile === 'feminino' && subOpt.includes('quad_post')));
             let isC = (!isA && !isB);
@@ -3508,45 +3492,41 @@ function updateDynamicCards() {
                         { title: "Série 1: Peito Sup + Costas Largura", slots: [ safeSlot(['peito_clavicular'], 'halter'), safeSlot(['costa_largura'], 'maquina') ] },
                         { title: "Série 2: Peito Med + Costas Espessura", slots: [ safeSlot(['peito_esternocostal'], 'halter'), safeSlot(['costa_espessura'], 'barra') ] },
                         { title: "Série 3: Peito Inf + Costas Lombar", slots: [ safeSlot(['peito_costal'], 'cabo'), safeSlot(['costa'], 'peso_corporal') ] },
-                        { title: "Série 4: Trapézio + Core", slots: [ safeSlot(['trapezio'], 'halter'), safeSlot(['core_obliquo'], 'peso_corporal') ] }
+                        { title: "Série 4: Peito Geral + Costas Unilateral", slots: [ safeSlot(['peito'], 'maquina'), safeSlot(['costa'], 'halter') ] }
                     ];
-                } else if (isB) { // Pernas e Core
+                } else if (isB) { // Pernas (Completa - 6)
                     blueprint = [
                         { title: "Série 1: Quadríceps + Isquiotibiais", slots: [ safeSlot(['perna_quadriceps'], 'barra'), safeSlot(['perna_posterior_gluteo'], 'maquina') ] },
-                        { title: "Série 2: Glúteos + Adutores", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra'), safeSlot(['perna_adutor_abdutor'], 'maquina') ] },
-                        { title: "Série 3: Quad Isolado + Panturrilha", slots: [ safeSlot(['perna_quadriceps'], 'maquina'), safeSlot(['panturrilha_gastro'], 'maquina') ] },
-                        { title: "Série 4: Panturrilha + Core", slots: [ safeSlot(['panturrilha_soleo'], 'maquina'), safeSlot(['core_infra'], 'peso_corporal') ] }
+                        { title: "Série 2: Quadríceps + Glúteos", slots: [ safeSlot(['perna_quadriceps'], 'maquina'), safeSlot(['perna_posterior_gluteo'], 'barra') ] },
+                        { title: "Série 3: Panturrilha + Core Infra", slots: [ safeSlot(['panturrilha_gastro'], 'maquina'), safeSlot(['core_infra'], 'peso_corporal') ] }
                     ];
                 } else { // Ombros e Braços
                     blueprint = [
                         { title: "Série 1: Bíceps + Tríceps Longa", slots: [ safeSlot(['biceps_longa'], 'halter'), safeSlot(['triceps_longa'], 'halter') ] },
-                        { title: "Série 2: Braquial + Tríceps Lat/Med", slots: [ safeSlot(['biceps_braquial'], 'cabo'), safeSlot(['triceps_lateral_medial'], 'cabo') ] },
-                        { title: "Série 3: Ombro Ant + Ombro Post", slots: [ safeSlot(['ombro_anterior'], 'halter'), safeSlot(['ombro_posterior'], 'halter') ] },
-                        { title: "Série 4: Ombro Lat + Estabilização", slots: [ safeSlot(['ombro_lateral'], 'halter'), safeSlot(['core_profundo'], 'peso_corporal') ] }
+                        { title: "Série 2: Ombro Ant + Ombro Post", slots: [ safeSlot(['ombro_anterior'], 'halter'), safeSlot(['ombro_posterior'], 'halter') ] },
+                        { title: "Série 3: Ombro Lat + Core (Pump)", slots: [ safeSlot(['ombro_lateral'], 'halter'), safeSlot(['core_profundo'], 'peso_corporal') ] }
                     ];
                 }
             } else {
-                // Hipertrofia / Definição
-                if (isA) { 
+                if (isA) { // Peito (4) + Costas (4) = 4 Bi-Sets Agrupados
                     blueprint = [
                         { title: "Série 1: Peitoral Sup + Costas Largura", slots: [ safeSlot(['peito_clavicular'], 'barra'), safeSlot(['costa_largura'], 'maquina') ] },
                         { title: "Série 2: Peitoral Med + Costas Espessura", slots: [ safeSlot(['peito_esternocostal'], 'halter'), safeSlot(['costa_espessura'], 'barra') ] },
                         { title: "Série 3: Peitoral Inf + Costas Lombar", slots: [ safeSlot(['peito_costal'], 'cabo'), safeSlot(['costa'], 'peso_corporal') ] },
-                        { title: "Série 4: Trapézio + Finisher", slots: [ safeSlot(['trapezio'], 'halter'), safeSlot(rawProfile==='definicao'?['cardio_motor']:['panturrilha_gastro'], 'peso_corporal') ] }
+                        { title: "Série 4: Peitoral Isolado + Costas Foco", slots: [ safeSlot(['peito'], 'maquina'), safeSlot(['costa_isolado'], 'halter') ] }
                     ];
-                } else if (isB) {
+                } else if (isB) { // Pernas (6) = 3 Bi-Sets
                     blueprint = [
                         { title: "Série 1: Quadríceps Vastos + Isquio Alongada", slots: [ safeSlot(['perna_quadriceps'], 'maquina'), safeSlot(['perna_posterior_gluteo'], 'barra') ] },
-                        { title: "Série 2: Quad Reto + Isquio Encurtada", slots: [ safeSlot(['perna_quadriceps'], 'maquina'), safeSlot(['perna_posterior_gluteo'], 'maquina') ] },
-                        { title: "Série 3: Glúteo + Core", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra'), safeSlot(['core_profundo'], 'peso_corporal') ] },
-                        { title: "Série 4: Panturrilhas + Finisher", slots: [ safeSlot(['panturrilha_gastro'], 'maquina'), safeSlot(rawProfile==='definicao'?['esporte_pliometria']:['panturrilha_soleo'], 'peso_corporal') ] }
+                        { title: "Série 2: Quad Reto + Isquio Encurtada", slots: [ safeSlot(['perna_quadriceps'], 'barra'), safeSlot(['perna_posterior_gluteo'], 'maquina') ] },
+                        { title: "Série 3: Glúteo + Panturrilhas", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina'), safeSlot(['panturrilha_gastro'], 'maquina') ] }
                     ];
-                } else {
+                } else { // Ombros (3) + Braços (3)
                     blueprint = [
-                        { title: "Série 1: Bíceps + Tríceps Longa", slots: [ safeSlot(['biceps_longa'], 'barra'), safeSlot(['triceps_longa'], 'halter') ] },
-                        { title: "Série 2: Braquial + Tríceps Lateral", slots: [ safeSlot(['biceps_braquial'], 'cabo'), safeSlot(['triceps_lateral_medial'], 'cabo') ] },
-                        { title: "Série 3: Deltoide Ant + Deltoide Post", slots: [ safeSlot(['ombro_anterior'], 'halter'), safeSlot(['ombro_posterior'], 'halter') ] },
-                        { title: "Série 4: Deltoide Lat + Finisher", slots: [ safeSlot(['ombro_lateral'], 'halter'), safeSlot(rawProfile==='definicao'?['cardio_resistencia']:['core_obliquo'], 'peso_corporal') ] }
+                        { title: "Série 1: Bíceps + Tríceps", slots: [ safeSlot(['biceps_longa'], 'barra'), safeSlot(['triceps_longa'], 'halter') ] },
+                        { title: "Série 2: Deltoide Ant + Deltoide Post", slots: [ safeSlot(['ombro_anterior'], 'halter'), safeSlot(['ombro_posterior'], 'halter') ] },
+                        { title: "Série 3: Deltoide Lat + Core (Finisher)", slots: [ safeSlot(['ombro_lateral'], 'halter'), safeSlot(['core_obliquo'], 'peso_corporal') ] }, // OPÇÃO B
+                        { title: "Isolamentos Finais (Pump)", slots: [ safeSlot(['biceps_braquial'], 'cabo'), safeSlot(['triceps_lateral_medial'], 'cabo') ] }
                     ];
                 }
             }
@@ -3557,57 +3537,54 @@ function updateDynamicCards() {
             });
         }
         
-        // --- BI-SETS AGONISTA (PRÉ-EXAUSTÃO) ---
+        // --- BI-SETS AGONISTA (PRÉ-EXAUSTÃO - Paradoxo Resolvido: Opção B) ---
         else if (method === 'biset_agonista') {
             let blueprint = [];
             let isA = (subOpt === 'A' || subOpt.includes('peito'));
             let isB = (subOpt === 'B' || subOpt.includes('costa'));
-            let isC = (!isA && !isB);
 
             if (routeProfile === 'feminino') {
                 if (isA) { // Push
                     blueprint = [
                         { title: "Série 1: Peito Sup Isolado + Composto", slots: [ safeSlot(['peito_clavicular'], 'halter'), safeSlot(['peito_clavicular'], 'barra') ] },
-                        { title: "Série 2: Peito Médio + Ombro Ant", slots: [ safeSlot(['peito_esternocostal'], 'halter'), safeSlot(['ombro_anterior'], 'halter') ] },
-                        { title: "Série 3: Deltoide Lateral Exaustão", slots: [ safeSlot(['ombro_lateral'], 'halter'), safeSlot(['ombro_lateral'], 'cabo') ] },
-                        { title: "Série 4: Tríceps Longa + Lateral", slots: [ safeSlot(['triceps_longa'], 'halter'), safeSlot(['triceps_lateral_medial'], 'cabo') ] }
+                        { title: "Série 2: Peito Médio + Inferior", slots: [ safeSlot(['peito_esternocostal'], 'halter'), safeSlot(['peito_costal'], 'cabo') ] },
+                        { title: "Série 3: Deltoide Lateral Exaustão + Core", slots: [ safeSlot(['ombro_lateral'], 'halter'), safeSlot(['core_obliquo'], 'peso_corporal') ] },
+                        { title: "Isolamento Finais", slots: [ safeSlot(['ombro_anterior'], 'halter'), safeSlot(['triceps_global'], 'cabo') ] }
                     ];
                 } else if (isB) { // Pull
                     blueprint = [
                         { title: "Série 1: Costas Largura Iso + Comp", slots: [ safeSlot(['costa_largura'], 'cabo'), safeSlot(['costa_largura'], 'maquina') ] },
-                        { title: "Série 2: Costas Espessura + Ombro Post", slots: [ safeSlot(['costa_espessura'], 'barra'), safeSlot(['ombro_posterior'], 'halter') ] },
-                        { title: "Série 3: Lombar + Trapézio", slots: [ safeSlot(['costa'], 'peso_corporal'), safeSlot(['trapezio'], 'halter') ] },
-                        { title: "Série 4: Bíceps + Braquial", slots: [ safeSlot(['biceps_longa'], 'barra'), safeSlot(['biceps_braquial'], 'cabo') ] }
+                        { title: "Série 2: Costas Espessura + Lombar", slots: [ safeSlot(['costa_espessura'], 'barra'), safeSlot(['costa'], 'peso_corporal') ] },
+                        { title: "Série 3: Bíceps + Core", slots: [ safeSlot(['biceps_longa'], 'barra'), safeSlot(['core_infra'], 'peso_corporal') ] },
+                        { title: "Isolamento Finais", slots: [ safeSlot(['ombro_posterior'], 'halter'), safeSlot(['biceps_braquial'], 'cabo') ] }
                     ];
                 } else { // Legs
                     blueprint = [
                         { title: "Série 1: Quadríceps Iso + Comp", slots: [ safeSlot(['perna_quadriceps'], 'maquina'), safeSlot(['perna_quadriceps'], 'barra') ] },
                         { title: "Série 2: Isquiotibiais Iso + Comp", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina'), safeSlot(['perna_posterior_gluteo'], 'barra') ] },
-                        { title: "Série 3: Glúteos + Adutores", slots: [ safeSlot(['perna_posterior_gluteo'], 'cabo'), safeSlot(['perna_adutor_abdutor'], 'maquina') ] },
-                        { title: "Série 4: Panturrilhas", slots: [ safeSlot(['panturrilha_gastro'], 'maquina'), safeSlot(['panturrilha_soleo'], 'maquina') ] }
+                        { title: "Série 3: Glúteos + Panturrilhas", slots: [ safeSlot(['perna_posterior_gluteo'], 'cabo'), safeSlot(['panturrilha_gastro'], 'maquina') ] }
                     ];
                 }
             } else {
-                if (isA) { // Push
+                if (isA) { // Peito (4) e Ombros (3)
                     blueprint = [
                         { title: "Série 1: Peitoral Médio + Superior", slots: [ safeSlot(['peito_esternocostal'], 'halter'), safeSlot(['peito_clavicular'], 'barra') ] },
-                        { title: "Série 2: Deltoide Lateral + Anterior", slots: [ safeSlot(['ombro_lateral'], 'halter'), safeSlot(['ombro_anterior'], 'halter') ] },
-                        { title: "Série 3: Tríceps Lateral + Longa", slots: [ safeSlot(['triceps_lateral_medial'], 'cabo'), safeSlot(['triceps_longa'], 'halter') ] },
-                        { title: "Série 4: Core + Finisher", slots: [ safeSlot(['core_supra'], 'peso_corporal'), safeSlot(rawProfile==='definicao'?['cardio_motor']:['core_infra'], 'peso_corporal') ] }
+                        { title: "Série 2: Peitoral Inferior + Isolamento", slots: [ safeSlot(['peito_costal'], 'cabo'), safeSlot(['peito'], 'maquina') ] },
+                        { title: "Série 3: Deltoide Lateral + Core", slots: [ safeSlot(['ombro_lateral'], 'halter'), safeSlot(['core_supra'], 'peso_corporal') ] }, // Opção B
+                        { title: "Isolamentos", slots: [ safeSlot(['ombro_anterior'], 'halter'), safeSlot(['ombro_posterior'], 'cabo') ] }
                     ];
-                } else if (isB) { // Pull
+                } else if (isB) { // Costas (4) e Bíceps (3)
                     blueprint = [
                         { title: "Série 1: Costas Largura + Espessura", slots: [ safeSlot(['costa_largura'], 'cabo'), safeSlot(['costa_espessura'], 'barra') ] },
-                        { title: "Série 2: Deltoide Posterior + Trapézio", slots: [ safeSlot(['ombro_posterior'], 'halter'), safeSlot(['trapezio'], 'halter') ] },
-                        { title: "Série 3: Braquial + Bíceps", slots: [ safeSlot(['biceps_braquial'], 'cabo'), safeSlot(['biceps_longa'], 'barra') ] },
-                        { title: "Série 4: Core + Finisher", slots: [ safeSlot(['core_obliquo'], 'peso_corporal'), safeSlot(rawProfile==='definicao'?['cardio_resistencia']:['core_profundo'], 'peso_corporal') ] }
+                        { title: "Série 2: Costas Foco + Lombar", slots: [ safeSlot(['costa_isolado'], 'halter'), safeSlot(['costa'], 'peso_corporal') ] },
+                        { title: "Série 3: Bíceps Longa + Core", slots: [ safeSlot(['biceps_longa'], 'barra'), safeSlot(['core_obliquo'], 'peso_corporal') ] }, // Opção B
+                        { title: "Isolamentos", slots: [ safeSlot(['biceps_curta'], 'halter'), safeSlot(['biceps_braquial'], 'cabo') ] }
                     ];
-                } else { // Legs
+                } else { // Legs (6)
                     blueprint = [
                         { title: "Série 1: Quadríceps Reto + Vastos", slots: [ safeSlot(['perna_quadriceps'], 'maquina'), safeSlot(['perna_quadriceps'], 'barra') ] },
                         { title: "Série 2: Isquio Encurtada + Alongada", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina'), safeSlot(['perna_posterior_gluteo'], 'barra') ] },
-                        { title: "Série 3: Glúteo + Adutores", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra'), safeSlot(['perna_adutor_abdutor'], 'maquina') ] },
-                        { title: "Série 4: Panturrilhas", slots: [ safeSlot(['panturrilha_gastro'], 'maquina'), safeSlot(['panturrilha_soleo'], 'maquina') ] }
+                        { title: "Série 3: Glúteo + Panturrilhas", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra'), safeSlot(['panturrilha_gastro'], 'maquina') ] }
                     ];
                 }
             }
@@ -3618,34 +3595,30 @@ function updateDynamicCards() {
             });
         }
         
-        // --- BI-SETS SINERGISTA ---
+        // --- BI-SETS SINERGISTA (Paradoxo Resolvido: Opção B) ---
         else if (method === 'biset_sinergista') {
             let blueprint = [];
             let isA = (subOpt === 'A' || subOpt.includes('peito'));
             let isB = (subOpt === 'B' || subOpt.includes('costa'));
-            let isC = (!isA && !isB);
 
             if (routeProfile === 'feminino') {
                 if (isA) { // Sinergia Posterior
                     blueprint = [
                         { title: "Série 1: Quadríceps + Glúteo", slots: [ safeSlot(['perna_quadriceps'], 'barra'), safeSlot(['perna_posterior_gluteo'], 'barra') ] },
                         { title: "Série 2: Isquiotibiais + Glúteo Isolado", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina'), safeSlot(['perna_posterior_gluteo'], 'cabo') ] },
-                        { title: "Série 3: Adutores + Core", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina'), safeSlot(['core_supra'], 'peso_corporal') ] },
-                        { title: "Série 4: Panturrilhas", slots: [ safeSlot(['panturrilha_gastro'], 'maquina'), safeSlot(['panturrilha_soleo'], 'maquina') ] }
+                        { title: "Série 3: Adutores + Core", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina'), safeSlot(['core_supra'], 'peso_corporal') ] }
                     ];
                 } else if (isB) { // Superiores
                     blueprint = [
                         { title: "Série 1: Costas + Bíceps", slots: [ safeSlot(['costa_largura'], 'maquina'), safeSlot(['biceps_longa'], 'halter') ] },
                         { title: "Série 2: Peito + Tríceps", slots: [ safeSlot(['peito_esternocostal'], 'halter'), safeSlot(['triceps_lateral_medial'], 'cabo') ] },
-                        { title: "Série 3: Ombros Globais", slots: [ safeSlot(['ombro_anterior'], 'halter'), safeSlot(['ombro_lateral'], 'halter') ] },
-                        { title: "Série 4: Core Oblíquo", slots: [ safeSlot(['core_obliquo'], 'peso_corporal'), safeSlot(['core_profundo'], 'peso_corporal') ] }
+                        { title: "Série 3: Ombros + Core", slots: [ safeSlot(['ombro_anterior'], 'halter'), safeSlot(['core_obliquo'], 'peso_corporal') ] }
                     ];
                 } else { // Quadriceps + Pant
                     blueprint = [
                         { title: "Série 1: Quadríceps Foco", slots: [ safeSlot(['perna_quadriceps'], 'maquina'), safeSlot(['perna_quadriceps'], 'halter') ] },
                         { title: "Série 2: Isquiotibiais Foco", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina'), safeSlot(['perna_posterior_gluteo'], 'halter') ] },
-                        { title: "Série 3: Panturrilhas + Core", slots: [ safeSlot(['panturrilha_gastro'], 'maquina'), safeSlot(['core_infra'], 'peso_corporal') ] },
-                        { title: "Série 4: Glúteo + Lombar", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra'), safeSlot(['costa'], 'peso_corporal') ] }
+                        { title: "Série 3: Panturrilhas + Core", slots: [ safeSlot(['panturrilha_gastro'], 'maquina'), safeSlot(['core_infra'], 'peso_corporal') ] }
                     ];
                 }
             } else {
@@ -3653,22 +3626,21 @@ function updateDynamicCards() {
                     blueprint = [
                         { title: "Série 1: Peitoral Sup + Tríceps Longa", slots: [ safeSlot(['peito_clavicular'], 'barra'), safeSlot(['triceps_longa'], 'halter') ] },
                         { title: "Série 2: Peitoral Med + Tríceps Lateral", slots: [ safeSlot(['peito_esternocostal'], 'halter'), safeSlot(['triceps_lateral_medial'], 'cabo') ] },
-                        { title: "Série 3: Deltoide Ant + Deltoide Lat", slots: [ safeSlot(['ombro_anterior'], 'halter'), safeSlot(['ombro_lateral'], 'halter') ] },
-                        { title: "Série 4: Core + Finisher", slots: [ safeSlot(['core_obliquo'], 'peso_corporal'), safeSlot(rawProfile==='definicao'?['cardio_motor']:['core_supra'], 'peso_corporal') ] }
+                        { title: "Série 3: Peitoral Inf + Core", slots: [ safeSlot(['peito_costal'], 'cabo'), safeSlot(['core_obliquo'], 'peso_corporal') ] },
+                        { title: "Isolamentos", slots: [ safeSlot(['peito'], 'maquina'), safeSlot(['triceps_global'], 'cabo') ] }
                     ];
                 } else if (isB) { // Pull
                     blueprint = [
                         { title: "Série 1: Costas Largura + Bíceps", slots: [ safeSlot(['costa_largura'], 'maquina'), safeSlot(['biceps_longa'], 'barra') ] },
                         { title: "Série 2: Costas Espessura + Braquial", slots: [ safeSlot(['costa_espessura'], 'barra'), safeSlot(['biceps_braquial'], 'cabo') ] },
-                        { title: "Série 3: Deltoide Post + Trapézio", slots: [ safeSlot(['ombro_posterior'], 'halter'), safeSlot(['trapezio'], 'halter') ] },
-                        { title: "Série 4: Lombar + Finisher", slots: [ safeSlot(['costa'], 'peso_corporal'), safeSlot(rawProfile==='definicao'?['cardio_resistencia']:['core_profundo'], 'peso_corporal') ] }
+                        { title: "Série 3: Costas Isolado + Core", slots: [ safeSlot(['costa_isolado'], 'halter'), safeSlot(['core_profundo'], 'peso_corporal') ] },
+                        { title: "Isolamentos", slots: [ safeSlot(['costa'], 'peso_corporal'), safeSlot(['biceps_curta'], 'halter') ] }
                     ];
                 } else { // Legs
                     blueprint = [
                         { title: "Série 1: Quadríceps + Panturrilha", slots: [ safeSlot(['perna_quadriceps'], 'barra'), safeSlot(['panturrilha_gastro'], 'maquina') ] },
                         { title: "Série 2: Isquio + Glúteo", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra'), safeSlot(['perna_posterior_gluteo'], 'maquina') ] },
-                        { title: "Série 3: Quad + Isquio Encurtada", slots: [ safeSlot(['perna_quadriceps'], 'maquina'), safeSlot(['perna_posterior_gluteo'], 'maquina') ] },
-                        { title: "Série 4: Core + Finisher", slots: [ safeSlot(['core_infra'], 'peso_corporal'), safeSlot(rawProfile==='definicao'?['esporte_agilidade']:['panturrilha_soleo'], 'maquina') ] }
+                        { title: "Série 3: Quad + Isquio Encurtada", slots: [ safeSlot(['perna_quadriceps'], 'maquina'), safeSlot(['perna_posterior_gluteo'], 'maquina') ] }
                     ];
                 }
             }
@@ -3678,12 +3650,12 @@ function updateDynamicCards() {
                 if (validExs.length > 0) generatedBlocks.push({ title: b.title, exercises: validExs });
             });
         }
+        
         // --- CIRCUITO METABÓLICO (FullBody - 8 Estações) ---
         else if (method === 'circuito') {
             let blueprint = [];
             
             if (rawProfile === 'definicao') {
-                // Circuito Extremo de Definição (8 Estações para Secar)
                 blueprint = [{
                     title: "Circuito Extremo (Derretedor)",
                     slots: [
@@ -3698,7 +3670,6 @@ function updateDynamicCards() {
                     ]
                 }];
             } else {
-                // Circuito FullBody Padrão
                 blueprint = [{
                     title: "Rodada Metabólica FullBody",
                     slots: [
@@ -3779,21 +3750,6 @@ function updateDynamicCards() {
                 else FitApp.adjustRestTime(method === 'circuito' ? 45 : 60);
             }
         }, 500);
-
-        // ==========================================================
-        // 🛡️ ADIÇÃO DO BLOCO DE ABDÔMEN (Bônus Opcional)
-        // ==========================================================
-        if (includeAbs && method !== 'circuito') {
-            let abs1 = safeSlot(['core_supra', 'core_infra'], 'peso_corporal', "15-20 rep");
-            let abs2 = safeSlot(['core_obliquo', 'core_profundo'], 'peso_corporal', "Até a falha");
-            
-            if (abs1) {
-                generatedBlocks.push({ 
-                    title: "Bloco Bônus: Core & Abdômen", 
-                    exercises: abs2 ? [abs1, abs2] : [abs1]
-                });
-            }
-        }
 
         if(generatedBlocks.length === 0) generatedBlocks = [{ title: "Rotina de Contingência", exercises: [] }];
         return generatedBlocks;

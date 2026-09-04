@@ -35,19 +35,16 @@ const dictionaryData = [
     { name: "Remada Cavalinho", group: "Costas", focus: "Romboides/Miolo (Espessura)", equip: "Barras_Anilhas", desc: "Trabalho focado em romboides/miolo (espessura) (costas).", nivel: 2 },
     { name: "Remada Unilateral (Serrote)", group: "Costas", focus: "Romboides/Miolo (Espessura)", equip: "Pesos_Livres", desc: "Trabalho unilateral de espessura.", nivel: 2 },
     { name: "Remada Invertida (Australian Pull-up)", group: "Costas", focus: "Romboides/Miolo (Espessura)", equip: "Calistenia", desc: "Trabalho focado em romboides/miolo (espessura) (costas).", nivel: 2 },
-    { name: "Contração de Costas Isométrica", group: "Costas", focus: "Romboides/Miolo (Espessura)", equip: "Peso_Corporal", desc: "Trabalho focado em romboides/miolo (espessura) (costas).", nivel: 2 },
     { name: "Encolhimento na Máquina Smith", group: "Costas", focus: "Trapézio Superior", equip: "Maquinas_Polias", desc: "Trabalho focado em trapézio superior (costas).", nivel: 1 },
     { name: "Encolhimento com Barra/Halteres", group: "Costas", focus: "Trapézio Superior", equip: "Barras_Anilhas, Pesos_Livres", desc: "Trabalho focado em trapézio superior (costas).", nivel: 2 },
     { name: "Remada Alta no Cabo", group: "Costas", focus: "Trapézio Superior", equip: "Maquinas_Polias", desc: "Movimento híbrido: lateral do ombro e trapézio.", nivel: 2 },
     { name: "Extensão de Lombar no Banco Romano", group: "Costas", focus: "Eretores da Espinha (Lombar)", equip: "Maquinas_Polias", desc: "Trabalho focado em eretores da espinha (lombar) (costas).", nivel: 1 },
     { name: "Levantamento Terra (Conventional/Sumô)", group: "Costas", focus: "Eretores da Espinha (Lombar)", equip: "Barras_Anilhas", desc: "Trabalho focado em eretores da espinha (lombar) (costas).", nivel: 2 },
-    { name: "Bom-Dia (Good Morning)", group: "Costas", focus: "Eretores da Espinha (Lombar)", equip: "Barras_Anilhas, Pesos_Livres", desc: "Trabalho focado em eretores da espinha (lombar) (costas).", nivel: 2 },
     { name: "Superman Solo", group: "Costas", focus: "Eretores da Espinha (Lombar)", equip: "Peso_Corporal", desc: "Trabalho focado em eretores da espinha (lombar) (costas).", nivel: 2 },
     { name: "Desenvolvimento na Máquina", group: "Ombros", focus: "Deltoide Anterior", equip: "Maquinas_Polias", desc: "Trabalho focado em deltoide anterior (ombros).", nivel: 1 },
     { name: "Desenvolvimento Militar (Barra)", group: "Ombros", focus: "Deltoide Anterior", equip: "Barras_Anilhas", desc: "Trabalho focado em deltoide anterior (ombros).", nivel: 2 },
     { name: "Desenvolvimento com Halteres", group: "Ombros", focus: "Deltoide Anterior", equip: "Pesos_Livres", desc: "Trabalho focado em deltoide anterior (ombros).", nivel: 2 },
     { name: "Elevação Frontal (Anilha/Cabo)", group: "Ombros", focus: "Deltoide Anterior", equip: "Pesos_Livres, Maquinas_Polias", desc: "Trabalho focado em deltoide anterior (ombros).", nivel: 2 },
-    { name: "Handstand Push-up (HSPU)", group: "Ombros", focus: "Deltoide Anterior", equip: "Peso_Corporal", desc: "Trabalho focado em deltoide anterior (ombros).", nivel: 3 },
     { name: "Elevação Lateral na Máquina", group: "Ombros", focus: "Deltoide Lateral", equip: "Maquinas_Polias", desc: "Trabalho focado em deltoide lateral (ombros).", nivel: 1 },
     { name: "Elevação Lateral na Polia Baixa", group: "Ombros", focus: "Deltoide Lateral", equip: "Maquinas_Polias", desc: "Trabalho focado em deltoide lateral (ombros).", nivel: 2 },
     { name: "Elevação Lateral com Halteres", group: "Ombros", focus: "Deltoide Lateral", equip: "Pesos_Livres", desc: "Trabalho focado em deltoide lateral (ombros).", nivel: 2 },
@@ -68,8 +65,6 @@ const dictionaryData = [
     { name: "Rosca Martelo (Halteres/Corda)", group: "Bíceps", focus: "Braquial/Antebraço", equip: "Pesos_Livres, Maquinas_Polias", desc: "Trabalho focado em braquial/antebraço (bíceps).", nivel: 2 },
     { name: "Rosca Inversa no Cabo/Barra", group: "Bíceps", focus: "Braquial/Antebraço", equip: "Barras_Anilhas, Maquinas_Polias", desc: "Trabalho focado em braquial/antebraço (bíceps).", nivel: 2 },
     { name: "Rosca de Punho (Flexão/Extensão)", group: "Antebraço", focus: "Flexores/Extensores", equip: "Barras_Anilhas, Pesos_Livres", desc: "Trabalho focado em flexores/extensores (antebraço).", nivel: 2 },
-    { name: "Caminhada do Fazendeiro (Farmer's Walk)", group: "Antebraço", focus: "Grip/Pegada", equip: "Barras_Anilhas, Pesos_Livres", desc: "Trabalho focado em grip/pegada (antebraço).", nivel: 2 },
-    { name: "Pendurar na Barra (Dead Hang)", group: "Antebraço", focus: "Grip/Pegada", equip: "Calistenia", desc: "Trabalho focado em grip/pegada (antebraço).", nivel: 2 },
     { name: "Tríceps Francês (Halter/Cabo)", group: "Tríceps", focus: "Cabeça Longa", equip: "Pesos_Livres, Maquinas_Polias", desc: "Trabalho focado em cabeça longa (tríceps).", nivel: 2 },
     { name: "Tríceps Testa (Barra W)", group: "Tríceps", focus: "Cabeça Longa", equip: "Barras_Anilhas", desc: "Trabalho focado em cabeça longa (tríceps).", nivel: 2 },
     { name: "Tríceps Pulley (Barra Reta/V)", group: "Tríceps", focus: "Lateral/Medial", equip: "Maquinas_Polias", desc: "Trabalho focado em lateral/medial (tríceps).", nivel: 2 },
@@ -86,8 +81,6 @@ const dictionaryData = [
     { name: "Elevação de Joelhos na Paralela", group: "Core", focus: "Inferior", equip: "Calistenia, Maquinas_Polias", desc: "Trabalho focado em inferior (core).", nivel: 1 },
     { name: "Elevação de Pernas Pendurado (Toes to Bar)", group: "Core", focus: "Inferior", equip: "Calistenia", desc: "Trabalho focado em inferior (core).", nivel: 2 },
     { name: "Abdominal Infra no Solo (Reverse Crunch)", group: "Core", focus: "Inferior", equip: "Peso_Corporal", desc: "Trabalho focado em inferior (core).", nivel: 2 },
-    { name: "Rotação de Tronco na Polia (Woodchopper)", group: "Core", focus: "Oblíquos / Rotação", equip: "Maquinas_Polias", desc: "Trabalho focado em oblíquos / rotação (core).", nivel: 2 },
-    { name: "Chute Rotacional com Cabo/Elástico", group: "Core", focus: "Oblíquos / Rotação", equip: "Funcional_Esportivo, Maquinas_Polias", desc: "Trabalho focado em oblíquos / rotação (core).", nivel: 2 },
     { name: "Russian Twist (Com anilha ou livre)", group: "Core", focus: "Oblíquos / Rotação", equip: "Peso_Corporal", desc: "Trabalho focado em oblíquos / rotação (core).", nivel: 2 },
     { name: "Toque no Calcanhar", group: "Core", focus: "Oblíquos / Rotação", equip: "Peso_Corporal", desc: "Flexão lateral blindando o tronco.", nivel: 2 },
     { name: "Abdominal Bicicleta", group: "Core", focus: "Oblíquos / Rotação", equip: "Peso_Corporal", desc: "Rotação contínua ativando laterais.", nivel: 2 },
@@ -96,7 +89,6 @@ const dictionaryData = [
     { name: "Percevejo (Dead Bugs)", group: "Core", focus: "Estabilização/Anti-extensão", equip: "Peso_Corporal", desc: "Trabalho focado em estabilização/anti-extensão (core).", nivel: 2 },
     { name: "Hollow Body Hold", group: "Core", focus: "Estabilização/Anti-extensão", equip: "Peso_Corporal", desc: "Estabilidade avançada do core profundo.", nivel: 2 },
     { name: "Roda Abdominal (Ab Wheel)", group: "Core", focus: "Estabilização/Anti-extensão", equip: "Funcional_Esportivo", desc: "Trabalho focado em estabilização/anti-extensão (core).", nivel: 2 },
-    { name: "Pallof Press", group: "Core", focus: "Estabilização/Anti-extensão", equip: "Maquinas_Polias", desc: "Trabalho focado em estabilização/anti-extensão (core).", nivel: 2 },
     { name: "Cócoras Profundas", group: "Mobilidade", focus: "Pernas/Quadril", equip: "Peso_Corporal", desc: "Trabalho focado em pernas/quadril (mobilidade).", nivel: 2 },
     { name: "Mobilidade 90/90", group: "Mobilidade", focus: "Pernas/Quadril", equip: "Peso_Corporal", desc: "Trabalho focado em pernas/quadril (mobilidade).", nivel: 2 },
     { name: "Agachamento Lateral (Cossack)", group: "Mobilidade", focus: "Pernas/Quadril", equip: "Peso_Corporal", desc: "Trabalho focado em pernas/quadril (mobilidade).", nivel: 2 },
@@ -112,19 +104,14 @@ const dictionaryData = [
     { name: "Burpees", group: "Cardio/HIIT", focus: "Resistência Anaeróbica", equip: "Peso_Corporal", desc: "Trabalho focado em resistência anaeróbica (cardio/hiit).", nivel: 2 },
     { name: "Sprawl (Meio Burpee)", group: "Cardio/HIIT", focus: "Resistência Anaeróbica", equip: "Peso_Corporal", desc: "Trabalho focado em resistência anaeróbica (cardio/hiit).", nivel: 2 },
     { name: "Escalador (Mountain Climber)", group: "Cardio/HIIT", focus: "Resistência Anaeróbica", equip: "Peso_Corporal", desc: "Cardio e estabilidade do transverso.", nivel: 2 },
-    { name: "Supino Landmine (Barra ancorada no chão)", group: "Peitoral", focus: "Fibras Superiores", equip: "Barras_Anilhas, Funcional_Esportivo", desc: "Trabalho focado em fibras superiores (peitoral).", nivel: 2 },
-    { name: "Floor Press (Supino no chão com halteres)", group: "Peitoral", focus: "Fibras Médias", equip: "Pesos_Livres", desc: "Trabalho focado em fibras médias (peitoral).", nivel: 2 },
-    { name: "Flexão com Palmas (Plyo Push-up)", group: "Peitoral", focus: "Fibras Médias", equip: "Peso_Corporal", desc: "Trabalho focado em fibras médias (peitoral).", nivel: 3 },
     { name: "Puxada Alta com Pegada Neutra (Triângulo/Paralelas)", group: "Costas", focus: "Latíssimo (Largura)", equip: "Maquinas_Polias", desc: "Trabalho focado em latíssimo (largura) (costas).", nivel: 2 },
     { name: "Straight-Arm Pulldown (Pulldown braços estendidos)", group: "Costas", focus: "Latíssimo (Largura)", equip: "Maquinas_Polias", desc: "Trabalho focado em latíssimo (largura) (costas).", nivel: 2 },
-    { name: "Remada Pendlay", group: "Costas", focus: "Romboides/Miolo (Espessura)", equip: "Barras_Anilhas", desc: "Trabalho focado em romboides/miolo (espessura) (costas).", nivel: 2 },
     { name: "Desenvolvimento Arnold (Arnold Press)", group: "Ombros", focus: "Deltoide Anterior", equip: "Pesos_Livres", desc: "Trabalho focado em deltoide anterior (ombros).", nivel: 2 },
     { name: "Elevação em 'Y' na Polia Baixa", group: "Ombros", focus: "Deltoide Lateral", equip: "Maquinas_Polias", desc: "Trabalho focado em deltoide lateral (ombros).", nivel: 2 },
     { name: "Face Pull com Rotação Externa", group: "Ombros", focus: "Deltoide Posterior", equip: "Maquinas_Polias", desc: "Trabalho focado em deltoide posterior (ombros).", nivel: 2 },
     { name: "Rosca Spider", group: "Bíceps", focus: "Cabeça Curta/Longa", equip: "Pesos_Livres", desc: "Trabalho focado em cabeça curta/longa (bíceps).", nivel: 2 },
     { name: "Rosca Bayesian", group: "Bíceps", focus: "Cabeça Curta/Longa", equip: "Maquinas_Polias", desc: "Trabalho focado em cabeça curta/longa (bíceps).", nivel: 2 },
     { name: "Extensão Cruzada de Tríceps (Katana Extensions)", group: "Tríceps", focus: "Lateral/Medial", equip: "Maquinas_Polias", desc: "Trabalho focado em lateral/medial (tríceps).", nivel: 2 },
-    { name: "Rotação de Tronco com Barra Ancorada (Landmine Twist)", group: "Core", focus: "Oblíquos / Rotação", equip: "Barras_Anilhas", desc: "Trabalho focado em oblíquos / rotação (core).", nivel: 2 },
     { name: "Prancha Frontal com Toques no Ombro (Shoulder Taps)", group: "Core", focus: "Estabilização/Anti-extensão", equip: "Peso_Corporal", desc: "Trabalho focado em estabilização/anti-extensão (core).", nivel: 2 },
     { name: "Bear Crawl (Caminhada do Urso)", group: "Core", focus: "Estabilização/Anti-extensão", equip: "Peso_Corporal", desc: "Trabalho focado em estabilização/anti-extensão (core).", nivel: 3 },
     { name: "Elevação Pélvica (Barra, Máquina, Halter, Unilateral)", group: "Pernas", focus: "Glúteo Máximo", equip: "Barras_Anilhas, Pesos_Livres, Maquinas_Polias", desc: "Trabalho focado em glúteo máximo (pernas).", nivel: 1 },
@@ -132,12 +119,10 @@ const dictionaryData = [
     { name: "Agachamento Búlgaro com tronco inclinado à frente (Halteres/Smith)", group: "Pernas", focus: "Glúteo Máximo", equip: "Pesos_Livres, Maquinas_Polias", desc: "Trabalho focado em glúteo máximo (pernas).", nivel: 3 },
     { name: "Extensão de Quadril na Polia (Cabo)", group: "Pernas", focus: "Glúteo Máximo", equip: "Maquinas_Polias", desc: "Trabalho focado em glúteo máximo (pernas).", nivel: 2 },
     { name: "Coice na Máquina", group: "Pernas", focus: "Glúteo Máximo", equip: "Maquinas_Polias", desc: "Isolamento pesado de glúteo.", nivel: 1 },
-    { name: "Reverse Hyper (Máquina específica)", group: "Pernas", focus: "Glúteo Máximo", equip: "Maquinas_Polias", desc: "Trabalho focado em glúteo máximo (pernas).", nivel: 1 },
     { name: "Pull-through na polia baixa (Corda)", group: "Pernas", focus: "Glúteo Máximo", equip: "Maquinas_Polias", desc: "Trabalho focado em glúteo máximo (pernas).", nivel: 2 },
     { name: "Cadeira Abdutora", group: "Pernas", focus: "Glúteo Médio/Mínimo", equip: "Maquinas_Polias", desc: "Trabalha a lateral do quadril (glúteos médio).", nivel: 1 },
     { name: "Abdução em pé na Polia", group: "Pernas", focus: "Glúteo Médio/Mínimo", equip: "Maquinas_Polias", desc: "Trabalho focado em glúteo médio/mínimo (pernas).", nivel: 2 },
     { name: "Elevação Lateral deitada (com Caneleira ou Halter apoiado na coxa)", group: "Pernas", focus: "Glúteo Médio/Mínimo", equip: "Pesos_Livres", desc: "Trabalho focado em glúteo médio/mínimo (pernas).", nivel: 2 },
-    { name: "Ostra / Clamshell (Halter sobre o joelho)", group: "Pernas", focus: "Glúteo Médio/Mínimo", equip: "Pesos_Livres, Funcional_Esportivo", desc: "Trabalho focado em glúteo médio/mínimo (pernas).", nivel: 2 },
     { name: "Passada Lateral com elástico/band", group: "Pernas", focus: "Glúteo Médio/Mínimo", equip: "Funcional_Esportivo", desc: "Trabalho focado em glúteo médio/mínimo (pernas).", nivel: 2 },
     { name: "Agachamento Livre (Barra nas costas)", group: "Pernas", focus: "Quadríceps (Vastos)", equip: "Barras_Anilhas", desc: "Trabalho focado em quadríceps (vastos) (pernas).", nivel: 2 },
     { name: "Agachamento Frontal (Barra)", group: "Pernas", focus: "Quadríceps (Vastos)", equip: "Barras_Anilhas", desc: "Desloca o centro de gravidade para os vastos.", nivel: 2 },
@@ -151,28 +136,21 @@ const dictionaryData = [
     { name: "Step-up na caixa (Halteres)", group: "Pernas", focus: "Quadríceps (Vastos)", equip: "Pesos_Livres, Funcional_Esportivo", desc: "Trabalho focado em quadríceps (vastos) (pernas).", nivel: 2 },
     { name: "Cadeira Extensora (Máquina)", group: "Pernas", focus: "Quadríceps (Reto Femoral)", equip: "Maquinas_Polias", desc: "Trabalho focado em quadríceps (reto femoral) (pernas).", nivel: 1 },
     { name: "Extensão de joelho unilateral na Polia (Caneleira conectada ao cabo)", group: "Pernas", focus: "Quadríceps (Reto Femoral)", equip: "Maquinas_Polias", desc: "Trabalho focado em quadríceps (reto femoral) (pernas).", nivel: 2 },
-    { name: "Sissy Squat (Peso corporal ou Anilha abraçada ao peito)", group: "Pernas", focus: "Quadríceps (Reto Femoral)", equip: "Peso_Corporal, Barras_Anilhas", desc: "Trabalho focado em quadríceps (reto femoral) (pernas).", nivel: 2 },
     { name: "Stiff (Barra/Halteres)", group: "Pernas", focus: "Isquiotibiais (Porção Alongada)", equip: "Barras_Anilhas, Pesos_Livres", desc: "Trabalho focado em isquiotibiais (porção alongada) (pernas).", nivel: 2 },
     { name: "Levantamento Terra Romeno/RDL (Barra/Halteres)", group: "Pernas", focus: "Isquiotibiais (Porção Alongada)", equip: "Barras_Anilhas, Pesos_Livres", desc: "Trabalho focado em isquiotibiais (porção alongada) (pernas).", nivel: 2 },
-    { name: "Bom Dia / Good Morning (Barra)", group: "Pernas", focus: "Isquiotibiais (Porção Alongada)", equip: "Barras_Anilhas", desc: "Trabalho focado em isquiotibiais (porção alongada) (pernas).", nivel: 2 },
-    { name: "RDL Unilateral (Halter/Kettlebell)", group: "Pernas", focus: "Isquiotibiais (Porção Alongada)", equip: "Pesos_Livres", desc: "Trabalho unilateral de estabilidade e alongamento.", nivel: 2 },
     { name: "Cadeira Flexora (Sentado)", group: "Pernas", focus: "Isquiotibiais (Porção Encurtada)", equip: "Maquinas_Polias", desc: "Trabalho focado em isquiotibiais (porção encurtada) (pernas).", nivel: 1 },
     { name: "Mesa Flexora (Deitado)", group: "Pernas", focus: "Isquiotibiais (Porção Encurtada)", equip: "Maquinas_Polias", desc: "Trabalho focado em isquiotibiais (porção encurtada) (pernas).", nivel: 1 },
     { name: "Flexora em pé (Máquina/Polia unilateral)", group: "Pernas", focus: "Isquiotibiais (Porção Encurtada)", equip: "Maquinas_Polias", desc: "Trabalho focado em isquiotibiais (porção encurtada) (pernas).", nivel: 1 },
-    { name: "Flexão Nórdica (Peso corporal com tornozelos travados)", group: "Pernas", focus: "Isquiotibiais (Porção Encurtada)", equip: "Peso_Corporal", desc: "Trabalho focado em isquiotibiais (porção encurtada) (pernas).", nivel: 3 },
     { name: "Flexão de pernas deitado com um Halter preso entre os pés", group: "Pernas", focus: "Isquiotibiais (Porção Encurtada)", equip: "Pesos_Livres", desc: "Trabalho focado em isquiotibiais (porção encurtada) (pernas).", nivel: 2 },
     { name: "Cadeira Adutora (Máquina)", group: "Pernas", focus: "Adutores", equip: "Maquinas_Polias", desc: "Trabalho focado em adutores (pernas).", nivel: 1 },
     { name: "Adução em pé na Polia", group: "Pernas", focus: "Adutores", equip: "Maquinas_Polias", desc: "Trabalho focado em adutores (pernas).", nivel: 2 },
     { name: "Agachamento Sumô (Barra, Halter pesado ou Anilha pesada pendurada)", group: "Pernas", focus: "Adutores", equip: "Barras_Anilhas, Pesos_Livres", desc: "Trabalho focado em adutores (pernas).", nivel: 2 },
-    { name: "Prancha de Copenhagen (Livre ou com anilha no quadril)", group: "Pernas", focus: "Adutores", equip: "Peso_Corporal, Barras_Anilhas", desc: "Trabalho focado em adutores (pernas).", nivel: 2 },
     { name: "Elevação em pé na Máquina", group: "Pernas", focus: "Panturrilhas (Gastrocnêmios)", equip: "Maquinas_Polias", desc: "Trabalho focado em panturrilhas (gastrocnêmios) (pernas).", nivel: 1 },
     { name: "Elevação no Smith (com step)", group: "Pernas", focus: "Panturrilhas (Gastrocnêmios)", equip: "Maquinas_Polias", desc: "Trabalho focado em panturrilhas (gastrocnêmios) (pernas).", nivel: 1 },
     { name: "Elevação unilateral com Halter (no step)", group: "Pernas", focus: "Panturrilhas (Gastrocnêmios)", equip: "Pesos_Livres", desc: "Trabalho focado em panturrilhas (gastrocnêmios) (pernas).", nivel: 2 },
     { name: "Panturrilha no Leg Press 45º", group: "Pernas", focus: "Panturrilhas (Gastrocnêmios)", equip: "Maquinas_Polias", desc: "Trabalho focado em panturrilhas (gastrocnêmios) (pernas).", nivel: 1 },
     { name: "Panturrilha no Hack Machine", group: "Pernas", focus: "Panturrilhas (Gastrocnêmios)", equip: "Maquinas_Polias", desc: "Trabalho focado em panturrilhas (gastrocnêmios) (pernas).", nivel: 1 },
     { name: "Máquina de Gêmeos Sentado (com Anilhas)", group: "Pernas", focus: "Panturrilhas (Sóleo)", equip: "Maquinas_Polias", desc: "Trabalho focado em panturrilhas (sóleo) (pernas).", nivel: 1 },
-    { name: "Elevação sentado no banco com Halteres pesados sobre os joelhos", group: "Pernas", focus: "Panturrilhas (Sóleo)", equip: "Pesos_Livres", desc: "Trabalho focado em panturrilhas (sóleo) (pernas).", nivel: 1 },
-    { name: "Elevação isométrica na posição baixa do agachamento (Squat Calf Raise)", group: "Pernas", focus: "Panturrilhas (Sóleo)", equip: "Peso_Corporal", desc: "Trabalho focado em panturrilhas (sóleo) (pernas).", nivel: 2 },
     { name: "Flexão Dorsal na máquina específica", group: "Pernas", focus: "Tibial Anterior", equip: "Maquinas_Polias", desc: "Trabalho focado em tibial anterior (pernas).", nivel: 1 },
     { name: "Flexão Dorsal na Polia baixa", group: "Pernas", focus: "Tibial Anterior", equip: "Maquinas_Polias", desc: "Trabalho focado em tibial anterior (pernas).", nivel: 2 },
     { name: "Corrida com Elevação de Joelhos (High Knees)", group: "Cardio/HIIT", focus: "Motor Aeróbico", equip: "Peso_Corporal", desc: "Trabalho focado em motor aeróbico (cardio/hiit).", nivel: 2 },
@@ -186,16 +164,9 @@ const dictionaryData = [
     { name: "Hiperextensão Reversa (No banco ou solo)", group: "Costas", focus: "Eretores da Espinha (Lombar)", equip: "Peso_Corporal, Funcional_Esportivo", desc: "Trabalho focado em eretores da espinha (lombar) (costas).", nivel: 2 },
     { name: "Prancha Superman (Elevação de braço e perna opostos)", group: "Costas", focus: "Eretores da Espinha (Lombar)", equip: "Peso_Corporal", desc: "Trabalho focado em eretores da espinha (lombar) (costas).", nivel: 3 },
     { name: "Remada no Banco Inclinado com Halteres (Chest-Supported Row)", group: "Costas", focus: "Romboides/Miolo (Espessura)", equip: "Pesos_Livres", desc: "Trabalho focado em romboides/miolo (espessura) (costas).", nivel: 2 },
-    { name: "Dumbbell Seal Row (Remada Foca com Halteres)", group: "Costas", focus: "Romboides/Miolo (Espessura)", equip: "Pesos_Livres", desc: "Trabalho focado em romboides/miolo (espessura) (costas).", nivel: 2 },
-    { name: "Remada Meadows (Meadows Row)", group: "Costas", focus: "Latíssimo (Largura)", equip: "Barras_Anilhas", desc: "Trabalho focado em latíssimo (largura) (costas).", nivel: 2 },
     { name: "Rosca Inclinada com Halteres (No banco a 45º)", group: "Bíceps", focus: "Cabeça Curta/Longa", equip: "Pesos_Livres", desc: "Trabalho focado em cabeça curta/longa (bíceps).", nivel: 2 },
-    { name: "Rosca Drag (Drag Curl)", group: "Bíceps", focus: "Cabeça Curta/Longa", equip: "Barras_Anilhas", desc: "Trabalho focado em cabeça curta/longa (bíceps).", nivel: 2 },
     { name: "JM Press", group: "Tríceps", focus: "Todas", equip: "Barras_Anilhas", desc: "Trabalho focado em todas (tríceps).", nivel: 3 },
     { name: "Crucifixo Inverso Cruzado na Polia Alta", group: "Ombros", focus: "Deltoide Posterior", equip: "Maquinas_Polias", desc: "Trabalho focado em deltoide posterior (ombros).", nivel: 2 },
-    { name: "Kas Glute Bridge", group: "Pernas", focus: "Glúteo Máximo", equip: "Barras_Anilhas, Maquinas_Polias", desc: "Trabalho focado em glúteo máximo (pernas).", nivel: 2 },
-    { name: "Agachamento Jefferson", group: "Pernas", focus: "Quadríceps (Vastos)", equip: "Barras_Anilhas", desc: "Trabalho focado em quadríceps (vastos) (pernas).", nivel: 3 },
-    { name: "Caminhada do Fazendeiro Unilateral (Suitcase Carry)", group: "Core", focus: "Estabilização/Anti-extensão", equip: "Pesos_Livres", desc: "Trabalho focado em estabilização/anti-extensão (core).", nivel: 2 },
-    { name: "Dragon Flag", group: "Core", focus: "Inferior", equip: "Peso_Corporal", desc: "Trabalho focado em inferior (core).", nivel: 3 },
     { name: "Supino Fechado com Halteres (Squeeze Press / Hex Press)", group: "Peitoral", focus: "Fibras Médias", equip: "Pesos_Livres", desc: "Trabalho focado em fibras médias (peitoral).", nivel: 2 }
 ];
 
@@ -221,7 +192,7 @@ const dbWorkouts = {
                 { title: "Bloco 1 (Bi-set: Pernas + Ombros)", exercises: [{ name: "Leg Press Máquina", sets: 4, target: "12-15 rep" }, { name: "Desenvolvimento Máquina", sets: 4, target: "12-15 rep" }] },
                 { title: "Bloco 2 (Bi-set: Pernas + Ombros)", exercises: [{ name: "Cadeira Extensora", sets: 4, target: "12-15 rep" }, { name: "Elevação Lateral Halteres", sets: 4, target: "12-15 rep" }] },
                 { title: "Bloco 3 (Bi-set: Adutores + Abdutores)", exercises: [{ name: "Cadeira Adutora", sets: 4, target: "12-15 rep" }, { name: "Cadeira Abdutora", sets: 4, target: "12-15 rep" }] },
-                { title: "Bloco 4 (Bi-set: Panturrilhas)", exercises: [{ name: "Panturrilha no Leg Press", sets: 4, target: "15-20 rep" }, { name: "Panturrilha Sentado", sets: 4, target: "15-20 rep" }] },
+                { title: "Bloco 4 (Bi-set: Panturrilhas)", exercises: [{ name: "Panturrilha no Leg Press", sets: 4, target: "15-20 rep" }, { name: "Máquina de Gêmeos Sentado (com Anilhas)", sets: 4, target: "15-20 rep" }] },
                 { title: "Bloco 5 (Core)", exercises: [{ name: "Prancha Isométrica", sets: 3, target: "30 seg" }] }
             ]
         },
@@ -245,7 +216,7 @@ const dbWorkouts = {
                 { title: "Bloco 2 (Bi-set: Pernas + Ombros)", exercises: [{ name: "Leg Press 45°", sets: 4, target: "10-12 rep" }, { name: "Elevação Lateral Halteres", sets: 4, target: "10-12 rep" }] },
                 { title: "Bloco 3 (Bi-set: Glúteos + Ombros)", exercises: [{ name: "Elevação Pélvica", sets: 4, target: "10-12 rep" }, { name: "Elevação Frontal Anilha", sets: 4, target: "10-12 rep" }] },
                 { title: "Bloco 4 (Bi-set: Posteriores + Trapézio)", exercises: [{ name: "Variação Mesa Flexora", sets: 4, target: "10-12 rep" }, { name: "Encolhimento Halteres", sets: 4, target: "12-15 rep" }] },
-                { title: "Bloco 5 (Core)", exercises: [{ name: "Prancha Lateral", sets: 3, target: "30 seg/lado" }] }
+                { title: "Bloco 5 (Core)", exercises: [{ name: "Prancha Isométrica", sets: 3, target: "30 seg/lado" }] }
             ]
         },
         avancado: {
@@ -267,8 +238,8 @@ const dbWorkouts = {
                 { title: "Bloco 1 (Bi-set: Pernas + Ombros)", exercises: [{ name: "Agachamento Livre", sets: 5, target: "6-8 rep" }, { name: "Desenvolvimento Militar", sets: 4, target: "8-10 rep" }] },
                 { title: "Bloco 2 (Bi-set: Pernas + Ombros)", exercises: [{ name: "Agachamento Búlgaro", sets: 4, target: "8-10 rep/lado" }, { name: "Desenvolvimento Halteres", sets: 4, target: "8-10 rep" }] },
                 { title: "Bloco 3 (Bi-set: Pernas + Ombros)", exercises: [{ name: "Stiff (Terra Romeno)", sets: 4, target: "8-10 rep" }, { name: "Remada Alta no Cabo", sets: 4, target: "10-12 rep" }] },
-                { title: "Bloco 4 (Bi-set: Panturrilhas)", exercises: [{ name: "Panturrilha no Leg Press", sets: 4, target: "15-20 rep" }, { name: "Panturrilha Sentado", sets: 4, target: "15-20 rep" }] },
-                { title: "Bloco 5 (Core)", exercises: [{ name: "V-Up (Abdominal em V)", sets: 3, target: "15-20 rep" }] }
+                { title: "Bloco 4 (Bi-set: Panturrilhas)", exercises: [{ name: "Panturrilha no Leg Press", sets: 4, target: "15-20 rep" }, { name: "Máquina de Gêmeos Sentado (com Anilhas)", sets: 4, target: "15-20 rep" }] },
+                { title: "Bloco 5 (Core)", exercises: [{ name: "Abdominal Supra Solo", sets: 3, target: "15-20 rep" }] }
             ]
         }
     },
@@ -344,6 +315,7 @@ const dbWorkouts = {
         }
     }
 };
+
 // 2.5 BANCO DE DADOS PARALELO (Feminino - Foco Inferiores e Tônus Superior)
 const dbWorkoutsFeminino = {
     biset: {
@@ -374,11 +346,11 @@ const dbWorkoutsFeminino = {
             'B': [
                 { title: "Bloco 1 (Bi-set: Costas + Peito)", exercises: [{ name: "Puxada Frente Supinada", sets: 4, target: "10-12 rep" }, { name: "Supino Inclinado Halteres", sets: 4, target: "10-12 rep" }] },
                 { title: "Bloco 2 (Bi-set: Ombros + Tríceps)", exercises: [{ name: "Desenvolvimento Halteres", sets: 4, target: "10-12 rep" }, { name: "Tríceps Corda", sets: 4, target: "10-12 rep" }] },
-                { title: "Bloco 3 (Isoladores)", exercises: [{ name: "Elevação Lateral Halteres", sets: 4, target: "12-15 rep" }, { name: "Prancha Lateral", sets: 3, target: "30 seg/lado" }] }
+                { title: "Bloco 3 (Isoladores)", exercises: [{ name: "Elevação Lateral Halteres", sets: 4, target: "12-15 rep" }, { name: "Prancha Isométrica", sets: 3, target: "30 seg/lado" }] }
             ],
             'C': [
                 { title: "Bloco 1 (Bi-set: Quadríceps)", exercises: [{ name: "Agachamento no Smith", sets: 4, target: "10-12 rep" }, { name: "Leg Press 45°", sets: 4, target: "10-12 rep" }] },
-                { title: "Bloco 2 (Bi-set: Quadríceps + Panturrilha)", exercises: [{ name: "Cadeira Extensora", sets: 4, target: "10-12 rep" }, { name: "Panturrilha Sentado", sets: 4, target: "15-20 rep" }] },
+                { title: "Bloco 2 (Bi-set: Quadríceps + Panturrilha)", exercises: [{ name: "Cadeira Extensora", sets: 4, target: "10-12 rep" }, { name: "Máquina de Gêmeos Sentado (com Anilhas)", sets: 4, target: "15-20 rep" }] },
                 { title: "Bloco 3 (Core)", exercises: [{ name: "Russian Twist", sets: 3, target: "15 rep/lado" }] }
             ]
         },
@@ -415,7 +387,7 @@ const dbWorkoutsFeminino = {
             'C': [
                 { title: "Bloco 1 (Quadríceps)", exercises: [{ name: "Leg Press Máquina", sets: 4, target: "12-15 rep" }] },
                 { title: "Bloco 2 (Quadríceps)", exercises: [{ name: "Cadeira Extensora", sets: 4, target: "12-15 rep" }] },
-                { title: "Bloco 3 (Panturrilha)", exercises: [{ name: "Panturrilha Sentado", sets: 4, target: "15-20 rep" }] }
+                { title: "Bloco 3 (Panturrilha)", exercises: [{ name: "Máquina de Gêmeos Sentado (com Anilhas)", sets: 4, target: "15-20 rep" }] }
             ]
         },
         intermediario: {
@@ -480,8 +452,8 @@ const dbWorkoutsTatico = {
             'A': [
                 { title: "Bloco 1 (Mobilidade)", exercises: [{ name: "Maior Alongamento do Mundo", sets: 2, target: "10 rep/lado" }, { name: "Mobilidade 90/90", sets: 2, target: "10 rep/lado" }] },
                 { title: "Bloco 2 (Potência e Pliometria)", exercises: [{ name: "Agachamento com Salto", sets: 4, target: "12-15 rep" }, { name: "Afundo / Avanço", sets: 4, target: "12 rep/lado" }] },
-                { title: "Bloco 3 (Core Dinâmico)", exercises: [{ name: "Russian Twist", sets: 3, target: "20 rep" }, { name: "Prancha Lateral", sets: 3, target: "30 seg/lado" }] },
-                { title: "Bloco 4 (Resistência Anaeróbica)", exercises: [{ name: "Saltos Laterais (Skater Jumps)", sets: 4, target: "40 seg" }] }
+                { title: "Bloco 3 (Core Dinâmico)", exercises: [{ name: "Russian Twist", sets: 3, target: "20 rep" }, { name: "Prancha Isométrica", sets: 3, target: "30 seg/lado" }] },
+                { title: "Bloco 4 (Resistência Anaeróbica)", exercises: [{ name: "Kettlebell Swing (Balanço com KB ou Halter)", sets: 4, target: "40 seg" }] }
             ],
             'B': [
                 { title: "Bloco 1 (Postura e Blindagem)", exercises: [{ name: "Remada Curvada Livre", sets: 4, target: "10-12 rep" }, { name: "Supino Reto Halteres", sets: 4, target: "10-12 rep" }] },
@@ -508,7 +480,7 @@ const dbWorkoutsTatico = {
             'C': [
                 { title: "Bloco 1 (Arrancada Posterior)", exercises: [{ name: "Stiff (Terra Romeno)", sets: 5, target: "8-10 rep" }, { name: "Elevação Pélvica", sets: 4, target: "10-12 rep" }] },
                 { title: "Bloco 2 (Blindagem de Tornozelo)", exercises: [{ name: "Panturrilha no Degrau", sets: 4, target: "Falha" }, { name: "Dorsiflexão de Tornozelo", sets: 4, target: "20 rep" }] },
-                { title: "Bloco 3 (Condicionamento Tático)", exercises: [{ name: "Saltos Laterais (Skater Jumps)", sets: 4, target: "1 min" }, { name: "Escalador (Mountain Climber)", sets: 4, target: "1 min" }] }
+                { title: "Bloco 3 (Condicionamento Tático)", exercises: [{ name: "Kettlebell Swing (Balanço com KB ou Halter)", sets: 4, target: "1 min" }, { name: "Escalador (Mountain Climber)", sets: 4, target: "1 min" }] }
             ]
         }
     },
@@ -519,13 +491,13 @@ const dbWorkoutsTatico = {
             'C': [{ title: "Treino Society", exercises: [{ name: "Agachamento Búlgaro", sets: 4, target: "10 rep" }, { name: "Stiff (Terra Romeno)", sets: 4, target: "15 rep" }, { name: "Cadeira Adutora", sets: 4, target: "20 rep" }, { name: "Burpees", sets: 4, target: "10 rep" }] }]
         },
         intermediario: {
-            'A': [{ title: "Treino Society", exercises: [{ name: "Agachamento com Salto", sets: 4, target: "20 rep" }, { name: "Afundo / Avanço", sets: 4, target: "15 rep/lado" }, { name: "Russian Twist", sets: 4, target: "20 rep" }, { name: "Saltos Laterais (Skater Jumps)", sets: 4, target: "45 seg" }] }],
+            'A': [{ title: "Treino Society", exercises: [{ name: "Agachamento com Salto", sets: 4, target: "20 rep" }, { name: "Afundo / Avanço", sets: 4, target: "15 rep/lado" }, { name: "Russian Twist", sets: 4, target: "20 rep" }, { name: "Kettlebell Swing (Balanço com KB ou Halter)", sets: 4, target: "45 seg" }] }],
             'B': [{ title: "Treino Society", exercises: [{ name: "Supino Reto Halteres", sets: 4, target: "10-12 rep" }, { name: "Remada Curvada Livre", sets: 4, target: "10-12 rep" }, { name: "Abdominal Bicicleta", sets: 4, target: "30 rep" }, { name: "Sprawl (Meio Burpee)", sets: 4, target: "1 min" }] }],
             'C': [{ title: "Treino Society", exercises: [{ name: "Agachamento Búlgaro", sets: 4, target: "12 rep/lado" }, { name: "Stiff (Terra Romeno)", sets: 4, target: "10-12 rep" }, { name: "Panturrilha no Leg Press", sets: 4, target: "20 rep" }, { name: "Escalador (Mountain Climber)", sets: 4, target: "1 min" }] }]
         },
         avancado: {
             'A': [{ title: "Treino Society", exercises: [{ name: "Agachamento Livre", sets: 5, target: "6-8 rep" }, { name: "Pistol Squat", sets: 4, target: "Máx/lado" }, { name: "Roda Abdominal", sets: 4, target: "15 rep" }, { name: "Burpees", sets: 4, target: "20 rep" }] }],
-            'B': [{ title: "Treino Society", exercises: [{ name: "Supino Reto Barra", sets: 5, target: "6-8 rep" }, { name: "Barra Fixa Supinada (Chin-up)", sets: 4, target: "Falha" }, { name: "Hollow Body Hold", sets: 4, target: "1 min" }, { name: "Saltos Laterais (Skater Jumps)", sets: 4, target: "1 min" }] }],
+            'B': [{ title: "Treino Society", exercises: [{ name: "Supino Reto Barra", sets: 5, target: "6-8 rep" }, { name: "Barra Fixa Supinada (Chin-up)", sets: 4, target: "Falha" }, { name: "Hollow Body Hold", sets: 4, target: "1 min" }, { name: "Kettlebell Swing (Balanço com KB ou Halter)", sets: 4, target: "1 min" }] }],
             'C': [{ title: "Treino Society", exercises: [{ name: "Stiff (Terra Romeno)", sets: 5, target: "8-10 rep" }, { name: "Agachamento com Salto", sets: 4, target: "20 rep" }, { name: "Panturrilha no Degrau", sets: 4, target: "Falha" }, { name: "Escalador (Mountain Climber)", sets: 4, target: "1.5 min" }] }]
         }
     }
