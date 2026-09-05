@@ -4089,13 +4089,14 @@ function checkCompletedCards() {
         if (!user) return;
         
         const db = firebase.firestore();
+        // BLINDAGEM: Adicionado o prefixo FitApp. para acessar as variáveis de dentro da cápsula
         const payload = {
-            campaign_data: safeGet('fitapp_campaign_data') || '',
-            campaign_count: safeGet('fitapp_campaign_count') || '0',
-            blacklist: safeGet('fitapp_blacklist') || '[]',
-            main_method: safeGet('fitapp_main_method') || 'abc',
-            profile: safeGet('fitapp_profile') || 'hipertrofia',
-            level: safeGet('fitapp_level') || 'intermediario'
+            campaign_data: FitApp.safeGet('fitapp_campaign_data') || '',
+            campaign_count: FitApp.safeGet('fitapp_campaign_count') || '0',
+            blacklist: FitApp.safeGet('fitapp_blacklist') || '[]',
+            main_method: FitApp.safeGet('fitapp_main_method') || 'abc',
+            profile: FitApp.safeGet('fitapp_profile') || 'hipertrofia',
+            level: FitApp.safeGet('fitapp_level') || 'intermediario'
         };
         
         try {
@@ -4116,15 +4117,14 @@ function checkCompletedCards() {
             if (doc.exists && doc.data().campanha) {
                 const data = doc.data().campanha;
                 
-                // Restaura o cofre
-                if (data.campaign_data) safeSet('fitapp_campaign_data', data.campaign_data);
-                if (data.campaign_count) safeSet('fitapp_campaign_count', data.campaign_count);
-                if (data.blacklist) safeSet('fitapp_blacklist', data.blacklist);
-                if (data.main_method) safeSet('fitapp_main_method', data.main_method);
-                if (data.profile) safeSet('fitapp_profile', data.profile);
-                if (data.level) safeSet('fitapp_level', data.level);
+                // BLINDAGEM: Adicionado o prefixo FitApp.
+                if (data.campaign_data) FitApp.safeSet('fitapp_campaign_data', data.campaign_data);
+                if (data.campaign_count) FitApp.safeSet('fitapp_campaign_count', data.campaign_count);
+                if (data.blacklist) FitApp.safeSet('fitapp_blacklist', data.blacklist);
+                if (data.main_method) FitApp.safeSet('fitapp_main_method', data.main_method);
+                if (data.profile) FitApp.safeSet('fitapp_profile', data.profile);
+                if (data.level) FitApp.safeSet('fitapp_level', data.level);
                 
-                // Atualiza os seletores da interface para refletirem a nuvem
                 const elsProfile = document.getElementById('profileSelector');
                 if (elsProfile && data.profile) elsProfile.value = data.profile;
                 
