@@ -2559,8 +2559,8 @@ function renderMetricsChart() {
                     
                     if (isRecent) {
                         const dictItem = typeof dictionaryData !== 'undefined' ? dictionaryData.find(d => d.name === set.exercise) : null;
-                        const focus = dictItem ? dictItem.focus : set.exercise;
-                        const broadGroup = getMuscleGroup(focus);
+                        // BLINDAGEM: Passamos o objeto inteiro (dictItem). O motor lerá o 'group' ("Peitoral") em vez do foco ("Fibras").
+                        const broadGroup = getMuscleGroup(dictItem ? dictItem : set.exercise);
                         
                         if (broadGroup === 'peito') muscleCounts['Peitoral']++;
                         else if (broadGroup === 'costas') muscleCounts['Costas']++;
