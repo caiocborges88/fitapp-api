@@ -3409,19 +3409,27 @@ function updateDynamicCards() {
         const rawProfile = document.getElementById('profileSelector') ? document.getElementById('profileSelector').value : 'hipertrofia';
         const routeProfile = (rawProfile === 'definicao' || rawProfile === 'masculino') ? 'hipertrofia' : rawProfile;
 
-        // 🛡️ O ESCUDO BIOMECÂNICO (Otimizado com Fallback Absoluto para não retornar NULL)
+        // 🛡️ O ESCUDO BIOMECÂNICO (Otimizado para Opção A: Volume Dinâmico Anti-Repetição)
         const safeSlot = (focusArr, equip = null, target = "10-12 rep") => {
             let ex = getEx(focusArr, equip, used);
-            if (!ex && equip) ex = getEx(focusArr, null, used); // Tenta sem o equipamento restrito
-            if (!ex) ex = getEx(focusArr, null, []); // Tenta ignorando a trava de exercícios repetidos
+            
+            // Fallback 1: Tenta sem a restrição de equipamento, mas MANTÉM a trava de repetição (used)
+            if (!ex && equip) ex = getEx(focusArr, null, used); 
+            
+            // Fallback 2: Tenta buscar pelo grupo muscular pai, MANTENDO a trava de repetição
             if (!ex) {
-                // Tenta puxar do grupo pai (ex: de 'peito_clavicular' para 'peito')
                 const parentTerm = focusArr[0].split('_')[0]; 
-                ex = getEx([parentTerm], null, []);
+                ex = getEx([parentTerm], null, used);
             }
-            if (ex) used.push(ex.name);
-            // Retorna um fallback vazio estruturado apenas se TUDO falhar (para não travar a UI)
-            return ex ? { name: ex.name, sets: 4, target: target } : { name: "Exercício Genérico (" + focusArr[0].split('_')[0] + ")", sets: 4, target: target };
+            
+            // Se encontrou um exercício INÉDITO, salva no array e envia para a tela
+            if (ex) {
+                used.push(ex.name);
+                return { name: ex.name, sets: 4, target: target };
+            }
+            
+            // OPÇÃO A: Se o estoque acabou, retorna nulo para o motor cortar este espaço do treino
+            return null;
         };
 
         // --- SISTEMA ABC / PPL (Etapa Alpha: Distribuição 4/4/3/3/3/Completa) ---
