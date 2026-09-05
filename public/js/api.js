@@ -136,8 +136,24 @@ var FitAPI = (() => {
         }
     }
 
+    // 7. DESTRUIÇÃO DE REGISTRO
+    async function deletarTreino(docId) {
+        try {
+            const user = auth.currentUser;
+            if (!user) throw new Error("Usuário não autenticado.");
+            
+            await db.collection("treinos_concluidos").doc(docId).delete();
+            console.log("Treino aniquilado da base:", docId);
+            return true;
+        } catch (error) {
+            console.error("Erro ao deletar treino:", error);
+            throw new Error("Falha na exclusão Cloud.");
+        }
+    }
+
     return {
         salvarTreino,
+        deletarTreino,
         getCoachFeedback,
         importarTreinoIA,
         carregarHistoricoNuvem, // NOVO: Expõe a função de resgate

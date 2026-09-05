@@ -1360,7 +1360,11 @@ function removeExercise(bIndex, eIndex) {
 
         try {
             document.getElementById('btnFinishAction').textContent = "⏳ Salvando...";
-            await FitAPI.salvarTreino(payload);
+            const response = await FitAPI.salvarTreino(payload);
+            // Salva a assinatura da nuvem no treino local para podermos apagar depois
+            if (response && response.id) {
+                payload._id = response.id;
+            }
         } catch (error) {
             let syncQueue = JSON.parse(safeGet('fitapp_sync_queue') || '[]');
             syncQueue.push(payload);
@@ -2074,13 +2078,19 @@ window.encerrarSessao = function() {
             header.style.cursor = 'pointer';
             header.style.borderLeft = log.tipo === 'Livre' ? '4px solid #a64dff' : '4px solid #00ff88';
             
+            // Oculta o botão de lixeira se o treino não tiver o ID da nuvem (offline)
+            const trashBtnDisplay = log._id ? 'block' : 'none';
+
             header.innerHTML = `
                 <div style="flex: 1;">
                     <div style="font-weight: bold; color: #fff;">Treino ${log.tipo}</div>
                     <div style="font-size: 12px; color: #aaa;">${dateStr} • ⏱️ ${durationStr}</div>
                 </div>
-                <button onclick="event.stopPropagation(); FitApp.exportStravaCard(${history.length - 1 - reversedHistory.indexOf(log)})" style="background: transparent; border: none; font-size: 20px; margin-right: 15px; cursor: pointer; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" title="Exportar para Instagram">📸</button>
-                <div class="toggle-arrow" style="color: #888; font-size: 12px; transition: transform 0.3s;">▼</div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button onclick="event.stopPropagation(); FitApp.exportStravaCard(${history.length - 1 - reversedHistory.indexOf(log)})" style="background: transparent; border: none; font-size: 20px; cursor: pointer; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" title="Exportar para Instagram">📸</button>
+                    <button onclick="event.stopPropagation(); FitApp.deleteHistoryLog('${log._id}')" style="display: ${trashBtnDisplay}; background: transparent; border: none; font-size: 18px; color: #ff4444; cursor: pointer;" title="Excluir Treino">🗑️</button>
+                    <div class="toggle-arrow" style="color: #888; font-size: 12px; transition: transform 0.3s; margin-left: 5px;">▼</div>
+                </div>
             `;
 
             const body = document.createElement('div');
@@ -2130,6 +2140,45 @@ window.encerrarSessao = function() {
             block.appendChild(body);
             container.appendChild(block);
         });
+    }
+
+    async function deleteHistoryLog(docId) {
+        if (!confirm("Excluir este treino? Ele será apagado do radar e da nuvem.")) return;
+        
+        try {
+            document.getElementById('btnTabList').textContent = "Limpando...";
+            
+            // 1. Aciona o Cérebro Neural para destruir o documento
+            await FitAPI.deletarTreino(docId);
+            
+            // 2. Limpa o cache local
+            let history = JSON.parse(safeGet('fitapp_week_log') || '[]');
+            history = history.filter(h => h._id !== docId);
+            safeSet('fitapp_week_log', JSON.stringify(history));
+            
+            // 3. Decrementa a Campanha (Aviso Tático)
+            let campCount = parseInt(safeGet('fitapp_campaign_count') || '0');
+            if (campCount > 0) {
+                safeSet('fitapp_campaign_count', campCount - 1);
+                updateCampaignDashboard();
+                saveCampaignToCloud();
+            }
+
+            // 4. Força a atualização de todos os radares visuais
+            checkSequence();
+            if (typeof checkCompletedCards === 'function') checkCompletedCards();
+            renderWeeklyCalendar();
+            if (typeof renderMetricsChart === 'function') renderMetricsChart();
+            renderHistoryList();
+            
+            document.getElementById('btnTabList').textContent = "📋 Lista";
+            showToast("Registro aniquilado com sucesso.");
+            
+        } catch(error) {
+            document.getElementById('btnTabList').textContent = "📋 Lista";
+            showToast("Falha. Verifique a conexão com a rede.");
+            console.error(error);
+        }
     }
 
     function renderMonthlyCalendar() {
@@ -3978,7 +4027,7 @@ function updateDynamicCards() {
         renderIsolationChart,
         adjustRestTime, changeSets, cloneFirstSet, exportStravaCard,
         toggleAutoPilot, startAutoPilot, stopAutoPilot, 
-        openHistoryModal, switchHistoryTab,
+        openHistoryModal, switchHistoryTab, deleteHistoryLog,
         saveCustomWorkout, deleteCustomWorkout,
         openImportAiModal, processWorkoutWithAI, switchAiTab,
         startPrepPhase, startCooldownTimer, skipCooldown, finalizeSession, // NOVO: As chaves das novas Fases liberadas para o HTML
