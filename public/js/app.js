@@ -3056,147 +3056,42 @@ function renderMetricsChart() {
         }
     }
 
-    function generateForgedWorkout() {
+   function generateForgedWorkout() {
         const method = document.getElementById('forgeMethod').value;
         const subOpt = document.getElementById('forgeSubSelect').value;
         
-        // NOVO: A Trava do Vazio Biomecânico
         const activeChips = document.querySelectorAll('.forge-equip-chip.active');
         if (activeChips.length === 0) {
-            FitApp.showToast("⚠️ Operação Negada: Você precisa ter pelo menos uma arma no seu arsenal (Halteres, Máquinas, etc).");
-            return;
-        }
-        
-        const removeAccents = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
-        const getEx = (focusTerms, equipPref, avoidNames, isStrictEquip = false) => {
-            let pool = dictionaryData.filter(d => {
-                const f = removeAccents(d.focus);
-                const matchFocus = focusTerms.some(term => f.includes(term));
-                let matchEquip = true;
-                if (equipPref) {
-                    if (isStrictEquip) matchEquip = (d.equip === equipPref);
-                    else matchEquip = (d.equip === equipPref || !d.equip);
-                }
-                return matchFocus && matchEquip && !avoidNames.includes(d.name);
-            });
-            if (pool.length === 0 && !isStrictEquip) {
-                pool = dictionaryData.filter(d => focusTerms.some(term => removeAccents(d.focus).includes(term)) && !avoidNames.includes(d.name));
-            }
-            return pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : null;
-        };
-
-        let generatedBlocks = [];
-        let used = [];
-        let finalTitle = "";
-
-        // 1. PUSH / PULL / LEGS (Sinergia de Eixos)
-        if (method === 'ppl') {
-            if (subOpt === 'push') {
-                finalTitle = "Push Day (Hipertrofia)";
-                let e1 = getEx(['peito'], 'barra', used); if(e1) used.push(e1.name);
-                let e2 = getEx(['ombro'], 'haltere', used); if(e2) used.push(e2.name);
-                if(e1) generatedBlocks.push({ title: "Força Base", exercises: [ {name: e1.name, sets: 4, target: "8-10"}, ...(e2 ? [{name: e2.name, sets: 4, target: "10-12"}] : []) ]});
-                
-                let e3 = getEx(['peito'], 'haltere', used); if(e3) used.push(e3.name);
-                let e4 = getEx(['triceps'], 'cabo', used); if(e4) used.push(e4.name);
-                if(e3) generatedBlocks.push({ title: "Dano Muscular", exercises: [ {name: e3.name, sets: 4, target: "10-12"}, ...(e4 ? [{name: e4.name, sets: 4, target: "12"}] : []) ]});
-            } else if (subOpt === 'pull') {
-                finalTitle = "Pull Day (Hipertrofia)";
-                let e1 = getEx(['costa', 'dorsal'], 'barra', used); if(e1) used.push(e1.name);
-                let e2 = getEx(['trapezio', 'posterior'], 'haltere', used); if(e2) used.push(e2.name);
-                if(e1) generatedBlocks.push({ title: "Tração Pesada", exercises: [ {name: e1.name, sets: 4, target: "8-10"}, ...(e2 ? [{name: e2.name, sets: 4, target: "10-12"}] : []) ]});
-                
-                let e3 = getEx(['costa', 'dorsal'], 'maquina', used); if(e3) used.push(e3.name);
-                let e4 = getEx(['biceps'], 'cabo', used); if(e4) used.push(e4.name);
-                if(e3) generatedBlocks.push({ title: "Volume de Contração", exercises: [ {name: e3.name, sets: 4, target: "10-12"}, ...(e4 ? [{name: e4.name, sets: 4, target: "12"}] : []) ]});
-            } else {
-                finalTitle = "Legs Day (Hipertrofia)";
-                let e1 = getEx(['perna', 'quadriceps'], 'barra', used); if(e1) used.push(e1.name);
-                let e2 = getEx(['posterior'], 'haltere', used); if(e2) used.push(e2.name);
-                if(e1) generatedBlocks.push({ title: "Eixo de Força", exercises: [ {name: e1.name, sets: 4, target: "8-10"}, ...(e2 ? [{name: e2.name, sets: 4, target: "10-12"}] : []) ]});
-                
-                let e3 = getEx(['panturrilha'], null, used); if(e3) used.push(e3.name);
-                let e4 = getEx(['core', 'abdom'], null, used); if(e4) used.push(e4.name);
-                if(e3) generatedBlocks.push({ title: "Isolamento", exercises: [ {name: e3.name, sets: 4, target: "15"}, ...(e4 ? [{name: e4.name, sets: 3, target: "Falha"}] : []) ]});
-            }
-        }
-        // 2. BI-SET AGONISTA (Pré/Pós Exaustão - Mesmo Músculo)
-        else if (method === 'biset_agonista') {
-            finalTitle = "Agonista: " + subOpt.toUpperCase();
-            let focus = [subOpt];
-            if(subOpt === 'braco') focus = ['biceps', 'triceps'];
-            
-            // Cria 3 blocos massacrantes para a mesma região
-            for(let i=1; i<=3; i++) {
-                let e1 = getEx(focus, i===1 ? 'barra' : 'haltere', used); if(e1) used.push(e1.name);
-                let e2 = getEx(focus, i===3 ? 'cabo' : 'maquina', used); if(e2) used.push(e2.name);
-                if(e1 && e2) {
-                    generatedBlocks.push({ title: `Bi-Set Agonista ${i} (Fadiga Extrema)`, exercises: [ {name: e1.name, sets: 3, target: "10 rep"}, {name: e2.name, sets: 3, target: "Até a falha"} ]});
-                }
-            }
-        }
-        // 3. BI-SET ANTAGONISTA / MISTO
-        else if (method === 'biset_antagonista') {
-            finalTitle = "Bi-Set Dinâmico: " + subOpt.split('_').join(' + ').toUpperCase();
-            let g1 = [subOpt.split('_')[0]];
-            let g2 = [subOpt.split('_')[1]];
-            
-            // Traduz siglas curtas
-            if(g1[0]==='quad') g1=['quadriceps']; if(g2[0]==='post') g2=['posterior'];
-            
-            for(let i=1; i<=3; i++) {
-                let e1 = getEx(g1, null, used); if(e1) used.push(e1.name);
-                let e2 = getEx(g2, null, used); if(e2) used.push(e2.name);
-                if(e1 && e2) {
-                    generatedBlocks.push({ title: `Bloco Oposto ${i}`, exercises: [ {name: e1.name, sets: 4, target: "10-12"}, {name: e2.name, sets: 4, target: "10-12"} ]});
-                }
-            }
-        }
-        // 4. CIRCUITO METABÓLICO (FullBody)
-        else if (method === 'circuito') {
-            finalTitle = "Circuito Metabólico Extreme";
-            let cExs = [];
-            let fP = getEx(['perna'], 'peso_corporal', used) || getEx(['perna'], null, used); if(fP) { used.push(fP.name); cExs.push({name: fP.name, sets: 4, target: "15-20 rep"}); }
-            let fC = getEx(['peito'], 'peso_corporal', used) || getEx(['peito'], null, used); if(fC) { used.push(fC.name); cExs.push({name: fC.name, sets: 4, target: "15-20 rep"}); }
-            let fB = getEx(['costa'], 'maquina', used); if(fB) { used.push(fB.name); cExs.push({name: fB.name, sets: 4, target: "15-20 rep"}); }
-            let fS = getEx(['ombro'], 'haltere', used); if(fS) { used.push(fS.name); cExs.push({name: fS.name, sets: 4, target: "15-20 rep"}); }
-            let fA = getEx(['core'], 'peso_corporal', used); if(fA) { used.push(fA.name); cExs.push({name: fA.name, sets: 4, target: "1 min"}); }
-            
-            if(cExs.length > 0) generatedBlocks.push({ title: "Rodada FullBody (Minímo Descanso)", exercises: cExs });
-            
-            // Altera o descanso padrão no motor para 30s-45s conforme o manual
-            FitApp.adjustRestTime(45); 
-        }
-        // 5. CALISTENIA PURA
-        else if (method === 'calistenia') {
-            finalTitle = "Calistenia (Dominando o Corpo)";
-            let cal1 = getEx(['peito', 'triceps'], 'calistenia', used, true) || getEx(['peito'], 'peso_corporal', used, true); if(cal1) used.push(cal1.name);
-            let cal2 = getEx(['costa', 'biceps'], 'calistenia', used, true) || getEx(['costa'], 'peso_corporal', used, true); if(cal2) used.push(cal2.name);
-            if(cal1) generatedBlocks.push({ title: "Bloco Superior", exercises: [ {name: cal1.name, sets: 4, target: "Falha"}, ...(cal2 ? [{name: cal2.name, sets: 4, target: "Falha"}] : []) ]});
-            
-            let cal3 = getEx(['perna'], 'peso_corporal', used, true); if(cal3) used.push(cal3.name);
-            let cal4 = getEx(['core'], 'calistenia', used, true) || getEx(['core'], 'peso_corporal', used, true); if(cal4) used.push(cal4.name);
-            if(cal3) generatedBlocks.push({ title: "Base e Core", exercises: [ {name: cal3.name, sets: 4, target: "20 rep"}, ...(cal4 ? [{name: cal4.name, sets: 4, target: "Isometria Máx"}] : []) ]});
-        }
-
-        if(generatedBlocks.length === 0) {
-            FitApp.showToast("Erro tático: Sem exercícios suficientes no dicionário para esta métrica.");
+            showToast("⚠️ Operação Negada: Selecione pelo menos uma arma no seu arsenal.");
             return;
         }
 
-        currentRoutine = generatedBlocks;
+        // UNIFICAÇÃO TÁTICA: O modal da Forja agora usa o Cérebro Neural Principal
+        // Isso elimina o código legado e herda: Arsenal, Volume Dinâmico e Gravidade de Core.
+        currentRoutine = executeForgeLogic(method, subOpt, []);
         currentWorkoutType = 'Livre';
+        
         document.getElementById('forgeModal').style.display = 'none';
         
         // Dispara o motor de carregamento para abrir a tela de visualização (Preview)
-        loadWorkout();
+        loadWorkout(); 
         
-        // Atualiza o nome da input para refletir a escolha
+        // Formatação inteligente do Título baseada na seleção
+        const selectEl = document.getElementById('forgeSubSelect');
+        let finalTitle = "Rotina Forjada";
+        if (selectEl && selectEl.options.length > 0 && selectEl.closest('div').style.display !== 'none') {
+            finalTitle = selectEl.options[selectEl.selectedIndex].text;
+        } else if (method === 'circuito') {
+            finalTitle = "Circuito Metabólico";
+        } else if (method === 'calistenia') {
+            finalTitle = "Calistenia Bodyweight";
+        }
+        
         const nameInput = document.getElementById('customWorkoutName');
         if (nameInput) nameInput.value = finalTitle;
         
-        FitApp.showToast("Rotina forjada com sucesso. Verifique o plano.");
-        if(audioEnabled) FitApp.speak("Treino gerado conforme literatura biomecânica.");
+        showToast("Rotina forjada com sucesso. Verifique o plano.");
+        if(audioEnabled) speak("Treino gerado conforme arsenal selecionado e literatura biomecânica.");
     }
 function lockCampaign() {
         const methodSelector = document.getElementById('mainMethodSelector');
