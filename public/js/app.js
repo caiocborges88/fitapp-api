@@ -3060,6 +3060,13 @@ function renderMetricsChart() {
         const method = document.getElementById('forgeMethod').value;
         const subOpt = document.getElementById('forgeSubSelect').value;
         
+        // NOVO: A Trava do Vazio Biomecânico
+        const activeChips = document.querySelectorAll('.forge-equip-chip.active');
+        if (activeChips.length === 0) {
+            FitApp.showToast("⚠️ Operação Negada: Você precisa ter pelo menos uma arma no seu arsenal (Halteres, Máquinas, etc).");
+            return;
+        }
+        
         const removeAccents = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
         const getEx = (focusTerms, equipPref, avoidNames, isStrictEquip = false) => {
             let pool = dictionaryData.filter(d => {
@@ -3350,6 +3357,15 @@ function updateDynamicCards() {
         const userLevel = els.levelSelector ? els.levelSelector.value : 'intermediario';
         const maxAllowedLevel = userLevel === 'iniciante' ? 1 : (userLevel === 'intermediario' ? 2 : 3);
 
+        // NOVO: Puxa o arsenal diretamente dos botões na interface
+        const equipChips = document.querySelectorAll('.forge-equip-chip.active');
+        let userArsenal = ['Barras_Anilhas', 'Pesos_Livres', 'Maquinas_Polias', 'Peso_Corporal', 'Calistenia', 'Funcional_Esportivo']; 
+        if (equipChips && equipChips.length > 0) {
+            userArsenal = [];
+            equipChips.forEach(c => userArsenal.push(...c.getAttribute('data-equip').split(',')));
+            userArsenal.push('Funcional_Esportivo'); // Blinda o motor de cardio
+        }
+
         const getEx = (focusTerms, equipPref, avoidNames, allowBodyweight = false) => {
             // A Pedra de Roseta: Expandida para abranger a biomecânica avançada e metabólica
             const mapFocus = {
@@ -3370,16 +3386,14 @@ function updateDynamicCards() {
             };
             const mapEquip = { 'barra': 'Barras_Anilhas', 'halter': 'Pesos_Livres', 'maquina': 'Maquinas_Polias', 'cabo': 'Maquinas_Polias', 'peso_corporal': 'Peso_Corporal', 'calistenia': 'Calistenia' };
 
-            // NOVO: Função validadora de Grupo Muscular Base
+            // Função validadora de Grupo Muscular Base
             const checkBaseGroup = (dGroup, fTerms) => {
-                const prefix = fTerms[0].split('_')[0]; // Extrai "ombro" de "ombro_posterior"
+                const prefix = fTerms[0].split('_')[0]; 
                 const expectedGroup = { 'peito': 'peito', 'costa': 'costas', 'trapezio': 'costas', 'ombro': 'ombros', 'perna': 'pernas', 'panturrilha': 'pernas', 'triceps': 'triceps', 'biceps': 'biceps', 'core': 'core' }[prefix] || 'outros';
-                
-                // Utiliza a função getMuscleGroup que já existe no seu app.js para ler com precisão
                 const actualGroup = typeof getMuscleGroup === 'function' ? getMuscleGroup(dGroup) : 'outros';
                 
-                if (expectedGroup === 'outros') return true; // Libera aeróbicos e pliometria
-                if (prefix === 'trapezio' && (actualGroup === 'costas' || actualGroup === 'ombros')) return true; // Tolerância anatômica para trapézio
+                if (expectedGroup === 'outros') return true; 
+                if (prefix === 'trapezio' && (actualGroup === 'costas' || actualGroup === 'ombros')) return true; 
                 return actualGroup === expectedGroup;
             };
 
@@ -3398,14 +3412,18 @@ function updateDynamicCards() {
                 const validFocuses = focusTerms.flatMap(term => mapFocus[term] || [term]);
                 const matchFocus = validFocuses.includes(exFocus) || validFocuses.some(f => exGroup.includes(f));
                 
-                let isCalisthenics = exEquip.includes('Peso_Corporal') || exEquip.includes('Calistenia');
-                if (!allowBodyweight && isCalisthenics) return false;
+                // NOVO: Filtro de Arsenal do Usuário
+                const exEquipsArray = exEquip.split(',').map(e => e.trim());
+                const isArsenalAllowed = exEquipsArray.some(eq => userArsenal.includes(eq));
+                if (!isArsenalAllowed && exEquip !== '') return false; // Aborta se ele não possui as armas necessárias
 
+                // A Preferência do Blueprint é respeitada apenas se estiver dentro do Arsenal permitido
                 let matchEquip = true;
                 if (equipPref) {
                     const translatedEquip = mapEquip[equipPref] || equipPref;
-                    matchEquip = exEquip.includes(translatedEquip);
+                    matchEquip = exEquipsArray.includes(translatedEquip);
                 }
+                
                 return matchFocus && matchEquip && !avoidNames.includes(d.name);
             });
 
@@ -3415,16 +3433,17 @@ function updateDynamicCards() {
                     const exGroup = d.group || '';
                     const exFocus = d.focus || '';
 
-                    // FILTRO DE DIFICULDADE (SNC) FALLBACK - NOVO: Se o Nível 1 estiver vazio, libera Nível 2.
+                    // FILTRO DE DIFICULDADE (SNC) FALLBACK
                     const exNivel = d.nivel || 1;
                     if (exNivel > maxAllowedLevel && exNivel > (maxAllowedLevel + 1)) return false; 
 
-                    // ESCUDO PRIMÁRIO NO FALLBACK TAMBÉM
                     if (!checkBaseGroup(exGroup, focusTerms)) return false;
-
-                    let isCalisthenics = exEquip.includes('Peso_Corporal') || exEquip.includes('Calistenia');
-                    if (!allowBodyweight && isCalisthenics) return false;
                     
+                    // NOVO: Filtro de Arsenal no Fallback
+                    const exEquipsArray = exEquip.split(',').map(e => e.trim());
+                    const isArsenalAllowed = exEquipsArray.some(eq => userArsenal.includes(eq));
+                    if (!isArsenalAllowed && exEquip !== '') return false;
+
                     const validFocuses = focusTerms.flatMap(term => mapFocus[term] || [term]);
                     return (validFocuses.includes(exFocus) || validFocuses.some(f => exGroup.includes(f))) && !avoidNames.includes(d.name);
                 });
