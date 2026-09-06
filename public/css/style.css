@@ -700,26 +700,41 @@ select:focus, textarea:focus, input[type="text"]:focus {
     border: 1px solid #00ff88;
 }
 
-/* --- PONTO 4: Encolhimento do Bloco no Treino (Sanfona) --- */
+/* --- PONTO 4: Encolhimento do Bloco no Treino (Sanfona e Conclusão) --- */
+
+/* 1. Estado de Conclusão Automática (Todas as séries marcadas) */
 .collapsed-block {
     background-color: #1a1a1a;
 }
 .collapsed-block .exercise-block {
-    display: none; /* Esconde os exercícios */
+    display: none; 
 }
 .collapsed-block .biset-title {
     color: #00ff88;
     border-bottom: none;
     margin-bottom: 0;
 }
-/* Coloca o ícone de Check limpo no título quando encolhido */
 .collapsed-block .biset-title .block-name::after {
     content: ' ✅';
     font-size: 14px;
 }
-/* Gira a setinha (Chevron) para baixo indicando que pode expandir */
 .collapsed-block .toggle-icon {
     transform: rotate(180deg);
+}
+
+/* 2. Estado de Minimização Manual (Clique do Atleta) */
+.minimized-block {
+    background-color: #1a1a1a;
+}
+.minimized-block .exercise-block {
+    display: none; /* Recolhe os exercícios sem aplicar o visual de "Feito" */
+}
+.minimized-block .biset-title {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+.minimized-block .toggle-icon {
+    transform: rotate(180deg); /* Gira a setinha normalmente */
 }
 /* ==========================================================================
    PAINEL DE COMANDO (CONFIGURAÇÕES E PERFIL)
