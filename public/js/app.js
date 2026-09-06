@@ -3818,6 +3818,39 @@ function updateDynamicCards() {
         }
 
         // ==========================================================
+        // 🧲 ALGORITMO DE GRAVIDADE (CORE FINISHER)
+        // ==========================================================
+        const isCoreEx = (exName) => {
+            const dictItem = typeof dictionaryData !== 'undefined' ? dictionaryData.find(d => d.name === exName) : null;
+            if (dictItem) {
+                const g = (dictItem.group || '').toLowerCase();
+                const f = (dictItem.focus || '').toLowerCase();
+                return g.includes('core') || f.includes('obliquo') || f.includes('abdom') || f.includes('estabiliza');
+            }
+            return false;
+        };
+
+        // 1. Gravidade Interna: Empurra o abdômen para o final da sua própria caixa (Vital para Circuitos)
+        generatedBlocks.forEach(bloco => {
+            bloco.exercises.sort((a, b) => {
+                const aCore = isCoreEx(a.name);
+                const bCore = isCoreEx(b.name);
+                if (aCore && !bCore) return 1;
+                if (!aCore && bCore) return -1;
+                return 0;
+            });
+        });
+
+        // 2. Gravidade Externa: Empurra o bloco inteiro para o final do treino
+        generatedBlocks.sort((a, b) => {
+            const aHasCore = a.exercises.some(ex => isCoreEx(ex.name)) || a.title.toLowerCase().includes('core');
+            const bHasCore = b.exercises.some(ex => isCoreEx(ex.name)) || b.title.toLowerCase().includes('core');
+            if (aHasCore && !bHasCore) return 1;
+            if (!aHasCore && bHasCore) return -1;
+            return 0;
+        });
+
+        // ==========================================================
         // 🕒 MANIPULAÇÃO DINÂMICA DO RELÓGIO DE DESCANSO
         // ==========================================================
         setTimeout(() => {
