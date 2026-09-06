@@ -1244,9 +1244,23 @@ function removeExercise(bIndex, eIndex) {
                                 }
                             }
 
-                            const allInSetChecked = currentRoutine[bIndex].exercises.every(e => e.setsData[s-1] && e.setsData[s-1].checked);
+                            // --- LÓGICA DE BI-SET (Sinergia de Descanso) ---
+                            let pendingCompanions = 0;
+                            const allInSetChecked = currentRoutine[bIndex].exercises.every(e => {
+                                // BLINDAGEM: Se o exercício parceiro tem menos séries, o motor ignora ele e foca no principal
+                                if (!e.setsData[s-1]) return true; 
+                                if (!e.setsData[s-1].checked) {
+                                    pendingCompanions++;
+                                    return false;
+                                }
+                                return true;
+                            });
+
                             if (allInSetChecked && checkedSets < totalSets) {
                                 startRestTimer(card, ex.name);
+                            } else if (currentRoutine[bIndex].exercises.length > 1 && pendingCompanions > 0) {
+                                // FEEDBACK TÁTICO: Avisa que o relógio está segurando a contagem
+                                showToast(`🔗 Bi-Set Ativo: Complete o movimento parceiro (Série ${s}) para iniciar o descanso.`);
                             }
 
                             todayLog.push({ exercise: ex.name, set: s, kg: parseSafeFloat(kgInp.value), reps: parseInt(rpInp.value) || 0 });
