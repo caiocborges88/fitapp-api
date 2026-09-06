@@ -1075,8 +1075,9 @@ function removeExercise(bIndex, eIndex) {
                     <span class="toggle-icon" style="transition: transform 0.3s; font-size: 14px; color: #888;">▲</span>
                 </div>`;
             
+            // BLINDAGEM: O clique manual agora recolhe visualmente sem mascarar o bloco como concluído
             card.querySelector('.biset-title').addEventListener('click', () => {
-                card.classList.toggle('collapsed-block');
+                card.classList.toggle('minimized-block');
             });
             
             bloco.exercises.forEach((ex, eIndex) => {
