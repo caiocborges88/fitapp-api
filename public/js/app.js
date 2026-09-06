@@ -1205,10 +1205,11 @@ function removeExercise(bIndex, eIndex) {
                     let displayKg = data.kg;
                     let displayReps = data.reps;
                     
-                    if (displayKg === '' && ghostKg !== '') { displayKg = ghostKg; ex.setsData[s-1].kg = ghostKg; }
-                    if (displayReps === '' && ghostReps !== '') { displayReps = ghostReps; ex.setsData[s-1].reps = ghostReps; }
+                    // BLINDAGEM UX: Removemos o preenchimento automático rígido. Os valores fantasmas agora são 'placeholders' translúcidos.
+                    const placeholderKg = ghostKg !== '' ? ghostKg : 'Kg';
+                    const placeholderReps = ghostReps !== '' ? ghostReps : 'Reps';
 
-                    row.innerHTML = `<div class="set-label">S${s}</div><input type="number" id="${kgId}" class="kg-val" placeholder="Kg" value="${displayKg}"><input type="number" id="${rpId}" class="rp-val" placeholder="Reps" value="${displayReps}"><button class="btn-iso" style="background:none; border:none; cursor:pointer; font-size:16px; padding:0 5px;" title="Iniciar Isometria">⏱️</button><input type="checkbox" id="${chkId}" class="chk-set" ${data.checked ? 'checked' : ''}>`;
+                    row.innerHTML = `<div class="set-label">S${s}</div><input type="number" id="${kgId}" class="kg-val" placeholder="${placeholderKg}" value="${displayKg}"><input type="number" id="${rpId}" class="rp-val" placeholder="${placeholderReps}" value="${displayReps}"><button class="btn-iso" style="background:none; border:none; cursor:pointer; font-size:16px; padding:0 5px;" title="Iniciar Isometria">⏱️</button><input type="checkbox" id="${chkId}" class="chk-set" ${data.checked ? 'checked' : ''}>`;
                     
                     const chk = row.querySelector('.chk-set');
                     const kgInp = row.querySelector('.kg-val');
@@ -1246,6 +1247,33 @@ function removeExercise(bIndex, eIndex) {
                         if (localIsoTimer) { clearInterval(localIsoTimer); localIsoTimer = null; btnIso.textContent = '⏱️'; btnIso.style.textShadow = 'none'; }
                         
                         if (chk.checked) { 
+                            // TRANSIÇÃO DE FANTASMA PARA MATERIAL: Se o campo estava vazio, herda o fantasma antes de registrar o PR
+                            if (kgInp.value === '' && ghostKg !== '') kgInp.value = ghostKg;
+                            if (rpInp.value === '' && ghostReps !== '') rpInp.value = ghostReps;
+
+                            // SISTEMA DE RECORDE PESSOAL (PR)
+                            const currentKg = parseSafeFloat(kgInp.value);
+                            const currentReps = parseInt(rpInp.value) || 0;
+                            const pKg = parseSafeFloat(ghostKg);
+                            const pReps = parseInt(ghostReps) || 0;
+
+                            let isPR = false;
+                            if (ghostKg !== '' || ghostReps !== '') { 
+                                if (currentKg > pKg) {
+                                    isPR = true;
+                                } else if (currentKg === pKg && currentReps > pReps) {
+                                    isPR = true;
+                                }
+                            }
+
+                            if (isPR) {
+                                row.classList.add('pr-breaker');
+                                if (typeof FitAudio !== 'undefined' && FitAudio.revealEpic) FitAudio.revealEpic();
+                                showToast("🏆 Recorde Pessoal Quebrado!");
+                            } else {
+                                row.classList.remove('pr-breaker');
+                            }
+
                             checkedSets++; 
                             
                             if (s < ex.sets) {
@@ -1260,7 +1288,6 @@ function removeExercise(bIndex, eIndex) {
                             // --- LÓGICA DE BI-SET (Sinergia de Descanso) ---
                             let pendingCompanions = 0;
                             const allInSetChecked = currentRoutine[bIndex].exercises.every(e => {
-                                // BLINDAGEM: Se o exercício parceiro tem menos séries, o motor ignora ele e foca no principal
                                 if (!e.setsData[s-1]) return true; 
                                 if (!e.setsData[s-1].checked) {
                                     pendingCompanions++;
@@ -1272,12 +1299,12 @@ function removeExercise(bIndex, eIndex) {
                             if (allInSetChecked && checkedSets < totalSets) {
                                 startRestTimer(card, ex.name);
                             } else if (currentRoutine[bIndex].exercises.length > 1 && pendingCompanions > 0) {
-                                // FEEDBACK TÁTICO: Avisa que o relógio está segurando a contagem
                                 showToast(`🔗 Bi-Set Ativo: Complete o movimento parceiro (Série ${s}) para iniciar o descanso.`);
                             }
 
                             todayLog.push({ exercise: ex.name, set: s, kg: parseSafeFloat(kgInp.value), reps: parseInt(rpInp.value) || 0 });
                         } else { 
+                            row.classList.remove('pr-breaker'); // Reseta a cor caso desmarque
                             checkedSets--; 
                             stopRestTimer(); 
                             todayLog = todayLog.filter(log => !(log.exercise === ex.name && log.set === s));
