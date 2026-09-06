@@ -1121,22 +1121,35 @@ function removeExercise(bIndex, eIndex) {
                 const isNoteOpen = openNotes.includes(noteContainerId) ? 'block' : 'none';
 
                 blockDiv.innerHTML = `
-                    <div class="exercise-header">
-                        <span class="ex-name" onclick="FitApp.openDict('${safeName.replace(/'/g, "\\'")}')">${safeName}${linkIcon}</span>
-                        <div class="ex-controls" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                            ${aiSuggestionHTML}
-                            <div style="display: flex; align-items: center; background: #222; border-radius: 12px; padding: 2px 6px; border: 1px solid #444;">
-                                <button class="btn-edit-set" onclick="FitApp.changeSets(${bIndex}, ${eIndex}, -1)" style="background: none; border: none; color: #ff4444; font-weight: bold; font-size: 16px; padding: 0 5px; cursor: pointer;">-</button>
-                                <span style="font-size: 12px; color: #ccc; margin: 0 5px;">${ex.sets}x</span>
-                                <button class="btn-edit-set" onclick="FitApp.changeSets(${bIndex}, ${eIndex}, 1)" style="background: none; border: none; color: #00ff88; font-weight: bold; font-size: 16px; padding: 0 5px; cursor: pointer;">+</button>
-                            </div>
-                            <button id="btnAuto_${bIndex}_${eIndex}" onclick="FitApp.toggleAutoPilot(${bIndex}, ${eIndex})" style="background: rgba(0, 255, 136, 0.1); border: 1px solid #00ff88; color: #00ff88; border-radius: 8px; padding: 4px 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin-left: 5px; transition: all 0.2s;" title="Modo Hands-Free">🤖 Auto</button>
+                    <div class="exercise-header" style="flex-direction: column; align-items: flex-start; gap: 12px;">
+                        <!-- LINHA 1: Nome do Exercício e Botão de Troca -->
+                        <div style="width: 100%; display: flex; justify-content: space-between; align-items: flex-start;">
+                            <span class="ex-name" onclick="FitApp.openDict('${safeName.replace(/'/g, "\\'")}')" style="line-height: 1.3; flex: 1; padding-right: 10px;">${safeName}${linkIcon}</span>
+                            <button class="btn-swap" onclick="FitApp.openSwapModal(${bIndex}, ${eIndex})" title="Substituir Exercício" style="margin-top: -4px;">🔄</button>
+                        </div>
+                        
+                        ${aiSuggestionHTML ? `<div style="width: 100%; margin-top: -5px; margin-bottom: 5px;">${aiSuggestionHTML}</div>` : ''}
+
+                        <!-- LINHA 2: Barra de Ferramentas (Toolbars) -->
+                        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                             
-                            <button onclick="FitApp.cloneFirstSet(${bIndex}, ${eIndex})" style="background: none; border: none; cursor: pointer; font-size: 16px; padding: 0; filter: grayscale(100%) brightness(200%);" title="Replicar valores da Série 1 em todas">📋</button>
-                            <button class="btn-notes" style="background: none; border: none; cursor: pointer; font-size: 16px; padding: 0;" title="Log de Combate (Anotações)">📝</button>
-                            <a href="${ytLink}" target="_blank" style="text-decoration: none; font-size: 18px;" title="Ver execução no YouTube">🎥</a>
-                            <span class="target-reps">${safeTarget}</span>
-                            <button class="btn-swap" onclick="FitApp.openSwapModal(${bIndex}, ${eIndex})" title="Substituir Exercício">🔄</button>
+                            <!-- Esquerda: Controles de Execução Primários -->
+                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <div style="display: flex; align-items: center; background: #222; border-radius: 8px; padding: 2px 6px; border: 1px solid #444;">
+                                    <button class="btn-edit-set" onclick="FitApp.changeSets(${bIndex}, ${eIndex}, -1)" style="background: none; border: none; color: #ff4444; font-weight: bold; font-size: 16px; padding: 0 5px; cursor: pointer;">-</button>
+                                    <span style="font-size: 12px; color: #ccc; margin: 0 5px; font-weight: bold;">${ex.sets}x</span>
+                                    <button class="btn-edit-set" onclick="FitApp.changeSets(${bIndex}, ${eIndex}, 1)" style="background: none; border: none; color: #00ff88; font-weight: bold; font-size: 16px; padding: 0 5px; cursor: pointer;">+</button>
+                                </div>
+                                <span class="target-reps" style="padding: 4px 8px; font-size: 11px;">${safeTarget}</span>
+                                <button id="btnAuto_${bIndex}_${eIndex}" onclick="FitApp.toggleAutoPilot(${bIndex}, ${eIndex})" style="background: rgba(0, 255, 136, 0.1); border: 1px solid #00ff88; color: #00ff88; border-radius: 8px; padding: 4px 8px; font-size: 11px; font-weight: bold; cursor: pointer; transition: all 0.2s;" title="Modo Hands-Free">🤖 Auto</button>
+                            </div>
+
+                            <!-- Direita: Ferramentas Secundárias Agrupadas -->
+                            <div style="display: flex; align-items: center; gap: 12px; background: #1a1a1a; border: 1px solid #333; padding: 6px 12px; border-radius: 8px;">
+                                <button onclick="FitApp.cloneFirstSet(${bIndex}, ${eIndex})" style="background: none; border: none; cursor: pointer; font-size: 15px; padding: 0; filter: grayscale(100%) brightness(200%);" title="Replicar valores da S1">📋</button>
+                                <button class="btn-notes" style="background: none; border: none; cursor: pointer; font-size: 15px; padding: 0;" title="Anotações">📝</button>
+                                <a href="${ytLink}" target="_blank" style="text-decoration: none; font-size: 16px; margin-top: 1px;" title="Ver execução no YouTube">🎥</a>
+                            </div>
                         </div>
                     </div>
                     <div id="${noteContainerId}" class="notes-container" style="display: ${isNoteOpen}; background: #1a1a1a; padding: 10px; border-radius: 6px; border-left: 2px solid #a64dff; margin-bottom: 12px; margin-top: 5px;">
