@@ -2954,30 +2954,44 @@ function renderMetricsChart() {
         }
 
         if(audioEnabled) speak("Ação.");
-        showToast(`Auto: Executando Série ${nextSet}... (${autoExec}s)`);
+        showToast(`Série ${nextSet} em andamento...`);
         
-        // Simula o tempo de execução físico do atleta
-        autoTimeout = setTimeout(() => {
-            if (!isAutoActive) return;
-            
-            // Localiza a caixa de seleção específica via ID e marca
-            const chk = document.getElementById(`chk_set_${autoBIndex}_${autoEIndex}_${nextSet}`);
-            if (chk && !chk.checked) {
-                adjustRestTime(autoRest); // Seta o cronômetro para o tempo definido no Piloto
-                chk.click(); // O clique fantasma dispara os alertas e o salvamento em nuvem
+        const btn = document.getElementById(`btnAuto_${autoBIndex}_${autoEIndex}`);
+        let timeLeft = autoExec;
+        if (btn) btn.innerHTML = `🛑 Ação: ${timeLeft}s`;
+        
+        // TELEMETRIA: Relógio regressivo visual para a fase de Ação
+        autoTimeout = setInterval(() => {
+            if (!isAutoActive) {
+                clearInterval(autoTimeout);
+                return;
             }
-            
-            // Aguarda o término do descanso (+2s de margem de segurança para o áudio respirar)
-            autoTimeout = setTimeout(() => {
-                executeAutoPhase(); // Chama o loop novamente para a próxima série
-            }, (autoRest + 2) * 1000);
-            
-        }, autoExec * 1000);
+
+            timeLeft--;
+            if (btn) btn.innerHTML = `🛑 Ação: ${timeLeft}s`;
+
+            if (timeLeft <= 0) {
+                clearInterval(autoTimeout); // Para o relógio de ação
+                if (btn) btn.innerHTML = `🛑 Descanso...`;
+
+                // Localiza a caixa de seleção específica via ID e marca
+                const chk = document.getElementById(`chk_set_${autoBIndex}_${autoEIndex}_${nextSet}`);
+                if (chk && !chk.checked) {
+                    adjustRestTime(autoRest); // Seta o cronômetro para o tempo definido no Piloto
+                    chk.click(); // O clique fantasma dispara a UI de descanso e o salvamento em nuvem
+                }
+                
+                // Aguarda o término do descanso (+2s de margem de segurança para o áudio respirar)
+                autoTimeout = setTimeout(() => {
+                    executeAutoPhase(); // Chama o loop novamente para a próxima série
+                }, (autoRest + 2) * 1000);
+            }
+        }, 1000);
     }
 
     function stopAutoPilot() {
         isAutoActive = false;
-        clearTimeout(autoTimeout);
+        clearInterval(autoTimeout); // BLINDAGEM: Atualizado para abortar o relógio regressivo com segurança
         const btn = document.getElementById(`btnAuto_${autoBIndex}_${autoEIndex}`);
         if (btn) {
             btn.innerHTML = '🤖 Auto';
@@ -2986,7 +3000,7 @@ function renderMetricsChart() {
             btn.style.background = 'rgba(0, 255, 136, 0.1)';
         }
         showToast("Piloto Automático desativado.");
-    } 
+    }
 // ==========================================
     // 🧬 A FORJA DE TREINOS (MOTOR FISIOLÓGICO)
     // ==========================================
