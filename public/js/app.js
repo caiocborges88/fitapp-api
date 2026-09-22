@@ -1715,60 +1715,98 @@ window.encerrarSessao = function() {
         if (!grid) return;
         grid.innerHTML = '';
 
-        const groups = {};
+        // 1. O Funil Absoluto: Força a categorização em apenas 8 gavetas limpas
+        const categorize = (item) => {
+            const searchStr = ((item.group || '') + ' ' + (item.focus || '')).toLowerCase();
+            if (searchStr.includes('peito') || searchStr.includes('peitoral')) return 'peito';
+            if (searchStr.includes('costa') || searchStr.includes('dorsal') || searchStr.includes('trapézio') || searchStr.includes('trapezio') || searchStr.includes('lombar') || searchStr.includes('romboide')) return 'costas';
+            if (searchStr.includes('perna') || searchStr.includes('quadríceps') || searchStr.includes('quadriceps') || searchStr.includes('glúteo') || searchStr.includes('gluteo') || searchStr.includes('isquiotibial') || searchStr.includes('panturrilha')) return 'pernas';
+            if (searchStr.includes('ombro') || searchStr.includes('deltoide')) return 'ombros';
+            if (searchStr.includes('tríceps') || searchStr.includes('triceps')) return 'triceps';
+            if (searchStr.includes('bíceps') || searchStr.includes('biceps') || searchStr.includes('braquial')) return 'biceps';
+            if (searchStr.includes('core') || searchStr.includes('abdom') || searchStr.includes('oblíquo') || searchStr.includes('obliquo')) return 'core';
+            return 'outros';
+        };
+
+        const groups = { 'peito': [], 'costas': [], 'pernas': [], 'ombros': [], 'triceps': [], 'biceps': [], 'core': [], 'outros': [] };
+        
+        // Distribui o arsenal massivo nas gavetas corretas
         dictionaryData.forEach(item => {
-            const groupName = getMuscleGroup(item.focus);
-            if (!groups[groupName]) groups[groupName] = [];
-            groups[groupName].push(item);
+            const key = categorize(item);
+            groups[key].push(item);
         });
 
         const groupTitles = {
-            'peito': '🟦 Peito',
-            'costas': '🟩 Costas',
-            'pernas': '🟨 Pernas',
-            'ombros': '🟪 Ombros',
+            'peito': '🟦 Peitoral',
+            'costas': '🟩 Costas & Dorsais',
+            'pernas': '🟨 Membros Inferiores',
+            'ombros': '🟪 Ombros & Deltoides',
             'triceps': '🟦 Tríceps',
             'biceps': '🟩 Bíceps',
-            'core': '🟧 Core',
-            'outros': '⬜ Outros'
+            'core': '🟧 Core & Abdômen',
+            'outros': '⬜ Mobilidade & Outros'
         };
 
         for (const [key, title] of Object.entries(groupTitles)) {
-            if (!groups[key] || groups[key].length === 0) continue;
+            if (groups[key].length === 0) continue;
 
             const categorySection = document.createElement('div');
             categorySection.className = 'library-category-section';
             
             const header = document.createElement('h3');
+            header.style.backgroundColor = '#1a1a1a';
             header.style.color = '#fff';
-            header.style.marginTop = '20px';
-            header.style.marginBottom = '10px';
-            header.style.borderBottom = '1px solid #333';
-            header.style.paddingBottom = '5px';
+            header.style.marginTop = '15px';
+            header.style.marginBottom = '0px';
+            header.style.border = '1px solid #333';
+            header.style.borderRadius = '8px';
+            header.style.padding = '15px';
             header.style.textTransform = 'uppercase';
-            
+            header.style.fontSize = '14px';
             header.style.cursor = 'pointer';
             header.style.display = 'flex';
             header.style.justifyContent = 'space-between';
             header.style.alignItems = 'center';
-            header.innerHTML = `<span>${title}</span><span style="font-size: 14px; color: #888; transition: transform 0.3s;">▼</span>`;
+            header.style.boxShadow = '0 4px 6px rgba(0,0,0,0.2)';
+            
+            // O contador de exercícios agora aparece limpo ao lado do título
+            header.innerHTML = `<span>${title} <span style="color: #666; font-size: 11px;">(${groups[key].length})</span></span><span class="toggle-arrow" style="font-size: 12px; color: #888; transition: transform 0.3s;">▼</span>`;
             categorySection.appendChild(header);
 
             const cardContainer = document.createElement('div');
             cardContainer.className = 'library-card-container';
-            cardContainer.style.display = 'grid'; 
+            // 2. Gavetas Fechadas: Protege a memória do celular não renderizando tudo de uma vez visualmente
+            cardContainer.style.display = 'none'; 
             cardContainer.style.gap = '15px';
+            cardContainer.style.paddingTop = '15px';
             
             header.onclick = () => {
                 const isVisible = cardContainer.style.display === 'grid';
                 cardContainer.style.display = isVisible ? 'none' : 'grid';
-                header.querySelector('span:last-child').style.transform = isVisible ? 'rotate(-90deg)' : 'rotate(0deg)';
+                header.querySelector('.toggle-arrow').style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
+                header.style.borderColor = isVisible ? '#333' : '#00ff88'; // Destaca a pasta aberta
             };
 
-            groups[key].forEach(item => {
+            // Ordena em ordem alfabética dentro da gaveta
+            groups[key].sort((a, b) => a.name.localeCompare(b.name)).forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'library-card';
-                card.innerHTML = `<div class="lib-name">${item.name}</div><div class="lib-focus">${item.focus}</div><div class="lib-desc">${item.desc}</div>`;
+                
+                const safeName = item.name ? item.name.replace(/'/g, "\\'") : 'Exercício';
+                const ytQuery = encodeURIComponent(`Como executar o exercício ${safeName}`);
+                const equipStr = item.equip ? item.equip.replace(/_/g, ' ') : 'N/A';
+                
+                // 3. Cartões Ativos: Design limpo com Munição e botão de YouTube
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div class="lib-name" style="flex: 1; font-size: 15px;">${safeName}</div>
+                        <a href="https://www.youtube.com/results?search_query=${ytQuery}" target="_blank" style="text-decoration: none; font-size: 18px; margin-left: 10px; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px; border: 1px solid #333;" title="Ver Execução no YouTube">🎥</a>
+                    </div>
+                    <div class="lib-focus" style="margin-top: 5px; font-size: 11px;">Alvo: ${item.group || 'Geral'}</div>
+                    <div style="font-size: 11px; color: #888; margin-top: 8px; background: #111; padding: 4px 8px; border-radius: 4px; display: inline-block; border: 1px dashed #333;">
+                        🛠️ Munição: ${equipStr}
+                    </div>
+                `;
                 cardContainer.appendChild(card);
             });
 
