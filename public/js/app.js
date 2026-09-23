@@ -63,7 +63,36 @@ var FitApp = (() => {
     let isWorkoutActive = false; 
     const els = {};
 
-    const safeSet = (k, v) => { try { localStorage.setItem(k, v); return true; } catch(e) { return false; } };
+    // 🛡️ GESTOR DE MEMÓRIA (Garbage Collector): Evita o bloqueio total se o limite de 5MB do Safari for atingido
+    const safeSet = (k, v) => { 
+        try { 
+            localStorage.setItem(k, v); 
+            return true; 
+        } catch(e) { 
+            // Interceta o erro de memória cheia
+            if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+                console.warn("Memória crítica detetada. Iniciando expurgo de ficheiros temporários...");
+                
+                // 1. Apaga a fila de IA pendente (não é vital)
+                localStorage.removeItem('fitapp_fila_ia');
+                
+                // 2. Comprime o histórico (guarda apenas os últimos 30 treinos)
+                let historyStr = localStorage.getItem('fitapp_week_log');
+                if (historyStr) {
+                    let log = JSON.parse(historyStr);
+                    if (log.length > 30) {
+                        localStorage.setItem('fitapp_week_log', JSON.stringify(log.slice(-30)));
+                    }
+                }
+                
+                showToast("⚠️ O armazenamento local do telemóvel atingiu o limite. Os ficheiros antigos foram limpos para salvar a sua missão atual.");
+                
+                // Tenta gravar o ficheiro novamente após a limpeza
+                try { localStorage.setItem(k, v); return true; } catch(e2) { return false; }
+            }
+            return false; 
+        } 
+    };
     const safeGet = (k) => { try { return localStorage.getItem(k); } catch(e) { return null; } };
 
     // ESCUDO ANTI-XSS: Neutraliza scripts maliciosos injetados via texto
@@ -2471,8 +2500,16 @@ window.encerrarSessao = function() {
             const data = await FitAPI.importarTreinoIA(megaPrompt);
             
             if (data.resultado && data.resultado !== "[]") {
-                const parsed = JSON.parse(data.resultado);
-                currentWorkoutType = 'custom_ia'; 
+                let cleanData = data.resultado;
+                
+                // 🛡️ ESCUDO ANTI-ALUCINAÇÃO: Extrai apenas o JSON puro (Arrays ou Objetos) ignorando texto extra do LLM
+                const jsonMatch = cleanData.match(/\[[\s\S]*\]|\{[\s\S]*\}/);
+                if (jsonMatch) {
+                    cleanData = jsonMatch[0];
+                }
+                
+                const parsed = JSON.parse(cleanData);
+                currentWorkoutType = 'custom_ia';
                 
                 // ESCUDO DE DADOS: Força a extração da Lista (Array), ignorando objetos externos
                 let workoutArray = [];
@@ -3010,7 +3047,7 @@ function renderMetricsChart() {
         });
         
     } // <-- A função init() termina aqui
-    
+
 // --- NOVO: MOTOR DO PILOTO AUTOMÁTICO (HANDS-FREE) ---
     let autoBIndex = null, autoEIndex = null;
     let autoExec = 0, autoRest = 0;
