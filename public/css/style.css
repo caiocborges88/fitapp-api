@@ -821,3 +821,64 @@ input.kg-val::placeholder, input.rp-val::placeholder {
 
 .btn-danger { background: rgba(255, 68, 68, 0.1); border: 1px solid rgba(255, 68, 68, 0.5); color: #ff4444; box-shadow: none; letter-spacing: 1px; text-transform: uppercase; font-size: 14px; }
 .btn-danger:hover { background: rgba(255, 68, 68, 0.2); border-color: #ff4444; }
+/* ==========================================================================
+   ATUALIZAÇÃO ALFA: OTIMIZAÇÃO DE UX/UI DE COMBATE
+   ========================================================================== */
+
+/* 1. Cronómetro de Descanso Flutuante (Sticky Bottom) */
+.inline-rest-timer {
+    position: fixed !important;
+    bottom: 75px !important; /* Fica exatamente acima da barra de navegação */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 92% !important;
+    max-width: 500px !important;
+    z-index: 9999 !important;
+    background: rgba(18, 18, 18, 0.95) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px !important;
+    border: 1px solid #00ff88 !important;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.8), inset 0 0 15px rgba(0, 255, 136, 0.1) !important;
+    padding: 20px !important;
+}
+
+/* 2. Redução de Poluição Visual na Barra de Ferramentas (Declutter) */
+.exercise-header .btn-swap,
+.exercise-header .btn-notes,
+.exercise-header a[title="Ver execução no YouTube"],
+.exercise-header button[title="Replicar valores da S1"] {
+    opacity: 0.4; /* Ficam quase transparentes */
+    transform: scale(0.85); /* Ligeiramente menores */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Acendem apenas quando o atleta toca ou passa o rato */
+.exercise-header .btn-swap:hover,
+.exercise-header .btn-notes:hover,
+.exercise-header a[title="Ver execução no YouTube"]:hover,
+.exercise-header button[title="Replicar valores da S1"]:hover,
+.exercise-header .btn-swap:active,
+.exercise-header .btn-notes:active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Maior área de toque nas séries para evitar erros de clique com a mão a suar */
+.set-row {
+    padding: 14px 10px !important; 
+    margin-bottom: 12px !important; 
+}
+
+/* 3. Correção de Contraste do Álbum (Cartas Vazias) */
+.sticker-slot.missing {
+    background: #1e1e1e !important; /* Fundo aclarado (de #121212 para #1e1e1e) */
+    border: 2px dashed #666 !important; /* Borda mais visível */
+    color: #888 !important;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.5) !important;
+}
+
+.sticker-slot.missing .sticker-icon {
+    opacity: 0.4 !important; /* Ícone mais percetível */
+    filter: grayscale(100%) !important;
+}

@@ -223,6 +223,13 @@ async function carregarDicionario() {
 }
 
 window.salvarDicionario = async function() {
+    // 🛡️ TRAVA DE SEGURANÇA B2B (Anti-Injeção)
+    const user = firebase.auth().currentUser;
+    if (!user) {
+        document.getElementById('dictStatus').innerHTML = '<span style="color: #ff4444;">Acesso Negado: Autenticação de Comandante não detetada.</span>';
+        return;
+    }
+
     const nome = document.getElementById('dictName').value.trim();
     const grupo = document.getElementById('dictGroup').value.trim();
     const dica = document.getElementById('dictTip').value.trim();
@@ -264,6 +271,13 @@ window.salvarDicionario = async function() {
 };
 
 window.deletarDicionario = async function(docId) {
+    // 🛡️ TRAVA DE SEGURANÇA B2B (Anti-Exclusão)
+    const user = firebase.auth().currentUser;
+    if (!user) {
+        alert("Acesso Negado: Apenas oficiais autenticados podem apagar registos.");
+        return;
+    }
+
     if (confirm("ATENÇÃO: Deseja realmente remover essa instrução do servidor de IA? Os alunos pararão de ouvir esta dica imediatamente.")) {
         const db = firebase.firestore();
         try {
