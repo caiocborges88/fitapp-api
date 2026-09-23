@@ -910,7 +910,8 @@ function removeExercise(bIndex, eIndex) {
         } else if (type === 'Casa') {
             // CÉREBRO TÁTICO: Gerador Dinâmico de Treino em Casa por Nível
             const removeAccents = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
-            const isHomeReady = (item) => item.equip && (item.equip.includes('Peso_Corporal') || item.equip.includes('Calistenia'));
+            // 🛡️ TRAVA DE TAXONOMIA: Em casa, SÓ entra Peso Corporal puro (chão). Calistenia fica para o parque.
+            const isHomeReady = (item) => item.equip && item.equip.includes('Peso_Corporal') && !item.equip.includes('Calistenia');
             
             // Separa o arsenal da nuvem/local por grupamentos
             const poolPeito = dictionaryData.filter(d => isHomeReady(d) && getMuscleGroup(d) === 'peito');
@@ -3452,6 +3453,27 @@ function updateDynamicCards() {
             };
             const mapEquip = { 'barra': 'Barras_Anilhas', 'halter': 'Pesos_Livres', 'maquina': 'Maquinas_Polias', 'cabo': 'Maquinas_Polias', 'peso_corporal': 'Peso_Corporal', 'calistenia': 'Calistenia' };
 
+            // ⬇️ COLE O CÓDIGO NOVO EXATAMENTE AQUI ⬇️
+            // 🛡️ FIREWALL SEMÂNTICO: Lê o nome do exercício e expulsa intrusos classificados incorretamente na base de dados
+            const isNameAllowed = (exName) => {
+                const nome = (exName || '').toLowerCase();
+                
+                // MODO CASA: Bloqueia bolas, anéis, argolas, barras (mesmo as de porta), halteres e máquinas
+                if (userArsenal.includes('Peso_Corporal') && !userArsenal.includes('Calistenia') && !userArsenal.includes('Pesos_Livres')) {
+                    if (/bola|anel|argola|barra|tração|tracao|haltere|anilhas|maquina|máquina|polia/.test(nome) && !nome.includes('peso corporal')) {
+                        return false;
+                    }
+                }
+                
+                // MODO PARQUE: Permite barras (fixas/paralelas), mas bloqueia pesos e máquinas de academia
+                if (!userArsenal.includes('Pesos_Livres') && !userArsenal.includes('Barras_Anilhas') && !userArsenal.includes('Maquinas_Polias')) {
+                    if (/haltere|anilhas|maquina|máquina|polia|cabo/.test(nome)) return false;
+                    if (nome.includes('barra') && !/barra fixa|paralela/.test(nome)) return false;
+                }
+                
+                return true;
+            };
+
             // Função validadora de Grupo Muscular Base
             const checkBaseGroup = (dGroup, fTerms) => {
                 const prefix = fTerms[0].split('_')[0]; 
@@ -3483,6 +3505,9 @@ function updateDynamicCards() {
                 const isArsenalAllowed = exEquipsArray.some(eq => userArsenal.includes(eq));
                 if (!isArsenalAllowed && exEquip !== '') return false; // Aborta se ele não possui as armas necessárias
 
+                // ⬇️ INSERÇÃO 1: FIREWALL SEMÂNTICO AQUI ⬇️
+                if (!isNameAllowed(d.name)) return false;
+
                 // A Preferência do Blueprint é respeitada apenas se estiver dentro do Arsenal permitido
                 let matchEquip = true;
                 if (equipPref) {
@@ -3509,6 +3534,9 @@ function updateDynamicCards() {
                     const exEquipsArray = exEquip.split(',').map(e => e.trim());
                     const isArsenalAllowed = exEquipsArray.some(eq => userArsenal.includes(eq));
                     if (!isArsenalAllowed && exEquip !== '') return false;
+
+                    // ⬇️ INSERÇÃO 2: FIREWALL SEMÂNTICO AQUI ⬇️
+                    if (!isNameAllowed(d.name)) return false;
 
                     const validFocuses = focusTerms.flatMap(term => mapFocus[term] || [term]);
                     return (validFocuses.includes(exFocus) || validFocuses.some(f => exGroup.includes(f))) && !avoidNames.includes(d.name);
@@ -4015,9 +4043,26 @@ function updateDynamicCards() {
                 icon.textContent = '🏠'; text.textContent = 'Casa';
                 btn.style.borderColor = '#ffaa00'; btn.style.color = '#ffaa00'; btn.style.background = 'rgba(255, 170, 0, 0.1)';
             } else {
-                icon.textContent = '🏖️'; text.textContent = 'Praia';
+                icon.textContent = '🌲'; text.textContent = 'Parque/Praia';
                 btn.style.borderColor = '#4da3ff'; btn.style.color = '#4da3ff'; btn.style.background = 'rgba(77, 163, 255, 0.1)';
             }
+        }
+
+        // 🛡️ SINCRONIZAÇÃO DE ARSENAL: Força a Forja a respeitar o ambiente selecionado
+        const equipChips = document.querySelectorAll('.forge-equip-chip');
+        if (equipChips.length > 0) {
+            equipChips.forEach(chip => {
+                const eq = chip.getAttribute('data-equip') || '';
+                chip.classList.remove('active'); // Desliga todos primeiro
+                
+                if (currentEnv === 'casa' && eq.includes('Peso_Corporal')) {
+                    chip.classList.add('active'); // Liga só peso corporal
+                } else if (currentEnv === 'praia' && (eq.includes('Peso_Corporal') || eq.includes('Calistenia'))) {
+                    chip.classList.add('active'); // Liga barras e peso corporal
+                } else if (currentEnv === 'academia') {
+                    chip.classList.add('active'); // Liga tudo
+                }
+            });
         }
     }
 
@@ -4168,6 +4213,18 @@ function updateDynamicCards() {
                             const newEx = pool[Math.floor(Math.random() * pool.length)];
                             ex.name = newEx.name;
                             usedSubstitutes.push(newEx.name);
+                        } else {
+                            // 🛡️ FALLBACK ABSOLUTO: Se não houver substituto perfeito, força um movimento corporal básico do mesmo grupo
+                            const fallbackPool = dictionaryData.filter(d => 
+                                getBroadGroup(d.group + " " + d.focus) === targetGroup && 
+                                (d.equip || '').includes('Peso_Corporal')
+                            );
+                            if (fallbackPool.length > 0) {
+                                ex.name = fallbackPool[Math.floor(Math.random() * fallbackPool.length)].name;
+                            } else {
+                                // Último recurso: Abdominal ou Agachamento genérico para não deixar a máquina na lista
+                                ex.name = targetGroup === 'pernas' ? "Agachamento Livre (Peso Corporal)" : "Prancha Isométrica";
+                            }
                         }
                     }
                 }
