@@ -1824,9 +1824,21 @@ window.encerrarSessao = function() {
         if (!grid) return;
         grid.innerHTML = '';
 
-        // NOVO: Leitura Dinâmica do Banco de Dados 
-        const groups = {};
-        const activeMuscles = new Set(); // Rastreia os músculos visíveis no momento
+        // 1. O Funil Absoluto Mapeador
+        const categorize = (item) => {
+            const searchStr = ((item.group || '') + ' ' + (item.focus || '')).toLowerCase();
+            if (searchStr.includes('peito') || searchStr.includes('peitoral')) return 'peito';
+            if (searchStr.includes('costa') || searchStr.includes('dorsal') || searchStr.includes('trapézio') || searchStr.includes('trapezio') || searchStr.includes('lombar') || searchStr.includes('romboide')) return 'costas';
+            if (searchStr.includes('perna') || searchStr.includes('quadríceps') || searchStr.includes('quadriceps') || searchStr.includes('glúteo') || searchStr.includes('gluteo') || searchStr.includes('isquiotibial') || searchStr.includes('panturrilha')) return 'pernas';
+            if (searchStr.includes('ombro') || searchStr.includes('deltoide')) return 'ombros';
+            if (searchStr.includes('tríceps') || searchStr.includes('triceps')) return 'triceps';
+            if (searchStr.includes('bíceps') || searchStr.includes('biceps') || searchStr.includes('braquial')) return 'biceps';
+            if (searchStr.includes('core') || searchStr.includes('abdom') || searchStr.includes('oblíquo') || searchStr.includes('obliquo')) return 'core';
+            return 'outros';
+        };
+
+        const groups = { 'peito': [], 'costas': [], 'pernas': [], 'ombros': [], 'triceps': [], 'biceps': [], 'core': [], 'outros': [] };
+        const activeMuscles = new Set();
         
         dictionaryData.forEach(ex => {
             const exName = ex.name || 'Exercício Desconhecido';
@@ -1834,13 +1846,13 @@ window.encerrarSessao = function() {
             const exFocus = ex.focus || 'Geral';
             const exEquip = ex.equip || '';
             
-            // Motor de Busca Rápida (pesquisa por nome, grupo, subnível ou equipamento)
+            // Filtro de Busca
             if (query && !exName.toLowerCase().includes(query) && 
                 !exGroup.toLowerCase().includes(query) && 
                 !exFocus.toLowerCase().includes(query) &&
                 !exEquip.toLowerCase().includes(query)) return;
             
-            // Rastreamento para o Heatmap (Se o exercício passou no filtro, captura o músculo)
+            // Rastreamento para o Heatmap (Mantido Inalterado)
             const f = (exGroup + ' ' + exFocus).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
             if (f.includes('peito')) activeMuscles.add('lib-svg-peito');
             if (f.includes('ombro') || f.includes('deltoide')) activeMuscles.add('lib-svg-ombro');
@@ -1854,11 +1866,9 @@ window.encerrarSessao = function() {
             if (f.includes('gluteo')) activeMuscles.add('lib-svg-gluteo');
             if (f.includes('panturrilha') || f.includes('gastro')) activeMuscles.add('lib-svg-panturrilha');
             
-            // Agrupador 3D: Grupo > Subnível > Array de Exercícios
-            if (!groups[exGroup]) groups[exGroup] = {};
-            if (!groups[exGroup][exFocus]) groups[exGroup][exFocus] = [];
-            
-            groups[exGroup][exFocus].push(ex);
+            // Distribuição na Matriz Unificada
+            const key = categorize(ex);
+            groups[key].push(ex);
         });
 
         // 1. Apaga todo o Heatmap da Base antes de acender os novos
@@ -1877,107 +1887,86 @@ window.encerrarSessao = function() {
             }
         });
 
-        // Mapeamento Tático de Ícones para a Nova Base
-        const groupIcons = {
-            'Peitoral': '🦍', 'Costas': '🛡️', 'Pernas': '🦵', 'Ombros': '🥥', 
-            'Tríceps': '🐎', 'Bíceps': '💪', 'Core': '🧱', 'Mobilidade': '🧘', 
-            'Cardio/HIIT': '🏃', 'Deslocamento/Esporte': '⚡', 'Antebraço': '🦾', 'Outros': '🔧'
+        const groupTitles = {
+            'peito': '🟦 Peitoral',
+            'costas': '🟩 Costas & Dorsais',
+            'pernas': '🟨 Membros Inferiores',
+            'ombros': '🟪 Ombros & Deltoides',
+            'triceps': '🟦 Tríceps',
+            'biceps': '🟩 Bíceps',
+            'core': '🟧 Core & Abdômen',
+            'outros': '⬜ Mobilidade & Outros'
         };
 
-        const orderedGroups = Object.keys(groups).sort();
+        for (const [key, title] of Object.entries(groupTitles)) {
+            if (groups[key].length === 0) continue;
 
-        orderedGroups.forEach(groupName => {
-            const subGroups = groups[groupName];
-            let groupTotal = 0;
-            for(let sub in subGroups) groupTotal += subGroups[sub].length;
-
-            if (groupTotal === 0) return;
-
-            const groupContainer = document.createElement('div');
-            groupContainer.style.marginBottom = '10px';
-            groupContainer.style.background = '#1e1e1e';
-            groupContainer.style.borderRadius = '8px';
-            groupContainer.style.border = '1px solid #333';
-            groupContainer.style.overflow = 'hidden';
-
-            const header = document.createElement('div');
+            const categorySection = document.createElement('div');
+            categorySection.className = 'library-category-section';
+            
+            const header = document.createElement('h3');
+            header.style.backgroundColor = '#1a1a1a';
+            header.style.color = '#fff';
+            header.style.marginTop = '15px';
+            header.style.marginBottom = '0px';
+            header.style.border = '1px solid #333';
+            header.style.borderRadius = '8px';
             header.style.padding = '15px';
-            header.style.background = '#2a2a2a';
+            header.style.textTransform = 'uppercase';
+            header.style.fontSize = '14px';
             header.style.cursor = 'pointer';
             header.style.display = 'flex';
             header.style.justifyContent = 'space-between';
             header.style.alignItems = 'center';
-            header.style.fontWeight = 'bold';
-            header.style.color = '#a64dff';
+            header.style.boxShadow = '0 4px 6px rgba(0,0,0,0.2)';
             
             const isOpen = query.length > 0;
-            const icon = groupIcons[groupName] || '🏋️';
-            header.innerHTML = `<span style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 18px;">${icon}</span> ${groupName} <span style="color: #666; font-size: 12px; font-weight: normal;">(${groupTotal})</span></span> <span style="transform: ${isOpen ? 'rotate(180deg)' : 'rotate(0deg)'}; transition: transform 0.3s; color: #fff;">▼</span>`;
+            header.style.borderColor = isOpen ? '#00ff88' : '#333';
             
-            const listContainer = document.createElement('div');
-            listContainer.style.display = isOpen ? 'block' : 'none';
-            listContainer.style.padding = '10px';
-            listContainer.style.background = '#151515';
+            header.innerHTML = `<span>${title} <span style="color: #666; font-size: 11px;">(${groups[key].length})</span></span><span class="toggle-arrow" style="font-size: 12px; color: #888; transition: transform 0.3s; transform: ${isOpen ? 'rotate(180deg)' : 'rotate(0deg)'}">▼</span>`;
+            categorySection.appendChild(header);
 
+            const cardContainer = document.createElement('div');
+            cardContainer.className = 'library-card-container';
+            cardContainer.style.display = isOpen ? 'grid' : 'none'; 
+            cardContainer.style.gap = '15px';
+            cardContainer.style.paddingTop = '15px';
+            
             header.onclick = () => {
-                const isCurrentlyOpen = listContainer.style.display === 'block';
-                listContainer.style.display = isCurrentlyOpen ? 'none' : 'block';
-                header.querySelector('span:last-child').style.transform = isCurrentlyOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+                const isVisible = cardContainer.style.display === 'grid';
+                cardContainer.style.display = isVisible ? 'none' : 'grid';
+                header.querySelector('.toggle-arrow').style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
+                header.style.borderColor = isVisible ? '#333' : '#00ff88'; 
             };
 
-            // Renderiza os Subníveis Musculares DENTRO do Grupo
-            const orderedSubGroups = Object.keys(subGroups).sort();
-            orderedSubGroups.forEach(subName => {
+            // Ordena em ordem alfabética e renderiza
+            groups[key].sort((a, b) => a.name.localeCompare(b.name)).forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'library-card';
+                card.style.background = '#111';
+                card.style.border = '1px solid #2a2a2a';
+                card.style.borderLeft = '4px solid #4da3ff';
                 
-                // Título Separador do Subnível (ex: Fibras Superiores)
-                const subTitle = document.createElement('div');
-                subTitle.style.color = '#4da3ff';
-                subTitle.style.fontSize = '13px';
-                subTitle.style.fontWeight = 'bold';
-                subTitle.style.borderBottom = '1px dashed #333';
-                subTitle.style.paddingBottom = '4px';
-                subTitle.style.marginBottom = '10px';
-                subTitle.style.marginTop = '10px';
-                subTitle.textContent = `🎯 ${subName}`;
-                listContainer.appendChild(subTitle);
-
-                subGroups[subName].forEach(ex => {
-                    const exDiv = document.createElement('div');
-                    exDiv.style.background = '#111';
-                    exDiv.style.padding = '12px';
-                    exDiv.style.marginBottom = '8px';
-                    exDiv.style.borderRadius = '6px';
-                    exDiv.style.border = '1px solid #444';
-                    
-                    let equipIcon = "🏋️";
-                    if(ex.equip && ex.equip.includes("Peso_Corporal")) equipIcon = "🏠";
-                    if(ex.equip && ex.equip.includes("Calistenia")) equipIcon = "🏖️";
-                    if(ex.equip && ex.equip.includes("Maquinas")) equipIcon = "⛓️";
-
-                    const ytQuery = encodeURIComponent(`Como executar o exercício ${ex.name}`);
-                    const ytLink = `https://www.youtube.com/results?search_query=${ytQuery}`;
-
-                    exDiv.innerHTML = `
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                            <div style="flex: 1; padding-right: 10px;">
-                                <div style="font-weight: bold; color: #fff; font-size: 14px; margin-bottom: 5px;">
-                                    ${ex.name}
-                                </div>
-                                <div style="font-size: 11px; color: #aaa; margin-bottom: 8px;">${ex.desc || 'Instrução pendente.'}</div>
-                                <span style="font-size: 10px; background: #333; padding: 2px 6px; border-radius: 4px; color: #00ff88;">${ex.focus}</span>
-                                <span style="font-size: 10px; background: #333; padding: 2px 6px; border-radius: 4px; color: #aaa; margin-left: 5px;">${equipIcon} ${ex.equip ? ex.equip.replace(/_/g, ' ') : 'N/A'}</span>
-                            </div>
-                            <a href="${ytLink}" target="_blank" style="text-decoration: none; font-size: 22px; padding: 8px; background: rgba(255, 0, 0, 0.1); border-radius: 6px; border: 1px solid rgba(255,0,0,0.3); transition: all 0.2s; display: flex; align-items: center; justify-content: center;" title="Ver no YouTube">🎥</a>
-                        </div>
-                    `;
-                    listContainer.appendChild(exDiv);
-                });
+                const safeName = item.name ? item.name.replace(/'/g, "\\'") : 'Exercício';
+                const ytQuery = encodeURIComponent(`Como executar o exercício ${safeName}`);
+                const equipStr = item.equip ? item.equip.replace(/_/g, ' ') : 'N/A';
+                
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div class="lib-name" style="flex: 1; font-size: 15px; color: #fff; font-weight: bold;">${safeName}</div>
+                        <a href="https://www.youtube.com/results?search_query=${ytQuery}" target="_blank" style="text-decoration: none; font-size: 18px; margin-left: 10px; background: rgba(255, 0, 0, 0.1); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,0,0,0.3);" title="Ver Execução no YouTube">🎥</a>
+                    </div>
+                    <div class="lib-focus" style="margin-top: 8px; font-size: 11px; color: #aaa;">🎯 Alvo: ${item.group || 'Geral'} (${item.focus || ''})</div>
+                    <div style="font-size: 11px; color: #00ff88; margin-top: 8px; background: rgba(0, 255, 136, 0.05); padding: 4px 8px; border-radius: 4px; display: inline-block; border: 1px dashed rgba(0, 255, 136, 0.3);">
+                        🎒 Requer: ${equipStr}
+                    </div>
+                `;
+                cardContainer.appendChild(card);
             });
 
-            groupContainer.appendChild(header);
-            groupContainer.appendChild(listContainer);
-            grid.appendChild(groupContainer);
-        });
+            categorySection.appendChild(cardContainer);
+            grid.appendChild(categorySection);
+        }
     }
 
     function switchTab(tabId, navId) {
