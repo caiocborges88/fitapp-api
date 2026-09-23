@@ -23,6 +23,17 @@ const FitAudio = (() => {
         osc.stop(audioCtx.currentTime + duration);
     }
     return {
+        // 🛡️ DESTRANCADOR IOS: Emite um som mudo de 1ms para forçar a Apple a libertar o motor de áudio
+        unlock: () => {
+            init();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            gain.gain.value = 0; // Somente mudo
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(0);
+            osc.stop(audioCtx.currentTime + 0.001);
+        },
         beepShort: () => playTone(800, 'sine', 0.1, 0.2),
         beepLong: () => playTone(1200, 'sine', 0.6, 0.3),
         packRip: () => { playTone(150, 'sawtooth', 0.1, 0.1); setTimeout(() => playTone(200, 'sawtooth', 0.2, 0.1), 100); },
@@ -97,7 +108,20 @@ var FitApp = (() => {
 
     function showToast(msg) { els.toast.textContent = msg; els.toast.classList.add('show'); setTimeout(() => els.toast.classList.remove('show'), 3000); }
     function speak(text) { if (!audioEnabled || !('speechSynthesis' in window)) return; window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'pt-BR'; utterance.rate = 1.1; window.speechSynthesis.speak(utterance); }
-    function toggleAudio() { audioEnabled = !audioEnabled; const btn = document.getElementById('btnAudio'); if (audioEnabled) { btn.classList.add('active'); btn.innerHTML = '🔊 <span>Áudio On</span>'; speak("Assistente ativado."); } else { btn.classList.remove('active'); btn.innerHTML = '🔈 <span>Áudio Off</span>'; window.speechSynthesis.cancel(); } }
+    function toggleAudio() { 
+        audioEnabled = !audioEnabled; 
+        const btn = document.getElementById('btnAudio'); 
+        if (audioEnabled) { 
+            btn.classList.add('active'); 
+            btn.innerHTML = '🔊 <span>Áudio On</span>'; 
+            if (typeof FitAudio !== 'undefined' && FitAudio.unlock) FitAudio.unlock(); // 🛡️ Aciona a chave da Apple
+            speak("Assistente ativado."); 
+        } else { 
+            btn.classList.remove('active'); 
+            btn.innerHTML = '🔈 <span>Áudio Off</span>'; 
+            window.speechSynthesis.cancel(); 
+        } 
+    }
 
     let currentTimerEl = null;
     let currentTimerTarget = null;
@@ -2963,8 +2987,30 @@ function renderMetricsChart() {
         updateEnvUI();
         updateCampaignDashboard();
         syncTacticalDictionary(); 
+
+        // 🛡️ ESCUDO ANTI-RECARREGAMENTO: Evita F5 ou fechar a aba por engano
+        window.addEventListener('beforeunload', (e) => {
+            if (isWorkoutActive) {
+                e.preventDefault();
+                e.returnValue = ''; // Exigido pelos navegadores modernos
+            }
+        });
+
+        // 🛡️ INTERCETOR DE GESTOS (SWIPE BACK): Impede o "deslizar para trás" do Android/iOS de fechar a PWA
+        history.pushState(null, null, location.href);
+        window.addEventListener('popstate', () => {
+            if (isWorkoutActive) {
+                // Se estiver num combate, empurra o estado de volta e ignora o deslize
+                history.pushState(null, null, location.href);
+                showToast("⚠️ Combate em curso. Utilize o botão 'Abortar Missão' para sair.");
+            } else {
+                // Mantém a PWA viva mesmo fora de treinos para evitar ecrãs pretos indesejados
+                history.pushState(null, null, location.href);
+            }
+        });
         
     } // <-- A função init() termina aqui
+    
 // --- NOVO: MOTOR DO PILOTO AUTOMÁTICO (HANDS-FREE) ---
     let autoBIndex = null, autoEIndex = null;
     let autoExec = 0, autoRest = 0;
