@@ -303,13 +303,25 @@ var FitGamification = (() => {
     }
 
     async function craftSticker() {
-        if(window.FitApp) FitApp.showToast("Forjando conquista na nuvem...");
+        // 🛡️ OPÇÃO HOTEL: Trava anti-duplo clique do Dedo Nervoso
+        const btnForge = document.getElementById('btnForge');
+        if (btnForge && btnForge.disabled) return;
+        if (btnForge) {
+            btnForge.disabled = true;
+            btnForge.style.opacity = '0.5';
+            btnForge.textContent = 'A processar...';
+        }
+
+        if(window.FitApp) FitApp.showToast("A forjar conquista na nuvem...");
         
         const profile = await getPlayerProfile();
         let savedCollection = profile.album || [];
         let repetidas = profile.repetidas || 0; 
         
-        if (repetidas < 3) return;
+        if (repetidas < 3) {
+            if(btnForge) { btnForge.disabled = false; btnForge.style.opacity = '1'; btnForge.textContent = 'Forjar Nova Peça (Custa 3)'; }
+            return;
+        }
         
         const faltantesForja = stickersDB.filter(s => !savedCollection.includes(s.id) && (s.rarity === 'comum' || s.rarity === 'prata'));
         

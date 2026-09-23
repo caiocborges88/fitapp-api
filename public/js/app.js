@@ -1111,12 +1111,14 @@ function removeExercise(bIndex, eIndex) {
         });
         // --- FIM DA MEMORIZAÇÃO ---
 
-        els.exerciseList.innerHTML = ''; 
         totalSets = 0; 
         checkedSets = 0; 
         todayLog = [];
         
         const historyLog = JSON.parse(safeGet('fitapp_week_log') || '[]');
+
+        // ⚡ OPÇÃO GOLF (Performance): Cria um fragmento de memória virtual para evitar Layout Thrashing
+        const virtualFragment = document.createDocumentFragment();
         
         currentRoutine.forEach((bloco, bIndex) => {
             const isBiset = bloco.exercises.length > 1;
@@ -1389,8 +1391,13 @@ function removeExercise(bIndex, eIndex) {
                 card.classList.add('collapsed-block');
             }
 
-            els.exerciseList.appendChild(card); 
+            virtualFragment.appendChild(card); // Adiciona ao fragmento virtual em vez do ecrã real
         });
+
+        // ⚡ OPÇÃO GOLF: Injeta todo o treino no ecrã num único cálculo do processador
+        els.exerciseList.innerHTML = '';
+        els.exerciseList.appendChild(virtualFragment);
+        
         updateProgress();
 
         // --- RESTAURAÇÃO DE ESTADO (Scroll e Foco) ---
@@ -1449,6 +1456,15 @@ function removeExercise(bIndex, eIndex) {
             }
         }
         // --- FIM DA TRAVA ANTI-EXPLOIT ---
+
+        // 🛡️ OPÇÃO HOTEL: Trava de Duplo Clique ativada apenas após passar nas validações
+        const btnFinish = document.getElementById('btnFinishAction');
+        if (btnFinish) {
+            if (btnFinish.disabled) return; 
+            btnFinish.disabled = true;
+            btnFinish.style.opacity = '0.5';
+            btnFinish.textContent = "⏳ A processar...";
+        }
 
         stopRestTimer(); 
         
