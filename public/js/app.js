@@ -485,12 +485,15 @@ async function exportStravaCard(historyIndex = -1) {
             const d = new Date();
             d.setDate(d.getDate() - i);
             
-            const offset = d.getTimezoneOffset() * 60000;
-            const localISOTime = (new Date(d.getTime() - offset)).toISOString().slice(0, 10);
+            // BLINDAGEM DE FUSO HORÁRIO: Formata a data garantindo o tempo local do dispositivo (ex: "2026-09-23")
+            const localISOTime = d.getFullYear() + "-" + 
+                                 String(d.getMonth() + 1).padStart(2, '0') + "-" + 
+                                 String(d.getDate()).padStart(2, '0');
             
             let dayName = d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '');
             dayName = dayName.substring(0, 3);
             
+            // O sistema procura por treinos gravados nessa data local exata
             const workedOut = history.slice().reverse().find(h => h.date === localISOTime);
             
             const dayEl = document.createElement('div');
@@ -1400,8 +1403,10 @@ function removeExercise(bIndex, eIndex) {
         const tipoTreino = currentWorkoutType; 
         
         const d = new Date();
-        const offset = d.getTimezoneOffset() * 60000;
-        const dataHoje = (new Date(d.getTime() - offset)).toISOString().split('T')[0];
+        // BLINDAGEM DE FUSO HORÁRIO (Salvamento): Registra a data com base no calendário local do atleta
+        const dataHoje = d.getFullYear() + "-" + 
+                         String(d.getMonth() + 1).padStart(2, '0') + "-" + 
+                         String(d.getDate()).padStart(2, '0');
         
         let totalTimeSecs = tempTotalTimeSecs; // Resgata o tempo já calculado
         if (workoutStartTime) {

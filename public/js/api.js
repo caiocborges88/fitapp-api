@@ -106,9 +106,11 @@ var FitAPI = (() => {
             const user = auth.currentUser;
             if (!user) return [];
 
-            // Puxa todos os treinos daquele usuário específico
+            // ESCUDO DE MEMÓRIA: Puxa apenas os últimos 50 treinos gravados pelo usuário
             const snapshot = await db.collection("treinos_concluidos")
                 .where("userId", "==", user.uid)
+                .orderBy("timestamp", "desc")
+                .limit(50)
                 .get();
 
             let historico = [];

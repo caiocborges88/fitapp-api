@@ -29,10 +29,14 @@ var FitGamification = (() => {
         const user = firebase.auth().currentUser;
         if (!user) return;
         
+        // CÉREBRO TÁTICO: Calcula o poder aqui e salva pronto na nuvem
+        const combatPower = (album.length * 10) + repetidas;
+
         try {
             await firebase.firestore().collection('jogadores').doc(user.uid).set({
                 album: album,
                 repetidas: repetidas,
+                poder_combate: combatPower, // NOVO: Salva o poder pré-calculado
                 nome: user.displayName,
                 email: user.email,
                 ultimoAcesso: firebase.firestore.FieldValue.serverTimestamp()
@@ -41,6 +45,7 @@ var FitGamification = (() => {
             console.error("Erro ao selar o cofre na nuvem:", error);
         }
     }
+
     // Adiciona moedas de suor diretamente no cofre (Usado pela Volta à Calma)
     async function addBonusSweat(amount) {
         const profile = await getPlayerProfile();
@@ -335,7 +340,12 @@ var FitGamification = (() => {
         container.innerHTML = '<div style="text-align: center; color: #ffaa00; padding: 20px; font-weight: bold; font-family: monospace;">Escaneando Base de Dados... 📡</div>';
 
         try {
-            const snapshot = await firebase.firestore().collection('jogadores').get();
+            // ESCUDO FINANCEIRO: Baixa apenas os 50 melhores, já ordenados pelo banco
+            const snapshot = await firebase.firestore().collection('jogadores')
+                .orderBy('poder_combate', 'desc')
+                .limit(50)
+                .get();
+                
             let players = [];
 
             snapshot.forEach(doc => {
@@ -343,9 +353,7 @@ var FitGamification = (() => {
                 const albumLength = data.album ? data.album.length : 0;
                 const repetidas = data.repetidas || 0;
                 const nome = data.nome || 'Atleta Anônimo';
-                
-                // A Matemática Tática: Poder de Combate (Cartas Únicas valem 10, Repetidas valem 1)
-                const combatPower = (albumLength * 10) + repetidas;
+                const combatPower = data.poder_combate || 0;
 
                 players.push({
                     uid: doc.id,
@@ -355,9 +363,6 @@ var FitGamification = (() => {
                     suor: repetidas
                 });
             });
-
-            // Ordena os jogadores do maior poder para o menor (Desempate)
-            players.sort((a, b) => b.poder - a.poder);
             
             container.innerHTML = ''; // Limpa o radar
 
