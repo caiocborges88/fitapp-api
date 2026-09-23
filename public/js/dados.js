@@ -218,13 +218,6 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Abdução de Quadril com Bola Medicinal",
-        "group": "Glúteos",
-        "focus": "Glúteo Médio e Mínimo",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
-    },
-    {
         "name": "Abdução de Quadril com Mini Band",
         "group": "Glúteos",
         "focus": "Glúteo Médio e Mínimo",
@@ -610,20 +603,6 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Afundo Reverso com Bola Medicinal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
-    },
-    {
-        "name": "Afundo Reverso com Bola Medicinal Acima da Cabeça",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 2
-    },
-    {
         "name": "Afundo Reverso com Deficit e Halteres",
         "group": "Glúteos + Quadríceps",
         "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
@@ -678,13 +657,6 @@ const dictionaryData = [
         "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
         "equip": "TRX",
         "nivel": 1
-    },
-    {
-        "name": "Afundo Reverso com Torção e Bola Medicinal",
-        "group": "Glúteos + Oblíquos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Oblíquos (Externos e Internos) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 2
     },
     {
         "name": "Afundo Reverso na Máquina Smith",
@@ -820,13 +792,6 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Afundo lateral com arremesso de bola medicinal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 2
-    },
-    {
         "name": "Afundo lateral com kettlebell",
         "group": "Glúteos + Quadríceps",
         "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
@@ -923,13 +888,6 @@ const dictionaryData = [
         "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barras_Anilhas",
         "nivel": 2
-    },
-    {
-        "name": "Agachamento Deslocado Com Bola Medicinal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
     },
     {
         "name": "Agachamento Espanhol com Faixa Elástica",
@@ -1329,27 +1287,6 @@ const dictionaryData = [
         "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barras_Anilhas",
         "nivel": 2
-    },
-    {
-        "name": "Agachamento com Bola Medicinal Acima da Cabeça",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 2
-    },
-    {
-        "name": "Agachamento com Bola Medicinal e Alcance",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
-    },
-    {
-        "name": "Agachamento com Bola Medicinal em Headlock",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
     },
     {
         "name": "Agachamento com Calcanhares Elevados",
@@ -2395,13 +2332,6 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Arremesso Arco-Íris com Bola Medicinal",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
-    },
-    {
         "name": "Arremesso Dividido No Landmine",
         "group": "Deltoides Frontais",
         "focus": "Deltoides (Complexo Completo)",
@@ -2409,53 +2339,11 @@ const dictionaryData = [
         "nivel": 3
     },
     {
-        "name": "Arremesso Lateral em Dupla com Bola Medicinal",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
-    },
-    {
-        "name": "Arremesso Woodchopper com Bola Medicinal",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
-    },
-    {
         "name": "Arremesso a partir da posição pendurada com kettlebell",
         "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
         "focus": "Deltoides (Complexo Completo) + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
         "equip": "Pesos_Livres",
         "nivel": 3
-    },
-    {
-        "name": "Arremesso com bola medicinal (para si mesmo)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
-    },
-    {
-        "name": "Arremesso de bola medicinal a partir do peito",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
-    },
-    {
-        "name": "Arremesso de bola medicinal do peito",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
-    },
-    {
-        "name": "Arremesso na parede com bola medicinal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
     },
     {
         "name": "Ativação do Serrato — Soco Cruzado",
@@ -2743,13 +2631,6 @@ const dictionaryData = [
         "focus": "Gastrocnêmio e Sóleo (Tríceps Sural)",
         "equip": "Yoga",
         "nivel": 1
-    },
-    {
-        "name": "Bola Medicinal Clean And Press",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoide Anterior e Lateral + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Medicineball",
-        "nivel": 2
     },
     {
         "name": "Bola de Estabilidade Limpa-vidros",
@@ -6154,13 +6035,6 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Flexão com Bola Medicinal",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 2
-    },
-    {
         "name": "Flexão com Elevação de Perna",
         "group": "Peito + Tríceps",
         "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
@@ -6172,13 +6046,6 @@ const dictionaryData = [
         "group": "Peito + Tríceps",
         "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
         "equip": "Pesos_Livres",
-        "nivel": 2
-    },
-    {
-        "name": "Flexão com Passagem sobre a Bola Medicinal",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
-        "equip": "Bola_de_Medicina",
         "nivel": 2
     },
     {
@@ -6525,13 +6392,6 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Halo com bola medicinal",
-        "group": "Deltoides Frontais + Deltoides Superiores",
-        "focus": "Deltoides (Complexo Completo)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
-    },
-    {
         "name": "Hang Clean E Press Com Haltere Unilateral",
         "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
         "focus": "Deltoide Lateral + Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo",
@@ -6551,13 +6411,6 @@ const dictionaryData = [
         "focus": "Deltoide Anterior e Lateral + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
         "equip": "Pesos_Livres",
         "nivel": 3
-    },
-    {
-        "name": "Hang clean e press com bola medicinal",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoide Anterior e Lateral + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Medicineball",
-        "nivel": 2
     },
     {
         "name": "Hang clean e press com kettlebell",
@@ -8009,13 +7862,6 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Peso Morto Unilateral com Bola Medicinal",
-        "group": "Glúteos",
-        "focus": "Glúteo Médio e Mínimo",
-        "equip": "Bola_de_Medicina",
-        "nivel": 2
-    },
-    {
         "name": "Peso Morto Unilateral com Disco",
         "group": "Glúteos + Parte Inferior das Costas",
         "focus": "Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo",
@@ -8076,13 +7922,6 @@ const dictionaryData = [
         "group": "Cardio/HIIT",
         "focus": "Motor Aeróbico",
         "equip": "Peso_Corporal",
-        "nivel": 1
-    },
-    {
-        "name": "Polichinelo com desenvolvimento com bola medicinal",
-        "group": "Deltoides Frontais",
-        "focus": "Deltoide Anterior e Lateral",
-        "equip": "Bola_de_Medicina",
         "nivel": 1
     },
     {
@@ -11215,13 +11054,6 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Rotação de tronco ajoelhado com bola medicinal",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
-    },
-    {
         "name": "Rotação de tronco na polia",
         "group": "Oblíquos",
         "focus": "Oblíquos (Externos e Internos)",
@@ -11254,13 +11086,6 @@ const dictionaryData = [
         "group": "Abdominais + Oblíquos",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Barras_Anilhas",
-        "nivel": 2
-    },
-    {
-        "name": "Russian Twist com bola medicinal",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Bola_de_Medicina",
         "nivel": 2
     },
     {
@@ -11416,13 +11241,6 @@ const dictionaryData = [
         "focus": "Glúteo Médio e Mínimo",
         "equip": "Cardio",
         "nivel": 1
-    },
-    {
-        "name": "Slam com Bola Medicinal (Clean and Press)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 2
     },
     {
         "name": "Smith Machine Elevação de Joelhos Suspensa",
@@ -12244,13 +12062,6 @@ const dictionaryData = [
         "nivel": 3
     },
     {
-        "name": "Supino com bola medicinal — arremesso em dupla",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
-    },
-    {
         "name": "Supino com cabos",
         "group": "Peito + Tríceps",
         "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
@@ -12724,13 +12535,6 @@ const dictionaryData = [
         "group": "Deltoides Frontais + Glúteos + Quadríceps",
         "focus": "Deltoides (Complexo Completo) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
         "equip": "Barras_Anilhas",
-        "nivel": 2
-    },
-    {
-        "name": "Thruster com bola medicinal",
-        "group": "Deltoides Frontais + Glúteos + Quadríceps",
-        "focus": "Deltoides (Complexo Completo) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Medicineball",
         "nivel": 2
     },
     {
@@ -13245,20 +13049,6 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Woodchopper com Bola Medicinal em Meio Ajoelhado",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
-    },
-    {
-        "name": "Woodchopper com bola medicinal",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 1
-    },
-    {
         "name": "Woodchopper com cabo ajoelhado — de baixo para cima",
         "group": "Oblíquos",
         "focus": "Oblíquos (Externos e Internos)",
@@ -13299,13 +13089,6 @@ const dictionaryData = [
         "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
         "equip": "Barras_Anilhas",
         "nivel": 3
-    },
-    {
-        "name": "a da Cabeça",
-        "group": "Quadríceps",
-        "focus": "Quadríceps Femoral (Geral)",
-        "equip": "Bola_de_Medicina",
-        "nivel": 2
     },
     {
         "name": "arra",
