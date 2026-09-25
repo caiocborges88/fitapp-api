@@ -2,189 +2,189 @@
 const dictionaryData = [
     {
         "name": "Abdominais",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Abdominal Ajoelhado com Barra no Cabo",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Abdominal Ajoelhado com Corda no Cabo",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Abdominal Ajoelhado na Polia com Barra de Remada",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Abdominal Bicicleta",
-        "group": "Core",
+        "group": "Abdominal",
         "focus": "Oblíquos / Rotação",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Abdominal Canivete / V-Up",
-        "group": "Core",
+        "group": "Abdominal",
         "focus": "Superior",
         "equip": "Peso Corporal",
         "nivel": 3
     },
     {
         "name": "Abdominal Em Pé Com Barra No Cabo",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Abdominal Infra no Solo (Reverse Crunch)",
-        "group": "Core",
+        "group": "Abdominal",
         "focus": "Inferior",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Abdominal Na Polia Em Pé",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Abdominal Oblíquo Ajoelhado na Polia",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Abdominal Oblíquo na Máquina Smith",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Máquina",
         "nivel": 3
     },
     {
         "name": "Abdominal Sapinho",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Abdominal Sapo",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Abdominal Supra (Solo/Carga)",
-        "group": "Core",
+        "group": "Abdominal",
         "focus": "Superior",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Abdominal bicicleta",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Abdominal com Anilha",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Abdominal com Remada",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Abdominal com barra",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Abdominal com haltere",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Abdominal com landmine",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Abdominal em Pé na Polia com Corda",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Abdominal em posição de mala com haltere",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Abdominal na Máquina",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Abdominal na Máquina Smith",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Abdominal na Polia Alta (Cable Crunch)",
-        "group": "Core",
+        "group": "Abdominal",
         "focus": "Superior",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Abdominal no Bosu com Flexão de Joelhos",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Abdominal russo com haltere",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Halter",
         "nivel": 2
@@ -246,13 +246,6 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Adução de Braço Estendido em Ajoelhado Lateral",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoide Lateral + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
         "name": "Adução de quadril em pé com cabo",
         "group": "Glúteos",
         "focus": "Glúteo Máximo (Complexo)",
@@ -268,7 +261,7 @@ const dictionaryData = [
     },
     {
         "name": "Afundo",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 1
@@ -282,7 +275,7 @@ const dictionaryData = [
     },
     {
         "name": "Afundo Alternado Com Peso Corporal",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 3
@@ -296,470 +289,365 @@ const dictionaryData = [
     },
     {
         "name": "Afundo Alternado com Halteres",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Afundo Alternado com Kettlebell",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Afundo Alternado com Salto (Peso Corporal)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Afundo Balançado com Peso Corporal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Afundo Búlgaro",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Afundo Búlgaro Assistido",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Afundo Búlgaro com Barra",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Afundo Búlgaro com Haltere (goblet)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Afundo Búlgaro com Haltere em Pegada Goblet",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Afundo Búlgaro com Halteres",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Afundo Caminhando",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Afundo Curtsy Com Haltere Em Taça",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Afundo Curtsy com Barra",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Afundo Curtsy com Deficit e Peso Corporal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Afundo Frontal com Haltere em Pegada Goblet",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Afundo Goblet Com Halter",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Afundo Inverso com Déficit Corporal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Afundo Lateral",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Afundo Lateral Alternado com Halteres",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Afundo Lateral Alternado com Kettlebell",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Afundo Lateral com Anilha",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Afundo Lateral com Barra",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Afundo Lateral com Halteres e Alcance",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Afundo Lateral com Kettlebell (Unilateral)",
-        "group": "Quadríceps",
-        "focus": "Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
-        "name": "Afundo Lateral com Kettlebells em Rack Frontal (Duplo)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
         "name": "Afundo Lateral com Salto (Peso Corporal)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Afundo Lateral em Taça com Landmine",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Afundo No Landmine Com Desenvolvimento Acima Da Cabeça",
-        "group": "Deltoides Frontais + Glúteos + Quadríceps",
-        "focus": "Deltoide Anterior e Lateral + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Afundo Reverso Alternado com Halteres",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Afundo Reverso Alternado com Kettlebell",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
-        "name": "Afundo Reverso Unilateral com Kettlebell em Front Rack",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Afundo Reverso com Anilha",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Afundo Reverso com Barra",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Afundo Reverso com Deficit e Halteres",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Afundo Reverso com Deficit e Halteres no Estilo Goblet",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Afundo Reverso com Haltere (Goblet)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Halter",
-        "nivel": 1
-    },
-    {
-        "name": "Afundo Reverso com Halteres",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Afundo Reverso com Kettlebell em Deficit",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
-        "name": "Afundo Reverso com Kettlebells no Rack Frontal (Duplo)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 2
+        "name": "Afundo Reverso com Halteres",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
+        "equip": "Halter",
+        "nivel": 1
     },
     {
         "name": "Afundo Reverso com Peso Corporal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
-        "name": "Afundo Reverso com TRX",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
         "name": "Afundo Reverso na Máquina Smith",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 2
     },
     {
-        "name": "Afundo Reverência Unilateral com Kettlebell",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
-        "name": "Afundo Reverência com Kettlebells na Posição Rack Frontal (Duplo)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
         "name": "Afundo com Balanço de Haltere",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Afundo com Barra em Deficit com Reverência",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Afundo com Haltere em Déficit com Curvatura",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Afundo com Halteres",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Afundo com Landmine",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 2
     },
     {
-        "name": "Afundo com Passagem de Kettlebell Alternado",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Afundo com Passagem de Perna (Peso Corporal)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Afundo com barra",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Afundo com barra e faixa elástica",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Afundo com disco à frente",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Afundo com déficit no disco",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Afundo de Deficit com Haltere no Goblet",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Afundo em Reverência",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Afundo em Reverência com Landmine",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Afundo em Reverência com Landmine (Pegada Goblet)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Afundo em reverência com anilha",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 2
     },
     {
-        "name": "Afundo lateral com kettlebell",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Afundo na Máquina Smith",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 2
     },
     {
         "name": "Afundo na Polia",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Cabo",
         "nivel": 3
     },
     {
-        "name": "Afundo no TRX",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
         "name": "Afundo reverso com barra hexagonal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 2
     },
     {
-        "name": "Afundo reverso com kettlebell",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Afundo reverso com rotação de tronco (com anilha)",
-        "group": "Glúteos + Oblíquos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Oblíquos (Externos e Internos) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 2
     },
@@ -772,30 +660,23 @@ const dictionaryData = [
     },
     {
         "name": "Afundos Laterais",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Agachamento Alternado com Peso Corporal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Agachamento Búlgaro Assistido com Halteres",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
-        "nivel": 1
-    },
-    {
-        "name": "Agachamento Búlgaro Assistido com Kettlebell",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
         "nivel": 1
     },
     {
@@ -807,8 +688,8 @@ const dictionaryData = [
     },
     {
         "name": "Agachamento Com Disco Sobre a Cabeça",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 2
     },
@@ -821,148 +702,127 @@ const dictionaryData = [
     },
     {
         "name": "Agachamento Frontal com Barra ",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Agachamento Frontal com Barra Olímpica",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Agachamento Frontal com Barra e Alças",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Agachamento Frontal com Barra — Calcanhares Elevados",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Agachamento Frontal com Barra — Musculação",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Agachamento Frontal com Halteres",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Agachamento Frontal com Halteres (pausa)",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Halter",
-        "nivel": 2
-    },
-    {
-        "name": "Agachamento Goblet (Halter/Anilha no peito)",
-        "group": "Pernas",
-        "focus": "Quadríceps (Vastos)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Agachamento Goblet Estreito com Haltere e Calcanhares Elevados",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Agachamento Goblet Sissy na Máquina",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 2
     },
     {
         "name": "Agachamento Goblet com Halter (Calcanhares Elevados)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Agachamento Goblet com Haltere",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Agachamento Goblet com Haltere (Pulsos)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Agachamento Goblet com Kettlebell",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Agachamento Goblet com Kettlebell — calcanhares elevados",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Agachamento Goblet na Polia",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Agachamento Hack Horizontal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Agachamento Hack com Landmine",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Agachamento Isométrico com Anilha",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Agachamento Isométrico com Anilha e Alcance",
-        "group": "Deltoides Frontais + Glúteos + Quadríceps + Tríceps",
-        "focus": "Deltoides (Complexo Completo) + Glúteo Máximo (Complexo) + Tríceps (Complexo Completo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Agachamento Landmine",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 1
     },
@@ -989,63 +849,63 @@ const dictionaryData = [
     },
     {
         "name": "Agachamento Overhead Unilateral",
-        "group": "Deltoides Frontais + Quadríceps",
-        "focus": "Deltoide Lateral + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Agachamento Overhead com Haltere",
-        "group": "Deltoides Frontais + Glúteos + Quadríceps",
-        "focus": "Deltoides (Complexo Completo) + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Agachamento Overhead com bastão",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Agachamento Pausado com Barra",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Agachamento Pulsado com Peso Corporal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Agachamento Sissy Assistido com Peso Corporal",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Agachamento Sissy com Barra no Landmine",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Agachamento Sissy na Máquina Smith",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 3
     },
     {
         "name": "Agachamento Sissy na máquina",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 2
@@ -1059,42 +919,42 @@ const dictionaryData = [
     },
     {
         "name": "Agachamento Sumô com Haltere",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Agachamento Zercher com Barra",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Agachamento Zercher com Barra EZ",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Agachamento Zercher no cabo",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Agachamento com Anilha",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Agachamento com Apoio de Halteres",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 2
@@ -1107,263 +967,200 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Agachamento com Apoio de Kettlebell",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Agachamento com Apoio de Peso Corporal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
-        "name": "Agachamento com Balanço de Kettlebell",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Agachamento com Barra",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Agachamento com Barra (Barra Alta)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Agachamento com Barra (Low-Bar)",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Agachamento com Barra em Apoio Lateral",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Agachamento com Barra, Toque e Pausa",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Agachamento com Calcanhares Elevados",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Agachamento com Cinto e Cabo",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Agachamento com Cinto na Máquina",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Agachamento com Cinto no Cabo",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Agachamento com Disco e Alcance",
-        "group": "Deltoides Frontais + Glúteos + Quadríceps",
-        "focus": "Deltoides (Complexo Completo) + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Agachamento com Halteres",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Agachamento com Halteres e Rolamento",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Agachamento com Halteres no Caixote",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Agachamento com Kettlebell",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
-        "name": "Agachamento com Kettlebell na Caixa",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Agachamento com Máquina Pêndulo",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Agachamento com Peso Corporal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Agachamento com Peso Corporal em Caixa",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Agachamento com Prato",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Agachamento com Salto (Peso Corporal)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
-        "name": "Agachamento com Salto no TRX",
-        "group": "Quadríceps",
-        "focus": "Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Trx",
-        "nivel": 2
-    },
-    {
-        "name": "Agachamento com Salto no TRXTRX · IntermediárioTRX Afundo Lateral",
-        "group": "Glúteos",
-        "focus": "Glúteo Médio e Mínimo",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
-        "name": "Agachamento com TRX",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
         "name": "Agachamento com barra",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Agachamento com barra hexagonal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Agachamento com barra nas costas (calcanhares elevados)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Agachamento com desenvolvimento na polia",
-        "group": "Deltoides Frontais + Glúteos + Quadríceps",
-        "focus": "Deltoide Anterior e Lateral + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
-        "name": "Agachamento com giro de kettlebell",
-        "group": "Quadríceps",
-        "focus": "Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Agachamento com haltere deslocado",
-        "group": "Glúteos + Oblíquos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Oblíquos (Externos e Internos) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Agachamento com o peso do corpo",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Agachamento com salto",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Agachamento com salto in and out",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Agachamento com uma perna só usando o peso do corpo",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 3
-    },
-    {
-        "name": "Agachamento de Garçom com Kettlebell",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 2
     },
     {
         "name": "Agachamento de Uma Perna com Calcanhares Elevados, com Halteres",
@@ -1374,57 +1171,50 @@ const dictionaryData = [
     },
     {
         "name": "Agachamento dividido com barra hexagonal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Agachamento do Garçom com Placa Alternada",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Agachamento estático de parede",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
-        "name": "Agachamento frontal com kettlebell",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Agachamento na Máquina Hack",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Agachamento na Parede com Peso",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Agachamento na caixa com barra e pausa",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Agachamento no Smith",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 1
     },
@@ -1437,51 +1227,23 @@ const dictionaryData = [
     },
     {
         "name": "Agachamento no Smith com postura estreita",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Alcance com Anilha",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Alcance e Capture",
-        "group": "Abdominais + Oblíquos",
-        "focus": "Oblíquos (Externos e Internos) + Reto Abdominal (Geral)",
+        "group": "Abdominal",
+        "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
-        "nivel": 1
-    },
-    {
-        "name": "Alongamento Lateral Sentado",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Alongamento Sentado para a Frente",
-        "group": "Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Alongamento de Braço Sentado",
-        "group": "Antebraços + Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Flexores do Antebraço",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Alongamento de Pescoço – Postura Fácil",
-        "group": "Trapézios",
-        "focus": "Trapézio (Complexo Completo)",
-        "equip": "Yoga",
         "nivel": 1
     },
     {
@@ -1492,22 +1254,8 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Alongamento de Quadríceps em Postura da Lua Crescente com Bloco",
-        "group": "Quadríceps",
-        "focus": "Quadríceps Femoral (Geral)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Alongamento do Quadríceps na Postura da Lua Crescente",
-        "group": "Quadríceps",
-        "focus": "Quadríceps Femoral (Geral)",
-        "equip": "Yoga",
-        "nivel": 2
-    },
-    {
         "name": "Alpinista",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
@@ -1521,204 +1269,148 @@ const dictionaryData = [
     },
     {
         "name": "Arnold Press Alternado com Halteres",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Deltoide Anterior e Lateral",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Arnold Press Sentado com Halteres",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Deltoide Anterior e Lateral",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Arnold Press Unilateral com Haltere",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Deltoide Lateral",
+        "group": "Ombro",
+        "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Arnold Press com halteres",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Deltoide Anterior e Lateral",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Arranco com Barra",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoides (Complexo Completo) + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Arranco com Landmine",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
-        "name": "Arranco com kettlebell (duplo)",
-        "group": "Deltoides Frontais + Glúteos",
-        "focus": "Deltoides (Complexo Completo) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
         "name": "Arranco de Barra",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoides (Complexo Completo) + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Arremesso Dividido No Landmine",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Barra",
         "nivel": 3
     },
     {
-        "name": "Arremesso a partir da posição pendurada com kettlebell",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoides (Complexo Completo) + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
         "name": "Auxílio de Máquina para Flexão de Queixo",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Geral)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Avanço",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Avanço Alternado com Landmine para Supino",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Barra",
-        "nivel": 3
-    },
-    {
-        "name": "Avanço Caminhando com Anilha Acima da Cabeça",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Barra",
-        "nivel": 2
-    },
-    {
-        "name": "Avanço Reverso com Deficit e Halteres na Frente",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Halter",
-        "nivel": 3
-    },
-    {
-        "name": "Avanço Reverso com Deficit e Kettlebell na Posição Frontal",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
-        "name": "Avanço Reverso com Deficit em Taça",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Barra",
-        "nivel": 2
-    },
-    {
-        "name": "Avanço Reverso com Kettlebell (Braço Único)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Avanço com Barra em Deficit",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Barra",
-        "nivel": 3
-    },
-    {
-        "name": "Avanço com Barra à Frente em Deficit",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Barra",
-        "nivel": 3
-    },
-    {
-        "name": "Avanço com Curtsy em Deficit com Halteres na Posição de Front Rack",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Halter",
-        "nivel": 3
-    },
-    {
-        "name": "Avanço com Deficit e Barra Zercher",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Barra",
-        "nivel": 3
-    },
-    {
-        "name": "Avanço com Kettlebells em Rack Frontal (Duplo)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
-        "name": "Avanço com barra",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Quadríceps Femoral (Geral)",
         "equip": "Barra",
         "nivel": 3
     },
     {
-        "name": "Avanço com kettlebell em apoio frontal (um braço)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Kettlebells",
+        "name": "Avanço Caminhando com Anilha Acima da Cabeça",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
+        "equip": "Barra",
         "nivel": 2
     },
     {
+        "name": "Avanço Reverso com Deficit e Halteres na Frente",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
+        "equip": "Halter",
+        "nivel": 3
+    },
+    {
+        "name": "Avanço Reverso com Deficit em Taça",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
+        "equip": "Barra",
+        "nivel": 2
+    },
+    {
+        "name": "Avanço com Barra em Deficit",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
+        "equip": "Barra",
+        "nivel": 3
+    },
+    {
+        "name": "Avanço com Barra à Frente em Deficit",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
+        "equip": "Barra",
+        "nivel": 3
+    },
+    {
+        "name": "Avanço com Curtsy em Deficit com Halteres na Posição de Front Rack",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
+        "equip": "Halter",
+        "nivel": 3
+    },
+    {
+        "name": "Avanço com Deficit e Barra Zercher",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
+        "equip": "Barra",
+        "nivel": 3
+    },
+    {
+        "name": "Avanço com barra",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
+        "equip": "Barra",
+        "nivel": 3
+    },
+    {
         "name": "Avanços Alternados com Peso Corporal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
-        "name": "Avião (Deitado de Bruços) na Caixa com Alças — Puxada de Braços",
-        "group": "Antebraços + Dorsais + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Flexores do Antebraço + Latíssimo do Dorso (Foco em Largura)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Balanço Para Remada Alta",
-        "group": "Deltoides Frontais + Glúteos",
-        "focus": "Deltoides (Complexo Completo) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Barra Fixa",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
@@ -1731,8 +1423,8 @@ const dictionaryData = [
     },
     {
         "name": "Barra Fixa (pegada supinada)",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
@@ -1745,15 +1437,15 @@ const dictionaryData = [
     },
     {
         "name": "Barra Fixa Assistida ao Estilo Gironda",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Barra Fixa Assistida por Máquina",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Máquina",
         "nivel": 1
     },
@@ -1766,107 +1458,58 @@ const dictionaryData = [
     },
     {
         "name": "Barra Fixa com Sobrecarga de Halteres",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Barra com Anel",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Geral) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Peso Corporal",
         "nivel": 3
     },
     {
         "name": "Barra com peso",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Geral) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Barra de Remada na Polia Remada em Pé",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Barra de Tração",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Geral)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Barra fixa assistida com pegada mista.",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Barra fixa assistida na Smith Machine",
-        "group": "Dorsais + Trapezio meio das Costas",
-        "focus": "Latíssimo do Dorso (Foco em Largura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
-        "name": "Bear Crawl (Caminhada do Urso)",
-        "group": "Core",
-        "focus": "Estabilização/Anti-extensão",
-        "equip": "Peso Corporal",
-        "nivel": 3
-    },
-    {
-        "name": "Bebê Feliz",
-        "group": "Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Bicicleta Unilateral",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Quadríceps Femoral (Geral)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Bicicleta ergométrica",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
         "name": "Bird Dog",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
-        "nivel": 1
-    },
-    {
-        "name": "Blocos Para Dobra Em Pé",
-        "group": "Panturrilhas",
-        "focus": "Músculo Gastrocnêmio",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Blocos para Panturrilha na Postura da Pirâmide",
-        "group": "Panturrilhas",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Blocos para Postura da Pirâmide",
-        "group": "Panturrilhas",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural)",
-        "equip": "Yoga",
         "nivel": 1
     },
     {
@@ -1878,70 +1521,49 @@ const dictionaryData = [
     },
     {
         "name": "Bom Dia Zercher com Cabo",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Cabo",
         "nivel": 3
     },
     {
         "name": "Bom Dia com Anilha",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Bom Dia com Barra (Posição Baixa)",
-        "group": "Glúteos + Posteriores da coxa",
-        "focus": "Glúteo Máximo (Complexo) + Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
+        "group": "Glúteos",
+        "focus": "Glúteo Máximo (Complexo)",
         "equip": "Barra",
         "nivel": 3
     },
     {
-        "name": "Braços Puxada Com Alças Arado Deitado De Bruços Sobre A Caixa",
-        "group": "Antebraços + Dorsais + Trapezio meio das Costas",
-        "focus": "Flexores do Antebraço + Latíssimo do Dorso (Foco em Largura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Braços de Águia — Queixo no Peito",
-        "group": "Trapezio meio das Costas + Trapézios",
-        "focus": "Romboides (Maior e Menor) e Trapézio Médio/Inferior + Trapézio (Complexo Completo)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
         "name": "Burpee",
-        "group": "Abdominais + Peito + Quadríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Quadríceps Femoral (Geral) + Reto Abdominal (Geral)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Burpees",
-        "group": "Cardio/HIIT",
+        "group": "Cardio/Hiit",
         "focus": "Resistência Anaeróbica",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
-        "name": "Cabeça ao joelho com torção",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Yoga",
-        "nivel": 3
-    },
-    {
         "name": "Cabo Meio Ajoelhado de Alto a Baixo Cortador de Madeira",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Cabo Meio Ajoelhado de Baixo Para Cima Lenhador",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Cabo",
         "nivel": 1
@@ -1975,219 +1597,16 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Caminhada Com Disco Sobre a Cabeça",
-        "group": "Abdominais + Deltoides Frontais + Trapézios",
-        "focus": "Deltoides (Complexo Completo) + Reto Abdominal (Geral) + Trapézio (Complexo Completo)",
-        "equip": "Barra",
-        "nivel": 1
-    },
-    {
-        "name": "Caminhada do Fazendeiro Unilateral (Suitcase Carry)",
-        "group": "Core",
-        "focus": "Estabilização/Anti-extensão",
-        "equip": "Halter",
-        "nivel": 2
-    },
-    {
-        "name": "Caminhada do Fazendeiro com Halteres",
-        "group": "Antebraços",
-        "focus": "Flexores do Antebraço",
-        "equip": "Halter",
-        "nivel": 1
-    },
-    {
-        "name": "Caminhada do Fazendeiro com Kettlebell",
-        "group": "Antebraços",
-        "focus": "Flexores do Antebraço",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
-        "name": "Caminhada do Fazendeiro com Pegada em Pinça (Disco)",
-        "group": "Antebraços",
-        "focus": "Flexores do Antebraço",
-        "equip": "Barra",
-        "nivel": 2
-    },
-    {
-        "name": "Caminhada do Fazendeiro com Pesa Russa (Braço Único)",
-        "group": "Antebraços + Oblíquos",
-        "focus": "Flexores do Antebraço + Oblíquos (Externos e Internos)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Caminhada do Fazendeiro com kettlebell",
-        "group": "Antebraços",
-        "focus": "Flexores do Antebraço",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Caminhada na Esteira de Costas",
-        "group": "Quadríceps",
-        "focus": "Quadríceps Femoral (Geral)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Caminhe na postura do cão voltado para baixo",
-        "group": "Panturrilhas",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Cardio Box Pés Rápidos",
-        "group": "Panturrilhas",
-        "focus": "Músculo Gastrocnêmio",
-        "equip": "Cardio",
-        "nivel": 2
-    },
-    {
-        "name": "Cardio Karaokê",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Cardio",
-        "nivel": 2
-    },
-    {
-        "name": "Cardio Lateral Pés Rápidos",
-        "group": "Glúteos + Panturrilhas + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Músculo Gastrocnêmio + Quadríceps Femoral (Geral)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Cardio Polichinelos Cruzados",
-        "group": "Deltoides Frontais + Glúteos + Panturrilhas",
-        "focus": "Deltoides (Complexo Completo) + Gastrocnêmio e Sóleo (Tríceps Sural) + Glúteo Máximo (Complexo)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Cardio Pés Rápidos",
-        "group": "Panturrilhas",
-        "focus": "Músculo Gastrocnêmio",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Cardio Salto Lateral Em Uma Perna",
-        "group": "Panturrilhas",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Cardio Salto unipodal para frente",
-        "group": "Panturrilhas",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Cardio Saída em Polichinelos",
-        "group": "Deltoides Frontais + Glúteos",
-        "focus": "Deltoides (Complexo Completo) + Glúteo Máximo (Complexo)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Cardio Shuffle Lateral",
-        "group": "Glúteos + Panturrilhas + Quadríceps",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural) + Glúteo Médio e Mínimo + Quadríceps Femoral (Geral)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Cardio Skater Para Burpee Com Uma Perna",
-        "group": "Glúteos + Panturrilhas + Peito",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural) + Glúteo Máximo (Complexo) + Peitoral Médio (Fibras Esternocostais)",
-        "equip": "Cardio",
-        "nivel": 3
-    },
-    {
-        "name": "Cardio com Três Passos Heismans",
-        "group": "Glúteos + Panturrilhas + Quadríceps",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Cardio no Ski Erg",
-        "group": "Abdominais + Dorsais + Tríceps",
-        "focus": "Latíssimo do Dorso (Geral) + Reto Abdominal (Geral) + Tríceps (Complexo Completo)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Cardio para Frente e para Trás",
-        "group": "Abdominais + Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral) + Reto Abdominal (Geral)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Cardio — Assault Bike",
-        "group": "Glúteos + Peito + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Peitoral Médio (Fibras Esternocostais) + Quadríceps Femoral (Geral)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Cardio — In and Outs",
-        "group": "Glúteos + Panturrilhas",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural) + Glúteo Máximo (Complexo)",
-        "equip": "Cardio",
-        "nivel": 2
-    },
-    {
-        "name": "Cardio — Polichinelos Seal",
-        "group": "Deltoides Frontais + Deltoides Superiores + Panturrilhas",
-        "focus": "Deltoides (Complexo Completo) + Gastrocnêmio e Sóleo (Tríceps Sural)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Cardio — Salto Longo com Passadas Rápidas para Trás",
-        "group": "Glúteos + Panturrilhas + Quadríceps",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural) + Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Cardio",
-        "nivel": 2
-    },
-    {
-        "name": "Cardio — shuffle lateral: dentro, dentro, fora, fora",
-        "group": "Glúteos + Panturrilhas",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural) + Glúteo Médio e Mínimo",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
         "name": "Carregamento de Mala com Barra",
-        "group": "Glúteos + Oblíquos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Oblíquos (Externos e Internos)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
-    },
-    {
-        "name": "Cem",
-        "group": "Abdominais",
-        "focus": "Reto Abdominal (Geral)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Cem Pernas Estendidas",
-        "group": "Abdominais",
-        "focus": "Reto Abdominal (Geral)",
-        "equip": "Pilates",
-        "nivel": 1
     },
     {
         "name": "Chest press inclinado alternado em pé na polia",
-        "group": "Peito + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Peitoral Superior (Fibras Claviculares)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Cabo",
         "nivel": 1
     },
@@ -2200,21 +1619,21 @@ const dictionaryData = [
     },
     {
         "name": "Chute Médio de Perna Reta em Pé com Cabo",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Chute Tesoura",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Chute Tesoura Lateral",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Peso Corporal",
         "nivel": 1
@@ -2228,29 +1647,22 @@ const dictionaryData = [
     },
     {
         "name": "Clean and Press com Haltere (Braço Único)",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoide Anterior e Lateral + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 3
     },
     {
-        "name": "Clean and Press com Kettlebell",
-        "group": "Deltoides Frontais + Glúteos",
-        "focus": "Deltoide Anterior e Lateral + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
         "name": "Clean and Press com barra",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoide Anterior e Lateral + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Clean and Press com halteres",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoide Anterior e Lateral + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 3
     },
@@ -2262,16 +1674,9 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Clean e Jerk com Pesa Russa",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoides (Complexo Completo) + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
         "name": "Clean e Press com Disco",
-        "group": "Deltoides Frontais + Glúteos",
-        "focus": "Deltoide Anterior e Lateral + Glúteo Máximo (Complexo)",
+        "group": "Glúteos",
+        "focus": "Glúteo Máximo (Complexo)",
         "equip": "Barra",
         "nivel": 2
     },
@@ -2283,71 +1688,50 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Controle a posição da prancha frontal",
-        "group": "Abdominais + Deltoides Frontais + Parte Inferior das Costas",
-        "focus": "Core (Transverso do Abdômen e Estabilizadores) + Deltoide Anterior + Eretores da Espinha (Região Lombar)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
         "name": "Corrida Calcanhar no Glúteo",
-        "group": "Cardio/HIIT",
+        "group": "Cardio/Hiit",
         "focus": "Motor Aeróbico",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
-        "name": "Corrida Deitado De Costas",
-        "group": "Panturrilhas + Quadríceps",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural) + Quadríceps Femoral (Geral)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
         "name": "Corrida Estacionária",
-        "group": "Cardio/HIIT",
+        "group": "Cardio/Hiit",
         "focus": "Motor Aeróbico",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Corrida com Elevação de Joelhos (High Knees)",
-        "group": "Cardio/HIIT",
+        "group": "Cardio/Hiit",
         "focus": "Motor Aeróbico",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Corte de madeira com cabo — em pé, de baixo para cima",
-        "group": "Abdominais + Oblíquos",
-        "focus": "Oblíquos (Externos e Internos) + Reto Abdominal (Geral)",
+        "group": "Abdominal",
+        "focus": "Reto Abdominal (Geral)",
         "equip": "Cabo",
         "nivel": 2
     },
     {
-        "name": "Costas Preparatórios de Remada Airplane Sentado",
-        "group": "Deltoides Superiores",
-        "focus": "Deltoides (Complexo Completo)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
         "name": "Crossover Polia Média",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Médias",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Crossover de Baixo para Cima",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Superiores",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Crossover de Cima para Baixo",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Inferiores",
         "equip": "Cabo",
         "nivel": 2
@@ -2396,8 +1780,8 @@ const dictionaryData = [
     },
     {
         "name": "Crucifixo Inclinado com Halteres",
-        "group": "Peito + Peitoral",
-        "focus": "Fibras Superiores + Peitoral Superior (Fibras Claviculares)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Halter",
         "nivel": 1
     },
@@ -2438,56 +1822,56 @@ const dictionaryData = [
     },
     {
         "name": "Crucifixo Inclinado no Cabo",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Superiores",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Crucifixo Inverso Cruzado na Polia Alta",
-        "group": "Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Posterior",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Crucifixo Inverso Curvado com Halteres",
-        "group": "Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Posterior",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Crucifixo Inverso Sentado com Halteres",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoide Posterior",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Crucifixo Inverso na Máquina",
-        "group": "Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Posterior",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Crucifixo Inverso na Polia Alta com Rotação Interna",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoide Posterior",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Crucifixo Reto com Halteres",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Médias",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Crucifixo Reto na Máquina (Peck Deck)",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Médias",
         "equip": "Máquina",
         "nivel": 1
@@ -2539,13 +1923,6 @@ const dictionaryData = [
         "group": "Peito",
         "focus": "Isolamento (Fibras Esternocostais)",
         "equip": "Halter",
-        "nivel": 1
-    },
-    {
-        "name": "Crucifixo com kettlebell",
-        "group": "Peito",
-        "focus": "Isolamento (Fibras Esternocostais)",
-        "equip": "Kettlebells",
         "nivel": 1
     },
     {
@@ -2613,21 +1990,21 @@ const dictionaryData = [
     },
     {
         "name": "Crucifixo inverso alto unilateral na polia com rotação interna",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Crucifixo inverso com halteres",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoide Posterior",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Crucifixo inverso no cabo alto",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoide Posterior",
         "equip": "Cabo",
         "nivel": 1
@@ -2682,20 +2059,6 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Crucifixo no chão com kettlebell",
-        "group": "Peito",
-        "focus": "Isolamento (Fibras Esternocostais)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Crucifixo unilateral com kettlebell",
-        "group": "Peito",
-        "focus": "Isolamento (Fibras Esternocostais)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Crucifixo unilateral no cabo no banco",
         "group": "Peito",
         "focus": "Isolamento (Fibras Esternocostais)",
@@ -2717,57 +2080,29 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Crucifixo unilateral no chão com kettlebell",
-        "group": "Peito",
-        "focus": "Isolamento (Fibras Esternocostais)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Crunch Oblíquo Ajoelhado na Polia com Corda",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Crunch oblíquo",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
-        "name": "Curl Nórdico de Isquiotibiais",
-        "group": "Posteriores da coxa",
-        "focus": "Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
-        "equip": "Peso Corporal",
-        "nivel": 2
-    },
-    {
-        "name": "Curl de posterior de coxa na polia",
-        "group": "Posteriores da coxa",
-        "focus": "Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
-        "equip": "Cabo",
-        "nivel": 3
-    },
-    {
-        "name": "Cão olhando para baixo: ponta do pé ao calcanhar",
-        "group": "Panturrilhas",
-        "focus": "Músculo Gastrocnêmio",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
         "name": "Círculo de Braços para Trás",
-        "group": "Deltoides Frontais + Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Círculos com os Braços para Frente",
-        "group": "Deltoides Frontais + Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Peso Corporal",
         "nivel": 1
@@ -2781,267 +2116,232 @@ const dictionaryData = [
     },
     {
         "name": "Dead Bug",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Descida do step com peso corporal",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Quadríceps Femoral (Geral)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Desenvolvimento Ajoelhado no Landmine",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Desenvolvimento Alternado Com Um Braço No Landmine",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Desenvolvimento Alternado Sentado No Landmine",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Desenvolvimento Alternado com Halteres",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Desenvolvimento Alternado com Halteres (Pegada Neutra)",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Desenvolvimento Arnold (Arnold Press)",
-        "group": "Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Desenvolvimento Bottoms-Up com Kettlebell",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
         "name": "Desenvolvimento Bradford com barra",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Desenvolvimento Com Barra Atrás da Nuca",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Desenvolvimento Cubano com Barra W",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Desenvolvimento Cubano com Halteres",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Anterior e Lateral",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Desenvolvimento Larsen unilateral com kettlebell",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Desenvolvimento Militar (Barra)",
-        "group": "Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Desenvolvimento Militar Sentado no Landmine",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Desenvolvimento Militar com Barra",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Desenvolvimento Militar no Landmine",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Desenvolvimento Sentado Unilateral com Landmine",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
-        "name": "Desenvolvimento Sentado com Kettlebell",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Desenvolvimento Sentado na Smith Machine",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Anterior e Lateral",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Desenvolvimento Unilateral com Halter",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Desenvolvimento Unilateral com Haltere em Pegada Neutra",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Desenvolvimento Unilateral com Kettlebell",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Desenvolvimento Unilateral com Landmine",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Desenvolvimento acima da cabeça com barra W",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Desenvolvimento com Halteres",
-        "group": "Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Desenvolvimento com Halteres (Pegada Neutra)",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Desenvolvimento com Halteres Sentado",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Desenvolvimento com barra atrás da cabeça (sentado)",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Desenvolvimento com cabo",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Desenvolvimento com halteres",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Desenvolvimento com halteres sentado (pegada neutra)",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Desenvolvimento de Braço Único com Kettlebell na Posição Invertida",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
         "name": "Desenvolvimento em Y com Halteres Sentado",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Desenvolvimento em Y com halteres",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Desenvolvimento na Máquina",
-        "group": "Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Desenvolvimento unilateral com haltere",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 1
     },
@@ -3061,245 +2361,224 @@ const dictionaryData = [
     },
     {
         "name": "Dragonflag Excêntrico",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Driver com anilha",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Elevação Alternada de Deltoides Posterior com Halteres",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoide Posterior",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Elevação Alternada de Perna Dobrada",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Elevação Alternada de Pernas",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
-        "name": "Elevação Dupla de Panturrilha Sentado com Kettlebell",
-        "group": "Panturrilhas",
-        "focus": "Músculo Sóleo",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Elevação Frontal (Anilha/Cabo)",
-        "group": "Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Elevação Frontal Completa Sentada com Barra",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Elevação Frontal Completa com Barra",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Elevação Frontal Completa com Halteres",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Elevação Frontal Inclinada com Halteres",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Elevação Frontal com Anilha",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Elevação Frontal com Barra",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Elevação Frontal com Barra no Cabo",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Elevação Frontal com Corda na Polia",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Elevação Frontal com Halteres",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Elevação Lateral Bilateral Baixa com Cabo",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Elevação Lateral Com Cabo Atrás Das Costas",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Elevação Lateral Completa Com Halteres (Sentado)",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Elevação Lateral Completa Sentado Com Haltere (Unilateral)",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Elevação Lateral Completa com Halteres",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Elevação Lateral Deitado",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Elevação Lateral Em Pé Com Halteres (Bayesian)",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Elevação Lateral Inclinada com Halteres Deitado",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Elevação Lateral Isométrica no Batente",
-        "group": "Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Elevação Lateral Unilateral com Corda no Cabo Baixo",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Cabo",
         "nivel": 1
     },
     {
-        "name": "Elevação Lateral Unilateral com Kettlebell",
-        "group": "Deltoides Frontais",
-        "focus": "Deltoide Lateral",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Elevação Lateral Unilateral no Cabo Baixo",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Elevação Lateral com Corda no Cabo (Deltoide Médio)",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Elevação Lateral com Disco",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Elevação Lateral com Halteres",
-        "group": "Deltoides Frontais + Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Elevação Lateral com Halteres em Seis Movimentos",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Elevação Lateral com Kettlebell (Alavanca Longa)",
-        "group": "Deltoides Frontais",
-        "focus": "Deltoide Lateral",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Elevação Lateral com Landmine",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Elevação Lateral de Braço Dobrado com Halteres",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 1
@@ -3313,28 +2592,28 @@ const dictionaryData = [
     },
     {
         "name": "Elevação Lateral na Máquina",
-        "group": "Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Elevação Lateral na Máquina em Pé",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Elevação Lateral na Polia Baixa",
-        "group": "Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Elevação Posterior de Deltoides na Banco com Halteres",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoide Posterior",
         "equip": "Halter",
         "nivel": 1
@@ -3347,23 +2626,16 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Elevação Sentada de Panturrilha com Pesa Russa",
-        "group": "Panturrilhas",
-        "focus": "Músculo Sóleo",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Elevação Y na polia",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Elevação de Braço em Prancha com Peso Corporal",
-        "group": "Abdominais + Deltoides Frontais + Deltoides Superiores",
-        "focus": "Core (Transverso do Abdômen e Estabilizadores) + Deltoides (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoides (Complexo Completo)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
@@ -3376,14 +2648,14 @@ const dictionaryData = [
     },
     {
         "name": "Elevação de Joelhos na Barra Fixa",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Elevação de Joelhos na Paralela",
-        "group": "Core",
+        "group": "Abdominal",
         "focus": "Inferior",
         "equip": "Máquina",
         "nivel": 1
@@ -3414,13 +2686,6 @@ const dictionaryData = [
         "group": "Panturrilhas",
         "focus": "Músculo Sóleo",
         "equip": "Barra",
-        "nivel": 1
-    },
-    {
-        "name": "Elevação de Panturrilha Unilateral com Kettlebell",
-        "group": "Panturrilhas",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural)",
-        "equip": "Kettlebells",
         "nivel": 1
     },
     {
@@ -3459,27 +2724,6 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Elevação de Panturrilha com Kettlebell",
-        "group": "Panturrilhas",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Elevação de Panturrilha com Kettlebell (Pegada Goblet)",
-        "group": "Panturrilhas",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Elevação de Panturrilha com Kettlebell de Braço e Perna Única",
-        "group": "Panturrilhas",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Elevação de Panturrilha com Landmine",
         "group": "Panturrilhas",
         "focus": "Gastrocnêmio e Sóleo (Tríceps Sural)",
@@ -3495,13 +2739,6 @@ const dictionaryData = [
     },
     {
         "name": "Elevação de Panturrilha com uma Perna com Peso Corporal",
-        "group": "Panturrilhas",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural)",
-        "equip": "Peso Corporal",
-        "nivel": 1
-    },
-    {
-        "name": "Elevação de Panturrilha em Caminhada",
         "group": "Panturrilhas",
         "focus": "Gastrocnêmio e Sóleo (Tríceps Sural)",
         "equip": "Peso Corporal",
@@ -3544,37 +2781,23 @@ const dictionaryData = [
     },
     {
         "name": "Elevação de Pernas Dobradas",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Inferior)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Elevação de Pernas Invertida",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Inferior)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Elevação de Pernas Pendurado (Toes to Bar)",
-        "group": "Core",
+        "group": "Abdominal",
         "focus": "Inferior",
         "equip": "Peso Corporal",
-        "nivel": 2
-    },
-    {
-        "name": "Elevação de Quadril",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Elevação de Quadril (Figura Quatro) com Pesa Russa",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
         "nivel": 2
     },
     {
@@ -3590,13 +2813,6 @@ const dictionaryData = [
         "focus": "Glúteo Médio e Mínimo",
         "equip": "Halter",
         "nivel": 1
-    },
-    {
-        "name": "Elevação de Quadril Unilateral com Kettlebell",
-        "group": "Glúteos",
-        "focus": "Glúteo Médio e Mínimo",
-        "equip": "Kettlebells",
-        "nivel": 3
     },
     {
         "name": "Elevação de Quadril com Barra",
@@ -3635,8 +2851,8 @@ const dictionaryData = [
     },
     {
         "name": "Elevação de Quadril com Disco para Supino",
-        "group": "Glúteos + Peito",
-        "focus": "Glúteo Máximo (Complexo) + Peitoral Médio (Fibras Esternocostais)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Barra",
         "nivel": 1
     },
@@ -3662,13 +2878,6 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Elevação de Quadril com Kettlebell",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Elevação de Quadril na Máquina",
         "group": "Glúteos",
         "focus": "Glúteo Máximo (Complexo)",
@@ -3676,16 +2885,9 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Elevação de QuadrilPilates · InicianteRolamentos de Quadril",
-        "group": "Quadríceps",
-        "focus": "Quadríceps Femoral (Geral)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
         "name": "Elevação de Queixo Neutra Assistida por Máquina",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Geral)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Máquina",
         "nivel": 1
     },
@@ -3705,7 +2907,7 @@ const dictionaryData = [
     },
     {
         "name": "Elevação de pernas deitado",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Inferior)",
         "equip": "Peso Corporal",
         "nivel": 1
@@ -3725,13 +2927,6 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Elevação de quadril com kettlebell",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Elevação de quadril unilateral com barra e calcanhares elevados",
         "group": "Glúteos",
         "focus": "Glúteo Médio e Mínimo",
@@ -3740,22 +2935,22 @@ const dictionaryData = [
     },
     {
         "name": "Elevação de queixo em posição L",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Geral)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Elevação em 'Y' na Polia Baixa",
-        "group": "Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Elevação em L Sentado",
-        "group": "Abdominais + Antebraços",
-        "focus": "Flexores do Antebraço + Reto Abdominal (Geral)",
+        "group": "Abdominal",
+        "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
@@ -3768,64 +2963,57 @@ const dictionaryData = [
     },
     {
         "name": "Elevação frontal com barra W",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Barra",
         "nivel": 1
     },
     {
-        "name": "Elevação frontal com kettlebell",
-        "group": "Deltoides Frontais",
-        "focus": "Deltoide Anterior",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Elevação lateral com halteres Bayesian",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Elevação lateral completa com anilha",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Elevação lateral completa unilateral com halter",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Elevação lateral sentado",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Elevação lateral unilateral com halter",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Elevação lateral unilateral com haltere (sentada)",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Elevação na barra com pegada Gironda.",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Geral)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Peso Corporal",
         "nivel": 3
     },
@@ -3845,8 +3033,8 @@ const dictionaryData = [
     },
     {
         "name": "Empurrada e puxada no cabo",
-        "group": "Dorsais + Oblíquos + Peito",
-        "focus": "Latíssimo do Dorso (Foco em Largura) + Oblíquos (Externos e Internos) + Peitoral Médio (Fibras Esternocostais)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Cabo",
         "nivel": 1
     },
@@ -3873,8 +3061,8 @@ const dictionaryData = [
     },
     {
         "name": "Encolhimento com Halteres Silverback",
-        "group": "Trapezio meio das Costas + Trapézios",
-        "focus": "Romboides (Maior e Menor) e Trapézio Médio/Inferior + Trapézio Superior (Fibras Descendentes)",
+        "group": "Trapézios",
+        "focus": "Romboides (Maior e Menor) e Trapézio Médio/Inferior",
         "equip": "Halter",
         "nivel": 1
     },
@@ -3883,13 +3071,6 @@ const dictionaryData = [
         "group": "Trapézios",
         "focus": "Trapézio Superior (Fibras Descendentes)",
         "equip": "Halter",
-        "nivel": 1
-    },
-    {
-        "name": "Encolhimento de Ombros Inclinado com Kettlebell",
-        "group": "Trapezio meio das Costas + Trapézios",
-        "focus": "Romboides (Maior e Menor) e Trapézio Médio/Inferior + Trapézio Superior (Fibras Descendentes)",
-        "equip": "Kettlebells",
         "nivel": 1
     },
     {
@@ -3914,41 +3095,6 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Encolhimento de Ombros com Kettlebell",
-        "group": "Trapézios",
-        "focus": "Trapézio Superior (Fibras Descendentes)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Encolhimento de Ombros com Kettlebell (Unilateral)",
-        "group": "Trapézios",
-        "focus": "Trapézio Superior (Fibras Descendentes)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Encolhimento de Ombros com Kettlebell Silverback",
-        "group": "Trapezio meio das Costas",
-        "focus": "Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Encolhimento de Ombros com Kettlebell Silverback (Unilateral)",
-        "group": "Trapezio meio das Costas",
-        "focus": "Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Encolhimento de Ombros com Kettlebell Silverback - (Unilateral)",
-        "group": "Trapézios",
-        "focus": "Trapézio Superior (Fibras Descendentes)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Encolhimento de Ombros em Pike (Peso Corporal)",
         "group": "Trapézios",
         "focus": "Trapézio Superior (Fibras Descendentes)",
@@ -3964,8 +3110,8 @@ const dictionaryData = [
     },
     {
         "name": "Encolhimento de Ombros no Cabo Silverback",
-        "group": "Trapezio meio das Costas + Trapézios",
-        "focus": "Romboides (Maior e Menor) e Trapézio Médio/Inferior + Trapézio Superior (Fibras Descendentes)",
+        "group": "Trapézios",
+        "focus": "Romboides (Maior e Menor) e Trapézio Médio/Inferior",
         "equip": "Cabo",
         "nivel": 1
     },
@@ -4006,8 +3152,8 @@ const dictionaryData = [
     },
     {
         "name": "Encolhimento de ombros deitado com halteres Silverback",
-        "group": "Trapezio meio das Costas + Trapézios",
-        "focus": "Romboides (Maior e Menor) e Trapézio Médio/Inferior + Trapézio Superior (Fibras Descendentes)",
+        "group": "Trapézios",
+        "focus": "Romboides (Maior e Menor) e Trapézio Médio/Inferior",
         "equip": "Halter",
         "nivel": 2
     },
@@ -4026,39 +3172,18 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Enfiar A Agulha Quadril Sobre Joelhos",
-        "group": "Oblíquos + Trapézios",
-        "focus": "Oblíquos (Externos e Internos) + Trapézio (Complexo Completo)",
-        "equip": "Yoga",
-        "nivel": 2
-    },
-    {
         "name": "Escalador (Mountain Climber)",
-        "group": "Cardio/HIIT",
+        "group": "Cardio/Hiit",
         "focus": "Resistência Anaeróbica",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Escalador de Slalom",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 2
-    },
-    {
-        "name": "Estocada do corredor",
-        "group": "Quadríceps",
-        "focus": "Quadríceps Femoral (Geral)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Expansão Reversa Teardrops Ajoelhado Com Joelhos Voltados Para Dentro",
-        "group": "Deltoides Frontais + Peito",
-        "focus": "Deltoides (Complexo Completo) + Peitoral Médio (Fibras Esternocostais)",
-        "equip": "Pilates",
-        "nivel": 1
     },
     {
         "name": "Extensão Cruzada de Tríceps (Katana Extensions)",
@@ -4069,8 +3194,8 @@ const dictionaryData = [
     },
     {
         "name": "Extensão Reversa na Máquina",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Máquina",
         "nivel": 1
     },
@@ -4089,15 +3214,8 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Extensão Unilateral do Ombro com Kettlebell",
-        "group": "Dorsais",
-        "focus": "Latíssimo do Dorso (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Extensão de Costas na Máquina",
-        "group": "Parte Inferior das Costas",
+        "group": "Lombar",
         "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Máquina",
         "nivel": 1
@@ -4110,13 +3228,6 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Extensão de Glúteos e Isquiotibiais",
-        "group": "Posteriores da coxa",
-        "focus": "Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
-        "equip": "Máquina",
-        "nivel": 2
-    },
-    {
         "name": "Extensão de Lombar no Banco Romano",
         "group": "Costas",
         "focus": "Eretores da Espinha (Lombar)",
@@ -4125,49 +3236,42 @@ const dictionaryData = [
     },
     {
         "name": "Extensão de Ombro com Halteres",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Extensão de Ombro com Kettlebell",
-        "group": "Dorsais",
-        "focus": "Latíssimo do Dorso (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Extensão de Ombros com Barra",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Extensão de Perna em Pé na Polia",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Reto Femoral (Isolamento)",
         "equip": "Cabo",
         "nivel": 3
     },
     {
         "name": "Extensão de Pernas Sentado no Cabo",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Reto Femoral (Isolamento)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Extensão de Pernas com Haltere",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Reto Femoral (Isolamento)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Extensão de Pernas na Máquina",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Reto Femoral (Isolamento)",
         "equip": "Máquina",
         "nivel": 1
@@ -4177,13 +3281,6 @@ const dictionaryData = [
         "group": "Antebraços",
         "focus": "Extensores do Antebraço",
         "equip": "Halter",
-        "nivel": 1
-    },
-    {
-        "name": "Extensão de Pulso com Kettlebell no Banco",
-        "group": "Antebraços",
-        "focus": "Extensores do Antebraço",
-        "equip": "Kettlebells",
         "nivel": 1
     },
     {
@@ -4215,13 +3312,6 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Extensão de Punho com Kettlebell",
-        "group": "Antebraços",
-        "focus": "Extensores do Antebraço",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Extensão de Punho no Cabo com Apoio",
         "group": "Antebraços",
         "focus": "Extensores do Antebraço",
@@ -4230,15 +3320,15 @@ const dictionaryData = [
     },
     {
         "name": "Extensão de Quadril com Cabo no Banco Inclinado (Perna Reta)",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Extensão de Quadril em Pé com Perna Esticada no Cabo",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Cabo",
         "nivel": 1
     },
@@ -4283,13 +3373,6 @@ const dictionaryData = [
         "focus": "Tríceps (Complexo Completo)",
         "equip": "Barra",
         "nivel": 3
-    },
-    {
-        "name": "Extensão de Tríceps com Kettlebell Acima da Cabeça",
-        "group": "Tríceps",
-        "focus": "Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 2
     },
     {
         "name": "Extensão de Tríceps com Peso Corporal",
@@ -4342,7 +3425,7 @@ const dictionaryData = [
     },
     {
         "name": "Extensão de ombro unilateral com haltere",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Halter",
         "nivel": 2
@@ -4383,13 +3466,6 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Extensão de tríceps em pé com kettlebell",
-        "group": "Tríceps",
-        "focus": "Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Extensão de tríceps na polia alta com corda (acima da cabeça)",
         "group": "Tríceps",
         "focus": "Cabeças Lateral e Medial",
@@ -4405,14 +3481,14 @@ const dictionaryData = [
     },
     {
         "name": "Extensão lombar (Superman)",
-        "group": "Parte Inferior das Costas",
+        "group": "Lombar",
         "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Extensão lombar 45° na máquina",
-        "group": "Parte Inferior das Costas",
+        "group": "Lombar",
         "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Máquina",
         "nivel": 1
@@ -4433,65 +3509,58 @@ const dictionaryData = [
     },
     {
         "name": "Face Pull Sentado Unilateral no Cabo",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Face Pull Sentado com Barra no Cabo",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Face Pull Sentado com Corda no Cabo",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Face Pull Unilateral no Cabo",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Face Pull com Rotação Externa",
-        "group": "Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Posterior",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Face Pull na Polia Alta",
-        "group": "Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Posterior",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Face Pulls na Polia com Corda",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Face pull com corda (ajoelhado)",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoides (Complexo Completo) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Cabo",
-        "nivel": 1
-    },
-    {
-        "name": "Faixa de Cardio com Movimentos Reversos de Voo e Polichinelos",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
-        "equip": "Cardio",
+        "equip": "Cabo",
         "nivel": 1
     },
     {
@@ -4502,36 +3571,29 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Flexora para posteriores da coxa na máquina",
-        "group": "Posteriores da coxa",
-        "focus": "Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
-        "equip": "Máquina",
-        "nivel": 1
-    },
-    {
         "name": "Flexão Arqueiro em Pé com Anel",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Flexão Com Palmas",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Flexão Declinada",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Inferior (Fibras Abdominais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Inferior (Fibras Abdominais)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Flexão Declinada (Pés elevados)",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Superiores",
         "equip": "Peso Corporal",
         "nivel": 2
@@ -4545,8 +3607,8 @@ const dictionaryData = [
     },
     {
         "name": "Flexão Diamante com Joelhos Apoiados (Peso Corporal)",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
@@ -4565,51 +3627,44 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Flexão Em Pé Com Pernas Afastadas Segurando Os Calcanhares",
-        "group": "Panturrilhas",
-        "focus": "Músculo Gastrocnêmio",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
         "name": "Flexão Explosiva (Peso Corporal)",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Peso Corporal",
         "nivel": 3
     },
     {
         "name": "Flexão Explosiva / Arqueiro",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Médias",
         "equip": "Peso Corporal",
         "nivel": 3
     },
     {
         "name": "Flexão Inclinada",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Flexão Inclinada (Mãos no banco)",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Inferiores",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Flexão Inclinada (Peso Corporal)",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Flexão Inclinada com Joelhos",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
@@ -4629,85 +3684,78 @@ const dictionaryData = [
     },
     {
         "name": "Flexão Pike Elevada",
-        "group": "Deltoides Frontais + Trapezio meio das Costas + Trapézios",
-        "focus": "Deltoides (Complexo Completo) + Romboides (Maior e Menor) e Trapézio Médio/Inferior + Trapézio (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoides (Complexo Completo)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Flexão Pike com Peso Corporal",
-        "group": "Deltoides Frontais + Trapezio meio das Costas + Trapézios",
-        "focus": "Deltoides (Complexo Completo) + Romboides (Maior e Menor) e Trapézio Médio/Inferior + Trapézio (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoides (Complexo Completo)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Flexão com Elevação de Perna",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Flexão com Halteres (Mãos Elevadas)",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Flexão com passagem por cima do kettlebell",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
         "name": "Flexão de Braço Tradicional",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Médias",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Flexão de Braço com Espera Estaggerada",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Flexão de Joelhos em Suspensão Corporal",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Flexão de Peso Corporal do Garçom",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Flexão de Queixo Assistida por Peso Corporal",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Geral)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Flexão de Tronco com Halteres em Posição Alternada",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Flexão de braço",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
@@ -4720,22 +3768,22 @@ const dictionaryData = [
     },
     {
         "name": "Flexão em Déficit com Anilha",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Flexão em L na Barra Fixa",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Flexão em Pé com Anel",
-        "group": "Deltoides Frontais + Peito + Tríceps",
-        "focus": "Deltoides (Complexo Completo) + Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
@@ -4748,8 +3796,8 @@ const dictionaryData = [
     },
     {
         "name": "Flexão para Remada Renegade",
-        "group": "Dorsais + Peito",
-        "focus": "Latíssimo do Dorso (Foco em Espessura) + Peitoral Médio (Fibras Esternocostais)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Halter",
         "nivel": 2
     },
@@ -4769,57 +3817,57 @@ const dictionaryData = [
     },
     {
         "name": "Flexões com Peso",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Flexões com as Mãos Levantadas",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Flexões de Braços com Joelhos Apoiados",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Flexões de Joelho com Peso",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Flexões na barra com peso de halteres",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Geral)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Fly Inverso Deitado Com Halteres",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoide Posterior",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Fly Sentado para Deltoide Posterior com Rotação Interna",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoide Posterior + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Ombro",
+        "focus": "Deltoide Posterior",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Fly para Deltoide Posterior com Halteres (Rotação Interna)",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoide Posterior + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Ombro",
+        "focus": "Deltoide Posterior",
         "equip": "Halter",
         "nivel": 1
     },
@@ -4839,8 +3887,8 @@ const dictionaryData = [
     },
     {
         "name": "Giro com Barra Fixa",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Peso Corporal",
         "nivel": 3
     },
@@ -4852,51 +3900,30 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Gomukhasana (Pernas Relaxadas)",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Yoga",
-        "nivel": 2
-    },
-    {
-        "name": "Gomukhasana (variação com um braço)",
-        "group": "Dorsais + Tríceps",
-        "focus": "Latíssimo do Dorso (Geral) + Tríceps (Complexo Completo)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
         "name": "Good Morning com anilha frontal",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Good Morning com barra alta",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Good Morning com haltere em posição goblet",
-        "group": "Glúteos + Parte Inferior das Costas + Posteriores da coxa",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Good Morning com kettlebell na posição goblet",
-        "group": "Glúteos + Parte Inferior das Costas + Posteriores da coxa",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Good Mornings",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
@@ -4909,37 +3936,30 @@ const dictionaryData = [
     },
     {
         "name": "Halo com anilha",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Hang Clean E Press Com Haltere Unilateral",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoide Lateral + Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Hang Clean e Press com Barra",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoide Anterior e Lateral + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Hang clean and press com halteres",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoide Anterior e Lateral + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
-        "nivel": 3
-    },
-    {
-        "name": "Hang clean e press com kettlebell",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoide Anterior e Lateral + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
         "nivel": 3
     },
     {
@@ -4965,80 +3985,66 @@ const dictionaryData = [
     },
     {
         "name": "Hollow Body Hold",
-        "group": "Core",
+        "group": "Abdominal",
         "focus": "Estabilização/Anti-extensão",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Hollow Hold com Landmine",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Hollow Hold com disco",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Hollow com Haltere",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Inclinação Lateral com Disco (Pegada em Pinça)",
-        "group": "Antebraços + Oblíquos",
-        "focus": "Flexores do Antebraço + Oblíquos (Externos e Internos)",
+        "group": "Abdominal",
+        "focus": "Oblíquos (Externos e Internos)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Inclinação Lateral com Haltere",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Inclinação Lateral com Haltere Acima da Cabeça",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Halter",
         "nivel": 3
     },
     {
-        "name": "Inclinação Para Frente Com Pernas Afastadas",
-        "group": "Deltoides Frontais",
-        "focus": "Deltoide Anterior",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
         "name": "Inclinação lateral com barra (landmine)",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Inclinação lateral no cabo",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Cabo",
         "nivel": 1
-    },
-    {
-        "name": "Isometria Superman com Kettlebell",
-        "group": "Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar)",
-        "equip": "Kettlebells",
-        "nivel": 3
     },
     {
         "name": "JM Press (extensão de triceps na barra)",
@@ -5049,122 +4055,38 @@ const dictionaryData = [
     },
     {
         "name": "JM Press com barra",
-        "group": "Peito + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Peitoral Médio (Fibras Esternocostais)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Barra",
         "nivel": 2
     },
     {
-        "name": "Jack Press com Faixa de Resistência para Cardio",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Deltoide Anterior e Lateral",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
         "name": "Jackknife oblíquo",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Jefferson Curl com Halteres",
-        "group": "Parte Inferior das Costas",
+        "group": "Lombar",
         "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Jefferson Curl com Kettlebell",
-        "group": "Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Jefferson Curl com barra",
-        "group": "Parte Inferior das Costas",
+        "group": "Lombar",
         "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Jefferson Curl da Coluna com Peso Corporal",
-        "group": "Parte Inferior das Costas",
+        "group": "Lombar",
         "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Peso Corporal",
         "nivel": 1
-    },
-    {
-        "name": "Kettlebell Agachado com Press Acima da Cabeça",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Deltoide Anterior e Lateral",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
-        "name": "Kettlebell Clean And Jerk Com Um Braço (Hang)",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoides (Complexo Completo) + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
-        "name": "Kettlebell Clean E Jerk Unilateral",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoide Lateral + Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
-        "name": "Kettlebell Clean and Press (Braço Único)",
-        "group": "Deltoides Frontais + Glúteos",
-        "focus": "Deltoide Anterior e Lateral + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
-        "name": "Kettlebell Clean e Desenvolvimento Unilateral a partir da Suspensão",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoide Lateral + Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
-        "name": "Kettlebell Hang Squat Clean E Jerk",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoides (Complexo Completo) + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
-        "name": "Kettlebell Press com um braço no chão",
-        "group": "Peito + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Peitoral Médio (Fibras Esternocostais)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Kettlebell Squat Clean e Jerk",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoides (Complexo Completo) + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
-        "name": "Kettlebell Swing (Balanço com KB ou Halter)",
-        "group": "Cardio/HIIT",
-        "focus": "Resistência Anaeróbica",
-        "equip": "Halter",
-        "nivel": 2
-    },
-    {
-        "name": "Kettlebell Windmill (mão de apoio)",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Kettlebells",
-        "nivel": 2
     },
     {
         "name": "Kickback de Glúteo no Landmine",
@@ -5182,8 +4104,8 @@ const dictionaryData = [
     },
     {
         "name": "Kickback de Quadril com Perna Reta no Cabo, Apoiado no Banco",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Cabo",
         "nivel": 1
     },
@@ -5209,45 +4131,31 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Kickbacks de tríceps",
-        "group": "Posteriores da coxa",
-        "focus": "Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
-        "equip": "Peso Corporal",
-        "nivel": 1
-    },
-    {
         "name": "L-Sit na Barra Fixa",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Landmine Rotacional — Levantamento para Desenvolvimento",
-        "group": "Deltoides Frontais + Oblíquos",
-        "focus": "Deltoide Anterior e Lateral + Oblíquos (Externos e Internos)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Landmine — Press Unilateral Acima da Cabeça (Meio Ajoelhado)",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Deltoide Lateral",
+        "group": "Ombro",
+        "focus": "Deltoide Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Larsen Press Unilateral com Haltere",
-        "group": "Peito + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Peitoral Médio (Fibras Esternocostais)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Halter",
-        "nivel": 2
-    },
-    {
-        "name": "Larsen Press com Kettlebell",
-        "group": "Peito + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Peitoral Médio (Fibras Esternocostais)",
-        "equip": "Kettlebells",
         "nivel": 2
     },
     {
@@ -5266,43 +4174,43 @@ const dictionaryData = [
     },
     {
         "name": "Leg Press Horizontal Máquina",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Leg Press Horizontal Máquina Sissy",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 2
     },
     {
         "name": "Leg Press na Máquina Smith",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 2
     },
     {
         "name": "Leg press na máquina",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Levantamento Alto com Barra",
-        "group": "Glúteos + Parte Inferior das Costas + Trapezio meio das Costas + Trapézios",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Romboides (Maior e Menor) e Trapézio Médio/Inferior + Trapézio (Complexo Completo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Levantamento Alto com Pegada Larga de Barra",
-        "group": "Glúteos + Parte Inferior das Costas + Trapezio meio das Costas + Trapézios",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Romboides (Maior e Menor) e Trapézio Médio/Inferior + Trapézio (Complexo Completo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
@@ -5322,134 +4230,106 @@ const dictionaryData = [
     },
     {
         "name": "Levantamento Terra Alternado com Barra",
-        "group": "Glúteos + Parte Inferior das Costas + Posteriores da coxa",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Levantamento Terra Coan com Barra",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Levantamento Terra Convencional com Barra",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Levantamento Terra Convencional com Barra e Pausa",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Levantamento Terra Convencional com Deficit de Barra",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
-        "name": "Levantamento Terra Convencional com Kettlebell (Duplo)",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Levantamento Terra Elevado na Polia",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Levantamento Terra Jefferson com Barra",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Levantamento Terra Maleta com Barra",
-        "group": "Glúteos + Oblíquos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Oblíquos (Externos e Internos)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
     {
-        "name": "Levantamento Terra Maleta com Kettlebell",
-        "group": "Glúteos + Oblíquos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Oblíquos (Externos e Internos)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Levantamento Terra Parcial com Barra",
-        "group": "Parte Inferior das Costas + Trapezio meio das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Levantamento Terra Reverso com Barra",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Levantamento Terra Romeno com Barra e Cabo Alternado",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Levantamento Terra Romeno com Barra na Polia",
-        "group": "Glúteos + Parte Inferior das Costas + Posteriores da coxa",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Levantamento Terra Romeno com Halter em Posição Semi-Ajoelhada",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Levantamento Terra Romeno com Halteres em Meio Ajoelhamento",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Levantamento Terra Romeno com Kettlebell em Meio Ajoelhamento",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
-        "name": "Levantamento Terra Romeno com Kettlebell em Meio-Ajoelhado",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Levantamento Terra Romeno de Halteres Cruzando o Corpo",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 2
     },
@@ -5462,106 +4342,78 @@ const dictionaryData = [
     },
     {
         "name": "Levantamento Terra Sumô com Barra e Pausa",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
-        "name": "Levantamento Terra Sumô com Kettlebell",
-        "group": "Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Levantamento Terra Sumô com Landmine",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Barra",
         "nivel": 1
     },
     {
-        "name": "Levantamento Terra Unilateral Com Kettlebell",
-        "group": "Glúteos + Parte Inferior das Costas + Posteriores da coxa",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo + Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
         "name": "Levantamento Terra Unilateral com Disco (Pegada em Pinça)",
-        "group": "Antebraços + Glúteos",
-        "focus": "Flexores do Antebraço + Glúteo Médio e Mínimo",
+        "group": "Glúteos",
+        "focus": "Glúteo Médio e Mínimo",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Levantamento Terra Unilateral na Polia",
-        "group": "Glúteos + Parte Inferior das Costas + Posteriores da coxa",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo + Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Cabo",
         "nivel": 3
     },
     {
         "name": "Levantamento Terra com Anilha",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Levantamento Terra com Anilha em Passada Alternada",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Barra",
-        "nivel": 3
-    },
-    {
-        "name": "Levantamento Terra com Barra",
-        "group": "Glúteos + Parte Inferior das Costas + Trapezio meio das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Barra",
-        "nivel": 2
-    },
-    {
-        "name": "Levantamento Terra com Barra em uma Perna Só",
-        "group": "Parte Inferior das Costas",
+        "group": "Lombar",
         "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
     {
-        "name": "Levantamento Terra com Kettlebell (Unilateral)",
-        "group": "Glúteos + Parte Inferior das Costas + Posteriores da coxa + Trapezio meio das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo + Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Kettlebells",
-        "nivel": 1
+        "name": "Levantamento Terra com Barra",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
+        "equip": "Barra",
+        "nivel": 2
     },
     {
-        "name": "Levantamento Terra com Kettlebell em Base Escalonada (Unilateral)",
-        "group": "Glúteos + Parte Inferior das Costas + Posteriores da coxa",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo + Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
-        "equip": "Kettlebells",
-        "nivel": 1
+        "name": "Levantamento Terra com Barra em uma Perna Só",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
+        "equip": "Barra",
+        "nivel": 3
     },
     {
         "name": "Levantamento Terra com Pegada Snatch",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Levantamento Terra com Pegada em Pinça no Disco",
-        "group": "Antebraços + Dorsais + Glúteos",
-        "focus": "Flexores do Antebraço + Glúteo Máximo (Complexo) + Latíssimo do Dorso (Geral)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Levantamento Terra com Pinça de Discos e Passada Alternada",
-        "group": "Antebraços + Glúteos",
-        "focus": "Flexores do Antebraço + Glúteo Máximo (Complexo)",
+        "group": "Glúteos",
+        "focus": "Glúteo Máximo (Complexo)",
         "equip": "Barra",
         "nivel": 3
     },
@@ -5573,22 +4425,15 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Levantamento com Kettlebell em Posição de Garçom Staggered",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Levantamento de Barra com Arremesso",
-        "group": "Deltoides Frontais + Glúteos + Parte Inferior das Costas",
-        "focus": "Deltoides (Complexo Completo) + Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Levantamento de Peso Olímpico com Divisão de Pernas",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Barra",
         "nivel": 2
@@ -5615,78 +4460,64 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Levantamento romeno com kettlebell",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Levantamento terra com barra hexagonal e pausa",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Levantamento terra com barra hexagonal em déficit",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Levantamento terra com halteres em passada",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Levantamento terra com kettlebell — base escalonada",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Levantamento terra romeno com barra EZ",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Levantamento terra romeno com barra hexagonal",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Levantamento terra romeno unilateral com barra hexagonal",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Levantamento terra unilateral com barra hexagonal",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Limpador de para-brisa",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Macas",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Máquina",
         "nivel": 2
@@ -5699,51 +4530,30 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Marcha do Fazendeiro com Kettlebell",
-        "group": "Antebraços",
-        "focus": "Flexores do Antebraço",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Meia Rotação de Pescoço",
-        "group": "Trapézios",
-        "focus": "Trapézio (Complexo Completo)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Meia-lótus",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
         "name": "Meio Agachamento de Joelho",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Mergulho com Halteres",
-        "group": "Deltoides Frontais + Peito + Tríceps",
-        "focus": "Deltoides (Complexo Completo) + Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Mergulho com Peso",
-        "group": "Deltoides Frontais + Peito + Tríceps",
-        "focus": "Deltoides (Complexo Completo) + Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Mergulho na caixa",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
@@ -5763,29 +4573,29 @@ const dictionaryData = [
     },
     {
         "name": "Mergulhos Assistidos com Caixa (Peso Corporal)",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Mergulhos Assistidos por Máquina em Barras Paralelas",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Mergulhos em Barras Paralelas",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Mergulhos na Máquina",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Máquina",
         "nivel": 1
     },
@@ -5804,22 +4614,15 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Montanha",
-        "group": "Peito",
-        "focus": "Peitoral Médio (Fibras Esternocostais)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
         "name": "Montanhista Saltador",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Montanhista em Ritmo Lento",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
@@ -5854,7 +4657,7 @@ const dictionaryData = [
     },
     {
         "name": "Máquina de Extensão de Pernas com Placas",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Reto Femoral (Isolamento)",
         "equip": "Máquina",
         "nivel": 1
@@ -5868,14 +4671,14 @@ const dictionaryData = [
     },
     {
         "name": "Máquina de Leg Press Unilateral",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Máquina de Levantamento de Pesos Neutro Acima da Cabeça",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Máquina",
         "nivel": 1
@@ -5903,35 +4706,35 @@ const dictionaryData = [
     },
     {
         "name": "Máquina de Press de Peito em Declínio com Placas",
-        "group": "Peito + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Peitoral Médio (Fibras Esternocostais)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Máquina de Pressão Acima da Cabeça com Pegada por Cima",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Anterior e Lateral",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Máquina de Remada Baixa com Carga por Placas",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoides (Complexo Completo) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Ombro",
+        "focus": "Deltoides (Complexo Completo)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Máquina de Remada Selada com Carga de Placas",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Máquina de Remada T com Carga de Placas",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Máquina",
         "nivel": 1
@@ -5952,70 +4755,63 @@ const dictionaryData = [
     },
     {
         "name": "Máquina de Supino Inclinado Baixo com Placas",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Máquina de Supino Inclinado com Placas",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Máquina de Supino Militar Frontal com Placas",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoide Anterior",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Máquina de Voo Reverso",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Máquina para Abdominais com Placas",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Oração com Cabo de Corda para Dorsais",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Cabo",
         "nivel": 2
     },
     {
-        "name": "Oração da Pirâmide",
-        "group": "Dorsais + Tríceps",
-        "focus": "Latíssimo do Dorso (Geral) + Tríceps (Complexo Completo)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
         "name": "Pallof Press Ajoelhado com Cabo",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Pallof Press Ajoelhado no Cabo para Woodchopper",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Pallof Press com Cabo",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Cabo",
         "nivel": 1
@@ -6035,73 +4831,31 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Parada de cabeça",
-        "group": "Deltoides Frontais",
-        "focus": "Deltoides (Complexo Completo)",
-        "equip": "Yoga",
-        "nivel": 3
-    },
-    {
         "name": "Paralelas (Dips com tronco à frente)",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Inferiores",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
-        "name": "Parte Média das Costas — Série 3",
-        "group": "Dorsais",
-        "focus": "Latíssimo do Dorso (Geral)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Passada Frontal Unilateral com Kettlebell",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Passada Frontal com Kettlebell (Dupla)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Passada Lateral com Haltere (Goblet)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Halter",
         "nivel": 3
     },
     {
-        "name": "Passada Lateral com Kettlebell em Apoio Frontal (Braço Único)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Passada Lateral com Landmine",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Passadas para frente",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Peso Corporal",
-        "nivel": 1
-    },
-    {
-        "name": "Patinação para Abertura Lateral",
-        "group": "Glúteos",
-        "focus": "Glúteo Médio e Mínimo",
-        "equip": "Pilates",
         "nivel": 1
     },
     {
@@ -6127,7 +4881,7 @@ const dictionaryData = [
     },
     {
         "name": "Percevejo (Dead Bugs)",
-        "group": "Core",
+        "group": "Abdominal",
         "focus": "Estabilização/Anti-extensão",
         "equip": "Peso Corporal",
         "nivel": 2
@@ -6140,123 +4894,74 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Perna Única (Perna Dobrada)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
         "name": "Peso Morto Romeno com Halteres",
-        "group": "Glúteos + Parte Inferior das Costas + Posteriores da coxa",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Peso Morto Romeno com Pegada Snatch na Barra",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Peso Morto Sumô com Barra",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Peso Morto Unilateral com Disco",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Peso Romeno Unilateral na Landmine",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Peso morto unilateral com haltere (uma perna, um braço)",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Pike Push-up / Flexão Hindú",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Superiores",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Pike de Remador",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Máquina",
         "nivel": 2
     },
     {
-        "name": "Pilates Footwork na Primeira Posição",
-        "group": "Quadríceps",
-        "focus": "Quadríceps Femoral (Geral)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Pilates Rotações de Um Braço Remada para Costas Remada Sentada",
-        "group": "Bíceps + Dorsais + Oblíquos + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura) + Oblíquos (Externos e Internos) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Pilates com Calcanhar de Uma Perna",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
         "name": "Polichinelo Cruzado (Seal Jacks)",
-        "group": "Cardio/HIIT",
+        "group": "Cardio/Hiit",
         "focus": "Motor Aeróbico",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Polichinelos (Jumping Jacks)",
-        "group": "Cardio/HIIT",
+        "group": "Cardio/Hiit",
         "focus": "Motor Aeróbico",
         "equip": "Peso Corporal",
         "nivel": 3
-    },
-    {
-        "name": "Polichinelos Cardio",
-        "group": "Deltoides Frontais",
-        "focus": "Deltoides (Complexo Completo)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Polichinelos com Faixa e Rosca Martelo",
-        "group": "Bíceps",
-        "focus": "Músculo Braquial e Braquiorradial",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Pombo Reclinado",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Yoga",
-        "nivel": 1
     },
     {
         "name": "Ponte Unilateral De Glúteos Com Pés Elevados (Peso Corporal)",
@@ -6343,16 +5048,9 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Ponte de Glúteos Unilateral com Kettlebell",
-        "group": "Glúteos",
-        "focus": "Glúteo Médio e Mínimo",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Ponte de Glúteos com Anilha para Pullover",
-        "group": "Dorsais + Glúteos",
-        "focus": "Glúteo Máximo (Complexo) + Latíssimo do Dorso (Geral)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Barra",
         "nivel": 1
     },
@@ -6372,8 +5070,8 @@ const dictionaryData = [
     },
     {
         "name": "Ponte de Glúteos com Halteres",
-        "group": "Glúteos + Posteriores da coxa + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Halter",
         "nivel": 1
     },
@@ -6428,287 +5126,98 @@ const dictionaryData = [
     },
     {
         "name": "Posição Hollow",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
-        "name": "Posição de Prancha Alongada",
-        "group": "Abdominais + Deltoides Frontais + Parte Inferior das Costas",
-        "focus": "Core (Transverso do Abdômen e Estabilizadores) + Deltoides (Complexo Completo) + Eretores da Espinha (Região Lombar)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Postura Borboleta Cruzada",
-        "group": "Trapézios",
-        "focus": "Trapézio (Complexo Completo)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura Selvagem",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Yoga",
-        "nivel": 2
-    },
-    {
-        "name": "Postura da Cabeça de Vaca — Variação com Dois Braços",
-        "group": "Dorsais + Tríceps",
-        "focus": "Latíssimo do Dorso (Geral) + Tríceps (Complexo Completo)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura da Cadeira",
-        "group": "Quadríceps",
-        "focus": "Quadríceps Femoral (Geral)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura da Cobra",
-        "group": "Abdominais + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Reto Abdominal (Geral)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura da Criança — Braços Estendidos",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Geral)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura da Criança — Braços Estendidos (Esquerda/Direita)",
-        "group": "Dorsais + Oblíquos",
-        "focus": "Latíssimo do Dorso (Geral) + Oblíquos (Externos e Internos)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura da Criança — Braços ao Lado",
-        "group": "Dorsais",
-        "focus": "Latíssimo do Dorso (Geral)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura da Criança — Cotovelos no Bloco",
-        "group": "Dorsais + Tríceps",
-        "focus": "Latíssimo do Dorso (Geral) + Tríceps (Complexo Completo)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura da Esfinge",
-        "group": "Parte Inferior das Costas + Peito",
-        "focus": "Eretores da Espinha (Região Lombar) + Peitoral Médio (Fibras Esternocostais)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura da Lua Crescente",
-        "group": "Quadríceps",
-        "focus": "Quadríceps Femoral (Geral)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura da Pirâmide",
-        "group": "Panturrilhas",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura da Árvore",
-        "group": "Peito",
-        "focus": "Peitoral Médio (Fibras Esternocostais)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura do Arco",
-        "group": "Abdominais + Peito",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Reto Abdominal (Geral)",
-        "equip": "Yoga",
-        "nivel": 2
-    },
-    {
-        "name": "Postura do Cachorrinho",
-        "group": "Deltoides Superiores + Dorsais",
-        "focus": "Deltoides (Complexo Completo) + Latíssimo do Dorso (Geral)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura do Cachorro",
-        "group": "Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura do Cachorro Olhando para Baixo com os Dedos Voltados para os Pés",
-        "group": "Antebraços + Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Flexores do Antebraço",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura do Corvo",
-        "group": "Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
-        "equip": "Yoga",
-        "nivel": 3
-    },
-    {
-        "name": "Postura do Gato",
-        "group": "Parte Inferior das Costas + Trapezio meio das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura do Macaco",
-        "group": "Quadríceps",
-        "focus": "Quadríceps Femoral (Geral)",
-        "equip": "Yoga",
-        "nivel": 3
-    },
-    {
-        "name": "Postura do Peixe com apoio",
-        "group": "Peito + Trapezio meio das Costas",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura do Pombo",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura do Pombo Duplo",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura do Portão — coluna arredondada — olhando para cima",
-        "group": "Dorsais + Oblíquos",
-        "focus": "Latíssimo do Dorso (Geral) + Oblíquos (Externos e Internos)",
-        "equip": "Yoga",
-        "nivel": 2
-    },
-    {
-        "name": "Postura do Ângulo Lateral Estendido com Bloco",
-        "group": "Dorsais + Oblíquos",
-        "focus": "Latíssimo do Dorso (Geral) + Oblíquos (Externos e Internos)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Postura do Ângulo Lateral Revolvido com Mãos em Oração",
-        "group": "Oblíquos + Trapezio meio das Costas",
-        "focus": "Oblíquos (Externos e Internos) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Yoga",
-        "nivel": 2
-    },
-    {
         "name": "Prancha Alta",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Core (Transverso do Abdômen e Estabilizadores)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Prancha Alta com Peso",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Core (Transverso do Abdômen e Estabilizadores)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Prancha Frontal com Toques no Ombro (Shoulder Taps)",
-        "group": "Core",
+        "group": "Abdominal",
         "focus": "Estabilização/Anti-extensão",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Prancha IYTW",
-        "group": "Abdominais + Deltoides Frontais + Deltoides Superiores",
-        "focus": "Core (Transverso do Abdômen e Estabilizadores) + Deltoides (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoides (Complexo Completo)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Prancha Isométrica (Frontal/Lateral)",
-        "group": "Core",
+        "group": "Abdominal",
         "focus": "Estabilização/Anti-extensão",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Prancha Lateral Apoiada na Mão com Passagem por Baixo",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Peso Corporal",
         "nivel": 3
     },
     {
         "name": "Prancha Lateral Subida e Descida",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Prancha Lateral com Halter no Cotovelo",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Prancha Lateral com Haltere (Subir e Descer)",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Prancha Lateral com Haltere na Mão",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Prancha Lateral com Máquina Smith para Cima e para Baixo",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Prancha Lateral com Passagem do Braço por Baixo",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Peso Corporal",
         "nivel": 3
     },
     {
         "name": "Prancha Sobe-Desce",
-        "group": "Core",
+        "group": "Abdominal",
         "focus": "Estabilização/Anti-extensão",
         "equip": "Peso Corporal",
         "nivel": 2
@@ -6722,247 +5231,170 @@ const dictionaryData = [
     },
     {
         "name": "Prancha com Abertura de Pernas",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Core (Transverso do Abdômen e Estabilizadores)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Prancha com Abertura de Pés usando o Peso Corporal",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Core (Transverso do Abdômen e Estabilizadores)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Prancha com Altos e Baixos Ponderados",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Core (Transverso do Abdômen e Estabilizadores)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Prancha com Escalada de Montanha no Cotovelo",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Core (Transverso do Abdômen e Estabilizadores)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Prancha com abertura e fechamento de pernas (com o peso do corpo)",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Core (Transverso do Abdômen e Estabilizadores)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Prancha com alavanca longa",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Core (Transverso do Abdômen e Estabilizadores)",
         "equip": "Peso Corporal",
         "nivel": 3
     },
     {
         "name": "Prancha com passagem de haltere",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Core (Transverso do Abdômen e Estabilizadores)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Prancha com subida e descida (peso corporal)",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Core (Transverso do Abdômen e Estabilizadores)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Prancha de Antebraço com Alavanca Longa",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Core (Transverso do Abdômen e Estabilizadores)",
         "equip": "Peso Corporal",
         "nivel": 3
     },
     {
         "name": "Prancha lateral com apoio na mão",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Prancha lateral no antebraço",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Prancha nos Antebraços com Peso",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Core (Transverso do Abdômen e Estabilizadores)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Prancha nos Joelhos — Subida/Descida (Peso Corporal)",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Core (Transverso do Abdômen e Estabilizadores)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Prancha nos antebraços",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Core (Transverso do Abdômen e Estabilizadores)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
-        "name": "Prece Reversa",
-        "group": "Deltoides Frontais",
-        "focus": "Deltoides (Complexo Completo)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
         "name": "Prece para Dorsais no Cabo",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Cabo",
         "nivel": 3
     },
     {
         "name": "Prensa de Agachamento na Máquina",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Vastos (Lateral, Medial, Intermédio)",
+        "group": "Pernas",
+        "focus": "Vastos (Lateral, Medial, Intermédio)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Prensa de Pernas Vertical",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
-        "name": "Preparatórios para Remada Frontal — Versão Sentada",
-        "group": "Deltoides Frontais + Peito + Tríceps",
-        "focus": "Deltoide Anterior + Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Preparação de remada para costas — cotovelos abertos, sentado",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoides (Complexo Completo) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Preparação para Remada (Costas) Rolamento para Baixo com Rosca Bíceps Sentado",
-        "group": "Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Preparação para Remada na Posição de Arado",
-        "group": "Antebraços + Deltoides Superiores + Dorsais + Trapezio meio das Costas",
-        "focus": "Deltoides (Complexo Completo) + Flexores do Antebraço + Latíssimo do Dorso (Foco em Espessura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Preparação para Teaser de Pilates",
-        "group": "Abdominais + Deltoides Frontais",
-        "focus": "Deltoides (Complexo Completo) + Reto Abdominal (Geral)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Preparação para a Estrela",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Preparação para nado de costas — deitado sobre caixa",
-        "group": "Dorsais + Peito",
-        "focus": "Latíssimo do Dorso (Geral) + Peitoral Médio (Fibras Esternocostais)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Preparação para remada (costas): rolar para baixo com oblíquos",
-        "group": "Deltoides Frontais + Oblíquos",
-        "focus": "Deltoides (Complexo Completo) + Oblíquos (Externos e Internos)",
-        "equip": "Pilates",
-        "nivel": 2
-    },
-    {
-        "name": "Preparos de Remada para Costas Roscas de Bíceps Sentadas",
-        "group": "Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
         "name": "Press Alternado com Halteres (Um Braço de Cada Vez)",
-        "group": "Peito + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Peitoral Médio (Fibras Esternocostais)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Press Landmine Ajoelhado Alternado",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Deltoide Anterior e Lateral",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Press Landmine Unilateral em Posição Escalonada",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Deltoide Lateral",
+        "group": "Ombro",
+        "focus": "Deltoide Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Press com Anilha Acima da Cabeça para Extensão de Tríceps",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Deltoide Anterior e Lateral",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Press de Ombros com Halteres em Meio-Ajoelhamento",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Deltoide Anterior e Lateral",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Pressão de Peito na Máquina",
-        "group": "Peito + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Peitoral Médio (Fibras Esternocostais)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
-        "name": "Pré-ativação de remada para costas — tríceps sentado",
-        "group": "Tríceps",
-        "focus": "Tríceps (Complexo Completo)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
         "name": "Pular Corda",
-        "group": "Cardio/HIIT + Panturrilhas",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural) + Motor Aeróbico",
-        "equip": "Cardio, Corda",
+        "group": "Cardio/Hiit",
+        "focus": "Motor Aeróbico",
+        "equip": "Corda",
         "nivel": 2
     },
     {
@@ -6995,16 +5427,9 @@ const dictionaryData = [
     },
     {
         "name": "Pullover Unilateral Com Haltere",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Halter",
-        "nivel": 1
-    },
-    {
-        "name": "Pullover Unilateral com Kettlebell",
-        "group": "Dorsais",
-        "focus": "Latíssimo do Dorso (Geral)",
-        "equip": "Kettlebells",
         "nivel": 1
     },
     {
@@ -7016,21 +5441,21 @@ const dictionaryData = [
     },
     {
         "name": "Pullover ajoelhado na polia",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Pullover com Barra",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Pullover com Halter",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Inferiores",
         "equip": "Halter",
         "nivel": 2
@@ -7044,80 +5469,59 @@ const dictionaryData = [
     },
     {
         "name": "Pullover com halteres",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Pullover na Máquina",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Pullover na Polia Alta",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Inferiores",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Pullover na Polia com Barra (Tronco Inclinado)",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Pullover na Polia com Corda",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Geral)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
-        "name": "Pulôver com kettlebell",
-        "group": "Dorsais",
-        "focus": "Latíssimo do Dorso (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
         "name": "Push Press Unilateral com Haltere",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Deltoide Lateral",
+        "group": "Ombro",
+        "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Push Press Unilateral com Kettlebell",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Deltoide Lateral",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Push Press Unilateral na Landmine",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Deltoide Lateral",
+        "group": "Ombro",
+        "focus": "Deltoide Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Push Press com Halteres",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Deltoide Anterior e Lateral",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Halter",
         "nivel": 2
-    },
-    {
-        "name": "Push Press com Kettlebell",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Deltoide Anterior e Lateral",
-        "equip": "Kettlebells",
-        "nivel": 1
     },
     {
         "name": "Puxada Alta com Pegada Neutra (Triângulo/Paralelas)",
@@ -7142,98 +5546,98 @@ const dictionaryData = [
     },
     {
         "name": "Puxada Alternada com Braços Estendidos no Cabo, Ajoelhado",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Puxada Fechada Assistida por Máquina",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Puxada Neutra",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Puxada Pegada Fechada",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Puxada Supinada",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Puxada Unilateral no Cabo para Dorsal (Mãos em Oração)",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Cabo",
         "nivel": 3
     },
     {
         "name": "Puxada alternada ajoelhado na polia",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Puxada bilateral ajoelhado na polia",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Puxada bilateral com braços estendidos na polia, em pé",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Puxada bilateral em pé na polia",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Puxada com Cabo Entre as Pernas",
-        "group": "Glúteos + Parte Inferior das Costas + Posteriores da coxa",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Puxada com cabo",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Puxada com cabo ao redor do corpo",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Puxada de Braço Reta com Cabo",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Cabo",
         "nivel": 1
@@ -7254,85 +5658,71 @@ const dictionaryData = [
     },
     {
         "name": "Puxada na Máquina com Carga de Placas",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Puxada na máquina",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Largura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Largura)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Puxada oblíqua na polia",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Puxada para o Rosto com Barra no Cabo",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
-        "name": "Relógio de Braço (Iogue)",
-        "group": "Bíceps + Peito",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Peitoral Médio (Fibras Esternocostais)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
         "name": "Remada Alta (Pegada Aberta)",
-        "group": "Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Remada Alta Cruzada Bilateral na Polia",
-        "group": "Deltoides Frontais + Trapézios",
-        "focus": "Deltoide Lateral + Trapézio Superior e Deltoide",
+        "group": "Ombro",
+        "focus": "Deltoide Lateral",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Remada Alta com Barra",
-        "group": "Deltoides Frontais + Trapézios",
-        "focus": "Deltoides (Complexo Completo) + Trapézio Superior e Deltoide",
+        "group": "Ombro",
+        "focus": "Deltoides (Complexo Completo)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Remada Alta com Halteres",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Remada Alta com Kettlebell",
-        "group": "Deltoides Frontais + Trapézios",
-        "focus": "Deltoides (Complexo Completo) + Trapézio Superior e Deltoide",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Remada Alta na Polia",
-        "group": "Deltoides Frontais + Trapézios",
-        "focus": "Deltoides (Complexo Completo) + Trapézio Superior e Deltoide",
+        "group": "Ombro",
+        "focus": "Deltoides (Complexo Completo)",
         "equip": "Cabo",
         "nivel": 3
     },
     {
         "name": "Remada Alta na Smith Machine",
-        "group": "Deltoides Frontais + Trapézios",
-        "focus": "Deltoides (Complexo Completo) + Trapézio Superior e Deltoide",
+        "group": "Ombro",
+        "focus": "Deltoides (Complexo Completo)",
         "equip": "Máquina",
         "nivel": 2
     },
@@ -7345,24 +5735,17 @@ const dictionaryData = [
     },
     {
         "name": "Remada Alta no Cabo com Corda",
-        "group": "Deltoides Frontais + Trapézios",
-        "focus": "Deltoides (Complexo Completo) + Trapézio Superior e Deltoide",
+        "group": "Ombro",
+        "focus": "Deltoides (Complexo Completo)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Remada Alternada com Anilha e Parada no Chão",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Barra",
         "nivel": 2
-    },
-    {
-        "name": "Remada Alternada com Kettlebell",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
-        "equip": "Kettlebells",
-        "nivel": 1
     },
     {
         "name": "Remada Baixa com Triângulo (Polia)",
@@ -7373,30 +5756,9 @@ const dictionaryData = [
     },
     {
         "name": "Remada Bilateral com Halteres",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Halter",
-        "nivel": 1
-    },
-    {
-        "name": "Remada Cardio (Ergômetro)",
-        "group": "Bíceps + Dorsais + Glúteos + Quadríceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Glúteo Máximo (Complexo) + Latíssimo do Dorso (Foco em Espessura) + Quadríceps Femoral (Geral)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Remada Cardio (Ergômetro) — Só Braços",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Remada Cardio Ergômetro de Remo Quatro Braçadas Início do Sprint",
-        "group": "Bíceps + Dorsais + Glúteos + Quadríceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Glúteo Máximo (Complexo) + Latíssimo do Dorso (Foco em Espessura) + Quadríceps Femoral (Geral)",
-        "equip": "Cardio",
         "nivel": 1
     },
     {
@@ -7408,8 +5770,8 @@ const dictionaryData = [
     },
     {
         "name": "Remada Cruzada Unilateral em Pé com Cabo para Deltoide Posterior",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoide Lateral + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Ombro",
+        "focus": "Deltoide Lateral",
         "equip": "Cabo",
         "nivel": 1
     },
@@ -7422,50 +5784,29 @@ const dictionaryData = [
     },
     {
         "name": "Remada Curvada com Barra",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Remada Curvada com Barra (Pegada Supinada)",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Barra",
         "nivel": 3
     },
     {
-        "name": "Remada Frontal Prepara a Segunda Posição Sentada",
-        "group": "Deltoides Frontais + Peito",
-        "focus": "Deltoide Anterior + Peitoral Médio (Fibras Esternocostais)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Remada Frontal Preparações Reta Para Frente Sentado",
-        "group": "Deltoides Frontais + Peito",
-        "focus": "Deltoide Anterior + Peitoral Médio (Fibras Esternocostais)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Remada Gorila com Pesa Russa",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Remada Inclinada com Halteres (Deitado)",
-        "group": "Bíceps + Dorsais",
-        "focus": "Cabeça Longa + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Remada Invertida",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
@@ -7478,177 +5819,156 @@ const dictionaryData = [
     },
     {
         "name": "Remada Invertida (Cotovelos abertos)",
-        "group": "Ombros",
+        "group": "Ombro",
         "focus": "Deltoide Posterior",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Remada Invertida com Pegada Pronada Corporal",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Remada Invertida com Pegada Supinada Usando o Peso do Corpo",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Remada Invertida com Peso em Disco",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Remada Invertida em Pé com Peso Corporal",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Remada Landmine com Barra",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Remada Meadows com barra",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Remada Neutra em Máquina",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Remada Pendlay Alternada com Halteres",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Remada Pendlay com barra (pegada pronada)",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Remada Pendlay com halteres",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Remada Pendlay com pegada supinada",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Remada Pendlay unilateral com halter",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Remada Pendlay unilateral com kettlebell",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Remada Pronada com Barra",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Remada Pronada na Máquina Smith",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Remada Renegade com Halteres",
-        "group": "Abdominais + Dorsais",
-        "focus": "Latíssimo do Dorso (Foco em Espessura) + Reto Abdominal (Geral)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Remada Sentada com Halteres para Deltoide Posterior",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoide Posterior + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Ombro",
+        "focus": "Deltoide Posterior",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Remada Sentada na Máquina",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Remada Subalterna na Máquina",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Remada Supinada com Cabo",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Remada Supinada com Halteres",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Remada T na Máquina com Apoio Peitoral",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Máquina",
-        "nivel": 1
-    },
-    {
-        "name": "Remada TRX com rotação",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
-        "name": "Remada TRX para deltoide posterior",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoide Posterior + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Trx",
         "nivel": 1
     },
     {
@@ -7660,155 +5980,113 @@ const dictionaryData = [
     },
     {
         "name": "Remada Unilateral Com Haltere Ajoelhado",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Remada Unilateral com Halter",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Remada Unilateral com Haltere (Joelho no Banco)",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Remada Unilateral com Kettlebell",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Remada Unilateral no Cabo com Pegada Neutra",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Remada Unilateral no Cabo — Pegada Supinada",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
-        "name": "Remada Vertical com Kettlebell Individual",
-        "group": "Deltoides Frontais + Trapézios",
-        "focus": "Deltoides (Complexo Completo) + Trapézio (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Remada alta com barra EZ",
-        "group": "Deltoides Frontais + Trapézios",
-        "focus": "Deltoides (Complexo Completo) + Trapézio Superior e Deltoide",
+        "group": "Ombro",
+        "focus": "Deltoides (Complexo Completo)",
         "equip": "Barra",
         "nivel": 1
     },
     {
-        "name": "Remada alta com kettlebell",
-        "group": "Deltoides Frontais + Trapézios",
-        "focus": "Deltoides (Complexo Completo) + Trapézio Superior e Deltoide",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Remada alta unilateral com haltere",
-        "group": "Deltoides Frontais + Trapézios",
-        "focus": "Deltoide Lateral + Trapézio Superior e Deltoide",
+        "group": "Ombro",
+        "focus": "Deltoide Lateral",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Remada com Barra na Landmine",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Barra",
         "nivel": 2
     },
     {
-        "name": "Remada com Kettlebell de Braço Único no Banco",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Remada com Máquina de Placas",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Remada com Máquina em Pegada Supinada",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
-        "name": "Remada com kettlebell",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Remada com kettlebell (unilateral)",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Remada com pegada de pinça na anilha",
-        "group": "Antebraços + Dorsais",
-        "focus": "Flexores do Antebraço + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Remada cortador de grama com haltere (joelho apoiado)",
-        "group": "Bíceps + Dorsais",
-        "focus": "Cabeça Curta + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Remada de Arco com Cabo",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Remada de Caiaque com Cabo",
-        "group": "Dorsais",
+        "group": "Costas",
         "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Remada em Anel",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Remada invertida na Smith Machine",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Máquina",
         "nivel": 1
     },
@@ -7828,8 +6106,8 @@ const dictionaryData = [
     },
     {
         "name": "Remada na Smith Machine com pegada supinada",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Máquina",
         "nivel": 1
     },
@@ -7841,134 +6119,78 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Remada para Costas no Pilates – Remada Sentada",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Remada para Deltoide Posterior com Kettlebell (Dupla)",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoide Posterior + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Remada para Deltoide Posterior com Pesa Russa",
-        "group": "Bíceps + Deltoides Superiores",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Deltoide Posterior",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Remada para Deltoides Posterior na Máquina",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoide Posterior",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Remada para deltoide posterior com halteres",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoide Posterior + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Ombro",
+        "focus": "Deltoide Posterior",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Remada para deltoide posterior unilateral com kettlebell",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoide Lateral + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Remada sentada unilateral para as costas no Pilates",
-        "group": "Bíceps + Dorsais + Trapezio meio das Costas",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
         "name": "Remada unilateral (Lawnmower)",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Remada unilateral com halter para deltoide posterior",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Remada unilateral com haltere",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Remada unilateral no TRX",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
         "name": "Remada unilateral para deltoide posterior na polia",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoide Lateral + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Ombro",
+        "focus": "Deltoide Lateral",
         "equip": "Cabo",
         "nivel": 3
     },
     {
         "name": "Remadas T-Bar na Landmine",
-        "group": "Bíceps + Dorsais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Latíssimo do Dorso (Foco em Espessura)",
+        "group": "Costas",
+        "focus": "Latíssimo do Dorso (Foco em Espessura)",
         "equip": "Barra",
         "nivel": 1
     },
     {
-        "name": "Remo (Ergômetro) — Só Pernas",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
         "name": "Roda Abdominal (Ab Wheel)",
-        "group": "Core",
+        "group": "Abdominal",
         "focus": "Estabilização/Anti-extensão",
         "equip": "Roda",
         "nivel": 2
     },
     {
-        "name": "Rolamentos de Quadril",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
         "name": "Rollouts com barra",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Rollouts na Máquina",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Máquina",
         "nivel": 2
     },
     {
         "name": "Rolo de Abdominal em Pé com Anel",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Porção Superior)",
         "equip": "Peso Corporal",
         "nivel": 2
@@ -8024,8 +6246,8 @@ const dictionaryData = [
     },
     {
         "name": "Rosca Arnold com Halter Sentado com Um Braço",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Halter",
         "nivel": 2
     },
@@ -8035,13 +6257,6 @@ const dictionaryData = [
         "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
         "equip": "Barra",
         "nivel": 2
-    },
-    {
-        "name": "Rosca Arrastada com Kettlebell",
-        "group": "Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
-        "equip": "Kettlebells",
-        "nivel": 1
     },
     {
         "name": "Rosca Bayesian",
@@ -8059,8 +6274,8 @@ const dictionaryData = [
     },
     {
         "name": "Rosca Com Disco Para Desenvolvimento Acima Da Cabeça Para Extensão De Tríceps",
-        "group": "Bíceps + Deltoides Frontais + Tríceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Deltoide Anterior e Lateral + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 3
     },
@@ -8084,13 +6299,6 @@ const dictionaryData = [
         "focus": "Cabeça Curta",
         "equip": "Halter",
         "nivel": 1
-    },
-    {
-        "name": "Rosca Concentrada com Kettlebell",
-        "group": "Bíceps",
-        "focus": "Cabeça Curta",
-        "equip": "Kettlebells",
-        "nivel": 2
     },
     {
         "name": "Rosca Concentrada com Peso Corporal",
@@ -8143,29 +6351,22 @@ const dictionaryData = [
     },
     {
         "name": "Rosca Direta no Scott com Barra EZ Invertida",
-        "group": "Antebraços + Bíceps",
-        "focus": "Cabeça Curta + Extensores do Antebraço",
+        "group": "Bíceps",
+        "focus": "Cabeça Curta",
         "equip": "Barra",
         "nivel": 1
     },
     {
-        "name": "Rosca Goblet com Kettlebell",
-        "group": "Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Rosca Inclinada Reversa com Apoio no Banco e Halteres",
-        "group": "Antebraços + Bíceps",
-        "focus": "Cabeça Longa + Flexores do Antebraço",
+        "group": "Bíceps",
+        "focus": "Cabeça Longa",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Rosca Inclinada Reversa com Apoio no Banco e Halteres com Um Braço",
-        "group": "Antebraços + Bíceps",
-        "focus": "Cabeça Longa + Flexores do Antebraço",
+        "group": "Bíceps",
+        "focus": "Cabeça Longa",
         "equip": "Halter",
         "nivel": 2
     },
@@ -8220,15 +6421,15 @@ const dictionaryData = [
     },
     {
         "name": "Rosca Inversa Bayesian na Polia (sentado)",
-        "group": "Antebraços + Bíceps",
-        "focus": "Extensores do Antebraço + Músculo Braquial e Braquiorradial",
+        "group": "Bíceps",
+        "focus": "Músculo Braquial e Braquiorradial",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Rosca Inversa Inclinada com Halteres",
-        "group": "Antebraços + Bíceps",
-        "focus": "Extensores do Antebraço + Músculo Braquial e Braquiorradial",
+        "group": "Bíceps",
+        "focus": "Músculo Braquial e Braquiorradial",
         "equip": "Halter",
         "nivel": 1
     },
@@ -8241,57 +6442,57 @@ const dictionaryData = [
     },
     {
         "name": "Rosca Inversa Sentada com Halteres",
-        "group": "Antebraços + Bíceps",
-        "focus": "Extensores do Antebraço + Músculo Braquial e Braquiorradial",
+        "group": "Bíceps",
+        "focus": "Músculo Braquial e Braquiorradial",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Rosca Inversa Unilateral Com Haltere Em Pé",
-        "group": "Antebraços + Bíceps",
-        "focus": "Extensores do Antebraço + Músculo Braquial e Braquiorradial",
+        "group": "Bíceps",
+        "focus": "Músculo Braquial e Braquiorradial",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Rosca Inversa Unilateral com Haltere (Sentado)",
-        "group": "Antebraços + Bíceps",
-        "focus": "Extensores do Antebraço + Músculo Braquial e Braquiorradial",
+        "group": "Bíceps",
+        "focus": "Músculo Braquial e Braquiorradial",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Rosca Inversa Unilateral com Haltere em Banco Inclinado",
-        "group": "Antebraços + Bíceps",
-        "focus": "Extensores do Antebraço + Músculo Braquial e Braquiorradial",
+        "group": "Bíceps",
+        "focus": "Músculo Braquial e Braquiorradial",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Rosca Inversa Unilateral na Polia Alta (Bayesian)",
-        "group": "Antebraços + Bíceps",
-        "focus": "Extensores do Antebraço + Músculo Braquial e Braquiorradial",
+        "group": "Bíceps",
+        "focus": "Músculo Braquial e Braquiorradial",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Rosca Inversa Unilateral na Polia Alta com Rotação",
-        "group": "Antebraços + Bíceps",
-        "focus": "Extensores do Antebraço + Músculo Braquial e Braquiorradial",
+        "group": "Bíceps",
+        "focus": "Músculo Braquial e Braquiorradial",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Rosca Inversa com Barra",
-        "group": "Antebraços + Bíceps",
-        "focus": "Extensores do Antebraço + Músculo Braquial e Braquiorradial",
+        "group": "Bíceps",
+        "focus": "Músculo Braquial e Braquiorradial",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Rosca Inversa com Halteres",
-        "group": "Antebraços + Bíceps",
-        "focus": "Extensores do Antebraço + Músculo Braquial e Braquiorradial",
+        "group": "Bíceps",
+        "focus": "Músculo Braquial e Braquiorradial",
         "equip": "Halter",
         "nivel": 1
     },
@@ -8311,8 +6512,8 @@ const dictionaryData = [
     },
     {
         "name": "Rosca Invertida Bayesian na Polia",
-        "group": "Antebraços + Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Extensores do Antebraço",
+        "group": "Bíceps",
+        "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
         "equip": "Cabo",
         "nivel": 1
     },
@@ -8429,13 +6630,6 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Rosca Reversa com Kettlebell de Um Braço Só",
-        "group": "Antebraços + Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Flexores do Antebraço",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Rosca Scott (Máquina/Barra)",
         "group": "Bíceps",
         "focus": "Cabeça Curta/Longa",
@@ -8464,16 +6658,9 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Rosca Scott com kettlebell",
-        "group": "Bíceps",
-        "focus": "Cabeça Curta",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Rosca Scott inversa com barra EZ",
-        "group": "Antebraços + Bíceps",
-        "focus": "Extensores do Antebraço + Músculo Braquial e Braquiorradial",
+        "group": "Bíceps",
+        "focus": "Músculo Braquial e Braquiorradial",
         "equip": "Barra",
         "nivel": 1
     },
@@ -8513,13 +6700,6 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Rosca Unilateral com Kettlebell",
-        "group": "Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Rosca Unilateral em Pé com Haltere",
         "group": "Bíceps",
         "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
@@ -8535,29 +6715,29 @@ const dictionaryData = [
     },
     {
         "name": "Rosca Zottman Sentada com Halteres",
-        "group": "Antebraços + Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Flexores do Antebraço",
+        "group": "Bíceps",
+        "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Rosca Zottman com Haltere (Sentado, Unilateral)",
-        "group": "Antebraços + Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Flexores do Antebraço",
+        "group": "Bíceps",
+        "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Rosca Zottman com Halteres",
-        "group": "Antebraços + Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Flexores do Antebraço",
+        "group": "Bíceps",
+        "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Rosca Zottman inclinada com halteres",
-        "group": "Antebraços + Bíceps",
-        "focus": "Cabeça Longa + Flexores do Antebraço",
+        "group": "Bíceps",
+        "focus": "Cabeça Longa",
         "equip": "Halter",
         "nivel": 2
     },
@@ -8598,22 +6778,22 @@ const dictionaryData = [
     },
     {
         "name": "Rosca com Anilha para Desenvolvimento Militar",
-        "group": "Bíceps + Deltoides Frontais",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Deltoide Anterior e Lateral",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Rosca com Halter na Posição de Garçom",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Rosca com Pegada Inversa na Barra do Cabo",
-        "group": "Antebraços + Bíceps",
-        "focus": "Extensores do Antebraço + Músculo Braquial e Braquiorradial",
+        "group": "Bíceps",
+        "focus": "Músculo Braquial e Braquiorradial",
         "equip": "Cabo",
         "nivel": 1
     },
@@ -8626,8 +6806,8 @@ const dictionaryData = [
     },
     {
         "name": "Rosca com anilha em agachamento isométrico",
-        "group": "Bíceps + Glúteos",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Glúteo Máximo (Complexo)",
+        "group": "Glúteos",
+        "focus": "Glúteo Máximo (Complexo)",
         "equip": "Barra",
         "nivel": 2
     },
@@ -8647,17 +6827,10 @@ const dictionaryData = [
     },
     {
         "name": "Rosca com halteres em um joelho e com um braço estendido acima da cabeça",
-        "group": "Deltoides Frontais + Tríceps",
-        "focus": "Deltoides (Complexo Completo) + Tríceps (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoides (Complexo Completo)",
         "equip": "Halter",
         "nivel": 2
-    },
-    {
-        "name": "Rosca com kettlebell",
-        "group": "Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
-        "equip": "Kettlebells",
-        "nivel": 1
     },
     {
         "name": "Rosca cruzada bilateral na polia",
@@ -8702,15 +6875,8 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Rosca de Pulso no Banco com Kettlebell",
-        "group": "Antebraços",
-        "focus": "Flexores do Antebraço",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Rosca de Punho (Flexão/Extensão)",
-        "group": "Antebraço",
+        "group": "Antebraços",
         "focus": "Flexores/Extensores",
         "equip": "Halter",
         "nivel": 2
@@ -8758,13 +6924,6 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Rosca de punho com kettlebell",
-        "group": "Antebraços",
-        "focus": "Flexores do Antebraço",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Rosca de punho no cabo com apoio",
         "group": "Antebraços",
         "focus": "Flexores do Antebraço",
@@ -8801,29 +6960,15 @@ const dictionaryData = [
     },
     {
         "name": "Rosca inversa com barra EZ",
-        "group": "Antebraços + Bíceps",
-        "focus": "Extensores do Antebraço + Músculo Braquial e Braquiorradial",
+        "group": "Bíceps",
+        "focus": "Músculo Braquial e Braquiorradial",
         "equip": "Barra",
         "nivel": 1
     },
     {
-        "name": "Rosca inversa com kettlebell",
-        "group": "Antebraços + Bíceps",
-        "focus": "Extensores do Antebraço + Músculo Braquial e Braquiorradial",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Rosca inversa de bíceps ajoelhado",
+        "name": "Rosca inversa unilateral no cabo",
         "group": "Bíceps",
         "focus": "Músculo Braquial e Braquiorradial",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Rosca inversa unilateral no cabo",
-        "group": "Antebraços + Bíceps",
-        "focus": "Extensores do Antebraço + Músculo Braquial e Braquiorradial",
         "equip": "Cabo",
         "nivel": 1
     },
@@ -8863,13 +7008,6 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Rosca no TRX",
-        "group": "Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
         "name": "Rosca unilateral em pé com haltere e rotação",
         "group": "Bíceps",
         "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
@@ -8885,56 +7023,56 @@ const dictionaryData = [
     },
     {
         "name": "Rotação Alternada de Poste",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Alongamentos",
         "nivel": 1
     },
     {
         "name": "Rotação Externa com Cabo",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Rotação Externa com Halteres",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Rotação Externa do Ombro com Haltere",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Rotação Interna com Cabo",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Rotação Interna com Halteres",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Rotação Oblíqua no Landmine",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Rotação Pallof na polia",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Cabo",
         "nivel": 1
@@ -8948,134 +7086,120 @@ const dictionaryData = [
     },
     {
         "name": "Rotação da Coluna Torácica com Peso Corporal",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Rotação de Tronco Ajoelhado (De Cima para Baixo)",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Rotação de Tronco com Cabo, Ajoelhado (De Cima para Baixo)",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Rotação de Tronco com Disco",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Rotação de Tronco em Pé (De Cima para Baixo)",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Rotação de Tronco em Pé com Cabo (De Cima para Baixo)",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Rotação de tronco na polia",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Rotação na Barra",
-        "group": "Deltoides Frontais",
+        "group": "Ombro",
         "focus": "Deltoides (Complexo Completo)",
         "equip": "Alongamentos",
         "nivel": 1
     },
     {
         "name": "Russian Twist (Com anilha ou livre)",
-        "group": "Core",
+        "group": "Abdominal",
         "focus": "Oblíquos / Rotação",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Russian Twist (peso corporal)",
-        "group": "Abdominais + Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Russian Twist com anilha",
-        "group": "Abdominais + Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Barra",
         "nivel": 2
     },
     {
-        "name": "Russian Twist com kettlebell",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Russian Twist com os Pés no Chão",
-        "group": "Abdominais + Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Russian Twist com os pés apoiados e halter",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Salto Alternado com Escalador de Montanha",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
-        "name": "Salto Diamante Cardio",
-        "group": "Panturrilhas",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural)",
-        "equip": "Cardio",
-        "nivel": 2
-    },
-    {
         "name": "Salto Grupado (Tuck Jumps no lugar)",
-        "group": "Cardio/HIIT",
+        "group": "Cardio/Hiit",
         "focus": "Resistência Anaeróbica",
         "equip": "Peso Corporal",
         "nivel": 3
     },
     {
         "name": "Salto Sentado na Caixa",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Salto Unilateral na Caixa",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Peso Corporal",
         "nivel": 3
     },
@@ -9088,84 +7212,35 @@ const dictionaryData = [
     },
     {
         "name": "Salto de Profundidade",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Peso Corporal",
-        "nivel": 2
-    },
-    {
-        "name": "Salto do Patinador",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Salto em distância",
-        "group": "Glúteos + Panturrilhas + Quadríceps",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Cardio",
         "nivel": 2
     },
     {
         "name": "Salto na caixa",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
-        "name": "Saudação de Expansão Reversa (Ajoelhado)",
-        "group": "Tríceps",
-        "focus": "Tríceps (Complexo Completo)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Savasana (Postura do Cadáver)",
-        "group": "Bíceps",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Scooter de Pilates",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
         "name": "Serra na prancha",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Core (Transverso do Abdômen e Estabilizadores)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Shadow Boxing (Sombra com ou sem halteres leves)",
-        "group": "Cardio/HIIT",
+        "group": "Cardio/Hiit",
         "focus": "Motor Aeróbico",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Short Spine no Pilates",
-        "group": "Abdominais + Glúteos + Parte Inferior das Costas + Quadríceps",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral) + Reto Abdominal (Geral)",
-        "equip": "Pilates",
-        "nivel": 2
-    },
-    {
-        "name": "Shuffle Lateral na Esteira",
-        "group": "Glúteos",
-        "focus": "Glúteo Médio e Mínimo",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
         "name": "Smith Machine Elevação de Joelhos Suspensa",
-        "group": "Abdominais",
+        "group": "Abdominal",
         "focus": "Reto Abdominal (Geral)",
         "equip": "Máquina",
         "nivel": 1
@@ -9179,7 +7254,7 @@ const dictionaryData = [
     },
     {
         "name": "Smith Machine Flexão Lateral",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Máquina",
         "nivel": 1
@@ -9199,172 +7274,116 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Snatch com Kettlebell (uma mão)",
-        "group": "Deltoides Frontais + Glúteos",
-        "focus": "Deltoides (Complexo Completo) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Spoto Press com barra",
-        "group": "Peito + Tríceps",
-        "focus": "Cabeças Lateral e Medial + Peitoral Médio (Fibras Esternocostais)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Sprawl (Meio Burpee)",
-        "group": "Cardio/HIIT",
+        "group": "Cardio/Hiit",
         "focus": "Resistência Anaeróbica",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
-        "name": "Sprint Cardio em Figura Oito",
-        "group": "Glúteos + Panturrilhas + Quadríceps",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Cardio",
-        "nivel": 2
-    },
-    {
-        "name": "Sprint No Lugar",
-        "group": "Glúteos + Panturrilhas + Quadríceps",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Sprint de Ida e Volta",
-        "group": "Glúteos + Panturrilhas + Quadríceps",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Sprint na Esteira",
-        "group": "Glúteos + Panturrilhas + Quadríceps",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
         "name": "Step Down Curtsy com Peso Corporal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Step Down Parcial com o Peso do Corpo",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Quadríceps Femoral (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
-        "name": "Step-Up Com Duas Pesas Russas",
-        "group": "Quadríceps",
-        "focus": "Quadríceps Femoral (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Step-Up Lateral com Halter na Posição Goblet",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Step-Up com Barra em Front Rack e Elevação do Joelho",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Step-Up com Barra no Front Rack",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Step-Up com Elevação do Joelho (Peso Corporal)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
         "name": "Step-Up com Haltere (Posição Goblet)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Step-up Lateral com Barra",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Step-up Lateral com Halteres",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Step-up Unilateral com Haltere e Elevação de Joelho",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Step-up com barra",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Step-up com barra e elevação do joelho",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Step-up com halteres",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Step-up com halteres em rack frontal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Halter",
         "nivel": 3
-    },
-    {
-        "name": "Step-up com kettlebell em rack frontal (braço único) e impulso de joelho",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
-        "name": "Step-up com pesa russa",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 1
     },
     {
         "name": "Step-up na caixa (Halteres)",
@@ -9375,24 +7394,17 @@ const dictionaryData = [
     },
     {
         "name": "Step-up reverso com peso corporal",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Quadríceps Femoral (Geral)",
         "equip": "Peso Corporal",
         "nivel": 3
     },
     {
         "name": "Step-up unilateral com haltere",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Halter",
         "nivel": 3
-    },
-    {
-        "name": "Step-up unilateral com kettlebell (equilíbrio)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Quadríceps Femoral (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 2
     },
     {
         "name": "Stiff (Barra/Halteres)",
@@ -9403,50 +7415,50 @@ const dictionaryData = [
     },
     {
         "name": "Stiff Romeno Landmine em Posição Escalonada",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Stiff Romeno Unilateral",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Stiff Romeno com Barra e Faixa Elástica",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Stiff com Barra",
-        "group": "Glúteos + Parte Inferior das Costas + Posteriores da coxa",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Stiff com barra",
-        "group": "Glúteos + Parte Inferior das Costas + Posteriores da coxa",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Stiff romeno com landmine",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Stiff unilateral com halteres",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 2
     },
@@ -9458,60 +7470,32 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Subida Unilateral com Pesa Russa e Elevação do Joelho",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Médio e Mínimo + Quadríceps Femoral (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Subida no Banco com Barra - Equilíbrio",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Subida no Banco com Halteres e Elevação de Joelho",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Subida no Banco com Kettlebell em Apoio Frontal (Braço Único)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
-        "name": "Subida no Banco com Kettlebell em Rack Frontal e Elevação de Joelho",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
         "name": "Subida no banco com halter no rack frontal (braço único)",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Subida no banco com halteres na posição frontal e elevação do joelho",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Halter",
         "nivel": 2
-    },
-    {
-        "name": "Subida no banco com kettlebell na posição de rack frontal",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 3
     },
     {
         "name": "Superman Solo",
@@ -9522,35 +7506,28 @@ const dictionaryData = [
     },
     {
         "name": "Superman com Halteres",
-        "group": "Parte Inferior das Costas",
+        "group": "Lombar",
         "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Superman com Kettlebell",
-        "group": "Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
         "name": "Superman com anilha",
-        "group": "Parte Inferior das Costas",
+        "group": "Lombar",
         "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Superman com halteres — segurar",
-        "group": "Parte Inferior das Costas",
+        "group": "Lombar",
         "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Superman com peso corporal",
-        "group": "Parte Inferior das Costas",
+        "group": "Lombar",
         "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Peso Corporal",
         "nivel": 1
@@ -9564,70 +7541,70 @@ const dictionaryData = [
     },
     {
         "name": "Supino Com Cabos",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Supino Declinado Alternado com Haltere (Um Braço por Vez)",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Inferior (Fibras Abdominais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Inferior (Fibras Abdominais)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Supino Declinado Alternado na Polia",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Inferior (Fibras Abdominais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Inferior (Fibras Abdominais)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Supino Declinado Com Cabos",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Inferior (Fibras Abdominais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Inferior (Fibras Abdominais)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Supino Declinado Guilhotina Com Halteres",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Inferior (Fibras Abdominais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Inferior (Fibras Abdominais)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Supino Declinado Unilateral com Haltere",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Inferior (Fibras Abdominais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Inferior (Fibras Abdominais)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Supino Declinado Unilateral na Polia",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Inferior (Fibras Abdominais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Inferior (Fibras Abdominais)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Supino Declinado com Barra/Halteres",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Inferiores",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Supino Declinado com Halteres (Aperto)",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Inferior (Fibras Abdominais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Inferior (Fibras Abdominais)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Supino Declinado na Máquina",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Inferiores",
         "equip": "Máquina",
         "nivel": 1
@@ -9641,15 +7618,15 @@ const dictionaryData = [
     },
     {
         "name": "Supino Fechado com Halteres (Squeeze Press / Hex Press)",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Médias",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Supino Guilhotina Inclinado Alto com Barra",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Barra",
         "nivel": 3
     },
@@ -9661,13 +7638,6 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Supino Guilhotina Unilateral com Pesa Russa para Tríceps",
-        "group": "Tríceps",
-        "focus": "Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Supino Guilhotina com Barra para Tríceps",
         "group": "Tríceps",
         "focus": "Tríceps (Complexo Completo)",
@@ -9676,92 +7646,64 @@ const dictionaryData = [
     },
     {
         "name": "Supino Guilhotina com Halteres",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Halter",
         "nivel": 3
     },
     {
-        "name": "Supino Guilhotina com Pesa Russa",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
-        "name": "Supino Inclinado Alto Unilateral com Kettlebell",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Supino Inclinado Alto com Haltere (Unilateral)",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Supino Inclinado Alto com Halteres e Pegada Neutra",
-        "group": "Deltoides Frontais + Peito + Tríceps",
-        "focus": "Deltoides (Complexo Completo) + Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Supino Inclinado Alto com Pesa Russa",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Supino Inclinado Guilhotina com Barra",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Supino Inclinado Guilhotina com Halteres",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Supino Inclinado Unilateral com Haltere",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Supino Inclinado Unilateral com Kettlebell",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Supino Inclinado Unilateral na Polia",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Supino Inclinado com Barra",
-        "group": "Peito + Peitoral + Tríceps",
-        "focus": "Fibras Superiores + Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Supino Inclinado com Barra em Ângulo Elevado",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Barra",
         "nivel": 2
     },
@@ -9774,71 +7716,57 @@ const dictionaryData = [
     },
     {
         "name": "Supino Inclinado com Cabos",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Supino Inclinado com Halteres",
-        "group": "Peito + Peitoral + Tríceps",
-        "focus": "Fibras Superiores + Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Supino Inclinado com Halteres (Pegada Neutra)",
-        "group": "Deltoides Frontais + Peito + Tríceps",
-        "focus": "Deltoides (Complexo Completo) + Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Supino Inclinado com Halteres em Altura Elevada",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Supino Inclinado com Kettlebell",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Supino Inclinado com Kettlebell na Guilhotina",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Supino Inclinado na Máquina",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Superiores",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Supino Inclinado na Máquina Smith",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Supino Larsen com barra",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Supino Larsen com halteres",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Halter",
         "nivel": 2
     },
@@ -9851,37 +7779,30 @@ const dictionaryData = [
     },
     {
         "name": "Supino Reto com Barra",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Médias",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Supino Reto com Halteres",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Médias",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Supino Reto na Máquina",
-        "group": "Peitoral",
+        "group": "Peito",
         "focus": "Fibras Médias",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Supino Unilateral com Haltere",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Halter",
-        "nivel": 1
-    },
-    {
-        "name": "Supino Unilateral com Kettlebell",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
         "nivel": 1
     },
     {
@@ -9893,127 +7814,106 @@ const dictionaryData = [
     },
     {
         "name": "Supino Unilateral no Landmine",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Supino alternado em pé no cabo",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Supino alternado na polia",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Supino com Halteres (Pegada Neutra)",
-        "group": "Deltoides Frontais + Peito + Tríceps",
-        "focus": "Deltoides (Complexo Completo) + Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Supino com Kettlebell (Unilateral)",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Supino com Kettlebell no Chão",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Supino com Pegada Inversa com Halteres",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Supino com Pegada Neutra",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Supino com Pegada Reversa na Barra",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Supino com barra",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Supino com barra (posição hook-lying)",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Supino com cabos",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Supino com halteres",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Supino com halteres apertados",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Supino com halteres no chão",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Halter",
         "nivel": 1
     },
     {
-        "name": "Supino com kettlebell",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Supino com pegada fechada (barra)",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Supino com pegada fechada na máquina Smith",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Máquina",
         "nivel": 1
     },
@@ -10026,22 +7926,22 @@ const dictionaryData = [
     },
     {
         "name": "Supino declinado com barra",
-        "group": "Deltoides Frontais + Peito + Tríceps",
-        "focus": "Deltoides (Complexo Completo) + Peitoral Inferior (Fibras Abdominais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Inferior (Fibras Abdominais)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Supino declinado com halteres",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Inferior (Fibras Abdominais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Inferior (Fibras Abdominais)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Supino declinado com halteres (pegada neutra)",
-        "group": "Deltoides Frontais + Peito + Tríceps",
-        "focus": "Deltoides (Complexo Completo) + Peitoral Inferior (Fibras Abdominais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Inferior (Fibras Abdominais)",
         "equip": "Halter",
         "nivel": 1
     },
@@ -10054,64 +7954,64 @@ const dictionaryData = [
     },
     {
         "name": "Supino declinado em pé na polia",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Inferior (Fibras Abdominais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Inferior (Fibras Abdominais)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Supino em Pé Unilateral com Cabo",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Supino guilhotina na Smith Machine",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Máquina",
         "nivel": 2
     },
     {
         "name": "Supino inclinado alternado na polia",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Supino inclinado em pé na polia",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Supino inclinado unilateral em pé na máquina de cabos",
-        "group": "Deltoides Frontais + Peito + Tríceps",
-        "focus": "Deltoide Lateral + Peitoral Superior (Fibras Claviculares) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Superior (Fibras Claviculares)",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Supino na Máquina Smith",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Máquina",
         "nivel": 1
     },
     {
         "name": "Supino no Chão com Barra",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Supino unilateral no cabo",
-        "group": "Peito + Tríceps",
-        "focus": "Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Cabo",
         "nivel": 1
     },
@@ -10124,213 +8024,17 @@ const dictionaryData = [
     },
     {
         "name": "Svend Press em Pé na Polia",
-        "group": "Oblíquos + Peito",
-        "focus": "Oblíquos (Externos e Internos) + Peitoral Médio (Fibras Esternocostais)",
+        "group": "Peito",
+        "focus": "Peitoral Médio (Fibras Esternocostais)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
-        "name": "Swing Completo com Kettlebell",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
-        "name": "Swing Unilateral com Kettlebell",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Médio e Mínimo",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Swing alternado com kettlebell",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Swing com Haltere",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Halter",
         "nivel": 1
-    },
-    {
-        "name": "Swing com kettlebell",
-        "group": "Glúteos + Parte Inferior das Costas + Posteriores da coxa",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo) + Isquiotibiais (Bíceps Femoral, Semitendíneo, Semimembranáceo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
-        "name": "Swing com kettlebell — base escalonada",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
-        "name": "Swing com kettlebells (Duplo)",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
-        "name": "Série 1 — Meio das costas",
-        "group": "Dorsais",
-        "focus": "Latíssimo do Dorso (Geral)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Série Costas Médias 2",
-        "group": "Dorsais",
-        "focus": "Latíssimo do Dorso (Geral)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Série Parte Média das Costas — Círculos Para Dentro",
-        "group": "Dorsais",
-        "focus": "Latíssimo do Dorso (Geral)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Série Parte Média das Costas — Círculos para Fora",
-        "group": "Dorsais",
-        "focus": "Latíssimo do Dorso (Geral)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "TRX Abdominal Oblíquo",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Trx",
-        "nivel": 2
-    },
-    {
-        "name": "TRX Afundo Curtsy",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
-        "name": "TRX Afundo Lateral",
-        "group": "Quadríceps",
-        "focus": "Vastos (Lateral, Medial, Intermédio)",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
-        "name": "TRX Crucifixo Invertido para Deltoide Posterior",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoide Posterior + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Trx",
-        "nivel": 2
-    },
-    {
-        "name": "TRX Crucifixo Peitoral",
-        "group": "Peito",
-        "focus": "Isolamento (Fibras Esternocostais)",
-        "equip": "Trx",
-        "nivel": 2
-    },
-    {
-        "name": "TRX Elevação de Panturrilha",
-        "group": "Panturrilhas",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural)",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
-        "name": "TRX Elevação em I",
-        "group": "Deltoides Frontais",
-        "focus": "Deltoides (Complexo Completo)",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
-        "name": "TRX Elevação em W",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoides (Complexo Completo) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
-        "name": "TRX Elevação em Y",
-        "group": "Deltoides Frontais + Trapézios",
-        "focus": "Deltoides (Complexo Completo) + Trapézio (Complexo Completo)",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
-        "name": "TRX Flexão",
-        "group": "Deltoides Frontais + Peito + Tríceps",
-        "focus": "Deltoides (Complexo Completo) + Peitoral Médio (Fibras Esternocostais) + Tríceps (Complexo Completo)",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
-        "name": "TRX Ponte de Glúteos",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
-        "name": "TRX Prancha Lateral no Antebraço",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Trx",
-        "nivel": 2
-    },
-    {
-        "name": "TRX Rollout Abdominal",
-        "group": "Dorsais",
-        "focus": "Latíssimo do Dorso (Geral)",
-        "equip": "Trx",
-        "nivel": 3
-    },
-    {
-        "name": "TRX Rollout Abdominal Ajoelhado",
-        "group": "Dorsais",
-        "focus": "Latíssimo do Dorso (Geral)",
-        "equip": "Trx",
-        "nivel": 2
-    },
-    {
-        "name": "TRX Rosca Inversa",
-        "group": "Antebraços + Bíceps",
-        "focus": "Extensores do Antebraço + Músculo Braquial e Braquiorradial",
-        "equip": "Trx",
-        "nivel": 2
-    },
-    {
-        "name": "TRX Rosca Martelo",
-        "group": "Bíceps",
-        "focus": "Músculo Braquial e Braquiorradial",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
-        "name": "TRX Tríceps Testa",
-        "group": "Tríceps",
-        "focus": "Cabeça Longa",
-        "equip": "Trx",
-        "nivel": 1
-    },
-    {
-        "name": "Tate Press com Kettlebell",
-        "group": "Tríceps",
-        "focus": "Cabeças Lateral e Medial",
-        "equip": "Kettlebells",
-        "nivel": 2
     },
     {
         "name": "Tate press com halteres",
@@ -10340,193 +8044,102 @@ const dictionaryData = [
         "nivel": 2
     },
     {
-        "name": "Tesoura Cardio para Frente",
-        "group": "Abdominais + Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral) + Reto Abdominal (Geral)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
         "name": "Thruster Alternado com Halteres (Um Braço de Cada Vez)",
-        "group": "Deltoides Frontais + Glúteos + Quadríceps",
-        "focus": "Deltoides (Complexo Completo) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Halter",
-        "nivel": 2
-    },
-    {
-        "name": "Thruster Alternado com Kettlebell (Um Braço de Cada Vez)",
-        "group": "Deltoides Frontais + Glúteos + Quadríceps",
-        "focus": "Deltoides (Complexo Completo) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Kettlebells",
         "nivel": 2
     },
     {
         "name": "Thruster Unilateral Com Haltere",
-        "group": "Deltoides Frontais + Glúteos + Quadríceps",
-        "focus": "Deltoide Lateral + Glúteo Médio e Mínimo + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Thruster Unilateral com Kettlebell",
-        "group": "Deltoides Frontais + Glúteos + Quadríceps",
-        "focus": "Deltoide Lateral + Glúteo Médio e Mínimo + Quadríceps Femoral (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
-        "name": "Thruster com Kettlebell",
-        "group": "Deltoides Frontais + Glúteos + Quadríceps",
-        "focus": "Deltoides (Complexo Completo) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Thruster com Landmine",
-        "group": "Deltoides Frontais + Glúteos + Quadríceps",
-        "focus": "Deltoides (Complexo Completo) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Thruster com anilha",
-        "group": "Deltoides Frontais + Glúteos + Quadríceps",
-        "focus": "Deltoides (Complexo Completo) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Thruster com barra",
-        "group": "Deltoides Frontais + Glúteos + Quadríceps",
-        "focus": "Deltoides (Complexo Completo) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Thruster com halteres",
-        "group": "Deltoides Frontais + Glúteos + Quadríceps",
-        "focus": "Deltoides (Complexo Completo) + Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
+        "group": "Pernas",
+        "focus": "Quadríceps Femoral (Geral)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Thrusters (Agachamento com Desenvolvimento)",
-        "group": "Cardio/HIIT",
+        "group": "Cardio/Hiit",
         "focus": "Resistência Anaeróbica",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Toque Alternado no Calcanhar",
-        "group": "Abdominais + Oblíquos",
-        "focus": "Oblíquos (Externos e Internos) + Reto Abdominal (Geral)",
+        "group": "Abdominal",
+        "focus": "Reto Abdominal (Geral)",
         "equip": "Peso Corporal",
         "nivel": 1
     },
     {
         "name": "Toque no Calcanhar",
-        "group": "Core",
+        "group": "Abdominal",
         "focus": "Oblíquos / Rotação",
         "equip": "Peso Corporal",
         "nivel": 2
     },
     {
-        "name": "Toque no pé",
-        "group": "Abdominais",
-        "focus": "Reto Abdominal (Geral)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
-        "name": "Toques de Joelho (Cardio)",
-        "group": "Panturrilhas + Quadríceps",
-        "focus": "Gastrocnêmio e Sóleo (Tríceps Sural) + Quadríceps Femoral (Geral)",
-        "equip": "Cardio",
-        "nivel": 1
-    },
-    {
         "name": "Torção Ajoelhada no Landmine",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Torção Em Pé Com Disco",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Barra",
         "nivel": 1
     },
     {
         "name": "Torção Estática no Landmine",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Barra",
         "nivel": 2
     },
     {
-        "name": "Torção Lateral Ajoelhado",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
         "name": "Torção Russa com Haltere (Braço Estendido)",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Halter",
         "nivel": 3
     },
     {
         "name": "Torção Russa no Landmine",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Barra",
         "nivel": 2
-    },
-    {
-        "name": "Torção Sentada",
-        "group": "Oblíquos + Trapezio meio das Costas",
-        "focus": "Oblíquos (Externos e Internos) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Torção Supina Deitada",
-        "group": "Oblíquos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Oblíquos (Externos e Internos)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Torção do Escorpião",
-        "group": "Bíceps + Peito",
-        "focus": "Bíceps Braquial (Cabeças Curta e Longa) + Peitoral Médio (Fibras Esternocostais)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Trabalho de Pés Meia-Ponta Alta",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Trabalho de Pés — Calcanhares na Barra",
-        "group": "Glúteos + Quadríceps",
-        "focus": "Glúteo Máximo (Complexo) + Quadríceps Femoral (Geral)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "Trabalho de pés: abaixar e levantar",
-        "group": "Panturrilhas",
-        "focus": "Músculo Gastrocnêmio",
-        "equip": "Pilates",
-        "nivel": 1
     },
     {
         "name": "Tríceps Coice (Kickback) Halter/Cabo",
@@ -10583,13 +8196,6 @@ const dictionaryData = [
         "focus": "Cabeça Longa",
         "equip": "Cabo",
         "nivel": 1
-    },
-    {
-        "name": "Tríceps Testa Declinada com Kettlebell",
-        "group": "Tríceps",
-        "focus": "Cabeça Longa",
-        "equip": "Kettlebells",
-        "nivel": 3
     },
     {
         "name": "Tríceps Testa Inclinado com Haltere (Braço Único)",
@@ -10697,24 +8303,10 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Tríceps press deitado da série Midback",
-        "group": "Tríceps",
-        "focus": "Cabeças Lateral e Medial",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
         "name": "Tríceps testa com barra",
         "group": "Tríceps",
         "focus": "Cabeça Longa",
         "equip": "Barra",
-        "nivel": 2
-    },
-    {
-        "name": "Tríceps testa com kettlebell",
-        "group": "Tríceps",
-        "focus": "Cabeça Longa",
-        "equip": "Kettlebells",
         "nivel": 2
     },
     {
@@ -10732,37 +8324,16 @@ const dictionaryData = [
         "nivel": 1
     },
     {
-        "name": "Urdhva Dhanurasana (Postura da Roda)",
-        "group": "Abdominais",
-        "focus": "Reto Abdominal (Geral)",
-        "equip": "Yoga",
-        "nivel": 1
-    },
-    {
-        "name": "Variação da Postura da Cancela — Braço Estendido ao Lado",
-        "group": "Dorsais + Oblíquos",
-        "focus": "Latíssimo do Dorso (Geral) + Oblíquos (Externos e Internos)",
-        "equip": "Yoga",
-        "nivel": 2
-    },
-    {
-        "name": "Voador Inverso Unilateral com Kettlebell",
-        "group": "Deltoides Superiores",
-        "focus": "Deltoide Lateral",
-        "equip": "Kettlebells",
-        "nivel": 2
-    },
-    {
         "name": "Voador Inverso Unilateral na Polia Alta",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoide Lateral",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Voador Invertido com Anel",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoides (Complexo Completo) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Ombro",
+        "focus": "Deltoides (Complexo Completo)",
         "equip": "Peso Corporal",
         "nivel": 2
     },
@@ -10775,92 +8346,78 @@ const dictionaryData = [
     },
     {
         "name": "Voador inverso deitado com halteres (rotação interna)",
-        "group": "Deltoides Superiores",
+        "group": "Ombro",
         "focus": "Deltoide Posterior",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Voador para deltoide posterior com disco e rotação interna",
-        "group": "Deltoides Superiores + Trapezio meio das Costas + Trapézios",
-        "focus": "Deltoide Posterior + Romboides (Maior e Menor) e Trapézio Médio/Inferior + Trapézio (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Posterior",
         "equip": "Barra",
         "nivel": 2
     },
     {
         "name": "Voo para deltoide posterior com disco",
-        "group": "Deltoides Superiores + Trapezio meio das Costas",
-        "focus": "Deltoide Posterior + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
+        "group": "Ombro",
+        "focus": "Deltoide Posterior",
         "equip": "Barra",
         "nivel": 1
     },
     {
-        "name": "Windmill com kettlebell",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
         "name": "Wood Chopper Meio Ajoelhado com Cabo",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Cabo",
         "nivel": 1
     },
     {
         "name": "Woodchopper Ajoelhado No Cabo",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Woodchopper Ajoelhado com Haltere",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Halter",
         "nivel": 1
     },
     {
         "name": "Woodchopper com cabo ajoelhado — de baixo para cima",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Cabo",
         "nivel": 2
     },
     {
         "name": "Woodchopper com haltere",
-        "group": "Oblíquos",
+        "group": "Abdominal",
         "focus": "Oblíquos (Externos e Internos)",
         "equip": "Halter",
         "nivel": 2
     },
     {
         "name": "Woodchopper com haltere (meio ajoelhado)",
-        "group": "Abdominais + Oblíquos",
-        "focus": "Oblíquos (Externos e Internos) + Reto Abdominal (Geral)",
+        "group": "Abdominal",
+        "focus": "Reto Abdominal (Geral)",
         "equip": "Halter",
         "nivel": 2
     },
     {
-        "name": "Woodchopper com pesa russa",
-        "group": "Oblíquos",
-        "focus": "Oblíquos (Externos e Internos)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
         "name": "Z Press com barra",
-        "group": "Deltoides Frontais + Trapézios",
-        "focus": "Deltoide Anterior e Lateral + Trapézio (Complexo Completo)",
+        "group": "Ombro",
+        "focus": "Deltoide Anterior e Lateral",
         "equip": "Barra",
         "nivel": 3
     },
     {
         "name": "Zercher Good Morning com barra",
-        "group": "Glúteos + Parte Inferior das Costas",
-        "focus": "Eretores da Espinha (Região Lombar) + Glúteo Máximo (Complexo)",
+        "group": "Lombar",
+        "focus": "Eretores da Espinha (Região Lombar)",
         "equip": "Barra",
         "nivel": 3
     },
@@ -10873,16 +8430,9 @@ const dictionaryData = [
     },
     {
         "name": "bida No Banco Unilateral Com Haltere Em Rack Frontal E Impulso De Joelho",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Quadríceps Femoral (Geral)",
         "equip": "Halter",
-        "nivel": 2
-    },
-    {
-        "name": "fundo Lateral com Kettlebell (Unilateral)",
-        "group": "Glúteos",
-        "focus": "Glúteo Médio e Mínimo",
-        "equip": "Kettlebells",
         "nivel": 2
     },
     {
@@ -10894,31 +8444,10 @@ const dictionaryData = [
     },
     {
         "name": "gachamento Lateral Alternado com Peso Corporal",
-        "group": "Quadríceps",
+        "group": "Pernas",
         "focus": "Quadríceps Femoral (Geral)",
         "equip": "Peso Corporal",
         "nivel": 2
-    },
-    {
-        "name": "ilates Footwork na Primeira Posição",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Pilates",
-        "nivel": 1
-    },
-    {
-        "name": "nço Reverso com Deficit e Kettlebell na Posição Frontal",
-        "group": "Quadríceps",
-        "focus": "Quadríceps Femoral (Geral)",
-        "equip": "Kettlebells",
-        "nivel": 3
-    },
-    {
-        "name": "postura-do-ângulo-lateral-estendido",
-        "group": "Dorsais",
-        "focus": "Latíssimo do Dorso (Geral)",
-        "equip": "Yoga",
-        "nivel": 1
     },
     {
         "name": "tamento Terra com Barra em uma Perna Só",
@@ -10926,20 +8455,6 @@ const dictionaryData = [
         "focus": "Glúteo Máximo (Complexo)",
         "equip": "Barra",
         "nivel": 3
-    },
-    {
-        "name": "tep-Up Com Duas Pesas Russas",
-        "group": "Glúteos",
-        "focus": "Glúteo Máximo (Complexo)",
-        "equip": "Kettlebells",
-        "nivel": 1
-    },
-    {
-        "name": "Ângulo Lateral Torcido Com Mãos Em Oração Iniciante",
-        "group": "Oblíquos + Trapezio meio das Costas",
-        "focus": "Oblíquos (Externos e Internos) + Romboides (Maior e Menor) e Trapézio Médio/Inferior",
-        "equip": "Yoga",
-        "nivel": 1
     }
 ];
 

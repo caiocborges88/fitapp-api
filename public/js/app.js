@@ -910,8 +910,8 @@ function removeExercise(bIndex, eIndex) {
         } else if (type === 'Casa') {
             // CÉREBRO TÁTICO: Gerador Dinâmico de Treino em Casa por Nível
             const removeAccents = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
-            // 🛡️ TRAVA DE TAXONOMIA: Em casa, SÓ entra Peso Corporal puro (chão). Calistenia fica para o parque.
-            const isHomeReady = (item) => item.equip && item.equip.includes('Peso_Corporal') && !item.equip.includes('Calistenia');
+            // 🛡️ TRAVA DE TAXONOMIA: Atualizado para ler "Peso Corporal" (sem underline) do novo banco
+            const isHomeReady = (item) => item.equip && item.equip.includes('Peso Corporal') && !item.equip.includes('Calistenia');
             
             // Separa o arsenal da nuvem/local por grupamentos
             const poolPeito = dictionaryData.filter(d => isHomeReady(d) && getMuscleGroup(d) === 'peito');
@@ -3426,47 +3426,79 @@ function updateDynamicCards() {
 
         // NOVO: Puxa o arsenal diretamente dos botões na interface
         const equipChips = document.querySelectorAll('.forge-equip-chip.active');
-        let userArsenal = ['Barras_Anilhas', 'Pesos_Livres', 'Maquinas_Polias', 'Peso_Corporal', 'Calistenia', 'Funcional_Esportivo']; 
+        let userArsenal = ['Barra', 'Halter', 'Máquina', 'Cabo', 'Peso Corporal', 'Calistenia']; 
         if (equipChips && equipChips.length > 0) {
             userArsenal = [];
-            equipChips.forEach(c => userArsenal.push(...c.getAttribute('data-equip').split(',')));
+            equipChips.forEach(c => {
+                const tags = c.getAttribute('data-equip').split(',');
+                // 🛡️ TRADUTOR UNIVERSAL: Converte as tags antigas do HTML para o novo Banco de Dados
+                tags.forEach(tag => {
+                    const t = tag.trim();
+                    if (t === 'Barras_Anilhas') userArsenal.push('Barra');
+                    if (t === 'Pesos_Livres') userArsenal.push('Halter');
+                    if (t === 'Maquinas_Polias') userArsenal.push('Máquina', 'Cabo');
+                    if (t === 'Peso_Corporal') userArsenal.push('Peso Corporal');
+                    if (t === 'Calistenia') userArsenal.push('Calistenia');
+                });
+            });
             userArsenal.push('Funcional_Esportivo'); // Blinda o motor de cardio
         }
 
         const getEx = (focusTerms, equipPref, avoidNames, allowBodyweight = false) => {
-            // A Pedra de Roseta: Expandida para abranger a biomecânica avançada e metabólica
+            // A Pedra de Roseta: Expandida e Sincronizada com o novo banco de dados (dados_consolidados.js)
             const mapFocus = {
-                'peito_esternocostal': ['Fibras Médias'], 'peito_clavicular': ['Fibras Superiores'], 'peito_costal': ['Fibras Inferiores'], 'peito': ['Fibras Médias', 'Fibras Superiores', 'Fibras Inferiores'],
-                'costa_largura': ['Latíssimo (Largura)'], 'costa_espessura': ['Romboides/Miolo (Espessura)'], 'costa_isolado': ['Latíssimo (Largura)'], 'costa': ['Latíssimo (Largura)', 'Romboides/Miolo (Espessura)'],
-                'ombro_anterior': ['Deltoide Anterior'], 'ombro_lateral': ['Deltoide Lateral'], 'ombro_posterior': ['Deltoide Posterior'], 'ombro': ['Deltoide Anterior', 'Deltoide Lateral'], 'trapezio': ['Trapézio Superior'],
-                'perna_quadriceps': ['Quadríceps', 'Reto Femoral'], 
-                'perna_posterior_gluteo': ['Isquiotibiais', 'Glúteos/Abdutores', 'Glúteo Máximo', 'Glúteo Médio/Mínimo', 'Isquiotibiais (Porção Alongada)', 'Isquiotibiais (Porção Encurtada)'], 
-                'perna_adutor_abdutor': ['Adutores', 'Glúteos/Abdutores', 'Glúteo Médio/Mínimo'], 
-                'perna': ['Quadríceps', 'Reto Femoral', 'Isquiotibiais', 'Glúteo Máximo', 'Isquiotibiais (Porção Alongada)', 'Isquiotibiais (Porção Encurtada)'],
-                'panturrilha_gastro': ['Panturrilhas', 'Panturrilhas (Gastrocnêmios)'], 
-                'panturrilha_soleo': ['Panturrilhas', 'Panturrilhas (Sóleo)'], 
-                'panturrilha': ['Panturrilhas', 'Panturrilhas (Gastrocnêmios)', 'Panturrilhas (Sóleo)', 'Tibial Anterior'],
-                'triceps_longa': ['Cabeça Longa'], 'triceps_lateral_medial': ['Lateral/Medial'], 'triceps_global': ['Todas'], 'triceps': ['Todas', 'Lateral/Medial', 'Cabeça Longa'],
-                'biceps_longa': ['Cabeça Curta/Longa'], 'biceps_curta': ['Cabeça Curta/Longa'], 'biceps_braquial': ['Braquial/Antebraço'], 'biceps_global': ['Cabeça Curta/Longa'], 'biceps': ['Cabeça Curta/Longa'],
-                'core_supra': ['Superior'], 'core_infra': ['Inferior'], 'core_obliquo': ['Oblíquos / Rotação'], 'core_profundo': ['Estabilização/Anti-extensão'], 'core': ['Superior', 'Inferior', 'Estabilização/Anti-extensão'],
-                'cardio_motor': ['Motor Aeróbico'], 'cardio_resistencia': ['Resistência Anaeróbica'], 'esporte_pliometria': ['Pliometria'], 'esporte_agilidade': ['Agilidade e Frenagem'], 'esporte_aceleracao': ['Aceleração e Velocidade']
+                'peito_esternocostal': ['Peitoral Médio (Fibras Esternocostais)', 'Fibras Médias'], 
+                'peito_clavicular': ['Peitoral Superior (Fibras Claviculares)', 'Fibras Superiores'], 
+                'peito_costal': ['Peitoral Inferior (Fibras Abdominais)', 'Fibras Inferiores'], 
+                'peito': ['Peitoral Médio (Fibras Esternocostais)', 'Peitoral Superior (Fibras Claviculares)', 'Peitoral Inferior (Fibras Abdominais)', 'Isolamento (Fibras Esternocostais)', 'Fibras Médias', 'Fibras Superiores', 'Fibras Inferiores'],
+                'costa_largura': ['Latíssimo do Dorso (Foco em Largura)', 'Latíssimo do Dorso (Geral)', 'Latíssimo (Largura)'], 
+                'costa_espessura': ['Latíssimo do Dorso (Foco em Espessura)', 'Romboides/Miolo (Espessura)', 'Romboides (Maior e Menor) e Trapézio Médio/Inferior'], 
+                'costa_isolado': ['Latíssimo do Dorso (Foco em Espessura)', 'Latíssimo do Dorso (Geral)', 'Latíssimo (Largura)'], 
+                'costa': ['Latíssimo do Dorso (Foco em Largura)', 'Latíssimo do Dorso (Foco em Espessura)', 'Latíssimo do Dorso (Geral)', 'Romboides/Miolo (Espessura)'],
+                'ombro_anterior': ['Deltoide Anterior', 'Deltoide Anterior e Lateral', 'Deltoides (Complexo Completo)'], 
+                'ombro_lateral': ['Deltoide Lateral', 'Deltoide Anterior e Lateral', 'Deltoides (Complexo Completo)'], 
+                'ombro_posterior': ['Deltoide Posterior', 'Deltoides (Complexo Completo)'], 
+                'ombro': ['Deltoide Anterior', 'Deltoide Lateral', 'Deltoides (Complexo Completo)', 'Deltoide Anterior e Lateral', 'Deltoide Posterior'], 
+                'trapezio': ['Trapézio Superior', 'Trapézio Superior (Fibras Descendentes)', 'Trapézio (Complexo Completo)'],
+                'perna_quadriceps': ['Quadríceps (Vastos)', 'Quadríceps Femoral (Geral)', 'Reto Femoral (Isolamento)', 'Vastos (Lateral, Medial, Intermédio)', 'Reto Femoral'], 
+                'perna_posterior_gluteo': ['Isquiotibiais (Porção Alongada)', 'Isquiotibiais (Porção Encurtada)', 'Glúteo Máximo', 'Glúteo Máximo (Complexo)', 'Glúteo Médio e Mínimo', 'Glúteo Médio/Mínimo', 'Isquiotibiais', 'Glúteos/Abdutores'], 
+                'perna_adutor_abdutor': ['Adutores', 'Glúteo Médio e Mínimo', 'Glúteo Máximo (Complexo)', 'Glúteos/Abdutores'], 
+                'perna': ['Quadríceps Femoral (Geral)', 'Vastos (Lateral, Medial, Intermédio)', 'Isquiotibiais (Porção Alongada)', 'Isquiotibiais (Porção Encurtada)', 'Glúteo Máximo (Complexo)', 'Glúteo Médio e Mínimo', 'Quadríceps', 'Isquiotibiais'],
+                'panturrilha_gastro': ['Gastrocnêmio e Sóleo (Tríceps Sural)', 'Músculo Gastrocnêmio', 'Panturrilhas (Gastrocnêmios)', 'Panturrilhas'], 
+                'panturrilha_soleo': ['Músculo Sóleo', 'Panturrilhas (Sóleo)', 'Gastrocnêmio e Sóleo (Tríceps Sural)', 'Panturrilhas'], 
+                'panturrilha': ['Gastrocnêmio e Sóleo (Tríceps Sural)', 'Músculo Gastrocnêmio', 'Músculo Sóleo', 'Tibial Anterior', 'Panturrilhas (Gastrocnêmios)', 'Panturrilhas (Sóleo)', 'Panturrilhas'],
+                'triceps_longa': ['Cabeça Longa', 'Tríceps (Complexo Completo)'], 
+                'triceps_lateral_medial': ['Cabeças Lateral e Medial', 'Lateral/Medial', 'Tríceps (Complexo Completo)'], 
+                'triceps_global': ['Tríceps (Complexo Completo)', 'Todas'], 
+                'triceps': ['Tríceps (Complexo Completo)', 'Cabeça Longa', 'Cabeças Lateral e Medial', 'Todas', 'Lateral/Medial'],
+                'biceps_longa': ['Bíceps Braquial (Cabeças Curta e Longa)', 'Cabeça Longa', 'Cabeça Curta/Longa'], 
+                'biceps_curta': ['Cabeça Curta', 'Bíceps Braquial (Cabeças Curta e Longa)', 'Cabeça Curta/Longa'], 
+                'biceps_braquial': ['Músculo Braquial e Braquiorradial', 'Braquial/Antebraço'], 
+                'biceps_global': ['Bíceps Braquial (Cabeças Curta e Longa)', 'Cabeça Curta/Longa'], 
+                'biceps': ['Bíceps Braquial (Cabeças Curta e Longa)', 'Cabeça Curta', 'Músculo Braquial e Braquiorradial', 'Cabeça Curta/Longa', 'Braquial/Antebraço'],
+                'core_supra': ['Reto Abdominal (Porção Superior)', 'Reto Abdominal (Geral)', 'Superior'], 
+                'core_infra': ['Reto Abdominal (Porção Inferior)', 'Reto Abdominal (Geral)', 'Inferior'], 
+                'core_obliquo': ['Oblíquos (Externos e Internos)', 'Oblíquos / Rotação'], 
+                'core_profundo': ['Core (Transverso do Abdômen e Estabilizadores)', 'Estabilização/Anti-extensão'], 
+                'core': ['Reto Abdominal (Geral)', 'Oblíquos (Externos e Internos)', 'Core (Transverso do Abdômen e Estabilizadores)', 'Superior', 'Inferior', 'Estabilização/Anti-extensão', 'Oblíquos / Rotação']
             };
-            const mapEquip = { 'barra': 'Barras_Anilhas', 'halter': 'Pesos_Livres', 'maquina': 'Maquinas_Polias', 'cabo': 'Maquinas_Polias', 'peso_corporal': 'Peso_Corporal', 'calistenia': 'Calistenia' };
+            // 🛡️ Tradutor de preferência (EquipPref do motor antigo para o novo banco)
+            const mapEquip = { 'barra': 'Barra', 'halter': 'Halter', 'maquina': 'Máquina', 'cabo': 'Cabo', 'peso_corporal': 'Peso Corporal', 'calistenia': 'Calistenia' };
 
             // ⬇️ COLE O CÓDIGO NOVO EXATAMENTE AQUI ⬇️
-            // 🛡️ FIREWALL SEMÂNTICO: Lê o nome do exercício e expulsa intrusos classificados incorretamente na base de dados
+            // 🛡️ FIREWALL SEMÂNTICO: Atualizado para ler o novo arsenal
             const isNameAllowed = (exName) => {
                 const nome = (exName || '').toLowerCase();
                 
                 // MODO CASA: Bloqueia bolas, anéis, argolas, barras (mesmo as de porta), halteres e máquinas
-                if (userArsenal.includes('Peso_Corporal') && !userArsenal.includes('Calistenia') && !userArsenal.includes('Pesos_Livres')) {
+                if (userArsenal.includes('Peso Corporal') && !userArsenal.includes('Calistenia') && !userArsenal.includes('Halter')) {
                     if (/bola|anel|argola|barra|tração|tracao|haltere|anilhas|maquina|máquina|polia/.test(nome) && !nome.includes('peso corporal')) {
                         return false;
                     }
                 }
                 
                 // MODO PARQUE: Permite barras (fixas/paralelas), mas bloqueia pesos e máquinas de academia
-                if (!userArsenal.includes('Pesos_Livres') && !userArsenal.includes('Barras_Anilhas') && !userArsenal.includes('Maquinas_Polias')) {
+                if (!userArsenal.includes('Halter') && !userArsenal.includes('Barra') && !userArsenal.includes('Máquina')) {
                     if (/haltere|anilhas|maquina|máquina|polia|cabo/.test(nome)) return false;
                     if (nome.includes('barra') && !/barra fixa|paralela/.test(nome)) return false;
                 }
@@ -4174,8 +4206,9 @@ function updateDynamicCards() {
             return 'geral';
         };
 
-        const allowedEquips = envTarget === 'praia' ? ['Peso_Corporal', 'Calistenia'] : ['Peso_Corporal'];
-        const preferredEquip = envTarget === 'praia' ? 'Calistenia' : 'Peso_Corporal';
+        // 🛡️ ADAPTAÇÃO SILENCIOSA: Atualizado para a nova nomenclatura de Peso Corporal
+        const allowedEquips = envTarget === 'praia' ? ['Peso Corporal', 'Calistenia'] : ['Peso Corporal'];
+        const preferredEquip = envTarget === 'praia' ? 'Calistenia' : 'Peso Corporal';
 
         currentRoutine.forEach(bloco => {
             bloco.exercises.forEach(ex => {
