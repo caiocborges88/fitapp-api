@@ -1,9 +1,17 @@
-const CACHE_NAME = 'fitapp-cache-v8'; // 🛡️ Versão 8: Dispara a limpeza do cache antigo em todos os telemóveis
+const CACHE_NAME = 'fitapp-cache-v10'; // 🛡️ Versão 10: Blindagem Anti-Falhas e Nova Base de Dados
 const urlsToCache = [
   '/',
   '/index.html',
   '/css/style.css',
   '/js/app.js',
+  '/js/state.js',
+  '/js/utils.js',
+  '/js/audio.js',
+  '/js/sync.js',
+  '/js/forge.js',
+  '/js/ai.js',
+  '/js/combat.js',
+  '/js/ui.js',
   '/js/dados.js',
   '/js/api.js',            
   '/js/gamification.js',
@@ -15,10 +23,16 @@ const urlsToCache = [
 self.addEventListener('install', event => {
   self.skipWaiting(); 
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then(cache => {
+      // 🛡️ BLINDAGEM: Tenta guardar ficheiro a ficheiro. Se um falhar (ex: ai.js não existe), ele ignora o erro e salva os restantes.
+      return Promise.all(
+        urlsToCache.map(url => {
+          return cache.add(url).catch(err => {
+            console.warn(`[Spotter] Ficheiro não encontrado para cache, ignorando: ${url}`);
+          });
+        })
+      );
+    })
   );
 });
 
@@ -36,9 +50,7 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request).then(cachedResponse => {
       
-      // 1. O motor vai buscar à rede em background (se houver internet)
       const fetchPromise = fetch(event.request).then(networkResponse => {
-        // Se a resposta for válida, atualiza o cache silenciosamente para a próxima visita
         if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
             const responseToCache = networkResponse.clone();
             caches.open(CACHE_NAME).then(cache => {
@@ -47,11 +59,9 @@ self.addEventListener('fetch', event => {
         }
         return networkResponse;
       }).catch(() => {
-        // Se a rede falhar completamente (offline real ou Lie-Fi severo), ignora o erro. O cache garantirá o funcionamento.
         console.log('[Spotter Digital] Operação Offline ativada.');
       });
 
-      // 2. A MÁGICA: Devolve a cache INSTANTANEAMENTE se existir. Se não existir (primeiro acesso da vida do utilizador), devolve a promessa da rede.
       return cachedResponse || fetchPromise;
     })
   );
@@ -64,7 +74,7 @@ self.addEventListener('activate', event => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheAllowlist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName); // Aniquila o v7 antigo
+            return caches.delete(cacheName); // Aniquila caches antigos
           }
         })
       );

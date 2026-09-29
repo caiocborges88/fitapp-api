@@ -1,67 +1,16 @@
 'use strict';
 
-// NOVO: Sintetizador de Áudio Tático (Web Audio API)
-const FitAudio = (() => {
-    let audioCtx = null;
-    function init() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-    }
-    function playTone(freq, type, duration, vol = 0.1) {
-        const btnAudio = document.getElementById('btnAudio');
-        if (!btnAudio || !btnAudio.classList.contains('active')) return; // Respeita o botão de mudo
-        init();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-    }
-    return {
-        // 🛡️ DESTRANCADOR IOS: Emite um som mudo de 1ms para forçar a Apple a libertar o motor de áudio
-        unlock: () => {
-            init();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            gain.gain.value = 0; // Somente mudo
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start(0);
-            osc.stop(audioCtx.currentTime + 0.001);
-        },
-        beepShort: () => playTone(800, 'sine', 0.1, 0.2),
-        beepLong: () => playTone(1200, 'sine', 0.6, 0.3),
-        packRip: () => { playTone(150, 'sawtooth', 0.1, 0.1); setTimeout(() => playTone(200, 'sawtooth', 0.2, 0.1), 100); },
-        revealNormal: () => { playTone(400, 'square', 0.1, 0.1); setTimeout(() => playTone(600, 'square', 0.3, 0.1), 100); },
-        revealEpic: () => { playTone(600, 'square', 0.1, 0.1); setTimeout(() => playTone(800, 'square', 0.1, 0.1), 100); setTimeout(() => playTone(1200, 'square', 0.5, 0.15), 200); },
-        repeated: () => { playTone(300, 'triangle', 0.2, 0.1); setTimeout(() => playTone(250, 'triangle', 0.4, 0.1), 200); },
-        forge: () => { playTone(800, 'square', 0.05, 0.2); setTimeout(() => playTone(400, 'sawtooth', 0.3, 0.1), 50); }
-    };
-})();
-
+// 🌐 IMPORTAÇÕES MODULARES GLOBAIS (Devem estar sempre no topo)
+import { state } from './state.js';
+import { FitAudio } from './audio.js';
+import { escapeHTML, parseSafeFloat, getMuscleGroup } from './utils.js';
+import { syncOfflineWorkouts, saveCampaignToCloud, loadCampaignFromCloud, syncTacticalDictionary } from './sync.js';
+import { openForgeModal, updateForgeOptions, generateForgedWorkout, executeForgeLogic } from './forge.js';
+import { fetchAIFeedback, openImportAiModal, switchAiTab, processWorkoutWithAI, carregarProximoTreinoIA } from './ai.js';
+import { adjustRestTime, startRestTimer, stopRestTimer, changeSets, cloneFirstSet, updateGlobalTimer, startCooldownTimer, skipCooldown, toggleAutoPilot, startAutoPilot, executeAutoPhase, stopAutoPilot } from './combat.js';
+import { renderLibrary, filterLibrary, renderPreviewList, renderCurrentRoutine, updateDynamicCards, applyTheme, switchTab, renderWeeklyCalendar, renderMonthlyCalendar, renderCustomWorkouts, renderHistoryList, renderMetricsChart, renderIsolationChart, removeExercise, openAddExerciseModal, setCategoryFilter, filterAddModal, confirmAddExercise, checkCompletedCards } from './ui.js';
 var FitApp = (() => {
-    let totalSets = 0, checkedSets = 0, audioEnabled = false, restTimer = null, currentRestTime = 60;
-    let todayLog = [];
-    let currentRoutine = []; 
-    let currentWorkoutType = ''; 
-    let filaDeTreinosIA = [];
-    
-    let cooldownTimerInterval = null; // NOVO: Relógio da Fase 3
-    let isPromotionPending = false; // NOVO: Gatilho de Promoção isolado
-    
-    // Variáveis do Gráfico e Relógio Global
-    let metricsChartInstance = null; // Obsoleto (mantido por segurança)
-    let radarChartInstance = null;   // NOVO: Memória do Radar
-    let isolationChartInstance = null; // NOVO: Memória do Gráfico de Isolamento
-    let globalTimer = null;
-    let workoutStartTime = null;
-    let isWorkoutActive = false; 
-    const els = {};
+    // 🛡️ As variáveis de combate foram transferidas para o js/state.js
 
     // 🛡️ GESTOR DE MEMÓRIA (Garbage Collector): Evita o bloqueio total se o limite de 5MB do Safari for atingido
     const safeSet = (k, v) => { 
@@ -95,52 +44,12 @@ var FitApp = (() => {
     };
     const safeGet = (k) => { try { return localStorage.getItem(k); } catch(e) { return null; } };
 
-    // ESCUDO ANTI-XSS: Neutraliza scripts maliciosos injetados via texto
-    const escapeHTML = (str) => {
-        if (str === null || str === undefined) return '';
-        // BLINDAGEM: Força a conversão para String antes de tentar ler
-        return String(str).replace(/[&<>'"]/g, 
-            tag => ({
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                "'": '&#39;',
-                '"': '&quot;'
-            }[tag] || tag)
-        );
-    };
-
-    // NOVO: Escudo Numérico (Neutraliza vírgulas, letras e pontos duplos)
-    const parseSafeFloat = (val) => {
-        if (!val) return 0;
-        let str = String(val).replace(',', '.').replace(/[^0-9.]/g, ''); 
-        const parts = str.split('.');
-        if (parts.length > 2) str = parts[0] + '.' + parts.slice(1).join('');
-        return parseFloat(str) || 0;
-    };
-
-    // NOVO: Motor de Classificação Muscular Universal (Adaptado CSV)
-    const getMuscleGroup = (item) => {
-        const text = typeof item === 'string' ? item : (item.group || item.focus || '');
-        if (!text) return 'outros';
-        const g = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-        if (g.includes('peito') || g.includes('peitoral')) return 'peito';
-        if (g.includes('costa') || g.includes('dorsal') || g.includes('lombar') || g.includes('trapézio')) return 'costas';
-        if (g.includes('perna') || g.includes('gluteo') || g.includes('panturrilha') || g.includes('quadriceps') || g.includes('isquio') || g.includes('adutor')) return 'pernas';
-        if (g.includes('ombro') || g.includes('deltoide')) return 'ombros';
-        if (g.includes('triceps') || g.includes('tríceps')) return 'triceps';
-        if (g.includes('biceps') || g.includes('bíceps') || g.includes('antebraço')) return 'biceps';
-        if (g.includes('core') || g.includes('abdom') || g.includes('obliquo') || g.includes('estabilização')) return 'core';
-        if (g.includes('mobilidade') || g.includes('cardio') || g.includes('deslocamento')) return 'outros';
-        return 'outros';
-    };
-
-    function showToast(msg) { els.toast.textContent = msg; els.toast.classList.add('show'); setTimeout(() => els.toast.classList.remove('show'), 3000); }
-    function speak(text) { if (!audioEnabled || !('speechSynthesis' in window)) return; window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'pt-BR'; utterance.rate = 1.1; window.speechSynthesis.speak(utterance); }
+    function showToast(msg) { state.els.toast.textContent = msg; state.els.toast.classList.add('show'); setTimeout(() => state.els.toast.classList.remove('show'), 3000); }
+    function speak(text) { if (!state.audioEnabled || !('speechSynthesis' in window)) return; window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'pt-BR'; utterance.rate = 1.1; window.speechSynthesis.speak(utterance); }
     function toggleAudio() { 
-        audioEnabled = !audioEnabled; 
+        state.audioEnabled = !state.audioEnabled; 
         const btn = document.getElementById('btnAudio'); 
-        if (audioEnabled) { 
+        if (state.audioEnabled) { 
             btn.classList.add('active'); 
             btn.innerHTML = '🔊 <span>Áudio On</span>'; 
             if (typeof FitAudio !== 'undefined' && FitAudio.unlock) FitAudio.unlock(); // 🛡️ Aciona a chave da Apple
@@ -152,207 +61,7 @@ var FitApp = (() => {
         } 
     }
 
-    let currentTimerEl = null;
-    let currentTimerTarget = null;
-    let currentTimerExercise = null; // Memória do exercício atual
-    let currentTacticalTip = ""; // Memória da dica para não recarregar a cada segundo
 
-    // Função para alterar o tempo de descanso em tempo real
-    function adjustRestTime(newTime) {
-        currentRestTime = newTime;
-        if(currentTimerTarget) {
-            // O 'true' avisa ao motor que é apenas um ajuste, para ele não repetir o áudio do dicionário
-            startRestTimer(currentTimerTarget, currentTimerExercise, true); 
-        }
-    }
-
-    // --- NOVO MOTOR DE ALTA PRECISÃO (Substitui o setInterval) ---
-    let rafTimerId = null;
-    let isRestTimerRunning = false;
-
-    function startRestTimer(targetContainer, exerciseName = null, isAdjustment = false) {
-        currentTimerTarget = targetContainer;
-        currentTimerExercise = exerciseName;
-        
-        // Esconde o cronômetro antigo do topo da tela
-        const oldGlobalTimer = document.getElementById('timerContainer');
-        if(oldGlobalTimer) oldGlobalTimer.style.display = 'none';
-
-        // Desliga o motor anterior, se houver
-        stopRestTimer(); 
-        isRestTimerRunning = true;
-
-        // CÉREBRO TÁTICO: Busca a dica no dicionário
-        if (!isAdjustment) {
-            currentTacticalTip = "";
-            if (exerciseName && typeof dictionaryData !== 'undefined') {
-                const dictItem = dictionaryData.find(d => d.name === exerciseName);
-                if (dictItem && dictItem.desc) {
-                    currentTacticalTip = dictItem.desc; 
-                }
-            }
-            if (!currentTacticalTip) {
-                const genericTips = [
-                    "Controle a respiração. Inspire na fase excêntrica, expire na concêntrica.", 
-                    "Mantenha o foco. O descanso converte suor em hipertrofia.", 
-                    "Aproveite para oxigenar a musculatura alvo.",
-                    "Hidrate-se. A água é o combustível da contração muscular."
-                ];
-                currentTacticalTip = genericTips[Math.floor(Math.random() * genericTips.length)];
-            }
-        }
-
-        // Cria a nova cápsula visual
-        currentTimerEl = document.createElement('div');
-        currentTimerEl.className = 'inline-rest-timer';
-        currentTimerEl.style.cssText = 'background: #1a1a1a; padding: 15px; border-radius: 8px; text-align: center; margin-top: 15px; border: 1px solid #333; transition: all 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.5);';
-        
-        targetContainer.appendChild(currentTimerEl);
-        
-        let duration = currentRestTime;
-        const endTime = Date.now() + (duration * 1000); 
-        let alert10sGiven = false; 
-
-        if (audioEnabled) {
-            if (isAdjustment) {
-                speak(`Tempo ajustado para ${duration} segundos.`);
-            } else {
-                speak(`Descanso. ${duration} segundos. Foco tático: ${currentTacticalTip}`);
-            }
-        }
-        
-        let lastBeep = -1;
-        let lastVisualUpdate = -1;
-
-        // O Núcleo do Motor de Alta Precisão
-        const tick = () => { 
-            if (!isRestTimerRunning) return;
-
-            let timeLeft = Math.ceil((endTime - Date.now()) / 1000);
-            if (timeLeft < 0) timeLeft = 0;
-            
-            // Só atualiza a interface (HTML) se o segundo realmente virou, economizando processador
-            if (timeLeft !== lastVisualUpdate) {
-                lastVisualUpdate = timeLeft;
-                
-                let m = Math.floor(timeLeft/60).toString().padStart(2,'0');
-                let s = (timeLeft%60).toString().padStart(2,'0'); 
-                
-                let timerContent = '';
-
-                // Lógica Progressiva de Cores e Áudios
-                if (timeLeft > 10) {
-                    currentTimerEl.style.borderColor = '#333';
-                    currentTimerEl.style.background = '#1a1a1a';
-                    timerContent = `
-                        <div style="color: #a64dff; font-size: 11px; text-transform: uppercase; margin-bottom: 2px; font-weight: bold; letter-spacing: 1px;">🧠 Spotter Digital</div>
-                        <div style="color: #ccc; font-size: 13px; margin-bottom: 12px; font-style: italic; max-width: 90%; margin-left: auto; margin-right: auto;">"${currentTacticalTip}"</div>
-                        <div style="font-size: 32px; color: #fff; font-weight: bold; font-family: monospace;">${m}:${s}</div>`;
-                } else if (timeLeft <= 10 && timeLeft > 5) {
-                    currentTimerEl.style.borderColor = '#ffaa00';
-                    currentTimerEl.style.background = 'rgba(255, 170, 0, 0.15)';
-                    timerContent = `<div style="color: #ffaa00; font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; animation: blink 1s infinite;">⚠️ Prepare-se</div><div style="font-size: 32px; color: #ffaa00; font-weight: bold; font-family: monospace;">${m}:${s}</div>`;
-                    if (!alert10sGiven && audioEnabled) { speak("Dez segundos. Assuma a posição."); alert10sGiven = true; }
-                } else if (timeLeft <= 5 && timeLeft > 0) {
-                    currentTimerEl.style.borderColor = '#ff4444';
-                    currentTimerEl.style.background = 'rgba(255, 68, 68, 0.2)';
-                    timerContent = `<div style="color: #ff4444; font-size: 14px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px;">Contagem Final</div><div style="font-size: 42px; color: #ff4444; font-weight: bold; text-shadow: 0 0 15px rgba(255,68,68,0.8);">${timeLeft}</div>`;
-                    
-                    if (timeLeft !== lastBeep) {
-                        FitAudio.beepShort();
-                        lastBeep = timeLeft;
-                    }
-                } else if (timeLeft === 0) {
-                    currentTimerEl.style.borderColor = '#00ff88';
-                    currentTimerEl.style.background = 'rgba(0, 255, 136, 0.2)';
-                    timerContent = `<div style="font-size: 36px; color: #00ff88; font-weight: bold; text-shadow: 0 0 15px rgba(0,255,136,0.8); text-transform: uppercase;">🔥 Vai!</div>`;
-                    
-                    if (timeLeft !== lastBeep) {
-                        FitAudio.beepLong();
-                        if(audioEnabled) speak("Ação!");
-                        lastBeep = timeLeft;
-                    }
-
-                    stopRestTimer();
-                    setTimeout(() => { 
-                        if (currentTimerEl && currentTimerEl.parentNode) currentTimerEl.parentNode.removeChild(currentTimerEl); 
-                    }, 3000);
-                }
-
-                if (timeLeft > 0) {
-                    timerContent += `
-                        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
-                            <button onclick="FitApp.adjustRestTime(60)" style="background: ${currentRestTime===60?'#00ff88':'#222'}; color: ${currentRestTime===60?'#000':'#aaa'}; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;">60s</button>
-                            <button onclick="FitApp.adjustRestTime(90)" style="background: ${currentRestTime===90?'#00ff88':'#222'}; color: ${currentRestTime===90?'#000':'#aaa'}; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;">90s</button>
-                            <button onclick="FitApp.adjustRestTime(120)" style="background: ${currentRestTime===120?'#00ff88':'#222'}; color: ${currentRestTime===120?'#000':'#aaa'}; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;">120s</button>
-                        </div>
-                    `;
-                }
-                
-                currentTimerEl.innerHTML = timerContent;
-            }
-
-            if (isRestTimerRunning) {
-                rafTimerId = requestAnimationFrame(tick);
-            }
-        };
-        
-        rafTimerId = requestAnimationFrame(tick); 
-    }
-
-    function stopRestTimer() { 
-        isRestTimerRunning = false;
-        if (rafTimerId) cancelAnimationFrame(rafTimerId);
-        // Garante a compatibilidade com navegadores mais antigos (fallback)
-        if (typeof restTimer !== 'undefined') clearInterval(restTimer); 
-        
-        if (currentTimerEl && currentTimerEl.parentNode) {
-            currentTimerEl.parentNode.removeChild(currentTimerEl);
-        }
-    }
-
-    // Função para adicionar ou remover séries dinamicamente durante o treino
-    function changeSets(bIndex, eIndex, delta) {
-        const ex = currentRoutine[bIndex].exercises[eIndex];
-        
-        if (delta > 0) {
-            ex.sets++;
-            if(!ex.setsData) ex.setsData = [];
-            ex.setsData.push({ kg: '', reps: '', checked: false });
-        } else if (delta < 0 && ex.sets > 1) {
-            ex.sets--;
-            const removedSet = ex.setsData.pop();
-            // Desfaz a contabilidade se a série removida já estava marcada como concluída
-            if (removedSet && removedSet.checked) {
-                checkedSets--;
-                todayLog = todayLog.filter(log => !(log.exercise === ex.name && log.set === (ex.sets + 1)));
-            }
-        }
-        
-        saveWorkoutState();
-        renderCurrentRoutine(); // Recarrega a tela instantaneamente
-        if(audioEnabled && delta > 0) speak("Série adicionada.");
-    }
-
-    function cloneFirstSet(bIndex, eIndex) {
-        const ex = currentRoutine[bIndex].exercises[eIndex];
-        if (!ex.setsData || ex.setsData.length === 0) return;
-        
-        const baseKg = ex.setsData[0].kg;
-        const baseReps = ex.setsData[0].reps;
-        
-        for (let i = 1; i < ex.sets; i++) {
-            if (!ex.setsData[i]) ex.setsData[i] = { kg: '', reps: '', checked: false };
-            if (!ex.setsData[i].checked) { // Só substitui as séries que não foram concluídas ainda
-                ex.setsData[i].kg = baseKg;
-                ex.setsData[i].reps = baseReps;
-            }
-        }
-        saveWorkoutState();
-        renderCurrentRoutine(); 
-        showToast("Cargas da S1 replicadas.");
-        if(audioEnabled) speak("Cargas replicadas.");
-    }
 async function exportStravaCard(historyIndex = -1) {
         showToast("📸 Focando lente... aguarde.");
         
@@ -415,36 +124,50 @@ async function exportStravaCard(historyIndex = -1) {
     }
 
     function openSwapModal(bIndex, eIndex) {
-        const ex = currentRoutine[bIndex].exercises[eIndex];
+        const ex = state.currentRoutine[bIndex].exercises[eIndex];
         const currentName = ex.name;
-        const currentDict = dictionaryData.find(d => d.name === currentName);
-        const currentGroup = currentDict ? currentDict.group : "Geral";
+        const currentDict = window.dictionaryData.find(d => d.name === currentName);
         
-        const style = els.styleSelector ? els.styleSelector.value : 'biset';
-        const level = els.levelSelector ? els.levelSelector.value : 'intermediario';
-        const type = currentWorkoutType;
+        // CÉREBRO DE SUBSTITUIÇÃO CORRIGIDO: Chama a função local diretamente
+        const broadGroup = currentDict ? getMuscleGroup(currentDict.group) : getMuscleGroup(currentName);
+        
+        const style = state.els.styleSelector ? state.els.styleSelector.value : 'biset';
+        const level = state.els.levelSelector ? state.els.levelSelector.value : 'intermediario';
+        const type = state.currentWorkoutType;
+        const currentEnv = safeGet('fitapp_global_env') || 'academia';
 
-        // PONTO 7: Busca hierárquica no Swap (Escudo Duplo)
-        let pool = dictionaryData.filter(d => d.focus === (currentDict ? currentDict.focus : '') && d.name !== currentName);
-        
-        // Se a busca cirúrgica falhar, busca pelo Grupo Muscular pai
-        if (pool.length === 0) {
-            pool = dictionaryData.filter(d => d.group === currentGroup && d.name !== currentName);
-        }
+        // 1. Busca todos os exercícios da mesma gaveta muscular
+        let pool = window.dictionaryData.filter(d => 
+            getMuscleGroup(d.group) === broadGroup && d.name !== currentName
+        );
 
         // Blindagem de Ambiente
         const method = document.getElementById('mainMethodSelector') ? document.getElementById('mainMethodSelector').value : '';
-        if (type === 'Casa' || method === 'calistenia') {
-            pool = pool.filter(d => d.equip.includes('Peso_Corporal') || d.equip.includes('Calistenia'));
+        if (type === 'Casa' || method === 'calistenia' || currentEnv === 'casa') {
+            pool = pool.filter(d => d.equip.includes('Peso Corporal') || d.equip.includes('Calistenia'));
         }
-        
+
+        // 2. ORDENAÇÃO INTELIGENTE (Prioridade de Ferro)
+        pool.sort((a, b) => {
+            const aFocusMatch = currentDict && a.focus === currentDict.focus ? 1 : 0;
+            const bFocusMatch = currentDict && b.focus === currentDict.focus ? 1 : 0;
+            if (aFocusMatch !== bFocusMatch) return bFocusMatch - aFocusMatch;
+            
+            if (currentEnv === 'academia') {
+                const aIsBw = a.equip === 'Peso Corporal' || a.equip === 'Calistenia';
+                const bIsBw = b.equip === 'Peso Corporal' || b.equip === 'Calistenia';
+                if (aIsBw && !bIsBw) return 1;
+                if (!aIsBw && bIsBw) return -1;
+            }
+            return 0;
+        });
+
         let originalName = currentName; 
         const isStandardWorkout = !type.startsWith('custom_') && type !== 'Livre' && type !== 'Casa' && type !== 'novo_customizado';
         
-        if (isStandardWorkout && typeof dbWorkouts !== 'undefined') {
-            // ESCUDO ANTI-CRASH: Se a campanha foi gerada dinamicamente, não haverá "Original" na base legada.
+        if (isStandardWorkout && typeof window.dbWorkouts !== 'undefined') {
             try {
-                originalName = dbWorkouts[style][level][type][bIndex].exercises[eIndex].name;
+                originalName = window.dbWorkouts[style][level][type][bIndex].exercises[eIndex].name;
             } catch (error) {
                 originalName = currentName; 
             }
@@ -469,7 +192,7 @@ async function exportStravaCard(historyIndex = -1) {
 
         if (currentName !== originalName) {
             html += `
-                <div class="swap-item" style="border-left: 4px solid #ffaa00; background: rgba(255, 170, 0, 0.1);" onclick="FitApp.confirmSwap(${bIndex}, ${eIndex}, '${originalName}')">
+                <div class="swap-item" style="border-left: 4px solid #ffaa00; background: rgba(255, 170, 0, 0.1);" onclick="window.FitApp.confirmSwap(${bIndex}, ${eIndex}, '${originalName}')">
                     <div class="swap-item-name">↩️ Restaurar Original</div>
                     <div class="swap-item-focus">${originalName}</div>
                 </div>
@@ -483,7 +206,7 @@ async function exportStravaCard(historyIndex = -1) {
         } else {
             pool.forEach(item => {
                 html += `
-                    <div class="swap-item" onclick="FitApp.confirmSwap(${bIndex}, ${eIndex}, '${item.name}')">
+                    <div class="swap-item" onclick="window.FitApp.confirmSwap(${bIndex}, ${eIndex}, '${item.name}')">
                         <div class="swap-item-name">${item.name}</div>
                         <div class="swap-item-focus">🎯 Foco: ${item.focus}</div>
                         <div class="swap-item-focus" style="color: #00ff88; margin-top: 4px;">🎒 Requer: ${item.equip ? item.equip.replace(/_/g, ' ') : 'N/A'}</div>
@@ -503,17 +226,17 @@ async function exportStravaCard(historyIndex = -1) {
     }
 
     function confirmSwap(bIndex, eIndex, newName) {
-        currentRoutine[bIndex].exercises[eIndex].name = newName;
+        state.currentRoutine[bIndex].exercises[eIndex].name = newName;
         document.getElementById('swapModal').style.display = 'none';
         
-        if (isWorkoutActive) {
-            renderCurrentRoutine(); 
+        if (state.isWorkoutActive) {
+            renderstate.currentRoutine(); 
             saveWorkoutState(); 
         } else {
             renderPreviewList();
         }
         
-        if(audioEnabled) speak("Exercício atualizado.");
+        if(state.audioEnabled) speak("Exercício atualizado.");
     }
 
     function checkSequence() {
@@ -527,64 +250,7 @@ async function exportStravaCard(historyIndex = -1) {
         if(statLast) statLast.textContent = lastType ? 'Treino ' + lastType : 'Nenhum';
     }
 
-    function renderWeeklyCalendar() {
-        const grid = document.getElementById('weeklyGrid');
-        if (!grid) return;
-        grid.innerHTML = '';
-        
-        const history = JSON.parse(safeGet('fitapp_week_log') || '[]');
-        
-        for (let i = 6; i >= 0; i--) {
-            const d = new Date();
-            d.setDate(d.getDate() - i);
-            
-            // BLINDAGEM DE FUSO HORÁRIO: Formata a data garantindo o tempo local do dispositivo (ex: "2026-09-23")
-            const localISOTime = d.getFullYear() + "-" + 
-                                 String(d.getMonth() + 1).padStart(2, '0') + "-" + 
-                                 String(d.getDate()).padStart(2, '0');
-            
-            let dayName = d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '');
-            dayName = dayName.substring(0, 3);
-            
-            // O sistema procura por treinos gravados nessa data local exata
-            const workedOut = history.slice().reverse().find(h => h.date === localISOTime);
-            
-            const dayEl = document.createElement('div');
-            dayEl.style.display = 'flex';
-            dayEl.style.flexDirection = 'column';
-            dayEl.style.alignItems = 'center';
-            dayEl.style.gap = '8px';
-            dayEl.style.cursor = 'pointer'; 
-            dayEl.onclick = () => {         
-                FitApp.openHistoryModal();
-                FitApp.switchHistoryTab('calendar');
-            };
-            
-            let dotColor = '#2a2a2a';
-            let textColor = '#555';
-            let typeLabel = '';
-            let shadow = 'none';
-            
-            if (workedOut) {
-                dotColor = workedOut.tipo === 'Livre' ? '#a64dff' : '#00ff88';
-                textColor = '#000';
-                typeLabel = workedOut.tipo === 'Livre' ? 'L' : workedOut.tipo;
-                shadow = `0 0 10px ${dotColor}80`;
-            }
-            
-            const isToday = i === 0;
-            const dayLabelColor = isToday ? '#fff' : '#aaa';
-            const fontWeight = isToday ? 'bold' : 'normal';
-            
-            dayEl.innerHTML = `
-                <span style="font-size: 11px; color: ${dayLabelColor}; font-weight: ${fontWeight}; text-transform: capitalize;">${dayName}</span>
-                <div style="width: 34px; height: 34px; border-radius: 50%; background: ${dotColor}; display: flex; justify-content: center; align-items: center; font-size: 14px; font-weight: bold; color: ${textColor}; box-shadow: ${shadow}; border: 1px solid #444;">
-                    ${typeLabel}
-                </div>
-            `;
-            grid.appendChild(dayEl);
-        }
-    }
+
 
     function startWorkout(type) {
         const tabTreino = document.getElementById('nav-treino');
@@ -594,7 +260,7 @@ async function exportStravaCard(historyIndex = -1) {
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        currentWorkoutType = type;
+        state.currentWorkoutType = type;
         loadWorkout();
     }
 
@@ -610,8 +276,8 @@ async function exportStravaCard(historyIndex = -1) {
         if (tabTreino) tabTreino.click();
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        currentWorkoutType = 'Cardio';
-        isWorkoutActive = true; 
+        state.currentWorkoutType = 'Cardio';
+        state.isWorkoutActive = true; 
         
         // Esconde painéis principais
         document.getElementById('workoutCards').style.display = 'none';
@@ -630,9 +296,9 @@ async function exportStravaCard(historyIndex = -1) {
         document.getElementById('exerciseList').style.display = 'none';
         
         // Mostra HUD de Cardio
-        els.workoutArea.style.display = 'block';
+        state.els.workoutArea.style.display = 'block';
         document.getElementById('cardioArea').style.display = 'block';
-        els.btnFinishArea.style.display = 'flex';
+        state.els.btnFinishArea.style.display = 'flex';
         
         // Ajusta botão de finalizar para ficar padrão
         const btnFinish = document.getElementById('btnFinishAction');
@@ -658,8 +324,8 @@ async function exportStravaCard(historyIndex = -1) {
         document.getElementById('cardioKcal').value = '';
         document.getElementById('cardioBpm').value = '';
         
-        workoutStartTime = Date.now();
-        if(audioEnabled) speak("Motor aeróbico ativado.");
+        state.workoutStartTime = Date.now();
+        if(state.audioEnabled) speak("Motor aeróbico ativado.");
     }
 
     function toggleCardioTimer() {
@@ -672,7 +338,7 @@ async function exportStravaCard(historyIndex = -1) {
             cardioPausedTime = cardioElapsedSeconds; // Salva o tempo congelado
             btn.innerHTML = "▶ Retomar Relógio";
             btn.style.color = '#00ff88'; btn.style.borderColor = '#00ff88'; btn.style.background = 'rgba(0, 255, 136, 0.2)';
-            if(audioEnabled) speak("Relógio pausado.");
+            if(state.audioEnabled) speak("Relógio pausado.");
         } else {
             isCardioRunning = true;
             // Desloca o tempo de início baseado no quanto já foi percorrido (matemática pura)
@@ -680,7 +346,7 @@ async function exportStravaCard(historyIndex = -1) {
             
             btn.innerHTML = "⏸ Pausar Relógio";
             btn.style.color = '#ffaa00'; btn.style.borderColor = '#ffaa00'; btn.style.background = 'rgba(255, 170, 0, 0.2)';
-            if(audioEnabled) speak("Ação.");
+            if(state.audioEnabled) speak("Ação.");
             
             cardioTimerInterval = setInterval(() => {
                 // Cálculo imune ao sono do celular
@@ -696,190 +362,29 @@ async function exportStravaCard(historyIndex = -1) {
     }
     // ----------------------------
 
-    function updateGlobalTimer() {
-        if (!workoutStartTime) return;
-        const now = Date.now();
-        const diffInSeconds = Math.floor((now - workoutStartTime) / 1000);
-        const h = Math.floor(diffInSeconds / 3600).toString().padStart(2, '0');
-        const m = Math.floor((diffInSeconds % 3600) / 60).toString().padStart(2, '0');
-        const s = (diffInSeconds % 60).toString().padStart(2, '0');
-        const display = document.getElementById('globalTimerDisplay');
-        if (display) display.textContent = `${h}:${m}:${s}`;
-    }
+
 
 function saveWorkoutState() {
-        if (!isWorkoutActive) return;
-        const state = { 
-            currentRoutine, 
-            currentWorkoutType, 
-            workoutStartTime 
+        if (!state.isWorkoutActive) return;
+        const activeState = { 
+            currentRoutine: state.currentRoutine, 
+            currentWorkoutType: state.currentWorkoutType, 
+            workoutStartTime: state.workoutStartTime 
         };
-        safeSet('fitapp_active_state', JSON.stringify(state));
+        safeSet('fitapp_active_state', JSON.stringify(activeState));
     }
 
     function clearWorkoutState() {
         localStorage.removeItem('fitapp_active_state');
     }
 
-    function renderPreviewList() {
-        const list = document.getElementById('previewList');
-        if (!list) return;
-        list.innerHTML = '';
-        
-        // 1. Apaga as luzes de todo o Corpo Humano primeiro
-        const allMuscles = ['svg-peito', 'svg-ombro', 'svg-biceps', 'svg-triceps', 'svg-costas', 'svg-trapezio', 'svg-core', 'svg-quadriceps', 'svg-posterior', 'svg-gluteo', 'svg-panturrilha'];
-        allMuscles.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) { el.style.fill = '#222'; el.style.stroke = '#444'; }
-        });
 
-        // 2. Rastreador de Músculos (Quais músculos serão usados hoje?)
-        const activeMuscles = new Set();
-        
-        currentRoutine.forEach((bloco, bIndex) => {
-            const blockTitle = document.createElement('h4');
-            blockTitle.style.color = 'var(--theme-secondary)';
-            blockTitle.style.marginTop = '15px';
-            blockTitle.style.marginBottom = '10px';
-            blockTitle.style.borderBottom = '1px solid #333';
-            blockTitle.style.paddingBottom = '5px';
-            blockTitle.textContent = bloco.title;
-            list.appendChild(blockTitle);
-
-            bloco.exercises.forEach((ex, eIndex) => {
-                
-                // 🧠 CÉREBRO ANATÔMICO: Descobre onde o exercício bate e aciona o Radar
-                const dictItem = typeof dictionaryData !== 'undefined' ? dictionaryData.find(d => d.name === ex.name) : null;
-                const focusStr = dictItem ? (dictItem.group + ' ' + dictItem.focus).toLowerCase() : ex.name.toLowerCase();
-                
-                // Remove acentos para facilitar o match
-                const f = focusStr.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                
-                if (f.includes('peito')) activeMuscles.add('svg-peito');
-                if (f.includes('ombro') || f.includes('deltoide')) activeMuscles.add('svg-ombro');
-                if (f.includes('biceps') || f.includes('braco')) activeMuscles.add('svg-biceps');
-                if (f.includes('triceps')) activeMuscles.add('svg-triceps');
-                if (f.includes('costa') || f.includes('dorsal') || f.includes('lombar')) activeMuscles.add('svg-costas');
-                if (f.includes('trapezio')) activeMuscles.add('svg-trapezio');
-                if (f.includes('core') || f.includes('abdom')) activeMuscles.add('svg-core');
-                if (f.includes('quadriceps') || f.includes('perna') && !f.includes('posterior') && !f.includes('gluteo')) activeMuscles.add('svg-quadriceps');
-                if (f.includes('posterior') || f.includes('isquio')) activeMuscles.add('svg-posterior');
-                if (f.includes('gluteo')) activeMuscles.add('svg-gluteo');
-                if (f.includes('panturrilha') || f.includes('gastro')) activeMuscles.add('svg-panturrilha');
-
-                const item = document.createElement('div');
-                item.className = 'preview-item';
-                
-                // NOVO: Higienização e montagem do UI do Exercício
-                const safeName = escapeHTML(ex.name);
-                const safeTarget = escapeHTML(ex.target);
-                const ytQuery = encodeURIComponent(`Como executar o exercício ${safeName}`);
-                const ytLink = `https://www.youtube.com/results?search_query=${ytQuery}`;
-
-                item.innerHTML = `
-                    <div style="flex: 1;">
-                        <div style="font-weight: bold; color: #fff; font-size: 14px; display: flex; align-items: center; gap: 8px;">
-                            ${safeName}
-                            <a href="${ytLink}" target="_blank" title="Ver execução no YouTube" style="text-decoration: none; font-size: 16px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">🎥</a>
-                        </div>
-                        <div style="font-size: 12px; color: var(--theme-primary); margin-top: 4px; font-weight: bold;">${ex.sets}x ${safeTarget}</div>
-                    </div>
-                    <div style="display: flex; gap: 8px;">
-                        <button onclick="FitApp.openSwapModal(${bIndex}, ${eIndex})" style="background: #333; border: none; color: #fff; padding: 6px 10px; border-radius: 4px; cursor: pointer;">🔄</button>
-                        <button onclick="FitApp.removeExercise(${bIndex}, ${eIndex})" style="background: #333; border: none; color: #ff4d4d; padding: 6px 10px; border-radius: 4px; cursor: pointer;">❌</button>
-                    </div>
-                `;
-                list.appendChild(item);
-            });
-        });
-
-        // 3. Acende o Heatmap com as cores do Tema Atual
-        activeMuscles.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) { 
-                el.style.fill = 'var(--theme-primary)'; 
-                el.style.stroke = '#fff';
-            }
-        });
-    }
-
-function removeExercise(bIndex, eIndex) {
-        currentRoutine[bIndex].exercises.splice(eIndex, 1);
-        renderPreviewList();
-    }
-
-    function openAddExerciseModal() {
-        document.getElementById('addExerciseModal').style.display = 'flex';
-        document.getElementById('searchAddInput').value = '';
-        document.getElementById('addExerciseConfig').style.display = 'none';
-        filterAddModal();
-    }
-
-    let currentCategoryFilter = 'todos';
-
-    function setCategoryFilter(category, btnElement) {
-        currentCategoryFilter = category;
-        
-        const chips = document.querySelectorAll('.filter-chip');
-        chips.forEach(chip => {
-            chip.style.background = '#2a2a2a';
-            chip.style.color = '#aaa';
-            chip.style.borderColor = '#444';
-        });
-        
-        btnElement.style.background = 'rgba(166, 77, 255, 0.2)';
-        btnElement.style.color = '#a64dff';
-        btnElement.style.borderColor = '#a64dff';
-
-        filterAddModal(); 
-    }
-
-    function filterAddModal() {
-        const query = document.getElementById('searchAddInput').value.toLowerCase();
-        const list = document.getElementById('addExerciseList');
-        list.innerHTML = '';
-        
-        const filtered = dictionaryData.filter(d => {
-            const matchesText = d.name.toLowerCase().includes(query) || d.focus.toLowerCase().includes(query);
-            const muscleGroup = getMuscleGroup(d.focus);
-            const matchesCategory = currentCategoryFilter === 'todos' || muscleGroup === currentCategoryFilter;
-            return matchesText && matchesCategory;
-        });
-        
-        filtered.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'swap-item';
-            div.innerHTML = `<div class="swap-item-name">${item.name}</div><div class="swap-item-focus">${item.focus}</div>`;
-            div.onclick = () => {
-                document.getElementById('selectedExerciseName').textContent = item.name;
-                document.getElementById('addExerciseConfig').style.display = 'block';
-                document.getElementById('addExerciseModal').querySelector('.swap-modal-content').scrollTop = 1000;
-            };
-            list.appendChild(div);
-        });
-    }
-
-    function confirmAddExercise() {
-        const name = document.getElementById('selectedExerciseName').textContent;
-        const sets = document.getElementById('customSets').value;
-        const target = document.getElementById('customReps').value;
-        
-        if (currentRoutine.length === 0) {
-            currentRoutine.push({ title: "Meu Treino Livre", exercises: [] });
-        }
-        
-        currentRoutine[0].exercises.push({ name, sets: parseInt(sets), target });
-        
-        document.getElementById('addExerciseModal').style.display = 'none';
-        renderPreviewList();
-        if(audioEnabled) speak("Exercício adicionado.");
-    }
 
     function loadWorkout() {
-        const style = els.styleSelector ? els.styleSelector.value : 'biset';
-        const level = els.levelSelector ? els.levelSelector.value : 'intermediario';
-        const profile = els.profileSelector ? els.profileSelector.value : 'masculino'; // NOVO: Leitura do Perfil
-        const type = currentWorkoutType;
+        const style = state.els.styleSelector ? state.els.styleSelector.value : 'biset';
+        const level = state.els.levelSelector ? state.els.levelSelector.value : 'intermediario';
+        const profile = state.els.profileSelector ? state.els.profileSelector.value : 'masculino'; // NOVO: Leitura do Perfil
+        const type = state.currentWorkoutType;
         if (!type) return;
 
         document.getElementById('workoutCards').style.display = 'none';
@@ -891,7 +396,7 @@ function removeExercise(bIndex, eIndex) {
         const bioPanel = mainSelector ? mainSelector.closest('div') : null;
         if (bioPanel) bioPanel.style.display = 'none';
         
-        isWorkoutActive = false;
+        state.isWorkoutActive = false;
         
         const preview = document.getElementById('workoutPreview');
         const customControls = document.getElementById('customWorkoutControls');
@@ -900,7 +405,7 @@ function removeExercise(bIndex, eIndex) {
 
         if (type === 'Livre') {
             // A Forja cuida da montagem, este bloco só renderiza se vier vazio por erro
-            if (currentRoutine.length === 0) currentRoutine = [{ title: "Treino Personalizado", exercises: [] }];
+            if (state.currentRoutine.length === 0) state.currentRoutine = [{ title: "Treino Personalizado", exercises: [] }];
             if(preview) {
                 document.getElementById('previewTitle').textContent = `🛠️ Forja Concluída`;
                 document.getElementById('previewDesc').textContent = `Rotina gerada. Ajuste as cargas e salve o template.`;
@@ -927,7 +432,7 @@ function removeExercise(bIndex, eIndex) {
             let repLevel = level === 'iniciante' ? "10-12 rep" : (level === 'avancado' ? "Até a falha" : "15-20 rep");
             let timeLevel = level === 'iniciante' ? "30s" : (level === 'avancado' ? "1 min" : "45s");
 
-            currentRoutine = [{
+            state.currentRoutine = [{
                 title: `Circuito Corporal (${level.charAt(0).toUpperCase() + level.slice(1)})`,
                 exercises: [
                     { name: getRandom(poolCardio, "Polichinelos (Jumping Jacks)"), sets: 3, target: timeLevel },
@@ -950,7 +455,7 @@ function removeExercise(bIndex, eIndex) {
             const customWorkout = savedCustoms.find(w => w.id == customId);
             
             if (customWorkout) {
-                currentRoutine = JSON.parse(JSON.stringify(customWorkout.routine));
+                state.currentRoutine = JSON.parse(JSON.stringify(customWorkout.routine));
                 if(preview) {
                     document.getElementById('previewTitle').textContent = `🛠️ Editando Treino`;
                     document.getElementById('previewDesc').textContent = `Altere os exercícios ou renomeie seu template.`;
@@ -975,7 +480,7 @@ function removeExercise(bIndex, eIndex) {
 
             if (campaignData.workouts[type]) {
                 // CLONAGEM PROFUNDA: Garante que alterações de "Casa" não salvem por cima do treino Oficial
-                currentRoutine = JSON.parse(JSON.stringify(campaignData.workouts[type])); 
+                state.currentRoutine = JSON.parse(JSON.stringify(campaignData.workouts[type])); 
             } else {
                 let subOpt = '';
                 if (method === 'ppl' || method === 'abc') subOpt = type === 'A' ? 'push' : (type === 'B' ? 'pull' : 'legs');
@@ -988,9 +493,9 @@ function removeExercise(bIndex, eIndex) {
                 let blacklist = JSON.parse(safeGet('fitapp_blacklist') || '[]');
                 
                 // Chama o motor da forja com a Lista Negra
-                currentRoutine = executeForgeLogic(method, subOpt, blacklist);
+                state.currentRoutine = executeForgeLogic(method, subOpt, blacklist);
                 
-                campaignData.workouts[type] = currentRoutine;
+                campaignData.workouts[type] = state.currentRoutine;
                 safeSet(campaignKey, JSON.stringify(campaignData));
             }
             // GATILHO GLOBAL DE TERRENO: Se o botão estiver em Casa ou Praia, adapta as armas silenciosamente!
@@ -1019,8 +524,8 @@ function removeExercise(bIndex, eIndex) {
         document.getElementById('workoutCards').style.display = 'flex';
         const header = document.querySelector('.dashboard-header');
         if (header) header.style.display = 'block';
-        currentWorkoutType = '';
-        currentRoutine = [];
+        state.currentWorkoutType = '';
+        state.currentRoutine = [];
         
         // Restaura o painel biomecânico
         const mainSelector = document.getElementById('mainMethodSelector');
@@ -1038,14 +543,14 @@ function removeExercise(bIndex, eIndex) {
     function beginWorkoutExecution() {
         // Intercepta o clique de iniciar e bloqueia a tela
         document.getElementById('snapModal').style.display = 'flex';
-        if(audioEnabled) speak("Atenção. Oportunidade de evolução detectada. Aceita o desafio?");
+        if(state.audioEnabled) speak("Atenção. Oportunidade de evolução detectada. Aceita o desafio?");
     }
 
     function acceptSnap() {
         document.getElementById('snapModal').style.display = 'none';
         snapActive = true;
         showToast("Contrato selado. Mostre sua força.");
-        if(audioEnabled) speak("Contrato selado. Iniciando protocolo de combate.");
+        if(state.audioEnabled) speak("Contrato selado. Iniciando protocolo de combate.");
         executeWorkoutStart();
     }
 
@@ -1058,15 +563,15 @@ function removeExercise(bIndex, eIndex) {
 
     // A função original que realmente inicia o cronômetro (Fase 2)
     function executeWorkoutStart() {
-        isWorkoutActive = true; 
+        state.isWorkoutActive = true; 
         safeSet('fitapp_onboarding_done', 'true'); // TRAVA BLINDADA: Se o usuário iniciou um combate, ele não é mais novato. Banner morto.
         
         // Garante que todas as telas de staging fechem
         document.getElementById('workoutPreview').style.display = 'none';
         document.getElementById('prepArea').style.display = 'none';
         
-        els.workoutArea.style.display = 'block'; 
-        els.btnFinishArea.style.display = 'block';
+        state.els.workoutArea.style.display = 'block'; 
+        state.els.btnFinishArea.style.display = 'block';
 
         // ATIVA MODO FOCO: Oculta o Menu Inferior e o Cabeçalho
         const navBar = document.querySelector('nav');
@@ -1078,9 +583,9 @@ function removeExercise(bIndex, eIndex) {
         const templatesFront = document.getElementById('templatesFrontline');
         if (templatesFront) templatesFront.style.display = 'none';
 
-        workoutStartTime = Date.now();
-        if (globalTimer) clearInterval(globalTimer);
-        globalTimer = setInterval(updateGlobalTimer, 1000);
+        state.workoutStartTime = Date.now();
+        if (state.globalTimer) clearInterval(state.globalTimer);
+        state.globalTimer = setInterval(updateGlobalTimer, 1000);
         updateGlobalTimer(); 
         
         // PONTO 8: Esconde o seletor biomecânico de forma segura
@@ -1092,333 +597,11 @@ function removeExercise(bIndex, eIndex) {
         saveWorkoutState(); 
     }
 
-    function renderCurrentRoutine() {
-        // --- INÍCIO DA FASE 2: BLINDAGEM DE ESTADO DE INTERFACE ---
-        // 1. Memoriza quem estava focado (inputs, textareas)
-        const activeEl = document.activeElement;
-        const activeId = activeEl && activeEl.id ? activeEl.id : null;
-        let caretPos = null;
-        try { caretPos = activeEl ? activeEl.selectionStart : null; } catch(e){}
 
-        // 2. Memoriza a posição do Scroll da página
-        const currentScroll = window.scrollY;
-
-        // 3. Memoriza quais anotações táticas estavam abertas
-        const openNotes = [];
-        document.querySelectorAll('.notes-container').forEach(container => {
-            if (container.style.display === 'block' && container.id) {
-                openNotes.push(container.id);
-            }
-        });
-        // --- FIM DA MEMORIZAÇÃO ---
-
-        totalSets = 0; 
-        checkedSets = 0; 
-        todayLog = [];
-        
-        const historyLog = JSON.parse(safeGet('fitapp_week_log') || '[]');
-
-        // ⚡ OPÇÃO GOLF (Performance): Cria um fragmento de memória virtual para evitar Layout Thrashing
-        const virtualFragment = document.createDocumentFragment();
-        
-        currentRoutine.forEach((bloco, bIndex) => {
-            const isBiset = bloco.exercises.length > 1;
-            const cardClass = isBiset ? 'biset-card' : 'tradicional-card'; 
-            
-            const card = document.createElement('div'); card.className = cardClass; 
-            if (!isBiset) card.style.borderLeft = '4px solid #44aaff'; 
-            
-            card.innerHTML = `
-                <div class="biset-title" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
-                    <span class="block-name">${bloco.title}</span>
-                    <span class="toggle-icon" style="transition: transform 0.3s; font-size: 14px; color: #888;">▲</span>
-                </div>`;
-            
-            // BLINDAGEM: O clique manual agora recolhe visualmente sem mascarar o bloco como concluído
-            card.querySelector('.biset-title').addEventListener('click', () => {
-                card.classList.toggle('minimized-block');
-            });
-            
-            bloco.exercises.forEach((ex, eIndex) => {
-                const blockDiv = document.createElement('div'); blockDiv.className = 'exercise-block';
-                const linkIcon = (isBiset && eIndex < bloco.exercises.length - 1) ? ' <span style="color:#00ff88;">🔗</span>' : '';
-                
-                const safeName = escapeHTML(ex.name);
-                const safeTarget = escapeHTML(ex.target);
-                const ytQuery = encodeURIComponent(`Como executar o exercício ${safeName}`);
-                const ytLink = `https://www.youtube.com/results?search_query=${ytQuery}`;
-                const savedNotes = ex.notes ? escapeHTML(ex.notes) : '';
-                
-                let aiSuggestionHTML = '';
-                const lastWorkoutMatch = historyLog.slice().reverse().find(log => 
-                    log.data && log.data.some(d => d.exercise === ex.name)
-                );
-
-                if (lastWorkoutMatch) {
-                    const lastSets = lastWorkoutMatch.data.filter(d => d.exercise === ex.name);
-                    if (lastSets.length > 0) {
-                            const finalSet = lastSets[lastSets.length - 1]; 
-                            let suggestedKg = parseFloat(finalSet.kg) || 0;
-                            const repsDone = parseInt(finalSet.reps) || 0;
-                            
-                            // BLINDAGEM: Força o String() antes de aplicar o filtro .replace()
-                            const targetStr = ex.target ? String(ex.target).replace(/[^0-9-]/g, '') : "10";
-                            let targetHigh = parseInt(targetStr.split('-').pop()) || 10;
-                        
-                        if (repsDone >= targetHigh && suggestedKg > 0) {
-                            suggestedKg += 2;
-                        }
-                        
-                        if (suggestedKg > 0) {
-                            aiSuggestionHTML = `<span style="font-size: 10px; background: rgba(166, 77, 255, 0.2); color: #a64dff; padding: 2px 6px; border-radius: 4px; border: 1px solid #a64dff; font-weight: bold; margin-right: auto;" title="Sugestão baseada no seu último treino">🎯 Alvo IA: ${suggestedKg}kg</span>`;
-                        }
-                    }
-                }
-                
-                // Verifica se essa caixa de anotação estava aberta no ciclo de memória anterior
-                const noteContainerId = `notes_container_${bIndex}_${eIndex}`;
-                const isNoteOpen = openNotes.includes(noteContainerId) ? 'block' : 'none';
-
-                blockDiv.innerHTML = `
-                    <div class="exercise-header" style="flex-direction: column; align-items: flex-start; gap: 12px;">
-                        <!-- LINHA 1: Nome do Exercício e Botão de Troca -->
-                        <div style="width: 100%; display: flex; justify-content: space-between; align-items: flex-start;">
-                            <span class="ex-name" onclick="FitApp.openDict('${safeName.replace(/'/g, "\\'")}')" style="line-height: 1.3; flex: 1; padding-right: 10px;">${safeName}${linkIcon}</span>
-                            <button class="btn-swap" onclick="FitApp.openSwapModal(${bIndex}, ${eIndex})" title="Substituir Exercício" style="margin-top: -4px;">🔄</button>
-                        </div>
-                        
-                        ${aiSuggestionHTML ? `<div style="width: 100%; margin-top: -5px; margin-bottom: 5px;">${aiSuggestionHTML}</div>` : ''}
-
-                        <!-- LINHA 2: Barra de Ferramentas (Toolbars) -->
-                        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                            
-                            <!-- Esquerda: Controles de Execução Primários -->
-                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                <div style="display: flex; align-items: center; background: #222; border-radius: 8px; padding: 2px 6px; border: 1px solid #444;">
-                                    <button class="btn-edit-set" onclick="FitApp.changeSets(${bIndex}, ${eIndex}, -1)" style="background: none; border: none; color: #ff4444; font-weight: bold; font-size: 16px; padding: 0 5px; cursor: pointer;">-</button>
-                                    <span style="font-size: 12px; color: #ccc; margin: 0 5px; font-weight: bold;">${ex.sets}x</span>
-                                    <button class="btn-edit-set" onclick="FitApp.changeSets(${bIndex}, ${eIndex}, 1)" style="background: none; border: none; color: #00ff88; font-weight: bold; font-size: 16px; padding: 0 5px; cursor: pointer;">+</button>
-                                </div>
-                                <span class="target-reps" style="padding: 4px 8px; font-size: 11px;">${safeTarget}</span>
-                                <button id="btnAuto_${bIndex}_${eIndex}" onclick="FitApp.toggleAutoPilot(${bIndex}, ${eIndex})" style="background: rgba(0, 255, 136, 0.1); border: 1px solid #00ff88; color: #00ff88; border-radius: 8px; padding: 4px 8px; font-size: 11px; font-weight: bold; cursor: pointer; transition: all 0.2s;" title="Modo Hands-Free">🤖 Auto</button>
-                            </div>
-
-                            <!-- Direita: Ferramentas Secundárias Agrupadas -->
-                            <div style="display: flex; align-items: center; gap: 12px; background: #1a1a1a; border: 1px solid #333; padding: 6px 12px; border-radius: 8px;">
-                                <button onclick="FitApp.cloneFirstSet(${bIndex}, ${eIndex})" style="background: none; border: none; cursor: pointer; font-size: 15px; padding: 0; filter: grayscale(100%) brightness(200%);" title="Replicar valores da S1">📋</button>
-                                <button class="btn-notes" style="background: none; border: none; cursor: pointer; font-size: 15px; padding: 0;" title="Anotações">📝</button>
-                                <a href="${ytLink}" target="_blank" style="text-decoration: none; font-size: 16px; margin-top: 1px;" title="Ver execução no YouTube">🎥</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="${noteContainerId}" class="notes-container" style="display: ${isNoteOpen}; background: #1a1a1a; padding: 10px; border-radius: 6px; border-left: 2px solid #a64dff; margin-bottom: 12px; margin-top: 5px;">
-                        <textarea id="notes_input_${bIndex}_${eIndex}" class="ex-notes-input" placeholder="Anotações táticas (ex: banco inclinado no nível 3, fadiga no ombro...)" style="width: 100%; background: transparent; border: none; color: #ccc; font-size: 12px; resize: vertical; min-height: 45px; outline: none;">${savedNotes}</textarea>
-                    </div>`;
-                
-                const btnNotes = blockDiv.querySelector('.btn-notes');
-                const notesContainer = blockDiv.querySelector('.notes-container');
-                const notesInput = blockDiv.querySelector('.ex-notes-input');
-
-                btnNotes.addEventListener('click', () => {
-                    const isHidden = notesContainer.style.display === 'none';
-                    notesContainer.style.display = isHidden ? 'block' : 'none';
-                    if (isHidden) notesInput.focus();
-                });
-
-                notesInput.addEventListener('input', () => {
-                    ex.notes = notesInput.value;
-                    saveWorkoutState(); 
-                });
-
-                if (!ex.setsData) ex.setsData = [];
-                
-                for(let s = 1; s <= ex.sets; s++) {
-                    totalSets++; 
-                    
-                    if (!ex.setsData[s-1]) {
-                        ex.setsData[s-1] = { kg: '', reps: '', checked: false };
-                    }
-                    const data = ex.setsData[s-1];
-                    
-                    if (data.checked) {
-                        checkedSets++;
-                        todayLog.push({ exercise: ex.name, set: s, kg: parseSafeFloat(data.kg), reps: parseInt(data.reps) || 0 });
-                    }
-
-                    const row = document.createElement('div'); row.className = 'set-row';
-                    const chkId = `chk_set_${bIndex}_${eIndex}_${s}`;
-                    const kgId = `kg_set_${bIndex}_${eIndex}_${s}`;
-                    const rpId = `rp_set_${bIndex}_${eIndex}_${s}`;
-                    
-                    let ghostKg = '';
-                    let ghostReps = '';
-                    if (lastWorkoutMatch) {
-                        const lastSets = lastWorkoutMatch.data.filter(d => d.exercise === ex.name);
-                        const pastSet = lastSets.find(d => parseInt(d.set) === s) || lastSets[lastSets.length - 1];
-                        if (pastSet) {
-                            if (pastSet.kg) ghostKg = pastSet.kg;
-                            if (pastSet.reps) ghostReps = pastSet.reps;
-                        }
-                    }
-                    
-                    let displayKg = data.kg;
-                    let displayReps = data.reps;
-                    
-                    // BLINDAGEM UX: Removemos o preenchimento automático rígido. Os valores fantasmas agora são 'placeholders' translúcidos.
-                    const placeholderKg = ghostKg !== '' ? ghostKg : 'Kg';
-                    const placeholderReps = ghostReps !== '' ? ghostReps : 'Reps';
-
-                    row.innerHTML = `<div class="set-label">S${s}</div><input type="number" id="${kgId}" class="kg-val" placeholder="${placeholderKg}" value="${displayKg}"><input type="number" id="${rpId}" class="rp-val" placeholder="${placeholderReps}" value="${displayReps}"><button class="btn-iso" style="background:none; border:none; cursor:pointer; font-size:16px; padding:0 5px;" title="Iniciar Isometria">⏱️</button><input type="checkbox" id="${chkId}" class="chk-set" ${data.checked ? 'checked' : ''}>`;
-                    
-                    const chk = row.querySelector('.chk-set');
-                    const kgInp = row.querySelector('.kg-val');
-                    const rpInp = row.querySelector('.rp-val');
-                    const btnIso = row.querySelector('.btn-iso');
-
-                    const updateState = () => {
-                        ex.setsData[s-1] = { kg: kgInp.value, reps: rpInp.value, checked: chk.checked };
-                        saveWorkoutState(); 
-                    };
-
-                    let localIsoTimer = null;
-                    btnIso.addEventListener('click', () => {
-                        if (localIsoTimer) {
-                            clearInterval(localIsoTimer);
-                            localIsoTimer = null;
-                            btnIso.textContent = '⏱️';
-                            btnIso.style.textShadow = 'none';
-                        } else {
-                            btnIso.textContent = '⏸️';
-                            btnIso.style.textShadow = '0 0 8px #00ff88';
-                            let currentSecs = parseInt(rpInp.value) || 0;
-                            localIsoTimer = setInterval(() => {
-                                currentSecs++;
-                                rpInp.value = currentSecs;
-                                updateState(); 
-                            }, 1000);
-                        }
-                    });
-
-                    kgInp.addEventListener('input', updateState);
-                    rpInp.addEventListener('input', updateState);
-
-                    chk.addEventListener('change', () => {
-                        if (localIsoTimer) { clearInterval(localIsoTimer); localIsoTimer = null; btnIso.textContent = '⏱️'; btnIso.style.textShadow = 'none'; }
-                        
-                        if (chk.checked) { 
-                            // TRANSIÇÃO DE FANTASMA PARA MATERIAL: Se o campo estava vazio, herda o fantasma antes de registrar o PR
-                            if (kgInp.value === '' && ghostKg !== '') kgInp.value = ghostKg;
-                            if (rpInp.value === '' && ghostReps !== '') rpInp.value = ghostReps;
-
-                            // SISTEMA DE RECORDE PESSOAL (PR)
-                            const currentKg = parseSafeFloat(kgInp.value);
-                            const currentReps = parseInt(rpInp.value) || 0;
-                            const pKg = parseSafeFloat(ghostKg);
-                            const pReps = parseInt(ghostReps) || 0;
-
-                            let isPR = false;
-                            if (ghostKg !== '' || ghostReps !== '') { 
-                                if (currentKg > pKg) {
-                                    isPR = true;
-                                } else if (currentKg === pKg && currentReps > pReps) {
-                                    isPR = true;
-                                }
-                            }
-
-                            if (isPR) {
-                                row.classList.add('pr-breaker');
-                                if (typeof FitAudio !== 'undefined' && FitAudio.revealEpic) FitAudio.revealEpic();
-                                showToast("🏆 Recorde Pessoal Quebrado!");
-                            } else {
-                                row.classList.remove('pr-breaker');
-                            }
-
-                            checkedSets++; 
-                            
-                            if (s < ex.sets) {
-                                const nextKgInp = document.getElementById(`kg_set_${bIndex}_${eIndex}_${s+1}`);
-                                const nextRpInp = document.getElementById(`rp_set_${bIndex}_${eIndex}_${s+1}`);
-                                if (nextKgInp && nextRpInp && !nextKgInp.value && !nextRpInp.value) {
-                                    nextKgInp.value = kgInp.value; nextRpInp.value = rpInp.value;
-                                    ex.setsData[s] = { kg: kgInp.value, reps: rpInp.value, checked: false };
-                                }
-                            }
-
-                            // --- LÓGICA DE BI-SET (Sinergia de Descanso) ---
-                            let pendingCompanions = 0;
-                            const allInSetChecked = currentRoutine[bIndex].exercises.every(e => {
-                                if (!e.setsData[s-1]) return true; 
-                                if (!e.setsData[s-1].checked) {
-                                    pendingCompanions++;
-                                    return false;
-                                }
-                                return true;
-                            });
-
-                            if (allInSetChecked && checkedSets < totalSets) {
-                                startRestTimer(card, ex.name);
-                            } else if (currentRoutine[bIndex].exercises.length > 1 && pendingCompanions > 0) {
-                                showToast(`🔗 Bi-Set Ativo: Complete o movimento parceiro (Série ${s}) para iniciar o descanso.`);
-                            }
-
-                            todayLog.push({ exercise: ex.name, set: s, kg: parseSafeFloat(kgInp.value), reps: parseInt(rpInp.value) || 0 });
-                        } else { 
-                            row.classList.remove('pr-breaker'); // Reseta a cor caso desmarque
-                            checkedSets--; 
-                            stopRestTimer(); 
-                            todayLog = todayLog.filter(log => !(log.exercise === ex.name && log.set === s));
-                        }
-                        updateState();
-                        updateProgress();
-
-                        const allBlockChecked = currentRoutine[bIndex].exercises.every(e => {
-                            const checkedCount = e.setsData ? e.setsData.filter(sd => sd && sd.checked).length : 0;
-                            return checkedCount === e.sets;
-                        });
-                        
-                        if (allBlockChecked) card.classList.add('collapsed-block');
-                        else card.classList.remove('collapsed-block');
-                    });
-                    blockDiv.appendChild(row);
-                } 
-                card.appendChild(blockDiv); 
-            });
-            
-            const isBlockFinishedOnLoad = currentRoutine[bIndex].exercises.every(e => {
-                const checkedCount = e.setsData ? e.setsData.filter(sd => sd && sd.checked).length : 0;
-                return checkedCount === e.sets;
-            });
-            if (isBlockFinishedOnLoad && currentRoutine[bIndex].exercises.length > 0) {
-                card.classList.add('collapsed-block');
-            }
-
-            virtualFragment.appendChild(card); // Adiciona ao fragmento virtual em vez do ecrã real
-        });
-
-        // ⚡ OPÇÃO GOLF: Injeta todo o treino no ecrã num único cálculo do processador
-        els.exerciseList.innerHTML = '';
-        els.exerciseList.appendChild(virtualFragment);
-        
-        updateProgress();
-
-        // --- RESTAURAÇÃO DE ESTADO (Scroll e Foco) ---
-        window.scrollTo(0, currentScroll);
-        if (activeId) {
-            const restoredEl = document.getElementById(activeId);
-            if (restoredEl) {
-                restoredEl.focus();
-                try {
-                    if (caretPos !== null && (restoredEl.tagName === 'INPUT' || restoredEl.tagName === 'TEXTAREA')) {
-                        restoredEl.setSelectionRange(caretPos, caretPos);
-                    }
-                } catch(e) {} 
-            }
-        }
-    }
 
     function updateProgress() {
-        const pct = totalSets === 0 ? 0 : Math.round((checkedSets / totalSets) * 100);
-        els.progressBar.style.width = pct + '%';
+        const pct = state.totalSets === 0 ? 0 : Math.round((state.checkedSets / state.totalSets) * 100);
+        state.els.progressBar.style.width = pct + '%';
         const btn = document.getElementById('btnFinishAction');
         if(pct === 100) { btn.className = 'btn-action btn-success'; btn.textContent = '🏆 Concluir Treino'; stopRestTimer(); speak("Treino finalizado."); } 
         else { btn.className = 'btn-action btn-warning'; btn.textContent = '⚠️ Encerrar Incompleto'; }
@@ -1427,12 +610,12 @@ function removeExercise(bIndex, eIndex) {
     async function finishWorkout() {
         // --- INÍCIO DA TRAVA ANTI-EXPLOIT ---
         let tempTotalTimeSecs = 0;
-        if (workoutStartTime) {
-            tempTotalTimeSecs = Math.floor((Date.now() - workoutStartTime) / 1000);
+        if (state.workoutStartTime) {
+            tempTotalTimeSecs = Math.floor((Date.now() - state.workoutStartTime) / 1000);
         }
 
         // NOVO: Ramificação Tática (Cardio vs Hipertrofia)
-        if (currentWorkoutType === 'Cardio') {
+        if (state.currentWorkoutType === 'Cardio') {
             const dist = parseSafeFloat(document.getElementById('cardioDist').value);
             const kcal = parseInt(document.getElementById('cardioKcal').value) || 0;
             const bpm = parseInt(document.getElementById('cardioBpm').value) || 0;
@@ -1443,11 +626,11 @@ function removeExercise(bIndex, eIndex) {
             }
             
             // Empacota os dados sem interferir na hipertrofia
-            todayLog = [{ exercise: 'Cardio', dist_km: dist, kcal: kcal, bpm_medio: bpm, tempo_segundos: cardioElapsedSeconds }];
-            checkedSets = 1; totalSets = 1; // Hack para liberar gamificação
+            state.todayLog = [{ exercise: 'Cardio', dist_km: dist, kcal: kcal, bpm_medio: bpm, tempo_segundos: cardioElapsedSeconds }];
+            state.checkedSets = 1; state.totalSets = 1; // Hack para liberar gamificação
             clearInterval(cardioTimerInterval);
         } else {
-            if (checkedSets === 0) {
+            if (state.checkedSets === 0) {
                 showToast("⚠️ Comando Negado: Marque ao menos uma série para registrar combate.");
                 return; 
             }
@@ -1469,8 +652,8 @@ function removeExercise(bIndex, eIndex) {
 
         stopRestTimer(); 
         
-        const isComplete = checkedSets === totalSets;
-        const tipoTreino = currentWorkoutType; 
+        const isComplete = state.checkedSets === state.totalSets;
+        const tipoTreino = state.currentWorkoutType; 
         
         const d = new Date();
         // BLINDAGEM DE FUSO HORÁRIO (Salvamento): Registra a data com base no calendário local do atleta
@@ -1479,14 +662,14 @@ function removeExercise(bIndex, eIndex) {
                          String(d.getDate()).padStart(2, '0');
         
         let totalTimeSecs = tempTotalTimeSecs; // Resgata o tempo já calculado
-        if (workoutStartTime) {
-            clearInterval(globalTimer);
-            workoutStartTime = null;
+        if (state.workoutStartTime) {
+            clearInterval(state.globalTimer);
+            state.workoutStartTime = null;
         }
 
         // NOVO: Registra qual foi o método utilizado para não misturar marcações de 'Feito'
         const currentMethod = document.getElementById('mainMethodSelector') ? document.getElementById('mainMethodSelector').value : 'ppl';
-        const payload = { date: dataHoje, tipo: tipoTreino, method: currentMethod, duration_secs: totalTimeSecs, data: todayLog };
+        const payload = { date: dataHoje, tipo: tipoTreino, method: currentMethod, duration_secs: totalTimeSecs, data: state.todayLog };
 
         try {
             document.getElementById('btnFinishAction').textContent = "⏳ Salvando...";
@@ -1544,24 +727,24 @@ function removeExercise(bIndex, eIndex) {
                 safeSet('fitapp_campaign_count', 0);
                 
                 // 3. Sobe a Patente Oficial
-                if (els.levelSelector) {
-                    if (els.levelSelector.value === 'iniciante') els.levelSelector.value = 'intermediario';
-                    else if (els.levelSelector.value === 'intermediario') els.levelSelector.value = 'avancado';
-                    safeSet('fitapp_level', els.levelSelector.value);
+                if (state.els.levelSelector) {
+                    if (state.els.levelSelector.value === 'iniciante') state.els.levelSelector.value = 'intermediario';
+                    else if (state.els.levelSelector.value === 'intermediario') state.els.levelSelector.value = 'avancado';
+                    safeSet('fitapp_level', state.els.levelSelector.value);
                 }
             }
         }
         // --- FIM DO SISTEMA DE GATILHO DUPLO ---
         saveCampaignToCloud(); // NOVO: Atualiza a contagem de treinos do mesociclo na nuvem
         clearWorkoutState(); 
-        isPromotionPending = isPromotionTime; // Guarda o status de promoção para depois da Fase 3
+        state.isPromotionPending = isPromotionTime; // Guarda o status de promoção para depois da Fase 3
 
-        els.workoutArea.style.display = 'none';
+        state.els.workoutArea.style.display = 'none';
         document.getElementById('cardioArea').style.display = 'none'; 
-        els.btnFinishArea.style.display = 'none';
+        state.els.btnFinishArea.style.display = 'none';
 
         // ROTEAMENTO DE FASE: Direciona para a Volta à Calma
-        if (isComplete && currentWorkoutType !== 'Cardio') {
+        if (isComplete && state.currentWorkoutType !== 'Cardio') {
             document.getElementById('workoutHud').style.display = 'none'; 
             document.getElementById('exerciseList').style.display = 'none'; 
             document.getElementById('cooldownArea').style.display = 'block';
@@ -1578,33 +761,9 @@ function removeExercise(bIndex, eIndex) {
 // ==========================================
     // FASE 3: VOLTA À CALMA & FINALIZAÇÃO
     // ==========================================
-    function startCooldownTimer() {
-        const btn = document.getElementById('btnStartCooldown');
-        btn.style.display = 'none'; // Esconde o botão para não dar cliques duplos
-        
-        let timeLeft = 90;
-        const display = document.getElementById('cooldownTimerDisplay');
-        if(audioEnabled) speak("Protocolo de recuperação iniciado. Respire.");
-        
-        cooldownTimerInterval = setInterval(() => {
-            timeLeft--;
-            let m = Math.floor(timeLeft/60).toString().padStart(2,'0');
-            let s = (timeLeft%60).toString().padStart(2,'0');
-            display.textContent = `${m}:${s}`;
-            
-            if (timeLeft <= 0) {
-                clearInterval(cooldownTimerInterval);
-                showToast("Volta à calma concluída! Bônus Adquirido.");
-                if(audioEnabled) speak("Recuperação finalizada. Excelente combate.");
-                finalizeSession(true, true); // True = Ganhou bônus
-            }
-        }, 1000);
-    }
 
-    function skipCooldown() {
-        if(cooldownTimerInterval) clearInterval(cooldownTimerInterval);
-        finalizeSession(false, true); // False = Pulou, sem bônus extra
-    }
+
+
 
     function finalizeSession(earnedBonus, showPack) {
         document.getElementById('cooldownArea').style.display = 'none';
@@ -1626,7 +785,7 @@ function removeExercise(bIndex, eIndex) {
         const bioPanel = mainSelector ? mainSelector.closest('div') : null;
         if (bioPanel) bioPanel.style.display = 'block';
 
-        currentWorkoutType = '';
+        state.currentWorkoutType = '';
         checkSequence(); 
         renderWeeklyCalendar(); 
         if (typeof renderMetricsChart === 'function') renderMetricsChart(); 
@@ -1634,13 +793,13 @@ function removeExercise(bIndex, eIndex) {
 
         // 🧠 SISTEMA DE RECOMPENSAS BLINDADO (Conectado à Nuvem)
         if (earnedBonus) {
-            if (typeof FitGamification !== 'undefined' && FitGamification.addBonusSweat) {
-                FitGamification.addBonusSweat(1);
+            if (typeof window.FitGamification !== 'undefined' && window.FitGamification.addBonusSweat) {
+                window.FitGamification.addBonusSweat(1);
             }
         }
 
         if (showPack) { 
-            FitGamification.showPackModal(snapActive || earnedBonus); 
+            window.FitGamification.showPackModal(snapActive || earnedBonus); 
             snapActive = false; 
         } else { 
             showToast('Treino salvo no sistema.'); 
@@ -1648,14 +807,14 @@ function removeExercise(bIndex, eIndex) {
         }
         
         // Disparo de Promoção de Patente (Atrasado para não conflitar com a tela final)
-        if (isPromotionPending) {
+        if (state.isPromotionPending) {
             setTimeout(() => {
                 alert("🎖️ MESOCICLO CONCLUÍDO!\n\nAdaptação neural máxima atingida.\nSua patente foi elevada e seu arsenal anterior enviado para a Lista Negra.\n\nEscolha seu novo destino tático na Forja.");
                 switchTab('tab-treino', 'nav-treino');
                 openForgeModal();
-                if(typeof audioEnabled !== 'undefined' && audioEnabled) speak("Adaptação neural máxima atingida. Patente elevada.");
+                if(typeof state.audioEnabled !== 'undefined' && state.audioEnabled) speak("Adaptação neural máxima atingida. Patente elevada.");
             }, 1500);
-            isPromotionPending = false;
+            state.isPromotionPending = false;
         }
     }
 
@@ -1700,7 +859,7 @@ function removeExercise(bIndex, eIndex) {
                 </div>
             `;
         });
-        if(audioEnabled) speak("Fase de preparação iniciada. Prepare as articulações.");
+        if(state.audioEnabled) speak("Fase de preparação iniciada. Prepare as articulações.");
     }
 
 // ==========================================
@@ -1711,23 +870,23 @@ window.abortarMissao = function() {
         
         // 1. Desliga os Motores
         stopRestTimer();
-        if (globalTimer) clearInterval(globalTimer);
+        if (state.globalTimer) clearInterval(state.globalTimer);
         clearInterval(cardioTimerInterval);
-        if (cooldownTimerInterval) clearInterval(cooldownTimerInterval); // Limpa relógio F3
-        workoutStartTime = null;
+        if (state.cooldownTimerInterval) clearInterval(state.cooldownTimerInterval); // Limpa relógio F3
+        state.workoutStartTime = null;
         
         // 2. Limpa o Estado de Combate
         clearWorkoutState();
-        currentWorkoutType = '';
+        state.currentWorkoutType = '';
         
         // 3. Restaura o Esconderijo Visual
-        els.workoutArea.style.display = 'none'; 
+        state.els.workoutArea.style.display = 'none'; 
         document.getElementById('cardioArea').style.display = 'none'; 
         document.getElementById('prepArea').style.display = 'none'; 
         document.getElementById('cooldownArea').style.display = 'none';
         document.getElementById('workoutHud').style.display = 'block'; 
         document.getElementById('exerciseList').style.display = 'block'; 
-        els.btnFinishArea.style.display = 'none';
+        state.els.btnFinishArea.style.display = 'none';
         document.getElementById('workoutCards').style.display = 'flex';
         
         // 4. Devolve as Barras de Navegação (Desativa Modo Foco)
@@ -1770,341 +929,6 @@ window.encerrarSessao = function() {
         });
     }
 };
-    async function fetchAIFeedback() {
-        document.getElementById('aiLoader').style.display = 'block';
-        document.getElementById('aiResponse').style.display = 'none';
-        document.getElementById('btnAnalyzeAI').disabled = true;
-
-        try {
-            const data = await FitAPI.getCoachFeedback();
-            
-            document.getElementById('aiResponse').innerHTML = `<strong>Feedback do Coach:</strong><br>${data.feedback}`;
-            document.getElementById('aiResponse').style.display = 'block';
-            if(audioEnabled) speak("Análise concluída.");
-        } catch (error) { showToast("Erro ao contatar o servidor."); } 
-        finally { document.getElementById('aiLoader').style.display = 'none'; document.getElementById('btnAnalyzeAI').disabled = false; }
-    }
-
-    function renderLibrary() {
-        const grid = document.getElementById('libraryGrid');
-        if (!grid) return;
-        grid.innerHTML = '';
-
-        // 1. O Funil Absoluto: Força a categorização em apenas 8 gavetas limpas
-        const categorize = (item) => {
-            const searchStr = ((item.group || '') + ' ' + (item.focus || '')).toLowerCase();
-            if (searchStr.includes('peito') || searchStr.includes('peitoral')) return 'peito';
-            if (searchStr.includes('costa') || searchStr.includes('dorsal') || searchStr.includes('trapézio') || searchStr.includes('trapezio') || searchStr.includes('lombar') || searchStr.includes('romboide')) return 'costas';
-            if (searchStr.includes('perna') || searchStr.includes('quadríceps') || searchStr.includes('quadriceps') || searchStr.includes('glúteo') || searchStr.includes('gluteo') || searchStr.includes('isquiotibial') || searchStr.includes('panturrilha')) return 'pernas';
-            if (searchStr.includes('ombro') || searchStr.includes('deltoide')) return 'ombros';
-            if (searchStr.includes('tríceps') || searchStr.includes('triceps')) return 'triceps';
-            if (searchStr.includes('bíceps') || searchStr.includes('biceps') || searchStr.includes('braquial')) return 'biceps';
-            if (searchStr.includes('core') || searchStr.includes('abdom') || searchStr.includes('oblíquo') || searchStr.includes('obliquo')) return 'core';
-            return 'outros';
-        };
-
-        const groups = { 'peito': [], 'costas': [], 'pernas': [], 'ombros': [], 'triceps': [], 'biceps': [], 'core': [], 'outros': [] };
-        
-        // Distribui o arsenal massivo nas gavetas corretas
-        dictionaryData.forEach(item => {
-            const key = categorize(item);
-            groups[key].push(item);
-        });
-
-        const groupTitles = {
-            'peito': '🟦 Peitoral',
-            'costas': '🟩 Costas & Dorsais',
-            'pernas': '🟨 Membros Inferiores',
-            'ombros': '🟪 Ombros & Deltoides',
-            'triceps': '🟦 Tríceps',
-            'biceps': '🟩 Bíceps',
-            'core': '🟧 Core & Abdômen',
-            'outros': '⬜ Mobilidade & Outros'
-        };
-
-        for (const [key, title] of Object.entries(groupTitles)) {
-            if (groups[key].length === 0) continue;
-
-            const categorySection = document.createElement('div');
-            categorySection.className = 'library-category-section';
-            
-            const header = document.createElement('h3');
-            header.style.backgroundColor = '#1a1a1a';
-            header.style.color = '#fff';
-            header.style.marginTop = '15px';
-            header.style.marginBottom = '0px';
-            header.style.border = '1px solid #333';
-            header.style.borderRadius = '8px';
-            header.style.padding = '15px';
-            header.style.textTransform = 'uppercase';
-            header.style.fontSize = '14px';
-            header.style.cursor = 'pointer';
-            header.style.display = 'flex';
-            header.style.justifyContent = 'space-between';
-            header.style.alignItems = 'center';
-            header.style.boxShadow = '0 4px 6px rgba(0,0,0,0.2)';
-            
-            // O contador de exercícios agora aparece limpo ao lado do título
-            header.innerHTML = `<span>${title} <span style="color: #666; font-size: 11px;">(${groups[key].length})</span></span><span class="toggle-arrow" style="font-size: 12px; color: #888; transition: transform 0.3s;">▼</span>`;
-            categorySection.appendChild(header);
-
-            const cardContainer = document.createElement('div');
-            cardContainer.className = 'library-card-container';
-            // 2. Gavetas Fechadas: Protege a memória do celular não renderizando tudo de uma vez visualmente
-            cardContainer.style.display = 'none'; 
-            cardContainer.style.gap = '15px';
-            cardContainer.style.paddingTop = '15px';
-            
-            header.onclick = () => {
-                const isVisible = cardContainer.style.display === 'grid';
-                cardContainer.style.display = isVisible ? 'none' : 'grid';
-                header.querySelector('.toggle-arrow').style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
-                header.style.borderColor = isVisible ? '#333' : '#00ff88'; // Destaca a pasta aberta
-            };
-
-            // Ordena em ordem alfabética dentro da gaveta
-            groups[key].sort((a, b) => a.name.localeCompare(b.name)).forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'library-card';
-                
-                const safeName = item.name ? item.name.replace(/'/g, "\\'") : 'Exercício';
-                const ytQuery = encodeURIComponent(`Como executar o exercício ${safeName}`);
-                const equipStr = item.equip ? item.equip.replace(/_/g, ' ') : 'N/A';
-                
-                // 3. Cartões Ativos: Design limpo com Munição e botão de YouTube
-                card.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div class="lib-name" style="flex: 1; font-size: 15px;">${safeName}</div>
-                        <a href="https://www.youtube.com/results?search_query=${ytQuery}" target="_blank" style="text-decoration: none; font-size: 18px; margin-left: 10px; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px; border: 1px solid #333;" title="Ver Execução no YouTube">🎥</a>
-                    </div>
-                    <div class="lib-focus" style="margin-top: 5px; font-size: 11px;">Alvo: ${item.group || 'Geral'}</div>
-                    <div style="font-size: 11px; color: #888; margin-top: 8px; background: #111; padding: 4px 8px; border-radius: 4px; display: inline-block; border: 1px dashed #333;">
-                        🛠️ Munição: ${equipStr}
-                    </div>
-                `;
-                cardContainer.appendChild(card);
-            });
-
-            categorySection.appendChild(cardContainer);
-            grid.appendChild(categorySection);
-        }
-    }
-
-    function filterLibrary() {
-        const searchInput = document.getElementById('searchInput');
-        if (!searchInput) return;
-        
-        const query = searchInput.value.toLowerCase();
-        const grid = document.getElementById('libraryGrid');
-        if (!grid) return;
-        grid.innerHTML = '';
-
-        // 1. O Funil Absoluto Mapeador
-        const categorize = (item) => {
-            const searchStr = ((item.group || '') + ' ' + (item.focus || '')).toLowerCase();
-            if (searchStr.includes('peito') || searchStr.includes('peitoral')) return 'peito';
-            if (searchStr.includes('costa') || searchStr.includes('dorsal') || searchStr.includes('trapézio') || searchStr.includes('trapezio') || searchStr.includes('lombar') || searchStr.includes('romboide')) return 'costas';
-            if (searchStr.includes('perna') || searchStr.includes('quadríceps') || searchStr.includes('quadriceps') || searchStr.includes('glúteo') || searchStr.includes('gluteo') || searchStr.includes('isquiotibial') || searchStr.includes('panturrilha')) return 'pernas';
-            if (searchStr.includes('ombro') || searchStr.includes('deltoide')) return 'ombros';
-            if (searchStr.includes('tríceps') || searchStr.includes('triceps')) return 'triceps';
-            if (searchStr.includes('bíceps') || searchStr.includes('biceps') || searchStr.includes('braquial')) return 'biceps';
-            if (searchStr.includes('core') || searchStr.includes('abdom') || searchStr.includes('oblíquo') || searchStr.includes('obliquo')) return 'core';
-            return 'outros';
-        };
-
-        const groups = { 'peito': [], 'costas': [], 'pernas': [], 'ombros': [], 'triceps': [], 'biceps': [], 'core': [], 'outros': [] };
-        const activeMuscles = new Set();
-        
-        dictionaryData.forEach(ex => {
-            const exName = ex.name || 'Exercício Desconhecido';
-            const exGroup = ex.group || 'Outros'; 
-            const exFocus = ex.focus || 'Geral';
-            const exEquip = ex.equip || '';
-            
-            // Filtro de Busca
-            if (query && !exName.toLowerCase().includes(query) && 
-                !exGroup.toLowerCase().includes(query) && 
-                !exFocus.toLowerCase().includes(query) &&
-                !exEquip.toLowerCase().includes(query)) return;
-            
-            // Rastreamento para o Heatmap (Mantido Inalterado)
-            const f = (exGroup + ' ' + exFocus).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-            if (f.includes('peito')) activeMuscles.add('lib-svg-peito');
-            if (f.includes('ombro') || f.includes('deltoide')) activeMuscles.add('lib-svg-ombro');
-            if (f.includes('biceps') || f.includes('braco')) activeMuscles.add('lib-svg-biceps');
-            if (f.includes('triceps')) activeMuscles.add('lib-svg-triceps');
-            if (f.includes('costa') || f.includes('dorsal') || f.includes('lombar')) activeMuscles.add('lib-svg-costas');
-            if (f.includes('trapezio')) activeMuscles.add('lib-svg-trapezio');
-            if (f.includes('core') || f.includes('abdom')) activeMuscles.add('lib-svg-core');
-            if (f.includes('quadriceps') || f.includes('perna') && !f.includes('posterior') && !f.includes('gluteo')) activeMuscles.add('lib-svg-quadriceps');
-            if (f.includes('posterior') || f.includes('isquio')) activeMuscles.add('lib-svg-posterior');
-            if (f.includes('gluteo')) activeMuscles.add('lib-svg-gluteo');
-            if (f.includes('panturrilha') || f.includes('gastro')) activeMuscles.add('lib-svg-panturrilha');
-            
-            // Distribuição na Matriz Unificada
-            const key = categorize(ex);
-            groups[key].push(ex);
-        });
-
-        // 1. Apaga todo o Heatmap da Base antes de acender os novos
-        const allMuscles = ['lib-svg-peito', 'lib-svg-ombro', 'lib-svg-biceps', 'lib-svg-triceps', 'lib-svg-costas', 'lib-svg-trapezio', 'lib-svg-core', 'lib-svg-quadriceps', 'lib-svg-posterior', 'lib-svg-gluteo', 'lib-svg-panturrilha'];
-        allMuscles.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) { el.style.fill = '#222'; el.style.stroke = '#444'; }
-        });
-
-        // 2. Acende os músculos relevantes com base na paleta do tema atual
-        activeMuscles.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) { 
-                el.style.fill = 'var(--theme-primary)'; 
-                el.style.stroke = '#fff';
-            }
-        });
-
-        const groupTitles = {
-            'peito': '🟦 Peitoral',
-            'costas': '🟩 Costas & Dorsais',
-            'pernas': '🟨 Membros Inferiores',
-            'ombros': '🟪 Ombros & Deltoides',
-            'triceps': '🟦 Tríceps',
-            'biceps': '🟩 Bíceps',
-            'core': '🟧 Core & Abdômen',
-            'outros': '⬜ Mobilidade & Outros'
-        };
-
-        for (const [key, title] of Object.entries(groupTitles)) {
-            if (groups[key].length === 0) continue;
-
-            const categorySection = document.createElement('div');
-            categorySection.className = 'library-category-section';
-            
-            const header = document.createElement('h3');
-            header.style.backgroundColor = '#1a1a1a';
-            header.style.color = '#fff';
-            header.style.marginTop = '15px';
-            header.style.marginBottom = '0px';
-            header.style.border = '1px solid #333';
-            header.style.borderRadius = '8px';
-            header.style.padding = '15px';
-            header.style.textTransform = 'uppercase';
-            header.style.fontSize = '14px';
-            header.style.cursor = 'pointer';
-            header.style.display = 'flex';
-            header.style.justifyContent = 'space-between';
-            header.style.alignItems = 'center';
-            header.style.boxShadow = '0 4px 6px rgba(0,0,0,0.2)';
-            
-            const isOpen = query.length > 0;
-            header.style.borderColor = isOpen ? '#00ff88' : '#333';
-            
-            header.innerHTML = `<span>${title} <span style="color: #666; font-size: 11px;">(${groups[key].length})</span></span><span class="toggle-arrow" style="font-size: 12px; color: #888; transition: transform 0.3s; transform: ${isOpen ? 'rotate(180deg)' : 'rotate(0deg)'}">▼</span>`;
-            categorySection.appendChild(header);
-
-            const cardContainer = document.createElement('div');
-            cardContainer.className = 'library-card-container';
-            cardContainer.style.display = isOpen ? 'grid' : 'none'; 
-            cardContainer.style.gap = '15px';
-            cardContainer.style.paddingTop = '15px';
-            
-            header.onclick = () => {
-                const isVisible = cardContainer.style.display === 'grid';
-                cardContainer.style.display = isVisible ? 'none' : 'grid';
-                header.querySelector('.toggle-arrow').style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
-                header.style.borderColor = isVisible ? '#333' : '#00ff88'; 
-            };
-
-            // Ordena em ordem alfabética e renderiza
-            groups[key].sort((a, b) => a.name.localeCompare(b.name)).forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'library-card';
-                card.style.background = '#111';
-                card.style.border = '1px solid #2a2a2a';
-                card.style.borderLeft = '4px solid #4da3ff';
-                
-                const safeName = item.name ? item.name.replace(/'/g, "\\'") : 'Exercício';
-                const ytQuery = encodeURIComponent(`Como executar o exercício ${safeName}`);
-                const equipStr = item.equip ? item.equip.replace(/_/g, ' ') : 'N/A';
-                
-                card.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div class="lib-name" style="flex: 1; font-size: 15px; color: #fff; font-weight: bold;">${safeName}</div>
-                        <a href="https://www.youtube.com/results?search_query=${ytQuery}" target="_blank" style="text-decoration: none; font-size: 18px; margin-left: 10px; background: rgba(255, 0, 0, 0.1); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,0,0,0.3);" title="Ver Execução no YouTube">🎥</a>
-                    </div>
-                    <div class="lib-focus" style="margin-top: 8px; font-size: 11px; color: #aaa;">🎯 Alvo: ${item.group || 'Geral'} (${item.focus || ''})</div>
-                    <div style="font-size: 11px; color: #00ff88; margin-top: 8px; background: rgba(0, 255, 136, 0.05); padding: 4px 8px; border-radius: 4px; display: inline-block; border: 1px dashed rgba(0, 255, 136, 0.3);">
-                        🎒 Requer: ${equipStr}
-                    </div>
-                `;
-                cardContainer.appendChild(card);
-            });
-
-            categorySection.appendChild(cardContainer);
-            grid.appendChild(categorySection);
-        }
-    }
-
-    function switchTab(tabId, navId) {
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-        
-        // NOVO: Travas de segurança para evitar erro de classList null
-        const tabEl = document.getElementById(tabId);
-        if (tabEl) tabEl.classList.add('active'); 
-        
-        const navEl = document.getElementById(navId);
-        if (navEl) navEl.classList.add('active');
-        
-        // Distribuição tática das renderizações
-        if (tabId === 'tab-arena') FitGamification.loadLeaderboard(); // Injeta o carregamento do Ranking
-        if (tabId === 'tab-conquistas') FitGamification.renderAlbum();
-        if (tabId === 'tab-evolucao') {
-            renderWeeklyCalendar();
-            if (typeof renderMetricsChart === 'function') renderMetricsChart();
-        }
-        if (tabId === 'tab-biblioteca') filterLibrary();
-        if (tabId === 'tab-treino') {
-            if (!currentWorkoutType) {
-                document.getElementById('workoutCards').style.display = 'flex';
-                // Remove o comportamento de esconder/mostrar o cabeçalho (que agora está na aba Perfil)
-                els.workoutArea.style.display = 'none';
-                els.btnFinishArea.style.display = 'none';
-                checkSequence();
-            }
-        }
-    }
-
-    function renderCustomWorkouts() {
-        const listEl = document.getElementById('customWorkoutsList');
-        if (!listEl) return;
-        listEl.innerHTML = '';
-        
-        const savedCustoms = JSON.parse(safeGet('fitapp_custom_workouts') || '[]');
-        
-        if (savedCustoms.length === 0) {
-            listEl.innerHTML = '<div style="color: #666; font-size: 13px; text-align: center; padding: 10px; border: 1px dashed #333; border-radius: 8px;">Nenhum treino criado.</div>';
-            return;
-        }
-        
-        savedCustoms.forEach(workout => {
-            const div = document.createElement('div');
-            div.className = 'card-treino';
-            div.style.borderLeftColor = '#a64dff';
-            div.style.display = 'flex';
-            div.style.justifyContent = 'space-between';
-            div.style.alignItems = 'center';
-            div.style.padding = '15px';
-            
-            div.innerHTML = `
-                <div style="flex: 1;" onclick="FitApp.startWorkout('custom_${workout.id}')">
-                    <h3 style="margin: 0; color: #fff; font-size: 16px;">${escapeHTML(workout.name)}</h3>
-                    <p style="margin: 0; color: #aaa; font-size: 12px; margin-top: 5px;">${workout.routine[0].exercises.length} exercícios estruturados</p>
-                </div>
-                <button onclick="FitApp.deleteCustomWorkout(${workout.id}, event)" style="background: none; border: none; color: #ff4444; font-size: 18px; cursor: pointer; padding: 5px; margin-left: 10px;" title="Excluir">🗑️</button>
-            `;
-            listEl.appendChild(div);
-        });
-    }
 
     function saveCustomWorkout() {
         const nameInput = document.getElementById('customWorkoutName');
@@ -2116,7 +940,7 @@ window.encerrarSessao = function() {
             return;
         }
         
-        if (currentRoutine.length === 0 || currentRoutine[0].exercises.length === 0) {
+        if (state.currentRoutine.length === 0 || state.currentRoutine[0].exercises.length === 0) {
             showToast('Alerta: Adicione pelo menos um exercício.');
             return;
         }
@@ -2124,11 +948,11 @@ window.encerrarSessao = function() {
         let savedCustoms = JSON.parse(safeGet('fitapp_custom_workouts') || '[]');
         
         let customId = null;
-        if (currentWorkoutType.startsWith('custom_')) {
-            customId = parseInt(currentWorkoutType.split('_')[1]);
+        if (state.currentWorkoutType.startsWith('custom_')) {
+            customId = parseInt(state.currentWorkoutType.split('_')[1]);
         } else {
             customId = Date.now(); 
-            currentWorkoutType = 'custom_' + customId; 
+            state.currentWorkoutType = 'custom_' + customId; 
         }
         
         const existingIndex = savedCustoms.findIndex(w => w.id === customId);
@@ -2136,7 +960,7 @@ window.encerrarSessao = function() {
         const workoutData = {
             id: customId,
             name: name,
-            routine: currentRoutine
+            routine: state.currentRoutine
         };
         
         if (existingIndex >= 0) {
@@ -2149,10 +973,10 @@ window.encerrarSessao = function() {
         
         renderCustomWorkouts();
         showToast(`Template "${name}" salvo.`);
-        if(audioEnabled) speak("Template customizado salvo no sistema.");
+        if(state.audioEnabled) speak("Template customizado salvo no sistema.");
 
-        if (typeof filaDeTreinosIA !== 'undefined' && filaDeTreinosIA.length > 0) {
-            currentWorkoutType = 'novo_customizado';
+        if (typeof state.filaDeTreinosIA !== 'undefined' && state.filaDeTreinosIA.length > 0) {
+            state.currentWorkoutType = 'novo_customizado';
             carregarProximoTreinoIA(); 
         } else {
             const botoes = document.querySelectorAll('button');
@@ -2203,101 +1027,7 @@ window.encerrarSessao = function() {
         }
     }
 
-    function renderHistoryList() {
-        const container = document.getElementById('historyListView');
-        container.innerHTML = '';
-        let history = JSON.parse(safeGet('fitapp_week_log') || '[]');
-        
-        if (history.length === 0) {
-            container.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">Nenhum treino salvo ainda.</div>';
-            return;
-        }
 
-        // PONTO 11: Inverte apenas a ordem dos dias, mas mantém a ordem dos exercícios intacta
-        const reversedHistory = history.slice().reverse();
-        reversedHistory.forEach((log) => {
-            // NOVO: Desmembramento bruto da data (YYYY-MM-DD para DD/MM/YYYY)
-            const parts = log.date.split('-');
-            const dateStr = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : log.date;
-            const durationStr = log.duration_secs ? Math.floor(log.duration_secs / 60) + ' min' : '--';
-            
-            const block = document.createElement('div');
-            block.style.background = '#2a2a2a';
-            block.style.borderRadius = '8px';
-            block.style.marginBottom = '10px';
-            block.style.border = '1px solid #333';
-
-            const header = document.createElement('div');
-            header.style.padding = '12px';
-            header.style.display = 'flex';
-            header.style.justifyContent = 'space-between';
-            header.style.alignItems = 'center';
-            header.style.cursor = 'pointer';
-            header.style.borderLeft = log.tipo === 'Livre' ? '4px solid #a64dff' : '4px solid #00ff88';
-            
-            // Oculta o botão de lixeira se o treino não tiver o ID da nuvem (offline)
-            const trashBtnDisplay = log._id ? 'block' : 'none';
-
-            header.innerHTML = `
-                <div style="flex: 1;">
-                    <div style="font-weight: bold; color: #fff;">Treino ${log.tipo}</div>
-                    <div style="font-size: 12px; color: #aaa;">${dateStr} • ⏱️ ${durationStr}</div>
-                </div>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <button onclick="event.stopPropagation(); FitApp.exportStravaCard(${history.length - 1 - reversedHistory.indexOf(log)})" style="background: transparent; border: none; font-size: 20px; cursor: pointer; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" title="Exportar para Instagram">📸</button>
-                    <button onclick="event.stopPropagation(); FitApp.deleteHistoryLog('${log._id}')" style="display: ${trashBtnDisplay}; background: transparent; border: none; font-size: 18px; color: #ff4444; cursor: pointer;" title="Excluir Treino">🗑️</button>
-                    <div class="toggle-arrow" style="color: #888; font-size: 12px; transition: transform 0.3s; margin-left: 5px;">▼</div>
-                </div>
-            `;
-
-            const body = document.createElement('div');
-            body.style.padding = '0 12px 12px 12px';
-            body.style.display = 'none';
-            body.style.borderTop = '1px dashed #444';
-            body.style.marginTop = '5px';
-            body.style.paddingTop = '10px';
-            
-            if (log.data && log.data.length > 0) {
-                const exMap = {};
-                log.data.forEach(item => {
-                    if (!exMap[item.exercise]) exMap[item.exercise] = [];
-                    exMap[item.exercise].push(item);
-                });
-                
-                for (const [exName, sets] of Object.entries(exMap)) {
-                    const exDiv = document.createElement('div');
-                    exDiv.style.marginBottom = '8px';
-                    exDiv.innerHTML = `<div style="color: #4da3ff; font-size: 13px; font-weight: bold;">${exName}</div>`;
-                    
-                    if (exName === 'Cardio') {
-                        const c = sets[0];
-                        const distStr = c.dist_km > 0 ? `<span style="background: #111; padding: 2px 6px; border-radius: 4px; margin-right: 4px; border: 1px solid #333; color: #4da3ff;">🏃 ${c.dist_km} km</span>` : '';
-                        const kcalStr = c.kcal > 0 ? `<span style="background: #111; padding: 2px 6px; border-radius: 4px; margin-right: 4px; border: 1px solid #333; color: #ffaa00;">🔥 ${c.kcal} kcal</span>` : '';
-                        const bpmStr = c.bpm_medio > 0 ? `<span style="background: #111; padding: 2px 6px; border-radius: 4px; margin-right: 4px; border: 1px solid #333; color: #ff4444;">❤️ ${c.bpm_medio} bpm</span>` : '';
-                        const timeStr = c.tempo_segundos > 0 ? `<span style="background: #111; padding: 2px 6px; border-radius: 4px; margin-right: 4px; border: 1px solid #333; color: #ccc;">⏱️ ${Math.floor(c.tempo_segundos/60)} min</span>` : '';
-                        exDiv.innerHTML += `<div style="margin-top: 6px;">${distStr}${kcalStr}${bpmStr}${timeStr}</div>`;
-                    } else {
-                        const setStr = sets.map(s => `<span style="font-size: 11px; color: #ccc; background: #111; padding: 2px 6px; border-radius: 4px; margin-right: 4px; border: 1px solid #333;">S${s.set}: ${s.kg}kg x ${s.reps}</span>`).join('');
-                        exDiv.innerHTML += `<div style="margin-top: 4px; line-height: 1.8;">${setStr}</div>`;
-                    }
-                    body.appendChild(exDiv);
-                }
-            } else {
-                body.innerHTML = '<div style="font-size: 12px; color: #666;">Sem dados detalhados.</div>';
-            }
-
-            header.onclick = () => {
-                const isVisible = body.style.display === 'block';
-                body.style.display = isVisible ? 'none' : 'block';
-                const arrow = header.querySelector('.toggle-arrow');
-                if(arrow) arrow.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
-            };
-
-            block.appendChild(header);
-            block.appendChild(body);
-            container.appendChild(block);
-        });
-    }
 
     async function deleteHistoryLog(docId) {
         if (!confirm("Excluir este treino? Ele será apagado do radar e da nuvem.")) return;
@@ -2338,546 +1068,15 @@ window.encerrarSessao = function() {
         }
     }
 
-    function renderMonthlyCalendar() {
-        const container = document.getElementById('historyCalendarView');
-        container.innerHTML = '';
-        
-        const history = JSON.parse(safeGet('fitapp_week_log') || '[]');
-        const historyDates = history.map(h => h.date); 
-        
-        const today = new Date();
-        const month = today.getMonth();
-        const year = today.getFullYear();
-        
-        const firstDay = new Date(year, month, 1).getDay(); 
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        
-        const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-        
-        const header = document.createElement('div');
-        header.style.textAlign = 'center';
-        header.style.fontWeight = 'bold';
-        header.style.color = '#fff';
-        header.style.marginBottom = '15px';
-        header.style.fontSize = '16px';
-        header.textContent = `${monthNames[month]} ${year}`;
-        container.appendChild(header);
-        
-        const grid = document.createElement('div');
-        grid.style.display = 'grid';
-        grid.style.gridTemplateColumns = 'repeat(7, 1fr)';
-        grid.style.gap = '5px';
-        grid.style.textAlign = 'center';
-        
-        const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
-        weekDays.forEach(d => {
-            const dayLabel = document.createElement('div');
-            dayLabel.style.color = '#aaa';
-            dayLabel.style.fontSize = '12px';
-            dayLabel.style.fontWeight = 'bold';
-            dayLabel.style.marginBottom = '5px';
-            dayLabel.textContent = d;
-            grid.appendChild(dayLabel);
-        });
-        
-        for (let i = 0; i < firstDay; i++) {
-            grid.appendChild(document.createElement('div'));
-        }
-        
-        for (let day = 1; day <= daysInMonth; day++) {
-            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            const isWorkoutDay = historyDates.includes(dateStr);
-            const isToday = day === today.getDate();
-            
-            const dayCell = document.createElement('div');
-            dayCell.style.padding = '10px 0';
-            dayCell.style.borderRadius = '6px';
-            dayCell.style.fontSize = '14px';
-            dayCell.style.background = isWorkoutDay ? 'rgba(0, 255, 136, 0.2)' : '#1e1e1e';
-            dayCell.style.color = isWorkoutDay ? '#00ff88' : '#fff';
-            dayCell.style.border = isWorkoutDay ? '1px solid #00ff88' : '1px solid #333';
-            dayCell.style.fontWeight = isWorkoutDay ? 'bold' : 'normal';
-            
-            if (isToday) {
-                dayCell.style.boxShadow = 'inset 0 0 0 2px #a64dff'; 
-            }
-            
-            dayCell.textContent = day;
-            grid.appendChild(dayCell);
-        }
-        
-        container.appendChild(grid);
-    }
-
-    function openImportAiModal() {
-        document.getElementById('importAiModal').style.display = 'flex';
-        const nameInput = document.getElementById('aiWorkoutName');
-        const textInput = document.getElementById('aiWorkoutText');
-        if (nameInput) nameInput.value = '';
-        if (textInput) textInput.value = '';
-        
-        // Sempre abre na aba de Criação por padrão
-        if(FitApp.switchAiTab) FitApp.switchAiTab('criar');
-    }
-
-    // NOVO: Controlador de Abas da IA
-    function switchAiTab(tab) {
-        const btnCriar = document.getElementById('btnTabAiCriar');
-        const btnImportar = document.getElementById('btnTabAiImportar');
-        const routeCriar = document.getElementById('aiRouteCriar');
-        const routeImportar = document.getElementById('aiRouteImportar');
-        const textInput = document.getElementById('aiWorkoutText');
-
-        // ESCUDO TÁTICO: Se o cache estiver usando o HTML antigo, aborta sem travar o aplicativo
-        if (!btnCriar || !btnImportar || !routeCriar || !routeImportar) {
-            console.warn("Aviso: HTML desatualizado detectado. Limpe o cache do navegador.");
-            return;
-        }
-
-        if (tab === 'criar') {
-            btnCriar.style.background = '#00ff88'; btnCriar.style.color = '#000';
-            btnImportar.style.background = 'transparent'; btnImportar.style.color = '#888';
-            routeCriar.style.display = 'block';
-            routeImportar.style.display = 'none';
-            if(textInput) textInput.value = ''; // Limpa o texto para garantir a rota de criação
-        } else {
-            btnImportar.style.background = '#00ff88'; btnImportar.style.color = '#000';
-            btnCriar.style.background = 'transparent'; btnCriar.style.color = '#888';
-            routeImportar.style.display = 'block';
-            routeCriar.style.display = 'none';
-        }
-    }
-
-    async function processWorkoutWithAI() {
-        const methodSelect = document.getElementById('aiMethod');
-        const aiMethod = methodSelect ? methodSelect.value : 'abc';
-        const methodName = methodSelect ? methodSelect.options[methodSelect.selectedIndex].text : 'IA';
-        
-        const env = document.getElementById('aiEnv').value;
-        const workoutName = document.getElementById('aiWorkoutName').value || `Rotina - ${methodName}`;
-        const pastedText = document.getElementById('aiWorkoutText').value.trim();
-        
-        const loader = document.getElementById('aiImportLoader');
-        const btn = document.getElementById('btnProcessAi');
-        
-        loader.style.display = 'block';
-        btn.disabled = true;
-        
-        let megaPrompt = "";
-
-        if (pastedText !== "") {
-            megaPrompt = `
-            O usuário quer importar este treino:
-            "${pastedText}"
-            
-            Se for apenas um dia de treino, chame-o de "${workoutName}".
-            Retorne APENAS um JSON válido.
-            `;
-        } else {
-            let instruction = "";
-            switch(aiMethod) {
-                case 'abc':
-                    instruction = "Crie uma periodização de 3 dias (ABC). Dia 1: Push (Peito, Ombro, Tríceps). Dia 2: Pull (Costas, Trapézio, Bíceps). Dia 3: Legs (Quadríceps, Isquiotibiais, Panturrilhas, Core). Para cada dia, escolha de 5 a 6 exercícios clássicos.";
-                    break;
-                case 'abcd':
-                    instruction = "Crie uma periodização de 4 dias (ABCD). Dia 1: Peito e Tríceps. Dia 2: Foco Anterior (Quadríceps e Panturrilha). Dia 3: Costas e Bíceps. Dia 4: Foco Posterior (Isquiotibiais, Glúteos e Ombros). Para cada dia, escolha 5 a 6 exercícios.";
-                    break;
-                case 'biset_agonista':
-                    instruction = "Crie uma periodização de 3 dias (Push/Pull/Legs). OBRIGATÓRIO: Agrupe os movimentos em 'Bi-sets Agonistas' (2 exercícios seguidos para o MESMO músculo, ex: Supino reto + Crucifixo). Escolha 6 exercícios por dia formando 3 blocos de bi-sets.";
-                    break;
-                case 'biset_antagonista':
-                    instruction = "Crie uma periodização de 3 dias. OBRIGATÓRIO: Agrupe os movimentos em 'Bi-sets Antagônicos/Mistos' (2 exercícios seguidos para músculos OPOSTOS, ex: Peito + Costas, ou Quadríceps + Posterior). Escolha 6 exercícios por dia formando 3 blocos de bi-sets.";
-                    break;
-                case 'biset_sinergista':
-                    instruction = "Crie uma periodização de 3 dias. OBRIGATÓRIO: Agrupe os movimentos em 'Bi-sets Sinergistas' (ex: Peito + Tríceps, Costas + Bíceps, Pernas + Ombros). Escolha 6 exercícios por dia formando 3 blocos de bi-sets.";
-                    break;
-                case 'circuito':
-                    instruction = "Crie 1 único treino no formato Circuito Metabólico FullBody. Escolha de 6 a 8 exercícios trabalhando o corpo todo de forma dinâmica. O objetivo é alto gasto calórico com mínimo descanso.";
-                    break;
-            }
-
-            const allowedExercises = dictionaryData.filter(d => {
-                if (env === 'academia') return d.equip !== 'peso_corporal' && d.equip !== 'calistenia'; 
-                if (env === 'calistenia') return d.equip === 'peso_corporal' || d.equip === 'calistenia';
-                return d.equip === 'peso_corporal';
-            }).map(d => d.name).join(", ");
-            
-            megaPrompt = `
-            ${instruction}
-            
-            REGRA ABSOLUTA: Você SÓ PODE usar os exercícios exatos desta lista abaixo. Não invente nenhum outro nome.
-            LISTA PERMITIDA: [${allowedExercises}].
-            
-            Defina séries lógicas (ex: 3 ou 4) e repetições adequadas (ex: 8-12, ou 15-20 para circuito).
-            Retorne APENAS o JSON válido.
-            `;
-        }
-
-        try {
-            const data = await FitAPI.importarTreinoIA(megaPrompt);
-            
-            if (data.resultado && data.resultado !== "[]") {
-                let cleanData = data.resultado;
-                
-                // 🛡️ ESCUDO ANTI-ALUCINAÇÃO: Extrai apenas o JSON puro (Arrays ou Objetos) ignorando texto extra do LLM
-                const jsonMatch = cleanData.match(/\[[\s\S]*\]|\{[\s\S]*\}/);
-                if (jsonMatch) {
-                    cleanData = jsonMatch[0];
-                }
-                
-                const parsed = JSON.parse(cleanData);
-                currentWorkoutType = 'custom_ia';
-                
-                // ESCUDO DE DADOS: Força a extração da Lista (Array), ignorando objetos externos
-                let workoutArray = [];
-                if (Array.isArray(parsed)) {
-                    workoutArray = parsed;
-                } else {
-                    // Se a IA embrulhou num Objeto, procura a primeira Lista dentro dele
-                    workoutArray = Object.values(parsed).find(val => Array.isArray(val)) || [];
-                }
-
-                if (workoutArray.length === 0) {
-                    throw new Error("Formato de JSON inválido. A IA não devolveu uma lista.");
-                }
-                
-                // 1. Converte o pacote inteiro da IA para o padrão do aplicativo
-                const todosOsTreinos = workoutArray.map((dia, index) => {
-                    const idLetra = String.fromCharCode(65 + index);
-                    const nomeTreino = dia.nome_treino || dia.nome || `Dia ${index + 1}`;
-                    const exercicios = dia.exercicios || dia.exercises || [];
-
-                    return {
-                        nome_treino: pastedText === "" && workoutArray.length > 1 ? `Treino ${idLetra} - ${nomeTreino}` : nomeTreino,
-                        exercicios: exercicios.map(ex => ({ 
-                            nome: ex.nome || ex.name || "Exercício Não Mapeado", 
-                            series: parseInt(ex.series || ex.sets) || 4, 
-                            repeticoes: ex.repeticoes || ex.reps || "10-12 rep" 
-                        }))
-                    };
-                });
-
-                // 2. Extrai o Dia 1 para a tela atual
-                const treinoDia1 = todosOsTreinos.shift(); 
-                currentRoutine = [{
-                    title: treinoDia1.nome_treino,
-                    exercises: treinoDia1.exercicios.map(ex => ({ name: ex.nome, sets: ex.series, target: ex.repeticoes }))
-                }];
-
-                // 3. Joga o resto na Fila e salva na Memória Persistente
-                filaDeTreinosIA = todosOsTreinos;
-                safeSet('fitapp_fila_ia', JSON.stringify(filaDeTreinosIA));
-                
-                document.getElementById('importAiModal').style.display = 'none';
-                
-                const customControls = document.getElementById('customWorkoutControls');
-                const nameContainer = document.getElementById('customWorkoutNameContainer');
-                const nameInput = document.getElementById('customWorkoutName');
-                
-                if(customControls) customControls.style.display = 'flex';
-                if(nameContainer) nameContainer.style.display = 'block';
-                if(nameInput) nameInput.value = workoutName;
-                
-                document.getElementById('previewTitle').textContent = pastedText ? `🤖 Treino Importado` : `🤖 Periodização Criada`;
-                document.getElementById('previewDesc').textContent = `Revise os movimentos. Clique em 'Salvar Template' para guardá-lo permanentemente na sua estante.`;
-                
-                const workoutCards = document.getElementById('workoutCards');
-                if (workoutCards) workoutCards.style.display = 'none';
-                
-                const dashHeader = document.querySelector('.dashboard-header');
-                if (dashHeader) dashHeader.style.display = 'none';
-                
-                const workoutPreview = document.getElementById('workoutPreview');
-                if (workoutPreview) workoutPreview.style.display = 'block';
-
-                renderPreviewList();
-                showToast("A inteligência artificial processou os dados com sucesso!");
-                
-                document.getElementById('aiWorkoutText').value = "";
-                document.getElementById('aiWorkoutName').value = "";
-            } else {
-                showToast("Falha na geração do treino. Tente novamente.");
-            }
-        } catch (error) {
-            console.error(error);
-            showToast("Erro de conexão com o servidor de IA.");
-        } finally {
-            loader.style.display = 'none';
-            btn.disabled = false;
-        }
-    }
-
-    function carregarProximoTreinoIA() {
-        if (filaDeTreinosIA.length === 0) {
-            safeSet('fitapp_fila_ia', '[]'); // Limpa a memória
-            showToast("Periodização importada e salva com sucesso!");
-            cancelWorkoutPreview(); 
-            renderCustomWorkouts();
-            return;
-        }
-
-        const treinoAtual = filaDeTreinosIA.shift(); 
-        safeSet('fitapp_fila_ia', JSON.stringify(filaDeTreinosIA)); // Atualiza a memória física
-
-        document.getElementById('workoutCards').style.display = 'none';
-        const header = document.querySelector('.dashboard-header');
-        if (header) header.style.display = 'none';
-        
-        const preview = document.getElementById('workoutPreview');
-        const customControls = document.getElementById('customWorkoutControls');
-        const nameContainer = document.getElementById('customWorkoutNameContainer');
-        const nameInput = document.getElementById('customWorkoutName');
-
-        if(customControls) customControls.style.display = 'flex';
-        if(nameContainer) nameContainer.style.display = 'block';
-
-        if (nameInput) nameInput.value = treinoAtual.nome_treino;
-        document.getElementById('previewTitle').textContent = `Revisando IA`;
-        document.getElementById('previewDesc').textContent = `Ajuste os exercícios e salve para puxar o próximo dia.`;
-
-        currentWorkoutType = 'novo_customizado';
-
-        currentRoutine = [{
-            title: "Treino Importado",
-            exercises: treinoAtual.exercicios.map(ex => ({
-                name: ex.nome,
-                sets: parseInt(ex.series) || 4,
-                target: ex.repeticoes || "10"
-            }))
-        }];
-
-        renderPreviewList(); 
-        
-        const botoes = document.querySelectorAll('button');
-        botoes.forEach(btn => {
-            if (btn.innerText.includes('Salvar Template') || btn.innerText.includes('Salvar e Revisar')) {
-                if (filaDeTreinosIA.length > 0) {
-                    btn.innerText = `Salvar e Revisar Próximo (${filaDeTreinosIA.length} restantes)`;
-                } else {
-                    btn.innerText = "Salvar Template Final";
-                }
-            }
-        });
-
-        if (preview) preview.style.display = 'block';
-    }
-
-    async function syncOfflineWorkouts() {
-        let syncQueue = JSON.parse(safeGet('fitapp_sync_queue') || '[]');
-        if (syncQueue.length === 0) return;
-
-        console.log(`Iniciando sincronização de ${syncQueue.length} treinos pendentes...`);
-        showToast("Sincronizando treinos pendentes com a nuvem...");
-
-        let remainingQueue = [];
-
-        for (let i = 0; i < syncQueue.length; i++) {
-            const payload = syncQueue[i];
-            try {
-                await FitAPI.salvarTreino(payload);
-                console.log(`Treino de ${payload.date} sincronizado com sucesso.`);
-            } catch (error) {
-                console.warn("Rede instável. Sincronização interrompida.");
-                remainingQueue = syncQueue.slice(i);
-                break; 
-            }
-        }
-
-        safeSet('fitapp_sync_queue', JSON.stringify(remainingQueue));
-        
-        if (remainingQueue.length === 0) {
-            showToast("Sincronização concluída! Dados atualizados.");
-            if(audioEnabled) speak("Base de dados sincronizada com a nuvem.");
-        }
-    }
-
-function renderMetricsChart() {
-        const history = JSON.parse(safeGet('fitapp_week_log') || '[]');
-        const radarCtx = document.getElementById('radarChart');
-        const radarContainer = document.getElementById('radarContainer');
-        const isolationContainer = document.getElementById('isolationContainer');
-        const exSelect = document.getElementById('exerciseIsolationSelect');
-        
-        if (!radarCtx || !radarContainer || !isolationContainer || history.length === 0) {
-            if(radarContainer) radarContainer.style.display = 'none';
-            if(isolationContainer) isolationContainer.style.display = 'none';
-            return;
-        }
-
-        radarContainer.style.display = 'block';
-        isolationContainer.style.display = 'block';
-
-        // --- MATRIZ 1: RADAR DE SIMETRIA (Últimos 30 Dias) ---
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-        
-        const muscleCounts = { 'Peitoral': 0, 'Costas': 0, 'Pernas': 0, 'Ombros': 0, 'Braços': 0, 'Core': 0 };
-        const allExecutedExercises = new Set(); // Para popular o seletor do Gráfico 2
-
-        history.forEach(log => {
-            const logDate = new Date(log.date + 'T12:00:00');
-            const isRecent = logDate >= thirtyDaysAgo;
-
-            if (log.data && log.data.length > 0) {
-                log.data.forEach(set => {
-                    allExecutedExercises.add(set.exercise); // Adiciona ao arsenal usado
-                    
-                    if (isRecent) {
-                        const dictItem = typeof dictionaryData !== 'undefined' ? dictionaryData.find(d => d.name === set.exercise) : null;
-                        // BLINDAGEM: Passamos o objeto inteiro (dictItem). O motor lerá o 'group' ("Peitoral") em vez do foco ("Fibras").
-                        const broadGroup = getMuscleGroup(dictItem ? dictItem : set.exercise);
-                        
-                        if (broadGroup === 'peito') muscleCounts['Peitoral']++;
-                        else if (broadGroup === 'costas') muscleCounts['Costas']++;
-                        else if (broadGroup === 'pernas') muscleCounts['Pernas']++;
-                        else if (broadGroup === 'ombros') muscleCounts['Ombros']++;
-                        else if (broadGroup === 'triceps' || broadGroup === 'biceps') muscleCounts['Braços']++;
-                        else if (broadGroup === 'core') muscleCounts['Core']++;
-                    }
-                });
-            }
-        });
-
-        if (radarChartInstance) radarChartInstance.destroy();
-
-        radarChartInstance = new Chart(radarCtx, {
-            type: 'radar',
-            data: {
-                labels: Object.keys(muscleCounts),
-                datasets: [{
-                    label: 'Séries no Mês',
-                    data: Object.values(muscleCounts),
-                    backgroundColor: 'rgba(0, 255, 136, 0.2)',
-                    borderColor: '#00ff88',
-                    pointBackgroundColor: '#a64dff',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: '#a64dff',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    r: {
-                        angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        pointLabels: { color: '#aaa', font: { size: 10, weight: 'bold' } },
-                        ticks: { display: false, backdropColor: 'transparent' }
-                    }
-                },
-                plugins: { legend: { display: false } }
-            }
-        });
-
-        // --- PREPARAÇÃO DO SELETOR: RASTREADOR DE SOBRECARGA ---
-        if (exSelect) {
-            const currentSelection = exSelect.value;
-            exSelect.innerHTML = '<option value="">Selecione um exercício do histórico...</option>';
-            Array.from(allExecutedExercises).sort().forEach(ex => {
-                exSelect.innerHTML += `<option value="${ex}">${ex}</option>`;
-            });
-            if (currentSelection && allExecutedExercises.has(currentSelection)) {
-                exSelect.value = currentSelection;
-            }
-            renderIsolationChart(); // Dispara a renderização inicial do segundo gráfico
-        }
-    }
-
-    function renderIsolationChart() {
-        const ctx = document.getElementById('isolationChart');
-        const select = document.getElementById('exerciseIsolationSelect');
-        const history = JSON.parse(safeGet('fitapp_week_log') || '[]');
-        
-        if (!ctx || !select || !select.value) {
-            if (isolationChartInstance) isolationChartInstance.destroy();
-            return;
-        }
-
-        const targetExercise = select.value;
-        const chartDataMap = {}; // Agrupar por data para achar a Carga Máxima do dia
-
-        history.forEach(log => {
-            if (log.data) {
-                const setsOfExercise = log.data.filter(set => set.exercise === targetExercise);
-                if (setsOfExercise.length > 0) {
-                    const dateStr = new Date(log.date + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-                    // Encontra a maior carga levantada naquele dia específico para este exercício
-                    const maxKg = Math.max(...setsOfExercise.map(s => parseFloat(s.kg) || 0));
-                    
-                    if (maxKg > 0) {
-                        chartDataMap[dateStr] = maxKg;
-                    }
-                }
-            }
-        });
-
-        const labels = Object.keys(chartDataMap);
-        const dataPoints = Object.values(chartDataMap);
-
-        if (isolationChartInstance) isolationChartInstance.destroy();
-
-        if (labels.length === 0) return;
-
-        isolationChartInstance = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Carga Máxima (Kg)',
-                    data: dataPoints,
-                    borderColor: '#a64dff',
-                    backgroundColor: 'rgba(166, 77, 255, 0.1)',
-                    borderWidth: 3,
-                    pointBackgroundColor: '#00ff88',
-                    pointRadius: 4,
-                    fill: true,
-                    tension: 0.3
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', titleColor: '#00ff88', bodyColor: '#fff', borderColor: '#a64dff', borderWidth: 1 }
-                },
-                scales: {
-                    y: { beginAtZero: false, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#888' } },
-                    x: { grid: { display: false }, ticks: { color: '#888', maxTicksLimit: 6 } }
-                }
-            }
-        });
-    }
-    
-    function applyTheme() {
-        // Fallback agora é hipertrofia
-        const profile = safeGet('fitapp_profile') || 'hipertrofia';
-        
-        // 1. Zera a prancheta de pintura
-        document.body.classList.remove('theme-feminino', 'theme-definicao', 'theme-tatico');
-        
-        // 2. Aplica a classe correspondente. 
-        // Nota: O perfil 'hipertrofia' NÃO recebe classe extra, caindo nas cores Verde/Roxo padrão do sistema.
-        if (profile === 'feminino') {
-            document.body.classList.add('theme-feminino');
-        } else if (profile === 'definicao') {
-            document.body.classList.add('theme-definicao');
-        } else if (profile === 'tatico') {
-            document.body.classList.add('theme-tatico');
-        }
-    }
-
     function init() {
-        els.profileSelector = document.getElementById('profileSelector');
-        els.styleSelector = document.getElementById('styleSelector');
-        els.levelSelector = document.getElementById('levelSelector'); 
-        els.workoutArea = document.getElementById('workoutArea'); 
-        els.exerciseList = document.getElementById('exerciseList');
-        els.progressBar = document.getElementById('progressBar'); 
-        els.btnFinishArea = document.getElementById('btnFinishArea');
-        els.toast = document.getElementById('toast');
+        state.els.profileSelector = document.getElementById('profileSelector');
+        state.els.styleSelector = document.getElementById('styleSelector');
+        state.els.levelSelector = document.getElementById('levelSelector'); 
+        state.els.workoutArea = document.getElementById('workoutArea'); 
+        state.els.exerciseList = document.getElementById('exerciseList');
+        state.els.progressBar = document.getElementById('progressBar'); 
+        state.els.btnFinishArea = document.getElementById('btnFinishArea');
+        state.els.toast = document.getElementById('toast');
 
         // Escuta quando a internet volta, mas só sincroniza se estiver logado
         window.addEventListener('online', () => {
@@ -2925,13 +1124,13 @@ function renderMetricsChart() {
 
         // NOVO: Resgata o perfil salvo no cache do celular
         const savedProfile = safeGet('fitapp_profile');
-        if (savedProfile && els.profileSelector) els.profileSelector.value = savedProfile;
+        if (savedProfile && state.els.profileSelector) state.els.profileSelector.value = savedProfile;
         applyTheme(); // 🎨 Aplica a identidade visual instantaneamente no boot do app
         const savedStyle = safeGet('fitapp_style');
-        if (savedStyle && els.styleSelector) els.styleSelector.value = savedStyle;
+        if (savedStyle && state.els.styleSelector) state.els.styleSelector.value = savedStyle;
         
         const savedLevel = safeGet('fitapp_level');
-        if (savedLevel && els.levelSelector) els.levelSelector.value = savedLevel;
+        if (savedLevel && state.els.levelSelector) state.els.levelSelector.value = savedLevel;
 
         // Mapeia todas as 6 abas da nova arquitetura (incluindo a Arena)
         ['treino', 'evolucao', 'conquistas', 'arena', 'biblioteca', 'perfil'].forEach(tab => { 
@@ -2969,12 +1168,12 @@ function renderMetricsChart() {
             btn.addEventListener('click', (e) => { 
                 document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active')); 
                 e.target.classList.add('active'); 
-                currentRestTime = parseInt(e.target.getAttribute('data-time')); 
+                state.currentRestTime = parseInt(e.target.getAttribute('data-time')); 
             }); 
         });
 
         const packEnvelope = document.getElementById('packEnvelope');
-        if (packEnvelope) packEnvelope.addEventListener('click', FitGamification.openPack);
+        if (packEnvelope) packEnvelope.addEventListener('click', window.FitGamification.openPack);
         
         const btnClosePack = document.getElementById('btnClosePack');
         if (btnClosePack) btnClosePack.addEventListener('click', () => { 
@@ -2985,7 +1184,7 @@ function renderMetricsChart() {
         checkSequence(); 
         updateDynamicCards(); // NOVO: Atualiza o nome dos cartões ao iniciar
         checkCompletedCards(); // NOVO: Checa se há cartões concluídos hoje
-        FitGamification.renderAlbum();
+        window.FitGamification.renderAlbum();
         renderWeeklyCalendar();
         renderCustomWorkouts(); 
         if (typeof renderMetricsChart === 'function') renderMetricsChart();   
@@ -2993,16 +1192,16 @@ function renderMetricsChart() {
         const savedState = safeGet('fitapp_active_state');
         if (savedState) {
             const state = JSON.parse(savedState);
-            currentRoutine = state.currentRoutine;
-            currentWorkoutType = state.currentWorkoutType;
-            workoutStartTime = state.workoutStartTime;
-            isWorkoutActive = true;
+            state.currentRoutine = state.state.currentRoutine;
+            state.currentWorkoutType = state.state.currentWorkoutType;
+            state.workoutStartTime = state.state.workoutStartTime;
+            state.isWorkoutActive = true;
             
             document.getElementById('workoutCards').style.display = 'none';
             const header = document.querySelector('.dashboard-header');
             if (header) header.style.display = 'none';
-            els.workoutArea.style.display = 'block'; 
-            els.btnFinishArea.style.display = 'block';
+            state.els.workoutArea.style.display = 'block'; 
+            state.els.btnFinishArea.style.display = 'block';
             
             // GARANTE O MODO FOCO: Caso a página seja recarregada no meio do treino
             const navBar = document.querySelector('nav');
@@ -3016,11 +1215,11 @@ function renderMetricsChart() {
             const templatesFront = document.getElementById('templatesFrontline');
             if (templatesFront) templatesFront.style.display = 'none';
             
-            if (globalTimer) clearInterval(globalTimer);
-            globalTimer = setInterval(updateGlobalTimer, 1000);
+            if (state.globalTimer) clearInterval(state.globalTimer);
+            state.globalTimer = setInterval(updateGlobalTimer, 1000);
             updateGlobalTimer();
             
-            renderCurrentRoutine(); 
+            renderstate.currentRoutine(); 
             showToast('Treino em andamento restaurado.');
         }
 
@@ -3028,11 +1227,11 @@ function renderMetricsChart() {
         const savedAIFila = safeGet('fitapp_fila_ia');
         if (savedAIFila && savedAIFila !== '[]') {
             try {
-                filaDeTreinosIA = JSON.parse(savedAIFila);
-                if (filaDeTreinosIA.length > 0) {
-                    showToast(`Detectado ${filaDeTreinosIA.length} treino(s) da IA pendentes para revisão.`);
+                state.filaDeTreinosIA = JSON.parse(savedAIFila);
+                if (state.filaDeTreinosIA.length > 0) {
+                    showToast(`Detectado ${state.filaDeTreinosIA.length} treino(s) da IA pendentes para revisão.`);
                     // Restaura a interface de continuação
-                    currentWorkoutType = 'novo_customizado';
+                    state.currentWorkoutType = 'novo_customizado';
                     carregarProximoTreinoIA();
                 }
             } catch(e) { console.error("Fila IA corrompida."); }
@@ -3044,7 +1243,7 @@ function renderMetricsChart() {
 
         // 🛡️ ESCUDO ANTI-RECARREGAMENTO: Evita F5 ou fechar a aba por engano
         window.addEventListener('beforeunload', (e) => {
-            if (isWorkoutActive) {
+            if (state.isWorkoutActive) {
                 e.preventDefault();
                 e.returnValue = ''; // Exigido pelos navegadores modernos
             }
@@ -3053,7 +1252,7 @@ function renderMetricsChart() {
         // 🛡️ INTERCETOR DE GESTOS (SWIPE BACK): Impede o "deslizar para trás" do Android/iOS de fechar a PWA
         history.pushState(null, null, location.href);
         window.addEventListener('popstate', () => {
-            if (isWorkoutActive) {
+            if (state.isWorkoutActive) {
                 // Se estiver num combate, empurra o estado de volta e ignora o deslize
                 history.pushState(null, null, location.href);
                 showToast("⚠️ Combate em curso. Utilize o botão 'Abortar Missão' para sair.");
@@ -3063,208 +1262,12 @@ function renderMetricsChart() {
             }
         });
         
-    } // <-- A função init() termina aqui
+    } 
 
-// --- NOVO: MOTOR DO PILOTO AUTOMÁTICO (HANDS-FREE) ---
-    let autoBIndex = null, autoEIndex = null;
-    let autoExec = 0, autoRest = 0;
-    let autoTimeout = null;
-    let isAutoActive = false;
-
-    function toggleAutoPilot(bIndex, eIndex) {
-        if (isAutoActive && autoBIndex === bIndex && autoEIndex === eIndex) {
-            stopAutoPilot();
-        } else {
-            if (isAutoActive) stopAutoPilot(); // Aborta se estiver rodando em outro exercício
-            autoBIndex = bIndex;
-            autoEIndex = eIndex;
-            document.getElementById('autoPilotModal').style.display = 'flex';
-        }
-    }
-
-    function startAutoPilot() {
-        autoExec = parseInt(document.getElementById('autoExecTime').value) || 40;
-        autoRest = parseInt(document.getElementById('autoRestTime').value) || 45;
-        
-        document.getElementById('autoPilotModal').style.display = 'none';
-        isAutoActive = true;
-        
-        const btn = document.getElementById(`btnAuto_${autoBIndex}_${autoEIndex}`);
-        if (btn) {
-            btn.innerHTML = '🛑 Parar';
-            btn.style.color = '#ff4444';
-            btn.style.borderColor = '#ff4444';
-            btn.style.background = 'rgba(255, 68, 68, 0.1)';
-        }
-        
-        if(audioEnabled) speak("Protocolo hands-free ativado. Prepare-se.");
-        showToast("Modo Auto iniciado. Guarde o dispositivo.");
-        
-        // Timer de respiro de 3 segundos antes do combate iniciar
-        autoTimeout = setTimeout(() => { executeAutoPhase(); }, 3000);
-    }
-
-    function executeAutoPhase() {
-        if (!isAutoActive) return;
-        
-        const ex = currentRoutine[autoBIndex].exercises[autoEIndex];
-        
-        // Escaneia qual é a próxima série que ainda não foi concluída
-        let nextSet = -1;
-        for(let i = 0; i < ex.sets; i++) {
-            if(!ex.setsData[i] || !ex.setsData[i].checked) {
-                nextSet = i + 1;
-                break;
-            }
-        }
-        
-        if (nextSet === -1) {
-            stopAutoPilot();
-            if(audioEnabled) speak("Ciclo de séries concluído com sucesso.");
-            showToast("Automação finalizada. Alvo abatido.");
-            return;
-        }
-
-        if(audioEnabled) speak("Ação.");
-        showToast(`Série ${nextSet} em andamento...`);
-        
-        const btn = document.getElementById(`btnAuto_${autoBIndex}_${autoEIndex}`);
-        let timeLeft = autoExec;
-        if (btn) btn.innerHTML = `🛑 Ação: ${timeLeft}s`;
-        
-        // TELEMETRIA: Relógio regressivo visual para a fase de Ação
-        autoTimeout = setInterval(() => {
-            if (!isAutoActive) {
-                clearInterval(autoTimeout);
-                return;
-            }
-
-            timeLeft--;
-            if (btn) btn.innerHTML = `🛑 Ação: ${timeLeft}s`;
-
-            if (timeLeft <= 0) {
-                clearInterval(autoTimeout); // Para o relógio de ação
-                if (btn) btn.innerHTML = `🛑 Descanso...`;
-
-                // Localiza a caixa de seleção específica via ID e marca
-                const chk = document.getElementById(`chk_set_${autoBIndex}_${autoEIndex}_${nextSet}`);
-                if (chk && !chk.checked) {
-                    adjustRestTime(autoRest); // Seta o cronômetro para o tempo definido no Piloto
-                    chk.click(); // O clique fantasma dispara a UI de descanso e o salvamento em nuvem
-                }
-                
-                // Aguarda o término do descanso (+2s de margem de segurança para o áudio respirar)
-                autoTimeout = setTimeout(() => {
-                    executeAutoPhase(); // Chama o loop novamente para a próxima série
-                }, (autoRest + 2) * 1000);
-            }
-        }, 1000);
-    }
-
-    function stopAutoPilot() {
-        isAutoActive = false;
-        clearInterval(autoTimeout); // BLINDAGEM: Atualizado para abortar o relógio regressivo com segurança
-        const btn = document.getElementById(`btnAuto_${autoBIndex}_${autoEIndex}`);
-        if (btn) {
-            btn.innerHTML = '🤖 Auto';
-            btn.style.color = '#00ff88';
-            btn.style.borderColor = '#00ff88';
-            btn.style.background = 'rgba(0, 255, 136, 0.1)';
-        }
-        showToast("Piloto Automático desativado.");
-    }
 // ==========================================
     // 🧬 A FORJA DE TREINOS (MOTOR FISIOLÓGICO)
     // ==========================================
-    function openForgeModal() {
-        document.getElementById('forgeModal').style.display = 'flex';
-        updateForgeOptions();
-    }
 
-    function updateForgeOptions() {
-        const method = document.getElementById('forgeMethod').value;
-        const subBox = document.getElementById('forgeSubOptionsBox');
-        const subSelect = document.getElementById('forgeSubSelect');
-        const subLabel = document.getElementById('forgeSubLabel');
-        
-        subSelect.innerHTML = '';
-        subBox.style.display = 'block';
-
-        if (method === 'ppl') {
-            subLabel.textContent = "Selecione o Eixo:";
-            subSelect.innerHTML = `
-                <option value="push">Empurrar (Peito, Ombro, Tríceps)</option>
-                <option value="pull">Puxar (Costas, Trapézio, Bíceps)</option>
-                <option value="legs">Pernas e Core (Quadríceps, Isquios, Glúteo)</option>
-            `;
-        } else if (method === 'biset_agonista') {
-            subLabel.textContent = "Músculo Alvo (Pré-Exaustão):";
-            subSelect.innerHTML = `
-                <option value="peito">Peitoral</option>
-                <option value="costa">Dorsais</option>
-                <option value="perna">Pernas Completas</option>
-                <option value="ombro">Deltoides</option>
-                <option value="braco">Braços (Bíceps e Tríceps Isolados)</option>
-            `;
-        } else if (method === 'biset_antagonista') {
-            subLabel.textContent = "Pares de Combate (Opostos & Mistos):";
-            subSelect.innerHTML = `
-                <option value="peito_costa">Peito + Costas (Opostos Clássico)</option>
-                <option value="biceps_triceps">Bíceps + Tríceps (Braços Insanos)</option>
-                <option value="quad_post">Quadríceps + Posterior (Perna Opostos)</option>
-                <option value="peito_biceps">Peito (Grande) + Bíceps (Pequeno)</option>
-                <option value="costa_triceps">Costas (Grande) + Tríceps (Pequeno)</option>
-                <option value="ombro_perna">Ombros + Pernas</option>
-            `;
-        } else if (method === 'biset_sinergista') {
-            subLabel.textContent = "Pares Sinergistas (Principal + Auxiliar):";
-            subSelect.innerHTML = `
-                <option value="peito_triceps">Peito + Tríceps</option>
-                <option value="costa_biceps">Costas + Bíceps</option>
-                <option value="perna_ombro">Pernas + Ombros</option>
-            `;
-        } else {
-            subBox.style.display = 'none'; // Circuito e Calistenia não precisam de sub-opção
-        }
-    }
-
-   function generateForgedWorkout() {
-        const method = document.getElementById('forgeMethod').value;
-        const subOpt = document.getElementById('forgeSubSelect').value;
-        
-        const activeChips = document.querySelectorAll('.forge-equip-chip.active');
-        if (activeChips.length === 0) {
-            showToast("⚠️ Operação Negada: Selecione pelo menos uma arma no seu arsenal.");
-            return;
-        }
-
-        // UNIFICAÇÃO TÁTICA: O modal da Forja agora usa o Cérebro Neural Principal
-        // Isso elimina o código legado e herda: Arsenal, Volume Dinâmico e Gravidade de Core.
-        currentRoutine = executeForgeLogic(method, subOpt, []);
-        currentWorkoutType = 'Livre';
-        
-        document.getElementById('forgeModal').style.display = 'none';
-        
-        // Dispara o motor de carregamento para abrir a tela de visualização (Preview)
-        loadWorkout(); 
-        
-        // Formatação inteligente do Título baseada na seleção
-        const selectEl = document.getElementById('forgeSubSelect');
-        let finalTitle = "Rotina Forjada";
-        if (selectEl && selectEl.options.length > 0 && selectEl.closest('div').style.display !== 'none') {
-            finalTitle = selectEl.options[selectEl.selectedIndex].text;
-        } else if (method === 'circuito') {
-            finalTitle = "Circuito Metabólico";
-        } else if (method === 'calistenia') {
-            finalTitle = "Calistenia Bodyweight";
-        }
-        
-        const nameInput = document.getElementById('customWorkoutName');
-        if (nameInput) nameInput.value = finalTitle;
-        
-        showToast("Rotina forjada com sucesso. Verifique o plano.");
-        if(audioEnabled) speak("Treino gerado conforme arsenal selecionado e literatura biomecânica.");
-    }
 function lockCampaign() {
         const methodSelector = document.getElementById('mainMethodSelector');
         const profileSelector = document.getElementById('profileSelector');
@@ -3297,748 +1300,17 @@ function lockCampaign() {
         updateCampaignDashboard();
         saveCampaignToCloud(); // NOVO: Envia o plano recém-criado para a nuvem
         showToast("Plano Tático Travado com Sucesso!");
-        if(audioEnabled) speak("Plano tático travado. Motor biomecânico atualizado.");
+        if(state.audioEnabled) speak("Plano tático travado. Motor biomecânico atualizado.");
         
         // Roteamento automático para a Linha de Frente (Aba Treinar)
         switchTab('tab-treino', 'nav-treino');
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-function updateDynamicCards() {
-        const selector = document.getElementById('mainMethodSelector');
-        if (!selector) return;
-        
-        const method = selector.value;
-        safeSet('fitapp_main_method', method);
-        
-        // NOVO: Padrão fallback agora é hipertrofia
-        const profile = document.getElementById('profileSelector') ? document.getElementById('profileSelector').value : 'hipertrofia';
-        
-        const cA = document.getElementById('card-A'); const cB = document.getElementById('card-B');
-        const cC = document.getElementById('card-C'); const cD = document.getElementById('card-D');
-        
-        if (!cA || !cB || !cC) return;
 
-        let tA="Treino A", sA="", tB="Treino B", sB="", tC="Treino C", sC="", tD="Treino D", sD="";
 
-        if (cD) cD.style.display = (method === 'abcd') ? 'block' : 'none';
-
-        if (method === 'abc' || method === 'ppl') {
-            if (profile === 'feminino') {
-                tA="Treino A (Posterior)"; sA="Glúteos & Isquiotibiais";
-                tB="Treino B (Superiores)"; sB="Costas, Peito & Braços";
-                tC="Treino C (Anterior)"; sC="Quadríceps & Panturrilhas";
-            } else if (profile === 'definicao') {
-                tA="Push + Cardio"; sA="Peito, Ombro, Tri & Motor";
-                tB="Pull + Core"; sB="Costas, Bi, Trapézio & Abs";
-                tC="Legs + Agilidade"; sC="Pernas Completas & Sprint";
-            } else { // Hipertrofia (Padrão)
-                tA="Treino Push"; sA="Peito, Ombro, Tríceps";
-                tB="Treino Pull"; sB="Costas, Trapézio, Bíceps";
-                tC="Treino Legs"; sC="Pernas & Panturrilhas";
-            }
-        } else if (method === 'abcd') {
-            if (profile === 'feminino') {
-                tA="Treino A (Anterior)"; sA="Quadríceps & Panturrilhas";
-                tB="Treino B (Superiores)"; sB="Tônus Superior Completo";
-                tC="Treino C (Posterior)"; sC="Isquiotibiais & Lombar";
-                tD="Treino D (Glúteos)"; sD="Foco Glúteo Máximo & Médio";
-            } else if (profile === 'definicao') {
-                tA="Peito & Tríceps"; sA="Hipertrofia Clássica";
-                tB="Anterior + Pliometria"; sB="Quadríceps, Panturrilha & Salto";
-                tC="Costas & Bíceps"; sC="Puxadas & Motor Aeróbico";
-                tD="Posterior + Esporte"; sD="Posterior, Glúteo & Arrancada";
-            } else { // Hipertrofia (Padrão)
-                tA="Treino A (Push)"; sA="Peito & Tríceps";
-                tB="Treino B (Foco Anterior)"; sB="Quadríceps & Panturrilhas";
-                tC="Treino C (Pull)"; sC="Costas & Bíceps";
-                tD="Treino D (Foco Posterior)"; sD="Isquiotibiais & Ombros";
-            }
-        } else if (method === 'biset_agonista') {
-            if (profile === 'feminino') {
-                tA="Fritura Posterior"; sA="Glúteos & Isquiotibiais";
-                tB="Fritura Superior"; sB="Superiores (Tônus)";
-                tC="Fritura Anterior"; sC="Quadríceps & Panturrilha";
-            } else if (profile === 'definicao') {
-                tA="Exaustão Push"; sA="Peito/Ombro/Tri + Core";
-                tB="Exaustão Pull"; sB="Costas/Bi + Metabólico";
-                tC="Exaustão Legs"; sC="Pernas Completas + Cardio";
-            } else { // Hipertrofia (Padrão)
-                tA="Bi-Set Push"; sA="Peitoral, Ombro & Tríceps";
-                tB="Bi-Set Pull"; sB="Dorsais, Trapézio & Bíceps";
-                tC="Bi-Set Legs"; sC="Pernas Completas";
-            }
-        } else if (method === 'biset_antagonista') {
-            if (profile === 'feminino') {
-                tA="Pernas Opostas"; sA="Quadríceps vs Posterior";
-                tB="Superiores Opostos"; sB="Costas vs Peito";
-                tC="Glúteo & Core"; sC="Glúteos vs Estabilizadores";
-            } else if (profile === 'definicao') {
-                tA="Derretedor A"; sA="Peito/Costas + Cardio";
-                tB="Derretedor B"; sB="Pernas/Core + Pliometria";
-                tC="Derretedor C"; sC="Ombros/Braços + Resistência";
-            } else { // Hipertrofia (Padrão)
-                tA="Antagonista A"; sA="Peito + Costas";
-                tB="Antagonista B"; sB="Pernas + Core";
-                tC="Antagonista C"; sC="Ombros + Braços";
-            }
-        } else if (method === 'biset_sinergista') {
-            if (profile === 'feminino') {
-                tA="Sinergia Posterior"; sA="Glúteo + Posterior";
-                tB="Sinergia Superior"; sB="Costas/Bíceps & Peito/Tríceps";
-                tC="Sinergia Anterior"; sC="Quadríceps + Adutores";
-            } else if (profile === 'definicao') {
-                tA="Sinergista A"; sA="Peito/Tri + Metabólico";
-                tB="Sinergista B"; sB="Costas/Bi + Aeróbico";
-                tC="Sinergista C"; sC="Pernas/Ombro + Agilidade";
-            } else { // Hipertrofia (Padrão)
-                tA="Sinergista Push"; sA="Peito + Tríceps + Ombro";
-                tB="Sinergista Pull"; sB="Costas + Bíceps + Trapézio";
-                tC="Sinergista Legs"; sC="Pernas Completas";
-            }
-        } else if (method === 'circuito') {
-            if (profile === 'definicao') {
-                tA="Seca Extrema 1"; sA="Cardio & Pliometria Base";
-                tB="Seca Extrema 2"; sB="FullBody Dinâmico";
-                tC="Seca Extrema 3"; sC="Resistência Anaeróbica";
-            } else {
-                tA="Circuito 1"; sA="Metabólico FullBody";
-                tB="Circuito 2"; sB="Cardio & Força";
-                tC="Circuito 3"; sC="Resistência Extrema";
-            }
-        }
-
-        if(cA.querySelector('h3')) { cA.querySelector('h3').textContent = tA; cA.querySelector('p').textContent = sA; }
-        if(cB.querySelector('h3')) { cB.querySelector('h3').textContent = tB; cB.querySelector('p').textContent = sB; }
-        if(cC.querySelector('h3')) { cC.querySelector('h3').textContent = tC; cC.querySelector('p').textContent = sC; }
-        if(cD && cD.querySelector('h3')) { cD.querySelector('h3').textContent = tD; cD.querySelector('p').textContent = sD; }
-
-        // NOVO: Reavalia as marcações de "Feito" sempre que os cartões mudarem
-        if (typeof checkCompletedCards === 'function') checkCompletedCards();
-        if (typeof updateCampaignDashboard === 'function') updateCampaignDashboard(); // NOVO: Força a atualização do banner
-    }
-
-    function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
-        const removeAccents = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
-        
-        // NOVO: Captura o Nível do Atleta (Limita o SNC)
-        const userLevel = els.levelSelector ? els.levelSelector.value : 'intermediario';
-        const maxAllowedLevel = userLevel === 'iniciante' ? 1 : (userLevel === 'intermediario' ? 2 : 3);
-
-        // NOVO: Puxa o arsenal diretamente dos botões na interface
-        const equipChips = document.querySelectorAll('.forge-equip-chip.active');
-        let userArsenal = ['Barra', 'Halter', 'Máquina', 'Cabo', 'Peso Corporal', 'Calistenia']; 
-        if (equipChips && equipChips.length > 0) {
-            userArsenal = [];
-            equipChips.forEach(c => {
-                const tags = c.getAttribute('data-equip').split(',');
-                // 🛡️ TRADUTOR UNIVERSAL: Converte as tags antigas do HTML para o novo Banco de Dados
-                tags.forEach(tag => {
-                    const t = tag.trim();
-                    if (t === 'Barras_Anilhas') userArsenal.push('Barra');
-                    if (t === 'Pesos_Livres') userArsenal.push('Halter');
-                    if (t === 'Maquinas_Polias') userArsenal.push('Máquina', 'Cabo');
-                    if (t === 'Peso_Corporal') userArsenal.push('Peso Corporal');
-                    if (t === 'Calistenia') userArsenal.push('Calistenia');
-                });
-            });
-            userArsenal.push('Funcional_Esportivo'); // Blinda o motor de cardio
-        }
-
-        const getEx = (focusTerms, equipPref, avoidNames, allowBodyweight = false) => {
-            // A Pedra de Roseta: Expandida e Sincronizada com o novo banco de dados (dados_consolidados.js)
-            const mapFocus = {
-                'peito_esternocostal': ['Peitoral Médio (Fibras Esternocostais)', 'Fibras Médias'], 
-                'peito_clavicular': ['Peitoral Superior (Fibras Claviculares)', 'Fibras Superiores'], 
-                'peito_costal': ['Peitoral Inferior (Fibras Abdominais)', 'Fibras Inferiores'], 
-                'peito': ['Peitoral Médio (Fibras Esternocostais)', 'Peitoral Superior (Fibras Claviculares)', 'Peitoral Inferior (Fibras Abdominais)', 'Isolamento (Fibras Esternocostais)', 'Fibras Médias', 'Fibras Superiores', 'Fibras Inferiores'],
-                'costa_largura': ['Latíssimo do Dorso (Foco em Largura)', 'Latíssimo do Dorso (Geral)', 'Latíssimo (Largura)'], 
-                'costa_espessura': ['Latíssimo do Dorso (Foco em Espessura)', 'Romboides/Miolo (Espessura)', 'Romboides (Maior e Menor) e Trapézio Médio/Inferior'], 
-                'costa_isolado': ['Latíssimo do Dorso (Foco em Espessura)', 'Latíssimo do Dorso (Geral)', 'Latíssimo (Largura)'], 
-                'costa': ['Latíssimo do Dorso (Foco em Largura)', 'Latíssimo do Dorso (Foco em Espessura)', 'Latíssimo do Dorso (Geral)', 'Romboides/Miolo (Espessura)'],
-                'ombro_anterior': ['Deltoide Anterior', 'Deltoide Anterior e Lateral', 'Deltoides (Complexo Completo)'], 
-                'ombro_lateral': ['Deltoide Lateral', 'Deltoide Anterior e Lateral', 'Deltoides (Complexo Completo)'], 
-                'ombro_posterior': ['Deltoide Posterior', 'Deltoides (Complexo Completo)'], 
-                'ombro': ['Deltoide Anterior', 'Deltoide Lateral', 'Deltoides (Complexo Completo)', 'Deltoide Anterior e Lateral', 'Deltoide Posterior'], 
-                'trapezio': ['Trapézio Superior', 'Trapézio Superior (Fibras Descendentes)', 'Trapézio (Complexo Completo)'],
-                'perna_quadriceps': ['Quadríceps (Vastos)', 'Quadríceps Femoral (Geral)', 'Reto Femoral (Isolamento)', 'Vastos (Lateral, Medial, Intermédio)', 'Reto Femoral'], 
-                'perna_posterior_gluteo': ['Isquiotibiais (Porção Alongada)', 'Isquiotibiais (Porção Encurtada)', 'Glúteo Máximo', 'Glúteo Máximo (Complexo)', 'Glúteo Médio e Mínimo', 'Glúteo Médio/Mínimo', 'Isquiotibiais', 'Glúteos/Abdutores'], 
-                'perna_adutor_abdutor': ['Adutores', 'Glúteo Médio e Mínimo', 'Glúteo Máximo (Complexo)', 'Glúteos/Abdutores'], 
-                'perna': ['Quadríceps Femoral (Geral)', 'Vastos (Lateral, Medial, Intermédio)', 'Isquiotibiais (Porção Alongada)', 'Isquiotibiais (Porção Encurtada)', 'Glúteo Máximo (Complexo)', 'Glúteo Médio e Mínimo', 'Quadríceps', 'Isquiotibiais'],
-                'panturrilha_gastro': ['Gastrocnêmio e Sóleo (Tríceps Sural)', 'Músculo Gastrocnêmio', 'Panturrilhas (Gastrocnêmios)', 'Panturrilhas'], 
-                'panturrilha_soleo': ['Músculo Sóleo', 'Panturrilhas (Sóleo)', 'Gastrocnêmio e Sóleo (Tríceps Sural)', 'Panturrilhas'], 
-                'panturrilha': ['Gastrocnêmio e Sóleo (Tríceps Sural)', 'Músculo Gastrocnêmio', 'Músculo Sóleo', 'Tibial Anterior', 'Panturrilhas (Gastrocnêmios)', 'Panturrilhas (Sóleo)', 'Panturrilhas'],
-                'triceps_longa': ['Cabeça Longa', 'Tríceps (Complexo Completo)'], 
-                'triceps_lateral_medial': ['Cabeças Lateral e Medial', 'Lateral/Medial', 'Tríceps (Complexo Completo)'], 
-                'triceps_global': ['Tríceps (Complexo Completo)', 'Todas'], 
-                'triceps': ['Tríceps (Complexo Completo)', 'Cabeça Longa', 'Cabeças Lateral e Medial', 'Todas', 'Lateral/Medial'],
-                'biceps_longa': ['Bíceps Braquial (Cabeças Curta e Longa)', 'Cabeça Longa', 'Cabeça Curta/Longa'], 
-                'biceps_curta': ['Cabeça Curta', 'Bíceps Braquial (Cabeças Curta e Longa)', 'Cabeça Curta/Longa'], 
-                'biceps_braquial': ['Músculo Braquial e Braquiorradial', 'Braquial/Antebraço'], 
-                'biceps_global': ['Bíceps Braquial (Cabeças Curta e Longa)', 'Cabeça Curta/Longa'], 
-                'biceps': ['Bíceps Braquial (Cabeças Curta e Longa)', 'Cabeça Curta', 'Músculo Braquial e Braquiorradial', 'Cabeça Curta/Longa', 'Braquial/Antebraço'],
-                'core_supra': ['Reto Abdominal (Porção Superior)', 'Reto Abdominal (Geral)', 'Superior'], 
-                'core_infra': ['Reto Abdominal (Porção Inferior)', 'Reto Abdominal (Geral)', 'Inferior'], 
-                'core_obliquo': ['Oblíquos (Externos e Internos)', 'Oblíquos / Rotação'], 
-                'core_profundo': ['Core (Transverso do Abdômen e Estabilizadores)', 'Estabilização/Anti-extensão'], 
-                'core': ['Reto Abdominal (Geral)', 'Oblíquos (Externos e Internos)', 'Core (Transverso do Abdômen e Estabilizadores)', 'Superior', 'Inferior', 'Estabilização/Anti-extensão', 'Oblíquos / Rotação']
-            };
-            // 🛡️ Tradutor de preferência (EquipPref do motor antigo para o novo banco)
-            const mapEquip = { 'barra': 'Barra', 'halter': 'Halter', 'maquina': 'Máquina', 'cabo': 'Cabo', 'peso_corporal': 'Peso Corporal', 'calistenia': 'Calistenia' };
-
-            // ⬇️ COLE O CÓDIGO NOVO EXATAMENTE AQUI ⬇️
-            // 🛡️ FIREWALL SEMÂNTICO: Atualizado para ler o novo arsenal
-            const isNameAllowed = (exName) => {
-                const nome = (exName || '').toLowerCase();
-                
-                // MODO CASA: Bloqueia bolas, anéis, argolas, barras (mesmo as de porta), halteres e máquinas
-                if (userArsenal.includes('Peso Corporal') && !userArsenal.includes('Calistenia') && !userArsenal.includes('Halter')) {
-                    if (/bola|anel|argola|barra|tração|tracao|haltere|anilhas|maquina|máquina|polia/.test(nome) && !nome.includes('peso corporal')) {
-                        return false;
-                    }
-                }
-                
-                // MODO PARQUE: Permite barras (fixas/paralelas), mas bloqueia pesos e máquinas de academia
-                if (!userArsenal.includes('Halter') && !userArsenal.includes('Barra') && !userArsenal.includes('Máquina')) {
-                    if (/haltere|anilhas|maquina|máquina|polia|cabo/.test(nome)) return false;
-                    if (nome.includes('barra') && !/barra fixa|paralela/.test(nome)) return false;
-                }
-                
-                return true;
-            };
-
-            // Função validadora de Grupo Muscular Base
-            const checkBaseGroup = (dGroup, fTerms) => {
-                const prefix = fTerms[0].split('_')[0]; 
-                const expectedGroup = { 'peito': 'peito', 'costa': 'costas', 'trapezio': 'costas', 'ombro': 'ombros', 'perna': 'pernas', 'panturrilha': 'pernas', 'triceps': 'triceps', 'biceps': 'biceps', 'core': 'core' }[prefix] || 'outros';
-                const actualGroup = typeof getMuscleGroup === 'function' ? getMuscleGroup(dGroup) : 'outros';
-                
-                if (expectedGroup === 'outros') return true; 
-                if (prefix === 'trapezio' && (actualGroup === 'costas' || actualGroup === 'ombros')) return true; 
-                return actualGroup === expectedGroup;
-            };
-
-            let pool = dictionaryData.filter(d => {
-                const exEquip = d.equip || '';
-                const exGroup = d.group || '';
-                const exFocus = d.focus || '';
-
-                // FILTRO DE DIFICULDADE (SNC)
-                const exNivel = d.nivel || 1;
-                if (exNivel > maxAllowedLevel) return false;
-
-                // ESCUDO PRIMÁRIO: O exercício pertence à macro-região certa?
-                if (!checkBaseGroup(exGroup, focusTerms)) return false;
-
-                const validFocuses = focusTerms.flatMap(term => mapFocus[term] || [term]);
-                const matchFocus = validFocuses.includes(exFocus) || validFocuses.some(f => exGroup.includes(f));
-                
-                // NOVO: Filtro de Arsenal do Usuário
-                const exEquipsArray = exEquip.split(',').map(e => e.trim());
-                const isArsenalAllowed = exEquipsArray.some(eq => userArsenal.includes(eq));
-                if (!isArsenalAllowed && exEquip !== '') return false; // Aborta se ele não possui as armas necessárias
-
-                // ⬇️ INSERÇÃO 1: FIREWALL SEMÂNTICO AQUI ⬇️
-                if (!isNameAllowed(d.name)) return false;
-
-                // A Preferência do Blueprint é respeitada apenas se estiver dentro do Arsenal permitido
-                let matchEquip = true;
-                if (equipPref) {
-                    const translatedEquip = mapEquip[equipPref] || equipPref;
-                    matchEquip = exEquipsArray.includes(translatedEquip);
-                }
-                
-                return matchFocus && matchEquip && !avoidNames.includes(d.name);
-            });
-
-            if (pool.length === 0) {
-                pool = dictionaryData.filter(d => {
-                    const exEquip = d.equip || '';
-                    const exGroup = d.group || '';
-                    const exFocus = d.focus || '';
-
-                    // FILTRO DE DIFICULDADE (SNC) FALLBACK
-                    const exNivel = d.nivel || 1;
-                    if (exNivel > maxAllowedLevel && exNivel > (maxAllowedLevel + 1)) return false; 
-
-                    if (!checkBaseGroup(exGroup, focusTerms)) return false;
-                    
-                    // NOVO: Filtro de Arsenal no Fallback
-                    const exEquipsArray = exEquip.split(',').map(e => e.trim());
-                    const isArsenalAllowed = exEquipsArray.some(eq => userArsenal.includes(eq));
-                    if (!isArsenalAllowed && exEquip !== '') return false;
-
-                    // ⬇️ INSERÇÃO 2: FIREWALL SEMÂNTICO AQUI ⬇️
-                    if (!isNameAllowed(d.name)) return false;
-
-                    const validFocuses = focusTerms.flatMap(term => mapFocus[term] || [term]);
-                    return (validFocuses.includes(exFocus) || validFocuses.some(f => exGroup.includes(f))) && !avoidNames.includes(d.name);
-                });
-            }
-            return pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : null;
-        };
-
-        let generatedBlocks = [];
-        let used = [...avoidNamesGlobal]; 
-        
-        const rawProfile = document.getElementById('profileSelector') ? document.getElementById('profileSelector').value : 'hipertrofia';
-        const routeProfile = (rawProfile === 'definicao' || rawProfile === 'masculino') ? 'hipertrofia' : rawProfile;
-
-        // 🛡️ O ESCUDO BIOMECÂNICO (Otimizado para Opção A: Volume Dinâmico Anti-Repetição)
-        const safeSlot = (focusArr, equip = null, target = "10-12 rep") => {
-            let ex = getEx(focusArr, equip, used);
-            
-            // Fallback 1: Tenta sem a restrição de equipamento, mas MANTÉM a trava de repetição (used)
-            if (!ex && equip) ex = getEx(focusArr, null, used); 
-            
-            // Fallback 2: Tenta buscar pelo grupo muscular pai, MANTENDO a trava de repetição
-            if (!ex) {
-                const parentTerm = focusArr[0].split('_')[0]; 
-                ex = getEx([parentTerm], null, used);
-            }
-            
-            // Se encontrou um exercício INÉDITO, salva no array e envia para a tela
-            if (ex) {
-                used.push(ex.name);
-                return { name: ex.name, sets: 4, target: target };
-            }
-            
-            // OPÇÃO A: Se o estoque acabou, retorna nulo para o motor cortar este espaço do treino
-            return null;
-        };
-
-        // --- SISTEMA ABC / PPL (Etapa Alpha: Distribuição 4/4/3/3/3/Completa) ---
-        if (method === 'abc' || method === 'ppl') {
-            let blueprint = [];
-            
-            if (routeProfile === 'feminino') {
-                if (subOpt === 'push' || subOpt === 'A') { // Treino A (Posterior Expandido)
-                    blueprint = [
-                        { title: "Posteriores Base (2 Ex)", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep") ] },
-                        { title: "Glúteos & Isolamento (2 Ex)", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina', "12-15 rep"), safeSlot(['perna_posterior_gluteo'], 'cabo', "12-15 rep") ] },
-                        { title: "Panturrilhas", slots: [ safeSlot(['panturrilha_gastro'], 'maquina', "15-20 rep") ] },
-                        { title: "Core Finisher", slots: [ safeSlot(['core_supra', 'core_infra'], null, "15-20 rep") ] }
-                    ];
-                } else if (subOpt === 'pull' || subOpt === 'B') { // Treino B (Superiores Completo)
-                    blueprint = [
-                        { title: "Costas (4 Exercícios)", slots: [ safeSlot(['costa_largura'], 'maquina', "10-12 rep"), safeSlot(['costa_espessura'], 'barra', "10-12 rep"), safeSlot(['costa_isolado'], 'cabo', "12-15 rep"), safeSlot(['costa'], 'halter', "12-15 rep") ] },
-                        { title: "Peitoral (4 Exercícios)", slots: [ safeSlot(['peito_clavicular'], 'halter', "12-15 rep"), safeSlot(['peito_esternocostal'], 'halter', "10-12 rep"), safeSlot(['peito_costal'], 'cabo', "12-15 rep"), safeSlot(['peito'], 'maquina', "10-12 rep") ] },
-                        { title: "Braços Isolados", slots: [ safeSlot(['triceps_global'], 'cabo', "12-15 rep"), safeSlot(['biceps_global'], 'halter', "12-15 rep") ] }
-                    ];
-                } else { // Treino C (Anterior Expandido)
-                    blueprint = [
-                        { title: "Quadríceps (2 Exercícios)", slots: [ safeSlot(['perna_quadriceps'], 'barra', "10-12 rep"), safeSlot(['perna_quadriceps'], 'halter', "10-12 rep") ] },
-                        { title: "Adutores & Panturrilhas", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina', "12-15 rep"), safeSlot(['panturrilha_soleo'], 'maquina', "15-20 rep") ] },
-                        { title: "Ombros (3 Exercícios)", slots: [ safeSlot(['ombro_anterior'], 'halter', "10-12 rep"), safeSlot(['ombro_lateral'], 'halter', "12-15 rep"), safeSlot(['ombro_posterior'], 'cabo', "12-15 rep") ] }
-                    ];
-                }
-            } else {
-                if (subOpt === 'push' || subOpt === 'A') { // PEITO (4), OMBRO (3), TRICEPS (3)
-                    blueprint = [
-                        { title: "Peitoral Base", slots: [ safeSlot(['peito_clavicular'], 'barra', "8-10 rep"), safeSlot(['peito_esternocostal'], 'halter', "8-10 rep") ] },
-                        { title: "Peitoral Isolamento", slots: [ safeSlot(['peito_costal'], 'cabo', "10-12 rep"), safeSlot(['peito_esternocostal'], 'maquina', "10-12 rep") ] },
-                        { title: "Deltoides", slots: [ safeSlot(['ombro_anterior'], 'halter', "10-12 rep"), safeSlot(['ombro_lateral'], 'halter', "12-15 rep"), safeSlot(['ombro_posterior'], 'cabo', "12-15 rep") ] },
-                        { title: "Tríceps & Core", slots: [ safeSlot(['triceps_longa'], 'halter', "10-12 rep"), safeSlot(['triceps_lateral_medial'], 'cabo', "12-15 rep"), safeSlot(['triceps_global'], 'cabo', "12-15 rep"), safeSlot(['core_supra'], null, "15-20 rep") ] }
-                    ];
-                } else if (subOpt === 'pull' || subOpt === 'B') { // COSTAS (4), BICEPS (3) + TRAPEZIO E CORE
-                    blueprint = [
-                        { title: "Dorsais Base", slots: [ safeSlot(['costa_largura'], 'barra', "8-10 rep"), safeSlot(['costa_espessura'], 'maquina', "8-10 rep") ] },
-                        { title: "Dorsais Isolamento", slots: [ safeSlot(['costa_isolado', 'costa'], 'cabo', "10-12 rep"), safeSlot(['costa_largura'], 'halter', "10-12 rep") ] },
-                        { title: "Bíceps", slots: [ safeSlot(['biceps_longa'], 'barra', "10-12 rep"), safeSlot(['biceps_curta'], 'halter', "10-12 rep"), safeSlot(['biceps_braquial'], 'cabo', "12-15 rep") ] },
-                        { title: "Trapézio & Core", slots: [ safeSlot(['trapezio'], 'halter', "12-15 rep"), safeSlot(['core_obliquo'], null, "15-20 rep") ] }
-                    ];
-                } else { // LEGS COMPLETAS (2 Quad, 2 Post, 1 Glúteo, 1 Panturrilha) + CORE
-                    blueprint = [
-                        { title: "Anterior (Quadríceps)", slots: [ safeSlot(['perna_quadriceps'], 'barra', "8-10 rep"), safeSlot(['perna_quadriceps'], 'maquina', "10-12 rep") ] },
-                        { title: "Posterior (Isquiotibiais)", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep") ] },
-                        { title: "Glúteos & Panturrilhas", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina', "15-20 rep"), safeSlot(['panturrilha_gastro'], 'maquina', "15-20 rep") ] },
-                        { title: "Core Profundo", slots: [ safeSlot(['core_profundo'], null, "15-20 rep"), safeSlot(['core_infra'], null, "15-20 rep") ] }
-                    ];
-                }
-            }
-
-            blueprint.forEach(b => {
-                const validExs = b.slots.filter(s => s !== null);
-                if (validExs.length > 0) {
-                    generatedBlocks.push({ title: b.title, exercises: validExs });
-                }
-            });
-        }
-        
-        // --- SISTEMA ABCD (Etapa Bravo: Distribuição 4/4/3/3/3/Completa) ---
-        else if (method === 'abcd') {
-            let blueprint = [];
-            
-            if (routeProfile === 'feminino') {
-                if (subOpt === 'A') { 
-                    blueprint = [
-                        { title: "Foco Frontal (Quadríceps)", slots: [ safeSlot(['perna_quadriceps'], 'barra', "10-12 rep"), safeSlot(['perna_quadriceps'], 'maquina', "10-12 rep") ] },
-                        { title: "Isolamento Quadríceps", slots: [ safeSlot(['perna_quadriceps'], 'halter', "12-15 rep"), safeSlot(['perna_quadriceps'], 'peso_corporal', "12-15 rep") ] },
-                        { title: "Panturrilhas & Core", slots: [ safeSlot(['panturrilha_gastro'], 'maquina', "15-20 rep"), safeSlot(['core_supra', 'core_infra'], 'peso_corporal', "15-20 rep") ] }
-                    ];
-                } else if (subOpt === 'B') { 
-                    blueprint = [
-                        { title: "Costas (4 Movimentos)", slots: [ safeSlot(['costa_largura'], 'maquina', "10-12 rep"), safeSlot(['costa_espessura'], 'barra', "10-12 rep"), safeSlot(['costa_isolado'], 'cabo', "12-15 rep"), safeSlot(['costa'], 'halter', "12-15 rep") ] },
-                        { title: "Peitoral (4 Movimentos)", slots: [ safeSlot(['peito_clavicular'], 'halter', "12-15 rep"), safeSlot(['peito_esternocostal'], 'halter', "10-12 rep"), safeSlot(['peito_costal'], 'cabo', "12-15 rep"), safeSlot(['peito'], 'maquina', "10-12 rep") ] }
-                    ];
-                } else if (subOpt === 'C') { 
-                    blueprint = [
-                        { title: "Posterior de Perna (Isquiotibiais)", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep") ] },
-                        { title: "Lombar & Isolamento Posterior", slots: [ safeSlot(['costa'], 'peso_corporal', "12-15 rep"), safeSlot(['perna_posterior_gluteo'], 'halter', "12-15 rep") ] },
-                        { title: "Ombros (3 Movimentos)", slots: [ safeSlot(['ombro_anterior'], 'halter', "12-15 rep"), safeSlot(['ombro_lateral'], 'halter', "12-15 rep"), safeSlot(['ombro_posterior'], 'cabo', "12-15 rep") ] }
-                    ];
-                } else if (subOpt === 'D') { 
-                    blueprint = [
-                        { title: "Força Glútea", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep") ] },
-                        { title: "Abdução e Adução", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina', "12-15 rep"), safeSlot(['perna_adutor_abdutor'], 'cabo', "12-15 rep") ] },
-                        { title: "Braços & Core Frontal", slots: [ safeSlot(['triceps_lateral_medial'], 'cabo', "12-15 rep"), safeSlot(['biceps_curta'], 'halter', "12-15 rep"), safeSlot(['core_supra', 'core_infra'], 'peso_corporal', "15-20 rep") ] }
-                    ];
-                }
-            } else {
-                if (subOpt === 'A') { // Peito (4) e Tríceps (3)
-                    blueprint = [
-                        { title: "Peitoral", slots: [ safeSlot(['peito_clavicular'], 'barra', "8-10 rep"), safeSlot(['peito_esternocostal'], 'halter', "10-12 rep"), safeSlot(['peito_costal'], 'cabo', "12-15 rep"), safeSlot(['peito'], 'maquina', "10-12 rep") ] },
-                        { title: "Tríceps", slots: [ safeSlot(['triceps_longa'], 'halter', "10-12 rep"), safeSlot(['triceps_lateral_medial'], 'cabo', "12-15 rep"), safeSlot(['triceps_global'], 'cabo', "12-15 rep") ] },
-                        { title: "Core Superior", slots: [ safeSlot(['core_supra'], null, "15-20 rep") ] }
-                    ];
-                }
-                else if (subOpt === 'B') { // Foco Anterior (Pernas Completas - 6)
-                    blueprint = [
-                        { title: "Quadríceps & Glúteo", slots: [ safeSlot(['perna_quadriceps'], 'barra', "8-10 rep"), safeSlot(['perna_quadriceps'], 'maquina', "10-12 rep"), safeSlot(['perna_adutor_abdutor'], 'maquina', "12-15 rep") ] },
-                        { title: "Isquiotibiais & Panturrilhas", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina', "12-15 rep"), safeSlot(['perna_posterior_gluteo'], 'halter', "12-15 rep"), safeSlot(['panturrilha_gastro'], 'maquina', "15-20 rep") ] }
-                    ];
-                }
-                else if (subOpt === 'C') { // Costas (4) e Bíceps (3)
-                    blueprint = [
-                        { title: "Dorsais", slots: [ safeSlot(['costa_largura'], 'barra', "8-10 rep"), safeSlot(['costa_espessura'], 'maquina', "10-12 rep"), safeSlot(['costa_isolado'], 'cabo', "12-15 rep"), safeSlot(['costa'], 'halter', "10-12 rep") ] },
-                        { title: "Bíceps & Trapézio", slots: [ safeSlot(['biceps_longa'], 'barra', "10-12 rep"), safeSlot(['biceps_curta'], 'halter', "10-12 rep"), safeSlot(['biceps_braquial'], 'cabo', "12-15 rep") ] },
-                        { title: "Core Inferior", slots: [ safeSlot(['core_infra'], null, "15-20 rep") ] }
-                    ];
-                }
-                else if (subOpt === 'D') { // Ombros (3) e Perna Posterior Completa (6)
-                    blueprint = [
-                        { title: "Deltoides", slots: [ safeSlot(['ombro_anterior'], 'halter', "8-10 rep"), safeSlot(['ombro_lateral'], 'halter', "10-12 rep"), safeSlot(['ombro_posterior'], 'cabo', "12-15 rep") ] },
-                        { title: "Posterior e Glúteo", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina', "10-12 rep"), safeSlot(['perna_posterior_gluteo'], 'barra', "10-12 rep"), safeSlot(['perna_adutor_abdutor'], 'maquina', "12-15 rep") ] },
-                        { title: "Quadríceps e Panturrilha", slots: [ safeSlot(['perna_quadriceps'], 'maquina', "12-15 rep"), safeSlot(['perna_quadriceps'], 'halter', "12-15 rep"), safeSlot(['panturrilha_soleo'], 'maquina', "15-20 rep") ] }
-                    ];
-                }
-            }
-
-            blueprint.forEach(b => {
-                const validExs = b.slots.filter(s => s !== null);
-                if (validExs.length > 0) generatedBlocks.push({ title: b.title, exercises: validExs });
-            });
-        } 
-        // --- BI-SETS ANTAGONISTA & MISTO (Paradoxo Resolvido: Opção B - Core Finisher) ---
-        else if (method === 'biset_antagonista') {
-            let blueprint = [];
-            let isA = (subOpt === 'A' || subOpt.includes('peito_costa'));
-            let isB = (subOpt === 'B' || subOpt.includes('biceps_triceps') || (routeProfile === 'feminino' && subOpt.includes('quad_post')));
-            let isC = (!isA && !isB);
-
-            if (routeProfile === 'feminino') {
-                if (isA) { // Peito e Costas
-                    blueprint = [
-                        { title: "Série 1: Peito Sup + Costas Largura", slots: [ safeSlot(['peito_clavicular'], 'halter'), safeSlot(['costa_largura'], 'maquina') ] },
-                        { title: "Série 2: Peito Med + Costas Espessura", slots: [ safeSlot(['peito_esternocostal'], 'halter'), safeSlot(['costa_espessura'], 'barra') ] },
-                        { title: "Série 3: Peito Inf + Costas Lombar", slots: [ safeSlot(['peito_costal'], 'cabo'), safeSlot(['costa'], 'peso_corporal') ] },
-                        { title: "Série 4: Peito Geral + Costas Unilateral", slots: [ safeSlot(['peito'], 'maquina'), safeSlot(['costa'], 'halter') ] }
-                    ];
-                } else if (isB) { // Pernas (Completa - 6)
-                    blueprint = [
-                        { title: "Série 1: Quadríceps + Isquiotibiais", slots: [ safeSlot(['perna_quadriceps'], 'barra'), safeSlot(['perna_posterior_gluteo'], 'maquina') ] },
-                        { title: "Série 2: Quadríceps + Glúteos", slots: [ safeSlot(['perna_quadriceps'], 'maquina'), safeSlot(['perna_posterior_gluteo'], 'barra') ] },
-                        { title: "Série 3: Panturrilha + Core Infra", slots: [ safeSlot(['panturrilha_gastro'], 'maquina'), safeSlot(['core_infra'], 'peso_corporal') ] }
-                    ];
-                } else { // Ombros e Braços
-                    blueprint = [
-                        { title: "Série 1: Bíceps + Tríceps Longa", slots: [ safeSlot(['biceps_longa'], 'halter'), safeSlot(['triceps_longa'], 'halter') ] },
-                        { title: "Série 2: Ombro Ant + Ombro Post", slots: [ safeSlot(['ombro_anterior'], 'halter'), safeSlot(['ombro_posterior'], 'halter') ] },
-                        { title: "Série 3: Ombro Lat + Core (Pump)", slots: [ safeSlot(['ombro_lateral'], 'halter'), safeSlot(['core_profundo'], 'peso_corporal') ] }
-                    ];
-                }
-            } else {
-                if (isA) { // Peito (4) + Costas (4) = 4 Bi-Sets Agrupados
-                    blueprint = [
-                        { title: "Série 1: Peitoral Sup + Costas Largura", slots: [ safeSlot(['peito_clavicular'], 'barra'), safeSlot(['costa_largura'], 'maquina') ] },
-                        { title: "Série 2: Peitoral Med + Costas Espessura", slots: [ safeSlot(['peito_esternocostal'], 'halter'), safeSlot(['costa_espessura'], 'barra') ] },
-                        { title: "Série 3: Peitoral Inf + Costas Lombar", slots: [ safeSlot(['peito_costal'], 'cabo'), safeSlot(['costa'], 'peso_corporal') ] },
-                        { title: "Série 4: Peitoral Isolado + Costas Foco", slots: [ safeSlot(['peito'], 'maquina'), safeSlot(['costa_isolado'], 'halter') ] }
-                    ];
-                } else if (isB) { // Pernas (6) = 3 Bi-Sets
-                    blueprint = [
-                        { title: "Série 1: Quadríceps Vastos + Isquio Alongada", slots: [ safeSlot(['perna_quadriceps'], 'maquina'), safeSlot(['perna_posterior_gluteo'], 'barra') ] },
-                        { title: "Série 2: Quad Reto + Isquio Encurtada", slots: [ safeSlot(['perna_quadriceps'], 'barra'), safeSlot(['perna_posterior_gluteo'], 'maquina') ] },
-                        { title: "Série 3: Glúteo + Panturrilhas", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina'), safeSlot(['panturrilha_gastro'], 'maquina') ] }
-                    ];
-                } else { // Ombros (3) + Braços (3)
-                    blueprint = [
-                        { title: "Série 1: Bíceps + Tríceps", slots: [ safeSlot(['biceps_longa'], 'barra'), safeSlot(['triceps_longa'], 'halter') ] },
-                        { title: "Série 2: Deltoide Ant + Deltoide Post", slots: [ safeSlot(['ombro_anterior'], 'halter'), safeSlot(['ombro_posterior'], 'halter') ] },
-                        { title: "Série 3: Deltoide Lat + Core (Finisher)", slots: [ safeSlot(['ombro_lateral'], 'halter'), safeSlot(['core_obliquo'], 'peso_corporal') ] }, // OPÇÃO B
-                        { title: "Isolamentos Finais (Pump)", slots: [ safeSlot(['biceps_braquial'], 'cabo'), safeSlot(['triceps_lateral_medial'], 'cabo') ] }
-                    ];
-                }
-            }
-
-            blueprint.forEach(b => {
-                const validExs = b.slots.filter(s => s !== null);
-                if (validExs.length > 0) generatedBlocks.push({ title: b.title, exercises: validExs });
-            });
-        }
-        
-        // --- BI-SETS AGONISTA (PRÉ-EXAUSTÃO - Paradoxo Resolvido: Opção B) ---
-        else if (method === 'biset_agonista') {
-            let blueprint = [];
-            let isA = (subOpt === 'A' || subOpt.includes('peito'));
-            let isB = (subOpt === 'B' || subOpt.includes('costa'));
-
-            if (routeProfile === 'feminino') {
-                if (isA) { // Push
-                    blueprint = [
-                        { title: "Série 1: Peito Sup Isolado + Composto", slots: [ safeSlot(['peito_clavicular'], 'halter'), safeSlot(['peito_clavicular'], 'barra') ] },
-                        { title: "Série 2: Peito Médio + Inferior", slots: [ safeSlot(['peito_esternocostal'], 'halter'), safeSlot(['peito_costal'], 'cabo') ] },
-                        { title: "Série 3: Deltoide Lateral Exaustão + Core", slots: [ safeSlot(['ombro_lateral'], 'halter'), safeSlot(['core_obliquo'], 'peso_corporal') ] },
-                        { title: "Isolamento Finais", slots: [ safeSlot(['ombro_anterior'], 'halter'), safeSlot(['triceps_global'], 'cabo') ] }
-                    ];
-                } else if (isB) { // Pull
-                    blueprint = [
-                        { title: "Série 1: Costas Largura Iso + Comp", slots: [ safeSlot(['costa_largura'], 'cabo'), safeSlot(['costa_largura'], 'maquina') ] },
-                        { title: "Série 2: Costas Espessura + Lombar", slots: [ safeSlot(['costa_espessura'], 'barra'), safeSlot(['costa'], 'peso_corporal') ] },
-                        { title: "Série 3: Bíceps + Core", slots: [ safeSlot(['biceps_longa'], 'barra'), safeSlot(['core_infra'], 'peso_corporal') ] },
-                        { title: "Isolamento Finais", slots: [ safeSlot(['ombro_posterior'], 'halter'), safeSlot(['biceps_braquial'], 'cabo') ] }
-                    ];
-                } else { // Legs
-                    blueprint = [
-                        { title: "Série 1: Quadríceps Iso + Comp", slots: [ safeSlot(['perna_quadriceps'], 'maquina'), safeSlot(['perna_quadriceps'], 'barra') ] },
-                        { title: "Série 2: Isquiotibiais Iso + Comp", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina'), safeSlot(['perna_posterior_gluteo'], 'barra') ] },
-                        { title: "Série 3: Glúteos + Panturrilhas", slots: [ safeSlot(['perna_posterior_gluteo'], 'cabo'), safeSlot(['panturrilha_gastro'], 'maquina') ] }
-                    ];
-                }
-            } else {
-                if (isA) { // Peito (4) e Ombros (3)
-                    blueprint = [
-                        { title: "Série 1: Peitoral Médio + Superior", slots: [ safeSlot(['peito_esternocostal'], 'halter'), safeSlot(['peito_clavicular'], 'barra') ] },
-                        { title: "Série 2: Peitoral Inferior + Isolamento", slots: [ safeSlot(['peito_costal'], 'cabo'), safeSlot(['peito'], 'maquina') ] },
-                        { title: "Série 3: Deltoide Lateral + Core", slots: [ safeSlot(['ombro_lateral'], 'halter'), safeSlot(['core_supra'], 'peso_corporal') ] }, // Opção B
-                        { title: "Isolamentos", slots: [ safeSlot(['ombro_anterior'], 'halter'), safeSlot(['ombro_posterior'], 'cabo') ] }
-                    ];
-                } else if (isB) { // Costas (4) e Bíceps (3)
-                    blueprint = [
-                        { title: "Série 1: Costas Largura + Espessura", slots: [ safeSlot(['costa_largura'], 'cabo'), safeSlot(['costa_espessura'], 'barra') ] },
-                        { title: "Série 2: Costas Foco + Lombar", slots: [ safeSlot(['costa_isolado'], 'halter'), safeSlot(['costa'], 'peso_corporal') ] },
-                        { title: "Série 3: Bíceps Longa + Core", slots: [ safeSlot(['biceps_longa'], 'barra'), safeSlot(['core_obliquo'], 'peso_corporal') ] }, // Opção B
-                        { title: "Isolamentos", slots: [ safeSlot(['biceps_curta'], 'halter'), safeSlot(['biceps_braquial'], 'cabo') ] }
-                    ];
-                } else { // Legs (6)
-                    blueprint = [
-                        { title: "Série 1: Quadríceps Reto + Vastos", slots: [ safeSlot(['perna_quadriceps'], 'maquina'), safeSlot(['perna_quadriceps'], 'barra') ] },
-                        { title: "Série 2: Isquio Encurtada + Alongada", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina'), safeSlot(['perna_posterior_gluteo'], 'barra') ] },
-                        { title: "Série 3: Glúteo + Panturrilhas", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra'), safeSlot(['panturrilha_gastro'], 'maquina') ] }
-                    ];
-                }
-            }
-
-            blueprint.forEach(b => {
-                const validExs = b.slots.filter(s => s !== null);
-                if (validExs.length > 0) generatedBlocks.push({ title: b.title, exercises: validExs });
-            });
-        }
-        
-        // --- BI-SETS SINERGISTA (Paradoxo Resolvido: Opção B) ---
-        else if (method === 'biset_sinergista') {
-            let blueprint = [];
-            let isA = (subOpt === 'A' || subOpt.includes('peito'));
-            let isB = (subOpt === 'B' || subOpt.includes('costa'));
-
-            if (routeProfile === 'feminino') {
-                if (isA) { // Sinergia Posterior
-                    blueprint = [
-                        { title: "Série 1: Quadríceps + Glúteo", slots: [ safeSlot(['perna_quadriceps'], 'barra'), safeSlot(['perna_posterior_gluteo'], 'barra') ] },
-                        { title: "Série 2: Isquiotibiais + Glúteo Isolado", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina'), safeSlot(['perna_posterior_gluteo'], 'cabo') ] },
-                        { title: "Série 3: Adutores + Core", slots: [ safeSlot(['perna_adutor_abdutor'], 'maquina'), safeSlot(['core_supra'], 'peso_corporal') ] }
-                    ];
-                } else if (isB) { // Superiores
-                    blueprint = [
-                        { title: "Série 1: Costas + Bíceps", slots: [ safeSlot(['costa_largura'], 'maquina'), safeSlot(['biceps_longa'], 'halter') ] },
-                        { title: "Série 2: Peito + Tríceps", slots: [ safeSlot(['peito_esternocostal'], 'halter'), safeSlot(['triceps_lateral_medial'], 'cabo') ] },
-                        { title: "Série 3: Ombros + Core", slots: [ safeSlot(['ombro_anterior'], 'halter'), safeSlot(['core_obliquo'], 'peso_corporal') ] }
-                    ];
-                } else { // Quadriceps + Pant
-                    blueprint = [
-                        { title: "Série 1: Quadríceps Foco", slots: [ safeSlot(['perna_quadriceps'], 'maquina'), safeSlot(['perna_quadriceps'], 'halter') ] },
-                        { title: "Série 2: Isquiotibiais Foco", slots: [ safeSlot(['perna_posterior_gluteo'], 'maquina'), safeSlot(['perna_posterior_gluteo'], 'halter') ] },
-                        { title: "Série 3: Panturrilhas + Core", slots: [ safeSlot(['panturrilha_gastro'], 'maquina'), safeSlot(['core_infra'], 'peso_corporal') ] }
-                    ];
-                }
-            } else {
-                if (isA) { // Push
-                    blueprint = [
-                        { title: "Série 1: Peitoral Sup + Tríceps Longa", slots: [ safeSlot(['peito_clavicular'], 'barra'), safeSlot(['triceps_longa'], 'halter') ] },
-                        { title: "Série 2: Peitoral Med + Tríceps Lateral", slots: [ safeSlot(['peito_esternocostal'], 'halter'), safeSlot(['triceps_lateral_medial'], 'cabo') ] },
-                        { title: "Série 3: Peitoral Inf + Core", slots: [ safeSlot(['peito_costal'], 'cabo'), safeSlot(['core_obliquo'], 'peso_corporal') ] },
-                        { title: "Isolamentos", slots: [ safeSlot(['peito'], 'maquina'), safeSlot(['triceps_global'], 'cabo') ] }
-                    ];
-                } else if (isB) { // Pull
-                    blueprint = [
-                        { title: "Série 1: Costas Largura + Bíceps", slots: [ safeSlot(['costa_largura'], 'maquina'), safeSlot(['biceps_longa'], 'barra') ] },
-                        { title: "Série 2: Costas Espessura + Braquial", slots: [ safeSlot(['costa_espessura'], 'barra'), safeSlot(['biceps_braquial'], 'cabo') ] },
-                        { title: "Série 3: Costas Isolado + Core", slots: [ safeSlot(['costa_isolado'], 'halter'), safeSlot(['core_profundo'], 'peso_corporal') ] },
-                        { title: "Isolamentos", slots: [ safeSlot(['costa'], 'peso_corporal'), safeSlot(['biceps_curta'], 'halter') ] }
-                    ];
-                } else { // Legs
-                    blueprint = [
-                        { title: "Série 1: Quadríceps + Panturrilha", slots: [ safeSlot(['perna_quadriceps'], 'barra'), safeSlot(['panturrilha_gastro'], 'maquina') ] },
-                        { title: "Série 2: Isquio + Glúteo", slots: [ safeSlot(['perna_posterior_gluteo'], 'barra'), safeSlot(['perna_posterior_gluteo'], 'maquina') ] },
-                        { title: "Série 3: Quad + Isquio Encurtada", slots: [ safeSlot(['perna_quadriceps'], 'maquina'), safeSlot(['perna_posterior_gluteo'], 'maquina') ] }
-                    ];
-                }
-            }
-
-            blueprint.forEach(b => {
-                const validExs = b.slots.filter(s => s !== null);
-                if (validExs.length > 0) generatedBlocks.push({ title: b.title, exercises: validExs });
-            });
-        }
-        
-        // --- CIRCUITO METABÓLICO (FullBody - 8 Estações) ---
-        else if (method === 'circuito') {
-            let blueprint = [];
-            
-            if (rawProfile === 'definicao') {
-                blueprint = [{
-                    title: "Circuito Extremo (Derretedor)",
-                    slots: [
-                        safeSlot(['esporte_aceleracao', 'cardio_motor'], 'peso_corporal', "30 seg"),
-                        safeSlot(['perna_quadriceps'], 'peso_corporal', "15-20 rep"),
-                        safeSlot(['costa_largura'], 'maquina', "15-20 rep"),
-                        safeSlot(['perna_posterior_gluteo'], 'halter', "15-20 rep"),
-                        safeSlot(['peito_esternocostal'], 'peso_corporal', "15-20 rep"),
-                        safeSlot(['esporte_pliometria'], 'peso_corporal', "45 seg"),
-                        safeSlot(['core_profundo', 'core_supra'], 'peso_corporal', "1 min"),
-                        safeSlot(['cardio_resistencia'], 'peso_corporal', "Até a falha")
-                    ]
-                }];
-            } else {
-                blueprint = [{
-                    title: "Rodada Metabólica FullBody",
-                    slots: [
-                        safeSlot(['outros', 'mobilidade', 'cardio_motor'], null, "1 min"),
-                        safeSlot(['esporte_pliometria', 'cardio_motor'], 'peso_corporal', "45 seg"),
-                        safeSlot(['perna_quadriceps'], 'peso_corporal', "15-20 rep"),
-                        safeSlot(['costa_espessura', 'costa_largura'], 'maquina', "15-20 rep"),
-                        safeSlot(['perna_posterior_gluteo'], 'halter', "15-20 rep"),
-                        safeSlot(['peito_esternocostal', 'ombro_anterior'], 'peso_corporal', "15-20 rep"),
-                        safeSlot(['core_obliquo', 'core_supra'], 'peso_corporal', "15-20 rep"),
-                        safeSlot(['cardio_resistencia', 'cardio_motor'], 'peso_corporal', "1 min")
-                    ]
-                }];
-            }
-
-            blueprint.forEach(b => {
-                const validExs = b.slots.filter(s => s !== null);
-                if (validExs.length > 0) generatedBlocks.push({ title: b.title, exercises: validExs });
-            });
-        }
-        
-        // --- CALISTENIA (Peso do Corpo e Barras) ---
-        else if (method === 'calistenia') {
-            let blueprint = [];
-            let isA = (subOpt === 'A' || subOpt === 'push');
-            let isB = (subOpt === 'B' || subOpt === 'pull');
-            
-            if (routeProfile === 'feminino') {
-                if (isA) {
-                    blueprint = [
-                        { title: "Força Inferior Frontal", slots: [ safeSlot(['perna_quadriceps'], 'peso_corporal', "Falha"), safeSlot(['perna_quadriceps'], 'peso_corporal', "Falha") ] },
-                        { title: "Força Inferior Posterior", slots: [ safeSlot(['perna_posterior_gluteo'], 'peso_corporal', "Falha"), safeSlot(['perna_posterior_gluteo'], 'peso_corporal', "Falha") ] },
-                        { title: "Core Isométrico", slots: [ safeSlot(['core_profundo'], 'peso_corporal', "Isometria Máx") ] }
-                    ];
-                } else if (isB) {
-                    blueprint = [
-                        { title: "Core Dinâmico", slots: [ safeSlot(['core_supra'], 'peso_corporal', "20 rep"), safeSlot(['core_infra'], 'peso_corporal', "20 rep") ] },
-                        { title: "Estabilidade Inferior", slots: [ safeSlot(['perna_adutor_abdutor'], 'peso_corporal', "20 rep"), safeSlot(['panturrilha_gastro'], 'peso_corporal', "Falha") ] }
-                    ];
-                } else {
-                    blueprint = [
-                        { title: "FullBody Calistenia", slots: [ safeSlot(['perna_quadriceps'], 'peso_corporal', "Falha"), safeSlot(['perna_posterior_gluteo'], 'peso_corporal', "Falha"), safeSlot(['core_supra'], 'peso_corporal', "Falha") ] }
-                    ];
-                }
-            } else {
-                if (isA) { // Push
-                    blueprint = [
-                        { title: "Força Relativa (Empurrar)", slots: [ safeSlot(['peito_esternocostal', 'peito_clavicular'], 'calistenia', "Falha"), safeSlot(['triceps_global'], 'peso_corporal', "Falha") ] },
-                        { title: "Isolamento Corporal", slots: [ safeSlot(['peito_esternocostal'], 'peso_corporal', "Falha") ] },
-                        { title: "Core Isométrico", slots: [ safeSlot(['core_profundo'], 'peso_corporal', "Isometria Máx") ] }
-                    ];
-                } else if (isB) { // Pull
-                    blueprint = [
-                        { title: "Força Relativa (Puxar)", slots: [ safeSlot(['costa_largura'], 'calistenia', "Falha"), safeSlot(['biceps_global'], 'calistenia', "Falha") ] },
-                        { title: "Sinergia Corporal", slots: [ safeSlot(['costa_espessura'], 'calistenia', "Falha") ] },
-                        { title: "Core Dinâmico", slots: [ safeSlot(['core_supra', 'core_infra'], 'peso_corporal', "Falha") ] }
-                    ];
-                } else { // Legs
-                    blueprint = [
-                        { title: "Base Inferior", slots: [ safeSlot(['perna_quadriceps'], 'peso_corporal', "Falha"), safeSlot(['perna_posterior_gluteo'], 'peso_corporal', "Falha") ] },
-                        { title: "Resistência", slots: [ safeSlot(['panturrilha_gastro'], 'peso_corporal', "Falha") ] }
-                    ];
-                }
-            }
-
-            blueprint.forEach(b => {
-                const validExs = b.slots.filter(s => s !== null);
-                if (validExs.length > 0) generatedBlocks.push({ title: b.title, exercises: validExs });
-            });
-        }
-
-        // ==========================================================
-        // 🧲 ALGORITMO DE GRAVIDADE (CORE FINISHER)
-        // ==========================================================
-        const isCoreEx = (exName) => {
-            const dictItem = typeof dictionaryData !== 'undefined' ? dictionaryData.find(d => d.name === exName) : null;
-            if (dictItem) {
-                const g = (dictItem.group || '').toLowerCase();
-                const f = (dictItem.focus || '').toLowerCase();
-                return g.includes('core') || f.includes('obliquo') || f.includes('abdom') || f.includes('estabiliza');
-            }
-            return false;
-        };
-
-        // 1. Gravidade Interna: Empurra o abdômen para o final da sua própria caixa (Vital para Circuitos)
-        generatedBlocks.forEach(bloco => {
-            bloco.exercises.sort((a, b) => {
-                const aCore = isCoreEx(a.name);
-                const bCore = isCoreEx(b.name);
-                if (aCore && !bCore) return 1;
-                if (!aCore && bCore) return -1;
-                return 0;
-            });
-        });
-
-        // 2. Gravidade Externa: Empurra o bloco inteiro para o final do treino
-        generatedBlocks.sort((a, b) => {
-            const aHasCore = a.exercises.some(ex => isCoreEx(ex.name)) || a.title.toLowerCase().includes('core');
-            const bHasCore = b.exercises.some(ex => isCoreEx(ex.name)) || b.title.toLowerCase().includes('core');
-            if (aHasCore && !bHasCore) return 1;
-            if (!aHasCore && bHasCore) return -1;
-            return 0;
-        });
-
-        // ==========================================================
-        // 🕒 MANIPULAÇÃO DINÂMICA DO RELÓGIO DE DESCANSO
-        // ==========================================================
-        setTimeout(() => {
-            if (typeof FitApp !== 'undefined' && FitApp.adjustRestTime) {
-                if (rawProfile === 'definicao') FitApp.adjustRestTime(method === 'circuito' ? 30 : 45);
-                else FitApp.adjustRestTime(method === 'circuito' ? 45 : 60);
-            }
-        }, 500);
-
-        if(generatedBlocks.length === 0) generatedBlocks = [{ title: "Rotina de Contingência", exercises: [] }];
-        return generatedBlocks;
-    }
 // --- NOVO: FUNÇÕES DE TERRENO E CAMPANHA ---
     function toggleGlobalEnv() {
-        if (isWorkoutActive) {
+        if (state.isWorkoutActive) {
             showToast("⚠️ Operação Negada: O cronômetro está rodando. Cancele o combate primeiro.");
             return;
         }
@@ -4053,11 +1325,11 @@ function updateDynamicCards() {
         updateEnvUI();
         
         let envText = currentEnv === 'academia' ? 'Academia' : (currentEnv === 'casa' ? 'Casa' : 'Praia');
-        if(typeof audioEnabled !== 'undefined' && audioEnabled) speak(`Modo ${envText} ativado.`);
+        if(typeof state.audioEnabled !== 'undefined' && state.audioEnabled) speak(`Modo ${envText} ativado.`);
         showToast(`Terreno alterado para: ${envText}`);
 
         // Recarregamento Automático
-        if (currentWorkoutType && !isWorkoutActive) {
+        if (state.currentWorkoutType && !state.isWorkoutActive) {
             loadWorkout();
         }
     }
@@ -4210,7 +1482,7 @@ function updateDynamicCards() {
         const allowedEquips = envTarget === 'praia' ? ['Peso Corporal', 'Calistenia'] : ['Peso Corporal'];
         const preferredEquip = envTarget === 'praia' ? 'Calistenia' : 'Peso Corporal';
 
-        currentRoutine.forEach(bloco => {
+        state.currentRoutine.forEach(bloco => {
             bloco.exercises.forEach(ex => {
                 const dictItem = dictionaryData.find(d => d.name === ex.name);
                 if (dictItem) {
@@ -4265,18 +1537,15 @@ function updateDynamicCards() {
         });
     }
     return { 
-        init, filterLibrary, openSwapModal, confirmSwap, startWorkout, startCardio, toggleCardioTimer, openForgeModal, updateForgeOptions, generateForgedWorkout, updateDynamicCards,
+        init, filterLibrary, openSwapModal, confirmSwap, startWorkout, startCardio, toggleCardioTimer, updateDynamicCards,
         beginWorkoutExecution, acceptSnap, declineSnap, cancelWorkoutPreview,
         toggleGlobalEnv, updateEnvUI, updateCampaignDashboard, resetCampaign, lockCampaign,
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,
-        renderIsolationChart,
-        adjustRestTime, changeSets, cloneFirstSet, exportStravaCard,
-        toggleAutoPilot, startAutoPilot, stopAutoPilot, 
+        renderIsolationChart, exportStravaCard,
         openHistoryModal, switchHistoryTab, deleteHistoryLog,
         saveCustomWorkout, deleteCustomWorkout,
-        openImportAiModal, processWorkoutWithAI, switchAiTab,
-        startPrepPhase, startCooldownTimer, skipCooldown, finalizeSession, // NOVO: As chaves das novas Fases liberadas para o HTML
-        safeGet, safeSet, showToast, speak,
+        finalizeSession, checkSequence, startPrepPhase,
+        safeGet, safeSet, showToast, speak, saveWorkoutState, updateProgress, clearWorkoutState,
         openDict: (name) => { 
             switchTab('tab-biblioteca', 'nav-biblioteca'); 
             const searchInp = document.getElementById('searchInput');
@@ -4286,164 +1555,66 @@ function updateDynamicCards() {
             } 
         } 
     };
-})();
-function checkCompletedCards() {
-        const history = JSON.parse(FitApp.safeGet('fitapp_week_log') || '[]');
-        
-        // 1. Remove a classe de todos os cartões primeiro para resetar a tela
-        ['A', 'B', 'C', 'D'].forEach(t => {
-            const card = document.getElementById('card-' + t);
-            if (card) card.classList.remove('completed-card');
-        });
-
-        if (history.length === 0) return;
-
-        const d = new Date();
-        const offset = d.getTimezoneOffset() * 60000;
-        const dataHoje = (new Date(d.getTime() - offset)).toISOString().split('T')[0];
-        const currentMethod = document.getElementById('mainMethodSelector') ? document.getElementById('mainMethodSelector').value : 'ppl';
-
-        // 2. Filtra apenas os treinos feitos HOJE e do MESMO MÉTODO selecionado
-        const treinosHoje = history.filter(h => h.date === dataHoje && (h.method === currentMethod || !h.method)).map(h => h.tipo);
-
-        // 3. Aplica a opacidade apenas nos treinos válidos
-        treinosHoje.forEach(tipo => {
-            const card = document.getElementById('card-' + tipo);
-            if (card) card.classList.add('completed-card');
-        });
-        
-        // 4. Regra do Ciclo: Se completou a matriz, reseta visualmente
-        let cycleComplete = false;
-        if (currentMethod === 'abcd' && treinosHoje.includes('A') && treinosHoje.includes('B') && treinosHoje.includes('C') && treinosHoje.includes('D')) cycleComplete = true;
-        else if (currentMethod !== 'abcd' && treinosHoje.includes('A') && treinosHoje.includes('B') && treinosHoje.includes('C')) cycleComplete = true;
-
-        if (cycleComplete) {
-            ['A', 'B', 'C', 'D'].forEach(t => {
-                const card = document.getElementById('card-' + t);
-                if (card) card.classList.remove('completed-card');
-            });
-        }
-    }
+})(); // 🛡️ FECHAMENTO CRÍTICO DO MÓDULO FITAPP (Não apagar)
 
 // ==========================================
-// ☁️ UPLINK DA CAMPANHA (FRENTE 2)
+// 🌐 DECLARAÇÕES GLOBAIS (ESTRITAMENTE FORA DO FITAPP)
 // ==========================================
-    async function saveCampaignToCloud() {
-        if (typeof firebase === 'undefined') return;
-        const user = firebase.auth().currentUser;
-        if (!user) return;
-        
-        const db = firebase.firestore();
-        // BLINDAGEM: Adicionado o prefixo FitApp. para acessar as variáveis de dentro da cápsula
-        const payload = {
-            campaign_data: FitApp.safeGet('fitapp_campaign_data') || '',
-            campaign_count: FitApp.safeGet('fitapp_campaign_count') || '0',
-            blacklist: FitApp.safeGet('fitapp_blacklist') || '[]',
-            main_method: FitApp.safeGet('fitapp_main_method') || 'abc',
-            profile: FitApp.safeGet('fitapp_profile') || 'hipertrofia',
-            level: FitApp.safeGet('fitapp_level') || 'intermediario'
-        };
-        
-        try {
-            await db.collection('usuarios').doc(user.uid).set({ campanha: payload }, { merge: true });
-        } catch (error) {
-            console.warn("Aviso Tático: Falha ao sincronizar campanha com a nuvem.", error);
-        }
-    }
+window.FitApp = FitApp;
 
-    async function loadCampaignFromCloud() {
-        if (typeof firebase === 'undefined') return;
-        const user = firebase.auth().currentUser;
-        if (!user) return;
-        
-        const db = firebase.firestore();
-        try {
-            const doc = await db.collection('usuarios').doc(user.uid).get();
-            if (doc.exists && doc.data().campanha) {
-                const data = doc.data().campanha;
-                
-                // BLINDAGEM: Adicionado o prefixo FitApp.
-                if (data.campaign_data) FitApp.safeSet('fitapp_campaign_data', data.campaign_data);
-                if (data.campaign_count) FitApp.safeSet('fitapp_campaign_count', data.campaign_count);
-                if (data.blacklist) FitApp.safeSet('fitapp_blacklist', data.blacklist);
-                if (data.main_method) FitApp.safeSet('fitapp_main_method', data.main_method);
-                if (data.profile) FitApp.safeSet('fitapp_profile', data.profile);
-                if (data.level) FitApp.safeSet('fitapp_level', data.level);
-                
-                const elsProfile = document.getElementById('profileSelector');
-                if (elsProfile && data.profile) elsProfile.value = data.profile;
-                
-                const elsMethod = document.getElementById('mainMethodSelector');
-                if (elsMethod && data.main_method) elsMethod.value = data.main_method;
-                
-                const elsLevel = document.getElementById('levelSelector');
-                if (elsLevel && data.level) elsLevel.value = data.level;
-            }
-        } catch (error) {
-            console.warn("Aviso Tático: Falha ao resgatar campanha da nuvem.", error);
-        }
-    }
+// Conexão do Motor de Combate (combat.js)
+window.FitApp.adjustRestTime = adjustRestTime;
+window.FitApp.startRestTimer = startRestTimer;
+window.FitApp.stopRestTimer = stopRestTimer;
+window.FitApp.changeSets = changeSets;
+window.FitApp.cloneFirstSet = cloneFirstSet;
+window.FitApp.updateGlobalTimer = updateGlobalTimer;
+window.FitApp.startCooldownTimer = startCooldownTimer;
+window.FitApp.skipCooldown = skipCooldown;
+window.FitApp.toggleAutoPilot = toggleAutoPilot;
+window.FitApp.startAutoPilot = startAutoPilot;
+window.FitApp.executeAutoPhase = executeAutoPhase;
+window.FitApp.stopAutoPilot = stopAutoPilot;
 
-async function syncTacticalDictionary() {
-    try {
-        const db = firebase.firestore();
-        // Tenta baixar as diretrizes do Comandante
-        const snapshot = await db.collection('dicionario').get();
+// Conexão do Cérebro Neural (forge.js)
+window.FitApp.openForgeModal = openForgeModal;
+window.FitApp.updateForgeOptions = updateForgeOptions;
+window.FitApp.generateForgedWorkout = generateForgedWorkout;
+window.FitApp.executeForgeLogic = executeForgeLogic;
 
-        if (snapshot.empty) return; // Se a nuvem estiver vazia, segue a vida normal
+// Conexão da Inteligência Artificial (ai.js)
+window.FitApp.fetchAIFeedback = fetchAIFeedback;
+window.FitApp.openImportAiModal = openImportAiModal;
+window.FitApp.switchAiTab = switchAiTab;
+window.FitApp.processWorkoutWithAI = processWorkoutWithAI;
+window.FitApp.carregarProximoTreinoIA = carregarProximoTreinoIA;
+// Conexão da Interface Visual (ui.js)
+window.FitApp.renderLibrary = renderLibrary;
+window.FitApp.filterLibrary = filterLibrary;
+window.FitApp.renderPreviewList = renderPreviewList;
+window.FitApp.renderCurrentRoutine = renderCurrentRoutine;
+window.FitApp.updateDynamicCards = updateDynamicCards;
+window.FitApp.applyTheme = applyTheme;
+window.FitApp.switchTab = switchTab;
+window.FitApp.renderWeeklyCalendar = renderWeeklyCalendar;
+window.FitApp.renderMonthlyCalendar = renderMonthlyCalendar;
+window.FitApp.renderCustomWorkouts = renderCustomWorkouts;
+window.FitApp.renderHistoryList = renderHistoryList;
+window.FitApp.renderMetricsChart = renderMetricsChart;
+window.FitApp.renderIsolationChart = renderIsolationChart;
 
-        if (typeof dictionaryData === 'undefined') return;
+window.FitApp.removeExercise = removeExercise;
+window.FitApp.openAddExerciseModal = openAddExerciseModal;
+window.FitApp.setCategoryFilter = setCategoryFilter;
+window.FitApp.filterAddModal = filterAddModal;
+window.FitApp.confirmAddExercise = confirmAddExercise;
+window.FitApp.checkCompletedCards = checkCompletedCards;
+window.FitApp.checkSequence = FitApp.checkSequence;
+window.FitApp.startPrepPhase = FitApp.startPrepPhase;
+window.FitApp.saveWorkoutState = FitApp.saveWorkoutState;
+window.FitApp.updateProgress = FitApp.updateProgress;
+window.FitApp.clearWorkoutState = FitApp.clearWorkoutState;
 
-        let atualizados = 0;
-        let novos = 0;
-
-        snapshot.forEach(doc => {
-            const data = doc.data();
-            const exerciseName = data.nome || data.name; // Flexibilidade na chave
-            if (!exerciseName) return; // Trava de segurança contra documentos vazios
-            
-            const newTip = data.dica || data.desc;
-            const newGroup = data.grupo || data.group;
-            
-            // NOVO: Coleta as novas tags biomecânicas da Nuvem
-            const newFocus = data.foco || data.focus || 'Geral';
-            const newEquip = data.equipamento || data.equip || 'Peso_Corporal';
-            const newNivel = parseInt(data.nivel) || 1;
-
-            // Procura se o exercício já existe no 'dados.js'
-            const existingIndex = dictionaryData.findIndex(item => item.name.toLowerCase() === exerciseName.toLowerCase());
-
-            if (existingIndex !== -1) {
-                // OVERRIDE: Substitui a dica de fábrica pela diretriz da Nuvem
-                if(newTip) dictionaryData[existingIndex].desc = newTip;
-                if(newGroup) dictionaryData[existingIndex].group = newGroup;
-                if(data.foco || data.focus) dictionaryData[existingIndex].focus = newFocus;
-                if(data.equipamento || data.equip) dictionaryData[existingIndex].equip = newEquip;
-                if(data.nivel) dictionaryData[existingIndex].nivel = newNivel;
-                atualizados++;
-            } else {
-                // ADD: Se for uma arma nova criada na Torre de Controle, adiciona com o esqueleto completo
-                dictionaryData.push({
-                    name: exerciseName,
-                    group: newGroup || 'Geral',
-                    focus: newFocus,
-                    equip: newEquip,
-                    desc: newTip || 'Instrução pendente.',
-                    nivel: newNivel
-                });
-                novos++;
-            }
-        });
-        
-        console.log(`📡 Spotter Digital Sincronizado: ${atualizados} atualizados, ${novos} novos padrões adotados.`);
-        
-        // Se a aba da biblioteca estiver aberta, recarrega a lista para mostrar os novos exercícios
-        if (typeof filterLibrary === 'function') {
-            filterLibrary();
-        }
-
-    } catch (error) {
-        console.log("⚠️ Modo Offline: Utilizando dicionário de fábrica (dados.js).");
-    }
-}
+// Ignição do Sistema
 document.addEventListener('DOMContentLoaded', FitApp.init);
+

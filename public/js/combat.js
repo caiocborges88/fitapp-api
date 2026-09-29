@@ -1,0 +1,266 @@
+import { state } from './state.js';
+
+// 🛡️ DECLARAÇÃO ÚNICA DAS VARIÁVEIS DE ESTADO DO COMBATE
+let currentTimerEl = null;
+let currentTimerTarget = null;
+let currentTimerExercise = null;
+let currentTacticalTip = "";
+let rafTimerId = null;
+let isRestTimerRunning = false;
+
+let autoBIndex = null;
+let autoEIndex = null;
+let autoExec = 0;
+let autoRest = 0;
+let autoTimeout = null;
+let isAutoActive = false;
+
+// 🛡️ FUNÇÃO CENTRAL DO CRONÓMETRO (Restaurada)
+export function startRestTimer(targetEl, exerciseName = "", isAdjust = false) {
+    stopRestTimer();
+    isRestTimerRunning = true;
+    currentTimerTarget = targetEl;
+    currentTimerExercise = exerciseName;
+
+    currentTimerEl = document.createElement('div');
+    currentTimerEl.className = 'rest-timer-active';
+    currentTimerEl.style.color = '#00ff88';
+    currentTimerEl.style.fontWeight = 'bold';
+    currentTimerEl.style.marginTop = '10px';
+    currentTimerEl.style.fontSize = '18px';
+    currentTimerEl.style.textAlign = 'center';
+    
+    // Calcula o tempo alvo baseando-se no tempo real do sistema (evita atrasos do navegador)
+    const endTime = Date.now() + (state.currentRestTime * 1000) + 1000;
+
+    if (!isAdjust && state.audioEnabled) {
+        window.FitApp.speak(`Descanso. Respire.`);
+    }
+
+    const updateTimer = () => {
+        if (!isRestTimerRunning) return;
+        const remaining = Math.max(0, endTime - Date.now());
+        const secs = Math.floor(remaining / 1000);
+        
+        let m = Math.floor(secs / 60).toString().padStart(2, '0');
+        let s = (secs % 60).toString().padStart(2, '0');
+        currentTimerEl.textContent = `⏱️ Descanso: ${m}:${s}`;
+        
+        if (secs === 10 && !isAdjust && state.audioEnabled) {
+            window.FitApp.speak("Dez segundos. Prepare-se.");
+        }
+
+        if (secs > 0) {
+            rafTimerId = requestAnimationFrame(updateTimer);
+        } else {
+            stopRestTimer();
+            if (state.audioEnabled) {
+                window.FitApp.speak("Ação.");
+            }
+        }
+    };
+
+    targetEl.appendChild(currentTimerEl);
+    rafTimerId = requestAnimationFrame(updateTimer);
+}
+
+export function adjustRestTime(newTime) {
+    state.currentRestTime = newTime;
+    if(currentTimerTarget) {
+        // O 'true' avisa ao motor que é apenas um ajuste, para ele não repetir o áudio
+        startRestTimer(currentTimerTarget, currentTimerExercise, true); 
+    }
+}
+
+export function stopRestTimer() { 
+    isRestTimerRunning = false;
+    if (rafTimerId) cancelAnimationFrame(rafTimerId);
+    
+    if (currentTimerEl && currentTimerEl.parentNode) {
+        currentTimerEl.parentNode.removeChild(currentTimerEl);
+    }
+}
+
+export function changeSets(bIndex, eIndex, delta) {
+    const ex = state.currentRoutine[bIndex].exercises[eIndex];
+    
+    if (delta > 0) {
+        ex.sets++;
+        if(!ex.setsData) ex.setsData = [];
+        ex.setsData.push({ kg: '', reps: '', checked: false });
+    } else if (delta < 0 && ex.sets > 1) {
+        ex.sets--;
+        const removedSet = ex.setsData.pop();
+        // Desfaz a contabilidade se a série removida já estava marcada como concluída
+        if (removedSet && removedSet.checked) {
+            state.checkedSets--;
+            state.todayLog = state.todayLog.filter(log => !(log.exercise === ex.name && log.set === (ex.sets + 1)));
+        }
+    }
+    
+    window.FitApp.saveWorkoutState();
+    window.FitApp.renderCurrentRoutine(); // ERRO CORRIGIDO (renderstate -> renderCurrentRoutine)
+    if(state.audioEnabled && delta > 0) window.FitApp.speak("Série adicionada.");
+}
+
+export function cloneFirstSet(bIndex, eIndex) {
+    const ex = state.currentRoutine[bIndex].exercises[eIndex];
+    if (!ex.setsData || ex.setsData.length === 0) return;
+    
+    const baseKg = ex.setsData[0].kg;
+    const baseReps = ex.setsData[0].reps;
+    
+    for (let i = 1; i < ex.sets; i++) {
+        if (!ex.setsData[i]) ex.setsData[i] = { kg: '', reps: '', checked: false };
+        if (!ex.setsData[i].checked) { // Só substitui as séries que não foram concluídas
+            ex.setsData[i].kg = baseKg;
+            ex.setsData[i].reps = baseReps;
+        }
+    }
+    window.FitApp.saveWorkoutState();
+    window.FitApp.renderCurrentRoutine(); 
+    window.FitApp.showToast("Cargas da S1 replicadas.");
+    if(state.audioEnabled) window.FitApp.speak("Cargas replicadas.");
+}
+
+export function updateGlobalTimer() {
+    if (!state.workoutStartTime) return;
+    const now = Date.now();
+    const diffInSeconds = Math.floor((now - state.workoutStartTime) / 1000);
+    const h = Math.floor(diffInSeconds / 3600).toString().padStart(2, '0');
+    const m = Math.floor((diffInSeconds % 3600) / 60).toString().padStart(2, '0');
+    const s = (diffInSeconds % 60).toString().padStart(2, '0');
+    const display = document.getElementById('globalTimerDisplay');
+    if (display) display.textContent = `${h}:${m}:${s}`;
+}
+
+export function startCooldownTimer() {
+    const btn = document.getElementById('btnStartCooldown');
+    btn.style.display = 'none'; // Esconde o botão para não dar cliques duplos
+    
+    let timeLeft = 90;
+    const display = document.getElementById('cooldownTimerDisplay');
+    if(state.audioEnabled) window.FitApp.speak("Protocolo de recuperação iniciado. Respire.");
+    
+    state.cooldownTimerInterval = setInterval(() => {
+        timeLeft--;
+        let m = Math.floor(timeLeft/60).toString().padStart(2,'0');
+        let s = (timeLeft%60).toString().padStart(2,'0');
+        display.textContent = `${m}:${s}`;
+        
+        if (timeLeft <= 0) {
+            clearInterval(state.cooldownTimerInterval);
+            window.FitApp.showToast("Volta à calma concluída! Bônus Adquirido.");
+            if(state.audioEnabled) window.FitApp.speak("Recuperação finalizada. Excelente combate.");
+            window.FitApp.finalizeSession(true, true); // True = Ganhou bônus
+        }
+    }, 1000);
+}
+
+export function skipCooldown() {
+    if(state.cooldownTimerInterval) clearInterval(state.cooldownTimerInterval);
+    window.FitApp.finalizeSession(false, true); // False = Pulou, sem bônus extra
+}
+
+export function toggleAutoPilot(bIndex, eIndex) {
+    if (isAutoActive && autoBIndex === bIndex && autoEIndex === eIndex) {
+        stopAutoPilot();
+    } else {
+        if (isAutoActive) stopAutoPilot(); // Aborta se estiver rodando noutro exercício
+        autoBIndex = bIndex;
+        autoEIndex = eIndex;
+        document.getElementById('autoPilotModal').style.display = 'flex';
+    }
+}
+
+export function startAutoPilot() {
+    autoExec = parseInt(document.getElementById('autoExecTime').value) || 40;
+    autoRest = parseInt(document.getElementById('autoRestTime').value) || 45;
+    
+    document.getElementById('autoPilotModal').style.display = 'none';
+    isAutoActive = true;
+    
+    const btn = document.getElementById(`btnAuto_${autoBIndex}_${autoEIndex}`);
+    if (btn) {
+        btn.innerHTML = '🛑 Parar';
+        btn.style.color = '#ff4444';
+        btn.style.borderColor = '#ff4444';
+        btn.style.background = 'rgba(255, 68, 68, 0.1)';
+    }
+    
+    if(state.audioEnabled) window.FitApp.speak("Protocolo hands-free ativado. Prepare-se.");
+    window.FitApp.showToast("Modo Auto iniciado. Guarde o dispositivo.");
+    
+    // Timer de respiro de 3 segundos antes do combate iniciar
+    autoTimeout = setTimeout(() => { executeAutoPhase(); }, 3000);
+}
+
+export function executeAutoPhase() {
+    if (!isAutoActive) return;
+    
+    const ex = state.currentRoutine[autoBIndex].exercises[autoEIndex];
+    
+    // Escaneia qual é a próxima série que ainda não foi concluída
+    let nextSet = -1;
+    for(let i = 0; i < ex.sets; i++) {
+        if(!ex.setsData[i] || !ex.setsData[i].checked) {
+            nextSet = i + 1;
+            break;
+        }
+    }
+    
+    if (nextSet === -1) {
+        stopAutoPilot();
+        if(state.audioEnabled) window.FitApp.speak("Ciclo de séries concluído com sucesso.");
+        window.FitApp.showToast("Automação finalizada. Alvo abatido.");
+        return;
+    }
+
+    if(state.audioEnabled) window.FitApp.speak("Ação.");
+    window.FitApp.showToast(`Série ${nextSet} em andamento...`);
+    
+    const btn = document.getElementById(`btnAuto_${autoBIndex}_${autoEIndex}`);
+    let timeLeft = autoExec;
+    if (btn) btn.innerHTML = `🛑 Ação: ${timeLeft}s`;
+    
+    // TELEMETRIA: Relógio regressivo visual para a fase de Ação
+    autoTimeout = setInterval(() => {
+        if (!isAutoActive) {
+            clearInterval(autoTimeout);
+            return;
+        }
+
+        timeLeft--;
+        if (btn) btn.innerHTML = `🛑 Ação: ${timeLeft}s`;
+
+        if (timeLeft <= 0) {
+            clearInterval(autoTimeout); // Para o relógio de ação
+            if (btn) btn.innerHTML = `🛑 Descanso...`;
+
+            // Localiza a caixa de seleção específica via ID e marca
+            const chk = document.getElementById(`chk_set_${autoBIndex}_${autoEIndex}_${nextSet}`);
+            if (chk && !chk.checked) {
+                adjustRestTime(autoRest); // Seta o cronómetro para o tempo definido no Piloto
+                chk.click(); // O clique fantasma dispara a UI de descanso e o salvamento na nuvem
+            }
+            
+            // Aguarda o término do descanso (+2s de margem de segurança para o áudio respirar)
+            autoTimeout = setTimeout(() => {
+                executeAutoPhase(); // Chama o loop novamente para a próxima série
+            }, (autoRest + 2) * 1000);
+        }
+    }, 1000);
+}
+
+export function stopAutoPilot() {
+    isAutoActive = false;
+    clearInterval(autoTimeout); 
+    const btn = document.getElementById(`btnAuto_${autoBIndex}_${autoEIndex}`);
+    if (btn) {
+        btn.innerHTML = '🤖 Auto';
+        btn.style.color = '#00ff88';
+        btn.style.borderColor = '#00ff88';
+        btn.style.background = 'rgba(0, 255, 136, 0.1)';
+    }
+    window.FitApp.showToast("Piloto Automático desativado.");
+}

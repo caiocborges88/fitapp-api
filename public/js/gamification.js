@@ -440,3 +440,4 @@ var FitGamification = (() => {
         addBonusSweat
     };
 })();
+window.FitGamification = FitGamification;
