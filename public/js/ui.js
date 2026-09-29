@@ -1,6 +1,7 @@
 import { state } from './state.js';
 import { escapeHTML, parseSafeFloat, getMuscleGroup } from './utils.js';
 let radarChartInstance = null;
+let isolationChartInstance = null;
 
     export function renderLibrary() {
         const grid = document.getElementById('libraryGrid');
