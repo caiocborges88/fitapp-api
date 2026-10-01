@@ -425,7 +425,18 @@ let isolationChartInstance = null;
             
             bloco.exercises.forEach((ex, eIndex) => {
                 const blockDiv = document.createElement('div'); blockDiv.className = 'exercise-block';
-                const linkIcon = (isBiset && eIndex < bloco.exercises.length - 1) ? ' <span style="color:#00ff88;">🔗</span>' : '';
+                
+                // NOVO: Lê a propriedade antagonist. Se a classe do Bi-set for de antagonistas (ex: push/pull), injeta o ícone Tático ⚔️ (em vez do 🔗 padrão).
+                const isSmartBiset = ex.antagonist && ex.antagonist !== 'Nenhum' && isBiset;
+                let linkIcon = '';
+                if (isBiset && eIndex < bloco.exercises.length - 1) {
+                    linkIcon = isSmartBiset ? ' <span style="color:#ffaa00; font-size: 16px;" title="Bi-Set Antagonista (Forja Inteligente)">⚔️</span>' : ' <span style="color:#00ff88;">🔗</span>';
+                }
+
+                // Opção Tática: Se o par for um bi-set antagonista, altera o rebordo esquerdo para refletir agressividade
+                if (isBiset && isSmartBiset && card.className === 'biset-card') {
+                   card.style.borderLeft = '4px solid #ffaa00';
+                }
                 
                 const safeName = escapeHTML(ex.name);
                 const safeTarget = escapeHTML(ex.target);
