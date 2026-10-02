@@ -239,7 +239,7 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
     } 
     
     // ==========================================================
-    // MOTOR INTELIGENTE DE BI-SETS (DNA BIOMECÂNICO)
+    // MOTOR INTELIGENTE DE BI-SETS (DNA BIOMECÂNICO & BÚSSOLA)
     // ==========================================================
     else if (method.includes('biset')) {
         let style = 'sinergista'; // O seu favorito como padrão
@@ -248,13 +248,29 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
 
         const s = subOpt.toLowerCase();
         let primaryMuscles = [];
+        let expectedSecondary = []; // <--- NEW: A Bússola de Sinergistas
         
-        // Deduz o Eixo do Dia com base na escolha do sub-menu
-        if (s.includes('peito') || s.includes('push')) primaryMuscles = ['Peitoral', 'Peitoral', 'Peitoral'];
-        else if (s.includes('costa') || s.includes('pull')) primaryMuscles = ['Costas', 'Costas', 'Costas'];
-        else if (s.includes('perna') || s.includes('quad')) primaryMuscles = ['Quadríceps', 'Isquiotibiais', 'Glúteos'];
-        else if (s.includes('ombro') || s.includes('braco') || s.includes('biceps')) primaryMuscles = ['Ombros', 'Bíceps', 'Tríceps'];
-        else primaryMuscles = ['Peitoral', 'Costas', 'Pernas']; // Fallback geral
+        // Deduz o Eixo do Dia com base na escolha do sub-menu e define os sinergistas PERMITIDOS
+        if (s.includes('peito') || s.includes('push')) {
+            primaryMuscles = ['Peitoral', 'Peitoral', 'Peitoral'];
+            expectedSecondary = ['tríceps', 'ombro anterior'];
+        }
+        else if (s.includes('costa') || s.includes('pull')) {
+            primaryMuscles = ['Costas', 'Costas', 'Costas'];
+            expectedSecondary = ['bíceps', 'trapézio', 'lombar'];
+        }
+        else if (s.includes('perna') || s.includes('quad')) {
+            primaryMuscles = ['Quadríceps', 'Isquiotibiais', 'Glúteos'];
+            expectedSecondary = ['panturrilha', 'glúteo', 'ombro']; // Caso de perna_ombro
+        }
+        else if (s.includes('ombro') || s.includes('braco') || s.includes('biceps')) {
+            primaryMuscles = ['Ombros', 'Bíceps', 'Tríceps'];
+            expectedSecondary = ['trapézio', 'antebraço'];
+        }
+        else {
+            primaryMuscles = ['Peitoral', 'Costas', 'Pernas']; 
+            expectedSecondary = [];
+        }
 
         let repTarget = rawProfile === 'definicao' ? "15-20 rep" : (rawProfile === 'tatico' ? "6-8 rep" : "10-12 rep");
 
@@ -264,14 +280,30 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
             if (exA) {
                 let targetB = primary; // Fallback para pré-exaustão (Agonista)
                 
-                // Mágica Biomecânica: Lê o ADN do Exercício A para definir o alvo B
+                // Mágica Biomecânica com Bússola: Filtra o ADN para não cruzar perna com braço
                 if (style === 'sinergista' && exA.obj.synergist && exA.obj.synergist.length > 0) {
-                    targetB = exA.obj.synergist[Math.floor(Math.random() * exA.obj.synergist.length)];
+                    const normalize = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
+                    
+                    // Filtra apenas os sinergistas que pertencem ao eixo do dia
+                    const validSynergists = exA.obj.synergist.filter(syn => {
+                        const synNorm = normalize(syn);
+                        return expectedSecondary.some(expected => synNorm.includes(normalize(expected)));
+                    });
+
+                    if (validSynergists.length > 0) {
+                        // O exercício tem um sinergista válido para hoje (ex: Terra tem Trapézio)
+                        targetB = validSynergists[Math.floor(Math.random() * validSynergists.length)];
+                    } else if (expectedSecondary.length > 0) {
+                        // O exercício tem sinergistas "fora do eixo" (ex: Pulldown quer puxar Core). Forçamos Bíceps.
+                        targetB = expectedSecondary[0];
+                    } else {
+                        targetB = exA.obj.synergist[Math.floor(Math.random() * exA.obj.synergist.length)];
+                    }
                 } else if (style === 'antagonista' && exA.obj.antagonist && exA.obj.antagonist !== 'Nenhum') {
                     targetB = exA.obj.antagonist;
                 }
 
-                // Puxa o Exercício B com base na decisão do ADN
+                // Puxa o Exercício B com base na decisão filtrada
                 const exB = pullExercise(targetB, null, repTarget);
 
                 if (exB) {
