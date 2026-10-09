@@ -299,14 +299,14 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
     }
 
     // ==========================================================
-    // ALGORITMO DE GRAVIDADE (CORE FINISHER)
+    // ALGORITMO DE GRAVIDADE (CORE FINISHER) - BLINDADO
     // ==========================================================
     const isCoreEx = (exName) => {
         const dictItem = typeof window.dictionaryData !== 'undefined' ? window.dictionaryData.find(d => d.name === exName) : null;
         if (dictItem) {
             const g = (dictItem.group || '').toLowerCase();
-            const f = (dictItem.subLevel || '').toLowerCase();
-            return g.includes('core') || f.includes('obliquo') || f.includes('abdom') || f.includes('estabiliza');
+            // A Bússola agora é estrita: só desce se o grupo principal for literalmente "core"
+            return g === 'core';
         }
         return false;
     };
