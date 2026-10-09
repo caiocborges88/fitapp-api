@@ -93,7 +93,14 @@ export function generateForgedWorkout() {
 export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
     let generatedBlocks = [];
     let used = [...avoidNamesGlobal]; 
+    
     const rawProfile = document.getElementById('profileSelector') ? document.getElementById('profileSelector').value : 'hipertrofia';
+    
+    // ==========================================================
+    // A NOVA ENGRENAGEM: O MODULADOR DE VOLUME E FADIGA
+    // ==========================================================
+    const userLevel = state.els.levelSelector ? state.els.levelSelector.value : 'intermediario';
+    const baseSets = userLevel === 'iniciante' ? 3 : 4; // Iniciantes fazem 3x, restantes fazem 4x
 
     // 1. MAPEAMENTO DE ARSENAL
     const equipChips = document.querySelectorAll('.forge-equip-chip.active');
@@ -118,6 +125,10 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
 
         let pool = window.dictionaryData.filter(d => {
             if (used.includes(d.name)) return false; 
+            
+            // ESCUDO DO INICIANTE: Bloqueia apenas exercícios extremos (Nível 3)
+            if (userLevel === 'iniciante' && d.nivel === 3) return false;
+
             const matchGroup = (d.agonist && normalize(d.agonist) === target) || (d.group && normalize(d.group) === target);
             if (!matchGroup) return false;
             if (subTarget && (!d.subLevel || !normalize(d.subLevel).includes(subTarget))) return false;
@@ -130,6 +141,8 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
         if (pool.length === 0 && subTarget) {
             pool = window.dictionaryData.filter(d => {
                 if (used.includes(d.name)) return false;
+                if (userLevel === 'iniciante' && d.nivel === 3) return false;
+                
                 const matchGroup = (d.agonist && normalize(d.agonist) === target) || (d.group && normalize(d.group) === target);
                 if (!matchGroup) return false;
                 const exEquips = (d.equip || '').split(',').map(e => e.trim());
@@ -142,6 +155,8 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
         if (pool.length === 0) {
             pool = window.dictionaryData.filter(d => {
                 if (used.includes(d.name)) return false;
+                if (userLevel === 'iniciante' && d.nivel === 3) return false;
+
                 const matchGroup = (d.agonist && normalize(d.agonist) === target) || (d.group && normalize(d.group) === target);
                 return matchGroup && d.equip === 'Peso Corporal';
             });
@@ -156,7 +171,8 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
 
             const ex = pool[Math.floor(Math.random() * pool.length)];
             used.push(ex.name);
-            return { name: ex.name, sets: 4, target: targetReps, obj: ex, antagonist: ex.antagonist || 'Nenhum' };
+            // Injeta as séries baseadas no nível (baseSets)
+            return { name: ex.name, sets: baseSets, target: targetReps, obj: ex, antagonist: ex.antagonist || 'Nenhum' };
         }
         return null;
     };
@@ -181,9 +197,7 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
         }
     } 
     
-    // ==========================================================
     // 4. LÓGICA DO MOTOR DE BI-SETS (MATRIZ DE VOLUME 3:2 & PARES MISTOS)
-    // ==========================================================
     else if (method.includes('biset')) {
         let style = 'sinergista';
         if (method.includes('antagonista')) style = 'antagonista';
@@ -192,7 +206,6 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
         const s = subOpt.toLowerCase();
         let primaryTargets = [];
         
-        // MATRIZ RÍGIDA: Garante rácio perfeito e ignora os devaneios do "synergist" original
         if (s.includes('peito') || s.includes('push')) {
             primaryTargets = [
                 ['Peitoral', 'Esternocostal', 'Tríceps', null], 
@@ -233,7 +246,6 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
                 let targetB_sub = p[1];
                 let exB = null;
                 
-                // Aplica a ordem direta da Matriz
                 if (style === 'sinergista') {
                     targetB_agonist = p[2];
                     targetB_sub = p[3];
@@ -244,7 +256,6 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
 
                 exB = pullExercise(targetB_agonist, targetB_sub, repTarget);
 
-                // Fallback Anti-Asfixia
                 let isMixed = false;
                 if (!exB) {
                     exB = pullExercise('Core', null, "15-20 rep");
@@ -261,14 +272,14 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
                     generatedBlocks.push({
                         title: `Série ${idx + 1}: ${blockTitle}`,
                         exercises: [
-                            { name: exA.name, sets: 4, target: repTarget },
-                            { name: exB.name, sets: 4, target: exB.target } 
+                            { name: exA.name, sets: baseSets, target: repTarget },
+                            { name: exB.name, sets: baseSets, target: exB.target } 
                         ]
                     });
                 } else {
                     generatedBlocks.push({
                         title: `Série ${idx + 1}: Foco Isolado (Arsenal Esgotado)`,
-                        exercises: [{ name: exA.name, sets: 4, target: repTarget }]
+                        exercises: [{ name: exA.name, sets: baseSets, target: repTarget }]
                     });
                 }
             }
@@ -299,14 +310,13 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
     }
 
     // ==========================================================
-    // ALGORITMO DE GRAVIDADE (CORE FINISHER) - BLINDADO
+    // ALGORITMO DE GRAVIDADE (CORE FINISHER)
     // ==========================================================
     const isCoreEx = (exName) => {
         const dictItem = typeof window.dictionaryData !== 'undefined' ? window.dictionaryData.find(d => d.name === exName) : null;
         if (dictItem) {
             const g = (dictItem.group || '').toLowerCase();
-            // A Bússola agora é estrita: só desce se o grupo principal for literalmente "core"
-            return g === 'core';
+            return g === 'core'; // Estrito para não empurrar peitoral abdominal
         }
         return false;
     };
@@ -329,15 +339,26 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
         return 0;
     });
 
+    // ==========================================================
+    // RELÓGIO METABÓLICO DINÂMICO
+    // ==========================================================
     setTimeout(() => {
         if (typeof FitApp !== 'undefined' && FitApp.adjustRestTime) {
-            if (rawProfile === 'definicao') FitApp.adjustRestTime(method === 'circuito' ? 30 : 45);
-            else FitApp.adjustRestTime(method === 'circuito' ? 45 : 60);
+            let rest = 60;
+            if (rawProfile === 'definicao') rest = method === 'circuito' ? 30 : 45;
+            else if (rawProfile === 'tatico') rest = 45;
+            
+            if (userLevel === 'iniciante') rest += 15; // + Descanso
+            if (userLevel === 'avancado' && rawProfile !== 'definicao') rest -= 15; // - Descanso
+            
+            FitApp.adjustRestTime(rest);
         }
     }, 500);
 
     if(generatedBlocks.length === 0) generatedBlocks = [{ title: "Rotina de Contingência", exercises: [] }];
     return generatedBlocks;
 }
+
+export function forgeSmartBiset() { return null; }
 
 export function forgeSmartBiset() { return null; } // Função obsoleta mantida para evitar quebra de referência global
