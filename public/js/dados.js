@@ -356,3 +356,33 @@ window.dictionaryData = [
         agonist: "Mobilidade Geral", antagonist: "Nenhum", synergist: [] 
     }
 ];
+// =========================================================================
+// RESTAURAÇÃO: BANCO DE FIGURINHAS (ÁLBUM)
+// =========================================================================
+
+window.stickersDB = [
+    { id: 1, name: "Halter de Ferro", rarity: "comum", icon: "🏋️", page: 1 },
+    { id: 2, name: "Anilha 20kg", rarity: "comum", icon: "💿", page: 1 },
+    { id: 3, name: "Kettlebell", rarity: "comum", icon: "💣", page: 1 },
+    { id: 4, name: "Barra Olímpica", rarity: "comum", icon: "📏", page: 1 },
+    { id: 5, name: "Banco Reto", rarity: "comum", icon: "💺", page: 1 },
+    { id: 6, name: "Corda de Pular", rarity: "comum", icon: "➰", page: 1 },
+    { id: 7, name: "Leg Press 45", rarity: "prata", icon: "🦵", page: 2 },
+    { id: 8, name: "Crossover", rarity: "prata", icon: "✖️", page: 2 },
+    { id: 9, name: "Hack Machine", rarity: "comum", icon: "🏗️", page: 2 },
+    { id: 10, name: "Mesa Flexora", rarity: "comum", icon: "🛏️", page: 2 },
+    { id: 11, name: "Extensora", rarity: "comum", icon: "🪑", page: 2 },
+    { id: 12, name: "Smith Machine", rarity: "prata", icon: "⛓️", page: 2 },
+    { id: 13, name: "Supino Reto", rarity: "ouro", icon: "🔥", page: 3 },
+    { id: 14, name: "Agachamento", rarity: "ouro", icon: "🍑", page: 3 },
+    { id: 15, name: "Terra (Deadlift)", rarity: "ouro", icon: "💀", page: 3 },
+    { id: 16, name: "Barra Fixa", rarity: "prata", icon: "🦍", page: 3 },
+    { id: 17, name: "Desenvolvimento", rarity: "prata", icon: "🛡️", page: 3 },
+    { id: 18, name: "Remada Curvada", rarity: "prata", icon: "🚣", page: 3 },
+    { id: 19, name: "Mestre da Disciplina", rarity: "holografico", icon: "👑", page: 4 },
+    { id: 20, name: "Força Bruta", rarity: "holografico", icon: "🦾", page: 4 },
+    { id: 21, name: "Resistência Base", rarity: "holografico", icon: "🔋", page: 4 },
+    { id: 22, name: "Simetria Perfeita", rarity: "holografico", icon: "📐", page: 4 },
+    { id: 23, name: "Foco Inabalável", rarity: "holografico", icon: "👁️", page: 4 },
+    { id: 24, name: "O Titã", rarity: "holografico", icon: "🏆", page: 4 }
+];
