@@ -1,5 +1,4 @@
 import { state } from './state.js';
-import { getMuscleGroup } from './utils.js';
 
 export function openForgeModal() {
     document.getElementById('forgeModal').style.display = 'flex';
@@ -8,52 +7,22 @@ export function openForgeModal() {
 
 export function updateForgeOptions() {
     const method = document.getElementById('forgeMethod').value;
-    const subBox = document.getElementById('forgeSubOptionsBox');
     const subSelect = document.getElementById('forgeSubSelect');
-    const subLabel = document.getElementById('forgeSubLabel');
+    const subBox = document.getElementById('forgeSubOptionsBox');
     
-    subSelect.innerHTML = '';
     subBox.style.display = 'block';
-
+    
+    // FASE 1: Só o método Tradicional está ativo. Os outros mostram aviso.
     if (method === 'ppl' || method === 'abc') {
-        subLabel.textContent = "Selecione o Eixo:";
+        document.getElementById('forgeSubLabel').textContent = "Selecione o Eixo (Apenas Tradicional Ativo):";
         subSelect.innerHTML = `
             <option value="push">Empurrar (Peito, Ombro, Tríceps)</option>
             <option value="pull">Puxar (Costas, Trapézio, Bíceps)</option>
             <option value="legs">Pernas e Core (Quadríceps, Isquios, Glúteo)</option>
         `;
-    } else if (method === 'abcd') {
-        subLabel.textContent = "Selecione a Divisão:";
-        subSelect.innerHTML = `
-            <option value="A">Treino A (Frontal)</option>
-            <option value="B">Treino B (Tração/Costas)</option>
-            <option value="C">Treino C (Posterior/Ombros)</option>
-            <option value="D">Treino D (Braços/Isoladores)</option>
-        `;
-    } else if (method === 'biset_agonista') {
-        subLabel.textContent = "Músculo Alvo (Pré-Exaustão):";
-        subSelect.innerHTML = `
-            <option value="peito">Peitoral</option>
-            <option value="costa">Dorsais</option>
-            <option value="perna">Pernas Completas</option>
-            <option value="ombro">Deltoides</option>
-        `;
-    } else if (method === 'biset_antagonista') {
-        subLabel.textContent = "Pares de Combate (Opostos):";
-        subSelect.innerHTML = `
-            <option value="peito_costa">Peito + Costas</option>
-            <option value="biceps_triceps">Bíceps + Tríceps</option>
-            <option value="quad_post">Quadríceps + Posterior</option>
-        `;
-    } else if (method === 'biset_sinergista') {
-        subLabel.textContent = "Pares Sinergistas (Principal + Auxiliar):";
-        subSelect.innerHTML = `
-            <option value="peito_triceps">Peito + Tríceps</option>
-            <option value="costa_biceps">Costas + Bíceps</option>
-            <option value="perna_ombro">Pernas + Ombros</option>
-        `;
     } else {
-        subBox.style.display = 'none';
+        document.getElementById('forgeSubLabel').textContent = "Manutenção em Curso:";
+        subSelect.innerHTML = `<option value="bloqueado">A aguardar reconstrução (Fase 2)</option>`;
     }
 }
 
@@ -63,331 +32,141 @@ export function generateForgedWorkout() {
     
     const activeChips = document.querySelectorAll('.forge-equip-chip.active');
     if (activeChips.length === 0) {
-        window.FitApp.showToast("⚠️ Operação Negada: Selecione pelo menos uma arma no seu arsenal.");
+        window.FitApp.showToast("Selecione pelo menos uma arma no arsenal.");
         return;
     }
 
     state.currentRoutine = executeForgeLogic(method, subOpt, []);
     state.currentWorkoutType = 'Livre';
-    
     document.getElementById('forgeModal').style.display = 'none';
     window.FitApp.loadWorkout(); 
-    
-    const selectEl = document.getElementById('forgeSubSelect');
-    let finalTitle = "Rotina Forjada";
-    if (selectEl && selectEl.options.length > 0 && selectEl.closest('div').style.display !== 'none') {
-        finalTitle = selectEl.options[selectEl.selectedIndex].text;
-    } else if (method === 'circuito') {
-        finalTitle = "Circuito Metabólico";
-    } else if (method === 'calistenia') {
-        finalTitle = "Calistenia Bodyweight";
-    }
-    
-    const nameInput = document.getElementById('customWorkoutName');
-    if (nameInput) nameInput.value = finalTitle;
-    
-    window.FitApp.showToast("Rotina forjada com sucesso. Verifique o plano.");
-    if(state.audioEnabled) window.FitApp.speak("Treino gerado conforme arsenal selecionado e literatura biomecânica.");
 }
 
 export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
-    const userLevel = state.els.levelSelector ? state.els.levelSelector.value : 'intermediario';
-    const maxAllowedLevel = userLevel === 'iniciante' ? 1 : (userLevel === 'intermediario' ? 2 : 3);
-
-    const equipChips = document.querySelectorAll('.forge-equip-chip.active');
-    let userArsenal = ['Barra', 'Halter', 'Máquina', 'Cabo', 'Peso Corporal', 'Calistenia']; 
-    if (equipChips && equipChips.length > 0) {
-        userArsenal = [];
-        equipChips.forEach(c => {
-            const tags = c.getAttribute('data-equip').split(',');
-            tags.forEach(tag => {
-                const t = tag.trim();
-                if (t === 'Barras_Anilhas') userArsenal.push('Barra');
-                if (t === 'Pesos_Livres') userArsenal.push('Halter');
-                if (t === 'Maquinas_Polias') userArsenal.push('Máquina', 'Cabo');
-                if (t === 'Peso_Corporal') userArsenal.push('Peso Corporal');
-                if (t === 'Calistenia') userArsenal.push('Calistenia');
-            });
-        });
-        userArsenal.push('Funcional_Esportivo');
-    }
-
     let generatedBlocks = [];
     let used = [...avoidNamesGlobal]; 
-    const rawProfile = document.getElementById('profileSelector') ? document.getElementById('profileSelector').value : 'hipertrofia';
 
-    // ==========================================================
-    // MOTOR DE FULFILLMENT: A ESCADA DE SOBREVIVÊNCIA
-    // ==========================================================
-    const pullExercise = (targetGroup, targetSubLevel = null, targetReps = "10-12 rep") => {
+    // 1. MAPEAMENTO DE ARSENAL
+    const equipChips = document.querySelectorAll('.forge-equip-chip.active');
+    let userArsenal = [];
+    equipChips.forEach(c => {
+        const tags = c.getAttribute('data-equip').split(',');
+        tags.forEach(t => {
+            const tag = t.trim();
+            if (tag === 'Barras_Anilhas') userArsenal.push('Barra');
+            if (tag === 'Pesos_Livres') userArsenal.push('Halter');
+            if (tag === 'Maquinas_Polias') userArsenal.push('Máquina', 'Cabo');
+            if (tag === 'Peso_Corporal') userArsenal.push('Peso Corporal');
+            if (tag === 'Calistenia') userArsenal.push('Calistenia');
+        });
+    });
+
+    // 2. O MOTOR DE BUSCA (Agora com SubNíveis e Escada de Sobrevivência)
+    const pullExercise = (targetAgonist, targetSubLevel = null) => {
         const normalize = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
-        const tGroup = normalize(targetGroup);
-        const tSub = targetSubLevel ? normalize(targetSubLevel) : null;
+        const target = normalize(targetAgonist);
+        const subTarget = targetSubLevel ? normalize(targetSubLevel) : null;
 
-        const filterPool = (ignoreSub, ignoreLevel, ignoreEquip) => {
-            return window.dictionaryData.filter(d => {
-                if (!ignoreLevel && (d.nivel || 1) > maxAllowedLevel) return false;
-                
-                const matchGroup = (d.group && normalize(d.group).includes(tGroup)) || (d.agonist && normalize(d.agonist).includes(tGroup));
+        // TENTATIVA 1: Precisão Total (Agonista + SubNível + Arsenal)
+        let pool = window.dictionaryData.filter(d => {
+            if (used.includes(d.name)) return false; 
+            
+            const matchGroup = (d.agonist && normalize(d.agonist) === target) || (d.group && normalize(d.group) === target);
+            if (!matchGroup) return false;
+
+            if (subTarget && (!d.subLevel || !normalize(d.subLevel).includes(subTarget))) return false;
+
+            const exEquips = (d.equip || '').split(',').map(e => e.trim());
+            const hasEquip = exEquips.some(eq => userArsenal.includes(eq));
+            return hasEquip || d.equip === 'Peso Corporal';
+        });
+
+        // TENTATIVA 2: Sobrevivência (Se não tiver equipamento para o SubNível, ignora o SubNível e traz qualquer um do Agonista)
+        if (pool.length === 0 && subTarget) {
+            pool = window.dictionaryData.filter(d => {
+                if (used.includes(d.name)) return false;
+                const matchGroup = (d.agonist && normalize(d.agonist) === target) || (d.group && normalize(d.group) === target);
                 if (!matchGroup) return false;
-                
-                if (!ignoreSub && tSub && (!d.subLevel || !normalize(d.subLevel).includes(tSub))) return false;
-                
-                if (!ignoreEquip) {
-                    const exEquips = (d.equip || '').split(',').map(e => e.trim());
-                    const hasEquip = exEquips.some(eq => userArsenal.includes(eq));
-                    if (!hasEquip && d.equip !== 'Peso Corporal') return false;
-                }
-                return !used.includes(d.name);
-            });
-        };
 
-        // Escada Anti-Asfixia: Garante que um exercício seja retornado
-        let pool = filterPool(false, false, false); // Nível 1: Precisão Total
-        if (pool.length === 0) pool = filterPool(true, false, false); // Nível 2: Ignora Foco Específico (SubLevel)
-        if (pool.length === 0) pool = filterPool(true, true, false);  // Nível 3: Ignora SNC/Dificuldade
-        if (pool.length === 0) pool = filterPool(true, true, true);   // Nível 4: Desespero (Qualquer arma ou Peso Corporal)
+                const exEquips = (d.equip || '').split(',').map(e => e.trim());
+                const hasEquip = exEquips.some(eq => userArsenal.includes(eq));
+                return hasEquip || d.equip === 'Peso Corporal';
+            });
+        }
+
+        // TENTATIVA 3: Desespero Absoluto (Traz Peso Corporal se tudo falhar)
+        if (pool.length === 0) {
+            pool = window.dictionaryData.filter(d => {
+                if (used.includes(d.name)) return false;
+                const matchGroup = (d.agonist && normalize(d.agonist) === target) || (d.group && normalize(d.group) === target);
+                return matchGroup && d.equip === 'Peso Corporal';
+            });
+        }
 
         if (pool.length > 0) {
+            // Prioridade a pesos pesados se existirem
             const hasIron = userArsenal.some(eq => ['Máquina', 'Barra', 'Halter', 'Cabo'].includes(eq));
             if (hasIron) {
                 const heavyPool = pool.filter(d => d.equip !== 'Peso Corporal' && d.equip !== 'Calistenia');
                 if (heavyPool.length > 0) pool = heavyPool;
             }
+
             const ex = pool[Math.floor(Math.random() * pool.length)];
-            used.push(ex.name); // Trava anti-repetição absoluta
-            return { name: ex.name, sets: 4, target: targetReps, antagonist: ex.antagonist || 'Nenhum', obj: ex };
+            used.push(ex.name);
+            return { name: ex.name, sets: 4, target: "10-12 rep" };
         }
         return null;
     };
 
+    // 3. CONSTRUTOR DE BLOCOS (Lê Agonista e SubNível)
     const buildBlock = (title, requests) => {
-        const slots = requests.map(req => {
-            const ex = pullExercise(req[0], req[1] || null, req[2] || "10-12 rep");
-            if (ex) return { name: ex.name, sets: ex.sets, target: ex.target, antagonist: ex.antagonist };
-            return null;
-        }).filter(e => e !== null);
+        const slots = requests.map(req => pullExercise(req[0], req[1] || null)).filter(ex => ex !== null);
         if (slots.length > 0) generatedBlocks.push({ title, exercises: slots });
     };
 
-    // ==========================================================
-    // SISTEMA DE ROTINAS (ABC, ABCD, CIRCUITOS)
-    // ==========================================================
+    // 4. LÓGICA DO TREINO TRADICIONAL (Com Biomecânica Estrita)
     if (method === 'abc' || method === 'ppl') {
-        if (rawProfile === 'feminino') {
-            if (subOpt === 'push' || subOpt === 'A') {
-                buildBlock("Posteriores & Glúteos", [["Isquiotibiais", "Isquiotibiais (Porção Alongada)", "10-12 rep"], ["Isquiotibiais", "Isquiotibiais (Porção Encurtada)", "12-15 rep"]]);
-                buildBlock("Foco Glúteo Máximo", [["Glúteos", "Glúteo Máximo", "12-15 rep"], ["Adutores", "Músculos Adutores", "15-20 rep"]]);
-                buildBlock("Panturrilhas & Core", [["Panturrilhas", "Gastrocnêmios", "15-20 rep"], ["Core", "Reto Abdominal Superior", "15-20 rep"]]);
-            } else if (subOpt === 'pull' || subOpt === 'B') {
-                buildBlock("Costas (Tônus)", [["Costas", "Latíssimo do Dorso", "12-15 rep"], ["Costas", "Espessura (Romboides)", "12-15 rep"]]);
-                buildBlock("Peitoral & Ombros", [["Peitoral", "Clavicular", "12-15 rep"], ["Ombros", "Deltoide Lateral", "12-15 rep"]]);
-                buildBlock("Braços Isolados", [["Tríceps", "Tríceps (Cabeça Longa)", "15-20 rep"], ["Bíceps", "Bíceps Braquial", "15-20 rep"]]);
-            } else {
-                buildBlock("Quadríceps Base", [["Quadríceps", "Quadríceps (Vastos)", "10-12 rep"], ["Quadríceps", "Reto Femoral", "12-15 rep"]]);
-                buildBlock("Adutores & Isoladores", [["Glúteos", "Glúteo Médio e Mínimo", "15-20 rep"], ["Panturrilhas", "Sóleo", "15-20 rep"]]);
-                buildBlock("Core Dinâmico", [["Core", "Oblíquos", "15-20 rep"], ["Core", "Transverso do Abdômen", "30 seg"]]);
-            }
-        } 
-        else if (rawProfile === 'definicao') {
-            const highRep = "15-20 rep";
-            if (subOpt === 'push' || subOpt === 'A') {
-                buildBlock("Peitoral Metabólico", [["Peitoral", "Esternocostal", highRep], ["Peitoral", "Clavicular", highRep]]);
-                buildBlock("Ombros & Tríceps", [["Ombros", "Deltoide Anterior", highRep], ["Tríceps", "Tríceps (Cabeça Lateral/Medial)", highRep]]);
-                buildBlock("Finisher Anaeróbico", [["Cardio/Mobilidade", "Sistema Anaeróbico", "1 min"], ["Core", "Oblíquos", highRep]]);
-            } else if (subOpt === 'pull' || subOpt === 'B') {
-                buildBlock("Costas Metabólico", [["Costas", "Latíssimo do Dorso", highRep], ["Costas", "Espessura (Romboides)", highRep]]);
-                buildBlock("Posterior & Bíceps", [["Ombros", "Deltoide Posterior", highRep], ["Bíceps", "Bíceps Braquial", highRep]]);
-                buildBlock("Finisher Cardiovascular", [["Cardio/Mobilidade", "Sistema Cardiovascular", "1 min"], ["Core", "Reto Abdominal Inferior", highRep]]);
-            } else {
-                buildBlock("Pernas Metabólico", [["Quadríceps", "Quadríceps (Vastos)", highRep], ["Isquiotibiais", "Isquiotibiais (Porção Alongada)", highRep]]);
-                buildBlock("Glúteos & Panturrilha", [["Glúteos", "Glúteo Máximo", highRep], ["Panturrilhas", "Gastrocnêmios", "20 rep"]]);
-                buildBlock("Derretedor Final", [["Cardio/Mobilidade", "Sistema Anaeróbico", "1 min"], ["Cardio/Mobilidade", "Sistema Cardiovascular", "1 min"]]);
-            }
+        if (subOpt === 'push' || subOpt === 'A') {
+            // AQUI ESTÁ A CORREÇÃO: Exigimos as 3 porções do Peitoral.
+            buildBlock("Peitoral Completo", [
+                ["Peitoral", "Esternocostal"], 
+                ["Peitoral", "Clavicular"], 
+                ["Peitoral", "Abdominal"]
+            ]);
+            buildBlock("Ombros & Tríceps", [
+                ["Ombros", "Deltoide Anterior"], 
+                ["Ombros", "Deltoide Lateral"], 
+                ["Tríceps", "Cabeça Longa"], 
+                ["Tríceps", "Cabeça Lateral"] // Opcional, vai puxar lateral ou medial
+            ]);
+        } else if (subOpt === 'pull' || subOpt === 'B') {
+            buildBlock("Dorsais Base", [
+                ["Costas", "Latíssimo do Dorso"], 
+                ["Costas", "Espessura"]
+            ]);
+            buildBlock("Posterior & Bíceps", [
+                ["Ombros", "Deltoide Posterior"], 
+                ["Bíceps", "Bíceps Braquial"], 
+                ["Bíceps", "Braquial"]
+            ]);
+        } else if (subOpt === 'legs') {
+            buildBlock("Quadríceps", [
+                ["Quadríceps", "Vastos"], 
+                ["Quadríceps", "Reto Femoral"]
+            ]);
+            buildBlock("Posteriores", [
+                ["Isquiotibiais", "Alongada"], 
+                ["Isquiotibiais", "Encurtada"]
+            ]);
+            buildBlock("Glúteos & Panturrilhas", [
+                ["Glúteos", "Glúteo Máximo"], 
+                ["Panturrilhas", "Gastrocnêmios"]
+            ]);
         }
-        else if (rawProfile === 'tatico') {
-            const pRep = "6-8 rep";
-            if (subOpt === 'push' || subOpt === 'A') {
-                buildBlock("Aquecimento Dinâmico", [["Cardio/Mobilidade", "Mobilidade Dinâmica", "10 rep"]]);
-                buildBlock("Força Pura (Empurre)", [["Peitoral", "Esternocostal", pRep], ["Ombros", "Deltoide Anterior", pRep]]);
-                buildBlock("Blindagem Core", [["Core", "Transverso do Abdômen", "1 min"], ["Core", "Reto Abdominal Superior", "15-20 rep"]]);
-            } else if (subOpt === 'pull' || subOpt === 'B') {
-                buildBlock("Aquecimento Articular", [["Cardio/Mobilidade", "Mobilidade Torácica", "10 rep"]]);
-                buildBlock("Força de Tração", [["Costas", "Latíssimo do Dorso", pRep], ["Costas", "Espessura (Romboides)", pRep]]);
-                buildBlock("Cadeia Lombar", [["Lombar", "Eretores da Espinha", "15-20 rep"], ["Core", "Oblíquos", "15-20 rep"]]);
-            } else {
-                buildBlock("Pliometria & Potência", [["Cardio/Mobilidade", "Sistema Anaeróbico", "30 seg"], ["Quadríceps", "Quadríceps (Vastos)", pRep]]);
-                buildBlock("Tração Posterior", [["Isquiotibiais", "Isquiotibiais (Porção Alongada)", pRep], ["Glúteos", "Glúteo Máximo", pRep]]);
-                buildBlock("Motor Cardiovascular", [["Cardio/Mobilidade", "Sistema Cardiovascular", "2 min"]]);
-            }
-        }
-        else { // Hipertrofia
-            if (subOpt === 'push' || subOpt === 'A') {
-                buildBlock("Peitoral Base", [["Peitoral", "Esternocostal", "8-10 rep"], ["Peitoral", "Clavicular", "8-10 rep"]]);
-                buildBlock("Deltoides", [["Ombros", "Deltoide Anterior", "10-12 rep"], ["Ombros", "Deltoide Lateral", "12-15 rep"]]);
-                buildBlock("Tríceps & Core", [["Tríceps", "Tríceps (Cabeça Longa)", "10-12 rep"], ["Tríceps", "Tríceps (Cabeça Lateral/Medial)", "12-15 rep"], ["Core", "Reto Abdominal Superior", "15-20 rep"]]);
-            } else if (subOpt === 'pull' || subOpt === 'B') {
-                buildBlock("Dorsais Base", [["Costas", "Latíssimo do Dorso", "8-10 rep"], ["Costas", "Espessura (Romboides)", "8-10 rep"]]);
-                buildBlock("Bíceps & Posterior", [["Bíceps", "Bíceps Braquial", "10-12 rep"], ["Ombros", "Deltoide Posterior", "12-15 rep"]]);
-                buildBlock("Braquial & Core", [["Bíceps", "Braquial / Antebraço", "12-15 rep"], ["Core", "Oblíquos", "15-20 rep"]]);
-            } else {
-                buildBlock("Anterior", [["Quadríceps", "Quadríceps (Vastos)", "8-10 rep"], ["Quadríceps", "Reto Femoral", "10-12 rep"]]);
-                buildBlock("Posterior", [["Isquiotibiais", "Isquiotibiais (Porção Alongada)", "10-12 rep"], ["Isquiotibiais", "Isquiotibiais (Porção Encurtada)", "10-12 rep"]]);
-                buildBlock("Glúteos & Panturrilhas", [["Glúteos", "Glúteo Máximo", "15-20 rep"], ["Panturrilhas", "Gastrocnêmios", "15-20 rep"]]);
-            }
-        }
-    } 
-    
-    // ==========================================================
-    // MOTOR INTELIGENTE DE BI-SETS (DNA BIOMECÂNICO & BÚSSOLA)
-    // ==========================================================
-    else if (method.includes('biset')) {
-        let style = 'sinergista'; // O seu favorito como padrão
-        if (method.includes('antagonista')) style = 'antagonista';
-        if (method.includes('agonista')) style = 'agonista';
-
-        const s = subOpt.toLowerCase();
-        let primaryMuscles = [];
-        let expectedSecondary = []; // <--- NEW: A Bússola de Sinergistas
-        
-        // Deduz o Eixo do Dia com base na escolha do sub-menu e define os sinergistas PERMITIDOS
-        if (s.includes('peito') || s.includes('push')) {
-            primaryMuscles = ['Peitoral', 'Peitoral', 'Peitoral'];
-            expectedSecondary = ['tríceps', 'ombro anterior'];
-        }
-        else if (s.includes('costa') || s.includes('pull')) {
-            primaryMuscles = ['Costas', 'Costas', 'Costas'];
-            expectedSecondary = ['bíceps', 'trapézio', 'lombar'];
-        }
-        else if (s.includes('perna') || s.includes('quad')) {
-            primaryMuscles = ['Quadríceps', 'Isquiotibiais', 'Glúteos'];
-            expectedSecondary = ['panturrilha', 'glúteo', 'ombro']; // Caso de perna_ombro
-        }
-        else if (s.includes('ombro') || s.includes('braco') || s.includes('biceps')) {
-            primaryMuscles = ['Ombros', 'Bíceps', 'Tríceps'];
-            expectedSecondary = ['trapézio', 'antebraço'];
-        }
-        else {
-            primaryMuscles = ['Peitoral', 'Costas', 'Pernas']; 
-            expectedSecondary = [];
-        }
-
-        let repTarget = rawProfile === 'definicao' ? "15-20 rep" : (rawProfile === 'tatico' ? "6-8 rep" : "10-12 rep");
-
-        primaryMuscles.forEach((primary, idx) => {
-            const exA = pullExercise(primary, null, repTarget);
-            
-            if (exA) {
-                let targetB = primary; // Fallback para pré-exaustão (Agonista)
-                
-                // Mágica Biomecânica com Bússola: Filtra o ADN para não cruzar perna com braço
-                if (style === 'sinergista' && exA.obj.synergist && exA.obj.synergist.length > 0) {
-                    const normalize = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
-                    
-                    // Filtra apenas os sinergistas que pertencem ao eixo do dia
-                    const validSynergists = exA.obj.synergist.filter(syn => {
-                        const synNorm = normalize(syn);
-                        return expectedSecondary.some(expected => synNorm.includes(normalize(expected)));
-                    });
-
-                    if (validSynergists.length > 0) {
-                        // O exercício tem um sinergista válido para hoje (ex: Terra tem Trapézio)
-                        targetB = validSynergists[Math.floor(Math.random() * validSynergists.length)];
-                    } else if (expectedSecondary.length > 0) {
-                        // O exercício tem sinergistas "fora do eixo" (ex: Pulldown quer puxar Core). Forçamos Bíceps.
-                        targetB = expectedSecondary[0];
-                    } else {
-                        targetB = exA.obj.synergist[Math.floor(Math.random() * exA.obj.synergist.length)];
-                    }
-                } else if (style === 'antagonista' && exA.obj.antagonist && exA.obj.antagonist !== 'Nenhum') {
-                    targetB = exA.obj.antagonist;
-                }
-
-                // Puxa o Exercício B com base na decisão filtrada
-                const exB = pullExercise(targetB, null, repTarget);
-
-                if (exB) {
-                    const blockTitle = style === 'sinergista' ? 'Sinergia Integrada' : (style === 'antagonista' ? 'Combate Cruzado (Opostos)' : 'Pré-Exaustão (Agonista)');
-                    generatedBlocks.push({
-                        title: `Série ${idx + 1}: ${blockTitle}`,
-                        exercises: [
-                            { name: exA.name, sets: 4, target: repTarget, antagonist: exA.antagonist },
-                            { name: exB.name, sets: 4, target: repTarget, antagonist: exB.antagonist }
-                        ]
-                    });
-                } else {
-                    generatedBlocks.push({
-                        title: `Série ${idx + 1}: Foco Isolado (Sem Armas para o Par)`,
-                        exercises: [{ name: exA.name, sets: 4, target: repTarget, antagonist: 'Nenhum' }]
-                    });
-                }
-            }
-        });
-
-        // Aplicadores Finais Baseados no Perfil
-        if (rawProfile === 'definicao') buildBlock("Finisher: Cardio Metabólico", [["Cardio/Mobilidade", "Sistema Anaeróbico", "1 min"]]);
-        else if (rawProfile === 'tatico') buildBlock("Finisher: Core Blindado", [["Core", "Transverso do Abdômen", "1 min"]]);
-        else buildBlock("Finisher: Core", [["Core", "Oblíquos", "15-20 rep"]]);
-    }
-    
-    // ==========================================================
-    // CIRCUITOS & CALISTENIA
-    // ==========================================================
-    else if (method === 'circuito') {
-        let circRep = rawProfile === 'tatico' ? "1 min" : "15-20 rep";
-        buildBlock("Rodada Metabólica FullBody", [
-            ["Cardio/Mobilidade", "Sistema Anaeróbico", "45 seg"],
-            ["Quadríceps", "Quadríceps (Vastos)", circRep],
-            ["Costas", "Latíssimo do Dorso", circRep],
-            ["Isquiotibiais", "Isquiotibiais (Porção Alongada)", circRep],
-            ["Peitoral", "Esternocostal", circRep],
-            ["Core", "Reto Abdominal Superior", "1 min"]
-        ]);
-    }
-    else if (method === 'calistenia') {
-        buildBlock("Força Relativa (Push)", [["Peitoral", "Esternocostal", "Falha"], ["Tríceps", null, "Falha"]]);
-        buildBlock("Força Relativa (Pull)", [["Costas", "Latíssimo do Dorso", "Falha"], ["Bíceps", null, "Falha"]]);
-        buildBlock("Estabilidade Base", [["Quadríceps", null, "Falha"], ["Core", "Transverso do Abdômen", "Isometria Máx"]]);
+    } else {
+        generatedBlocks.push({ title: "Modo em Reconstrução", exercises: [] });
     }
 
-    // ==========================================================
-    // ALGORITMO DE GRAVIDADE (CORE FINISHER)
-    // ==========================================================
-    const isCoreEx = (exName) => {
-        const dictItem = typeof window.dictionaryData !== 'undefined' ? window.dictionaryData.find(d => d.name === exName) : null;
-        if (dictItem) {
-            const g = (dictItem.group || '').toLowerCase();
-            const f = (dictItem.subLevel || '').toLowerCase();
-            return g.includes('core') || f.includes('obliquo') || f.includes('abdom') || f.includes('estabiliza');
-        }
-        return false;
-    };
-
-    generatedBlocks.forEach(bloco => {
-        bloco.exercises.sort((a, b) => {
-            const aCore = isCoreEx(a.name);
-            const bCore = isCoreEx(b.name);
-            if (aCore && !bCore) return 1;
-            if (!aCore && bCore) return -1;
-            return 0;
-        });
-    });
-
-    generatedBlocks.sort((a, b) => {
-        const aHasCore = a.exercises.some(ex => isCoreEx(ex.name)) || a.title.toLowerCase().includes('core');
-        const bHasCore = b.exercises.some(ex => isCoreEx(ex.name)) || b.title.toLowerCase().includes('core');
-        if (aHasCore && !bHasCore) return 1;
-        if (!aHasCore && bHasCore) return -1;
-        return 0;
-    });
-
-    setTimeout(() => {
-        if (typeof FitApp !== 'undefined' && FitApp.adjustRestTime) {
-            if (rawProfile === 'definicao') FitApp.adjustRestTime(method === 'circuito' ? 30 : 45);
-            else FitApp.adjustRestTime(method === 'circuito' ? 45 : 60);
-        }
-    }, 500);
-
-    if(generatedBlocks.length === 0) generatedBlocks = [{ title: "Rotina de Contingência", exercises: [] }];
+    if(generatedBlocks.length === 0) generatedBlocks = [{ title: "Falta Arsenal para gerar este treino", exercises: [] }];
     return generatedBlocks;
 }
