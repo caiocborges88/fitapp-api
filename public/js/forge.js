@@ -9,20 +9,42 @@ export function updateForgeOptions() {
     const method = document.getElementById('forgeMethod').value;
     const subSelect = document.getElementById('forgeSubSelect');
     const subBox = document.getElementById('forgeSubOptionsBox');
+    const subLabel = document.getElementById('forgeSubLabel');
     
+    subSelect.innerHTML = '';
     subBox.style.display = 'block';
     
-    // FASE 1: Só o método Tradicional está ativo. Os outros mostram aviso.
     if (method === 'ppl' || method === 'abc') {
-        document.getElementById('forgeSubLabel').textContent = "Selecione o Eixo (Apenas Tradicional Ativo):";
+        subLabel.textContent = "Selecione o Eixo:";
         subSelect.innerHTML = `
             <option value="push">Empurrar (Peito, Ombro, Tríceps)</option>
             <option value="pull">Puxar (Costas, Trapézio, Bíceps)</option>
             <option value="legs">Pernas e Core (Quadríceps, Isquios, Glúteo)</option>
         `;
+    } else if (method === 'biset_agonista') {
+        subLabel.textContent = "Músculo Alvo (Pré-Exaustão):";
+        subSelect.innerHTML = `
+            <option value="peito">Peitoral</option>
+            <option value="costa">Dorsais</option>
+            <option value="perna">Pernas Completas</option>
+            <option value="ombro">Deltoides</option>
+        `;
+    } else if (method === 'biset_antagonista') {
+        subLabel.textContent = "Pares de Combate (Opostos):";
+        subSelect.innerHTML = `
+            <option value="peito_costa">Peito + Costas</option>
+            <option value="biceps_triceps">Bíceps + Tríceps</option>
+            <option value="quad_post">Quadríceps + Posterior</option>
+        `;
+    } else if (method === 'biset_sinergista') {
+        subLabel.textContent = "Pares Sinergistas (Principal + Auxiliar):";
+        subSelect.innerHTML = `
+            <option value="peito_triceps">Peito + Tríceps</option>
+            <option value="costa_biceps">Costas + Bíceps</option>
+            <option value="perna_ombro">Pernas + Ombros</option>
+        `;
     } else {
-        document.getElementById('forgeSubLabel').textContent = "Manutenção em Curso:";
-        subSelect.innerHTML = `<option value="bloqueado">A aguardar reconstrução (Fase 2)</option>`;
+        subBox.style.display = 'none';
     }
 }
 
@@ -61,40 +83,33 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
         });
     });
 
-    // 2. O MOTOR DE BUSCA (Agora com SubNíveis e Escada de Sobrevivência)
+    // 2. O MOTOR DE BUSCA
     const pullExercise = (targetAgonist, targetSubLevel = null) => {
         const normalize = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
         const target = normalize(targetAgonist);
         const subTarget = targetSubLevel ? normalize(targetSubLevel) : null;
 
-        // TENTATIVA 1: Precisão Total (Agonista + SubNível + Arsenal)
         let pool = window.dictionaryData.filter(d => {
             if (used.includes(d.name)) return false; 
-            
             const matchGroup = (d.agonist && normalize(d.agonist) === target) || (d.group && normalize(d.group) === target);
             if (!matchGroup) return false;
-
             if (subTarget && (!d.subLevel || !normalize(d.subLevel).includes(subTarget))) return false;
-
             const exEquips = (d.equip || '').split(',').map(e => e.trim());
             const hasEquip = exEquips.some(eq => userArsenal.includes(eq));
             return hasEquip || d.equip === 'Peso Corporal';
         });
 
-        // TENTATIVA 2: Sobrevivência (Se não tiver equipamento para o SubNível, ignora o SubNível e traz qualquer um do Agonista)
         if (pool.length === 0 && subTarget) {
             pool = window.dictionaryData.filter(d => {
                 if (used.includes(d.name)) return false;
                 const matchGroup = (d.agonist && normalize(d.agonist) === target) || (d.group && normalize(d.group) === target);
                 if (!matchGroup) return false;
-
                 const exEquips = (d.equip || '').split(',').map(e => e.trim());
                 const hasEquip = exEquips.some(eq => userArsenal.includes(eq));
                 return hasEquip || d.equip === 'Peso Corporal';
             });
         }
 
-        // TENTATIVA 3: Desespero Absoluto (Traz Peso Corporal se tudo falhar)
         if (pool.length === 0) {
             pool = window.dictionaryData.filter(d => {
                 if (used.includes(d.name)) return false;
@@ -104,7 +119,6 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
         }
 
         if (pool.length > 0) {
-            // Prioridade a pesos pesados se existirem
             const hasIron = userArsenal.some(eq => ['Máquina', 'Barra', 'Halter', 'Cabo'].includes(eq));
             if (hasIron) {
                 const heavyPool = pool.filter(d => d.equip !== 'Peso Corporal' && d.equip !== 'Calistenia');
@@ -113,58 +127,104 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
 
             const ex = pool[Math.floor(Math.random() * pool.length)];
             used.push(ex.name);
-            return { name: ex.name, sets: 4, target: "10-12 rep" };
+            // IMPORTANTE: Exportamos o 'obj' completo para a IA conseguir ler os sinergistas
+            return { name: ex.name, sets: 4, target: "10-12 rep", obj: ex };
         }
         return null;
     };
 
-    // 3. CONSTRUTOR DE BLOCOS (Lê Agonista e SubNível)
     const buildBlock = (title, requests) => {
         const slots = requests.map(req => pullExercise(req[0], req[1] || null)).filter(ex => ex !== null);
         if (slots.length > 0) generatedBlocks.push({ title, exercises: slots });
     };
 
-    // 4. LÓGICA DO TREINO TRADICIONAL (Com Biomecânica Estrita)
+    // 3. LÓGICA DO TREINO TRADICIONAL
     if (method === 'abc' || method === 'ppl') {
         if (subOpt === 'push' || subOpt === 'A') {
-            // AQUI ESTÁ A CORREÇÃO: Exigimos as 3 porções do Peitoral.
-            buildBlock("Peitoral Completo", [
-                ["Peitoral", "Esternocostal"], 
-                ["Peitoral", "Clavicular"], 
-                ["Peitoral", "Abdominal"]
-            ]);
-            buildBlock("Ombros & Tríceps", [
-                ["Ombros", "Deltoide Anterior"], 
-                ["Ombros", "Deltoide Lateral"], 
-                ["Tríceps", "Cabeça Longa"], 
-                ["Tríceps", "Cabeça Lateral"] // Opcional, vai puxar lateral ou medial
-            ]);
+            buildBlock("Peitoral Completo", [["Peitoral", "Esternocostal"], ["Peitoral", "Clavicular"], ["Peitoral", "Abdominal"]]);
+            buildBlock("Ombros & Tríceps", [["Ombros", "Deltoide Anterior"], ["Ombros", "Deltoide Lateral"], ["Tríceps", "Cabeça Longa"], ["Tríceps", "Cabeça Lateral"]]);
         } else if (subOpt === 'pull' || subOpt === 'B') {
-            buildBlock("Dorsais Base", [
-                ["Costas", "Latíssimo do Dorso"], 
-                ["Costas", "Espessura"]
-            ]);
-            buildBlock("Posterior & Bíceps", [
-                ["Ombros", "Deltoide Posterior"], 
-                ["Bíceps", "Bíceps Braquial"], 
-                ["Bíceps", "Braquial"]
-            ]);
+            buildBlock("Dorsais Base", [["Costas", "Latíssimo do Dorso"], ["Costas", "Espessura"]]);
+            buildBlock("Posterior & Bíceps", [["Ombros", "Deltoide Posterior"], ["Bíceps", "Bíceps Braquial"], ["Bíceps", "Braquial"]]);
         } else if (subOpt === 'legs') {
-            buildBlock("Quadríceps", [
-                ["Quadríceps", "Vastos"], 
-                ["Quadríceps", "Reto Femoral"]
-            ]);
-            buildBlock("Posteriores", [
-                ["Isquiotibiais", "Alongada"], 
-                ["Isquiotibiais", "Encurtada"]
-            ]);
-            buildBlock("Glúteos & Panturrilhas", [
-                ["Glúteos", "Glúteo Máximo"], 
-                ["Panturrilhas", "Gastrocnêmios"]
-            ]);
+            buildBlock("Quadríceps", [["Quadríceps", "Vastos"], ["Quadríceps", "Reto Femoral"]]);
+            buildBlock("Posteriores", [["Isquiotibiais", "Alongada"], ["Isquiotibiais", "Encurtada"]]);
+            buildBlock("Glúteos & Panturrilhas", [["Glúteos", "Glúteo Máximo"], ["Panturrilhas", "Gastrocnêmios"]]);
         }
-    } else {
-        generatedBlocks.push({ title: "Modo em Reconstrução", exercises: [] });
+    } 
+    // 4. LÓGICA DO MOTOR DE BI-SETS (Com a Bússola Restritiva)
+    else if (method.includes('biset')) {
+        let style = 'sinergista';
+        if (method.includes('antagonista')) style = 'antagonista';
+        if (method.includes('agonista')) style = 'agonista';
+
+        const s = subOpt.toLowerCase();
+        let primaryTargets = [];
+        let expectedSecondary = []; // A Bússola que proíbe cruzar pernas com braços
+        
+        if (s.includes('peito') || s.includes('push')) {
+            primaryTargets = [['Peitoral', 'Esternocostal'], ['Peitoral', 'Clavicular'], ['Ombros', 'Deltoide Anterior']];
+            expectedSecondary = ['tríceps', 'ombro anterior', 'ombros'];
+        }
+        else if (s.includes('costa') || s.includes('pull')) {
+            primaryTargets = [['Costas', 'Latíssimo do Dorso'], ['Costas', 'Espessura (Romboides)'], ['Ombros', 'Deltoide Posterior']];
+            expectedSecondary = ['bíceps', 'braquial', 'trapézio', 'lombar'];
+        }
+        else if (s.includes('perna') || s.includes('quad')) {
+            primaryTargets = [['Quadríceps', 'Quadríceps (Vastos)'], ['Isquiotibiais', 'Isquiotibiais (Porção Alongada)'], ['Glúteos', 'Glúteo Máximo']];
+            expectedSecondary = ['panturrilhas', 'glúteos', 'core', 'isquiotibiais', 'ombros']; // Perna_ombro permitido aqui
+        }
+        else {
+            primaryTargets = [['Ombros', 'Deltoide Anterior'], ['Ombros', 'Deltoide Lateral'], ['Bíceps', 'Bíceps Braquial']];
+            expectedSecondary = ['tríceps', 'trapézio', 'antebraço'];
+        }
+
+        primaryTargets.forEach((p, idx) => {
+            const exA = pullExercise(p[0], p[1]);
+            
+            if (exA) {
+                let targetB_agonist = p[0]; // Fallback (Agonista)
+                
+                // Mágica Biomecânica com Bússola
+                if (style === 'sinergista' && exA.obj.synergist && exA.obj.synergist.length > 0) {
+                    const normalize = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
+                    
+                    // Cruza a lista de sinergistas do exercício com a bússola do treino de hoje
+                    const validSynergists = exA.obj.synergist.filter(syn => {
+                        const synNorm = normalize(syn);
+                        return expectedSecondary.some(expected => synNorm.includes(normalize(expected)));
+                    });
+
+                    if (validSynergists.length > 0) {
+                        targetB_agonist = validSynergists[Math.floor(Math.random() * validSynergists.length)];
+                    } else if (expectedSecondary.length > 0) {
+                        targetB_agonist = expectedSecondary[0]; // Se a cruza falhar, força o 1º permitido da bússola
+                    }
+                } else if (style === 'antagonista' && exA.obj.antagonist && exA.obj.antagonist !== 'Nenhum') {
+                    targetB_agonist = exA.obj.antagonist;
+                }
+
+                const exB = pullExercise(targetB_agonist, null);
+
+                if (exB) {
+                    const blockTitle = style === 'sinergista' ? 'Sinergia Integrada' : (style === 'antagonista' ? 'Combate Cruzado (Opostos)' : 'Pré-Exaustão (Agonista)');
+                    generatedBlocks.push({
+                        title: `Série ${idx + 1}: ${blockTitle}`,
+                        exercises: [
+                            { name: exA.name, sets: 4, target: "10-12 rep" },
+                            { name: exB.name, sets: 4, target: "10-12 rep" }
+                        ]
+                    });
+                } else {
+                    generatedBlocks.push({
+                        title: `Série ${idx + 1}: Foco Isolado (Arsenal Limitado)`,
+                        exercises: [{ name: exA.name, sets: 4, target: "10-12 rep" }]
+                    });
+                }
+            }
+        });
+        // Remate tático para fechar os bi-sets
+        buildBlock("Finisher: Core", [["Core", "Oblíquos"], ["Core", "Transverso"]]);
     }
 
     if(generatedBlocks.length === 0) generatedBlocks = [{ title: "Falta Arsenal para gerar este treino", exercises: [] }];
