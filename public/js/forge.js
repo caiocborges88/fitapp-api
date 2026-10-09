@@ -67,6 +67,9 @@ export function generateForgedWorkout() {
 export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
     let generatedBlocks = [];
     let used = [...avoidNamesGlobal]; 
+    
+    // CORREÇÃO CRÍTICA 1: O Perfil agora está declarado para evitar o Crash Fatal
+    const rawProfile = document.getElementById('profileSelector') ? document.getElementById('profileSelector').value : 'hipertrofia';
 
     // 1. MAPEAMENTO DE ARSENAL
     const equipChips = document.querySelectorAll('.forge-equip-chip.active');
@@ -83,8 +86,8 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
         });
     });
 
-    // 2. O MOTOR DE BUSCA
-    const pullExercise = (targetAgonist, targetSubLevel = null) => {
+    // 2. O MOTOR DE BUSCA (CORREÇÃO CRÍTICA 2: Agora aceita e devolve o targetReps)
+    const pullExercise = (targetAgonist, targetSubLevel = null, targetReps = "10-12 rep") => {
         const normalize = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
         const target = normalize(targetAgonist);
         const subTarget = targetSubLevel ? normalize(targetSubLevel) : null;
@@ -127,14 +130,14 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
 
             const ex = pool[Math.floor(Math.random() * pool.length)];
             used.push(ex.name);
-            // IMPORTANTE: Exportamos o 'obj' completo para a IA conseguir ler os sinergistas
-            return { name: ex.name, sets: 4, target: "10-12 rep", obj: ex };
+            // Agora devolve o obj e o target perfeitamente
+            return { name: ex.name, sets: 4, target: targetReps, obj: ex, antagonist: ex.antagonist || 'Nenhum' };
         }
         return null;
     };
 
     const buildBlock = (title, requests) => {
-        const slots = requests.map(req => pullExercise(req[0], req[1] || null)).filter(ex => ex !== null);
+        const slots = requests.map(req => pullExercise(req[0], req[1] || null, req[2] || "10-12 rep")).filter(ex => ex !== null);
         if (slots.length > 0) generatedBlocks.push({ title, exercises: slots });
     };
 
@@ -142,20 +145,18 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
     if (method === 'abc' || method === 'ppl') {
         if (subOpt === 'push' || subOpt === 'A') {
             buildBlock("Peitoral Completo", [["Peitoral", "Esternocostal"], ["Peitoral", "Clavicular"], ["Peitoral", "Abdominal"]]);
-            buildBlock("Ombros & Tríceps", [["Ombros", "Deltoide Anterior"], ["Ombros", "Deltoide Lateral"], ["Tríceps", "Cabeça Longa"], ["Tríceps", "Cabeça Lateral"]]);
+            buildBlock("Ombros & Tríceps", [["Ombros", "Deltoide Anterior"], ["Ombros", "Deltoide Lateral"], ["Tríceps", "Tríceps (Cabeça Longa)"], ["Tríceps", "Tríceps (Cabeça Lateral/Medial)"]]);
         } else if (subOpt === 'pull' || subOpt === 'B') {
-            buildBlock("Dorsais Base", [["Costas", "Latíssimo do Dorso"], ["Costas", "Espessura"]]);
-            buildBlock("Posterior & Bíceps", [["Ombros", "Deltoide Posterior"], ["Bíceps", "Bíceps Braquial"], ["Bíceps", "Braquial"]]);
+            buildBlock("Dorsais Base", [["Costas", "Latíssimo do Dorso"], ["Costas", "Espessura (Romboides)"]]);
+            buildBlock("Posterior & Bíceps", [["Ombros", "Deltoide Posterior"], ["Bíceps", "Bíceps Braquial"], ["Bíceps", "Braquial / Antebraço"]]);
         } else if (subOpt === 'legs') {
-            buildBlock("Quadríceps", [["Quadríceps", "Vastos"], ["Quadríceps", "Reto Femoral"]]);
-            buildBlock("Posteriores", [["Isquiotibiais", "Alongada"], ["Isquiotibiais", "Encurtada"]]);
+            buildBlock("Quadríceps", [["Quadríceps", "Quadríceps (Vastos)"], ["Quadríceps", "Reto Femoral"]]);
+            buildBlock("Posteriores", [["Isquiotibiais", "Isquiotibiais (Porção Alongada)"], ["Isquiotibiais", "Isquiotibiais (Porção Encurtada)"]]);
             buildBlock("Glúteos & Panturrilhas", [["Glúteos", "Glúteo Máximo"], ["Panturrilhas", "Gastrocnêmios"]]);
         }
     } 
-    // 4. LÓGICA DO MOTOR DE BI-SETS (Com a Bússola Restritiva)
-    // ==========================================================
-    // MOTOR INTELIGENTE DE BI-SETS (VOLUME CORRETO E PARES MISTOS)
-    // ==========================================================
+    
+    // 4. LÓGICA DO MOTOR DE BI-SETS (VOLUME CORRETO E PARES MISTOS)
     else if (method.includes('biset')) {
         let style = 'sinergista';
         if (method.includes('antagonista')) style = 'antagonista';
@@ -165,7 +166,7 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
         let primaryTargets = [];
         let expectedSecondary = []; 
         
-        // 1. VOLUME AUMENTADO: 4 Séries por treino para garantir 3-4 do maior e 2-3 do menor
+        // VOLUME AUMENTADO: 4 Séries por treino
         if (s.includes('peito') || s.includes('push')) {
             primaryTargets = [['Peitoral', 'Esternocostal'], ['Peitoral', 'Clavicular'], ['Peitoral', 'Abdominal'], ['Ombros', 'Deltoide Anterior']];
             expectedSecondary = ['tríceps', 'ombro anterior', 'ombros'];
@@ -192,7 +193,6 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
                 let targetB_agonist = p[0];
                 let exB = null;
                 
-                // Mágica Biomecânica
                 if (style === 'sinergista' && exA.obj.synergist && exA.obj.synergist.length > 0) {
                     const normalize = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
                     
@@ -210,28 +210,27 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
                     targetB_agonist = exA.obj.antagonist;
                 }
 
-                // 2. A BUSCA DO PAR IDEAL
                 exB = pullExercise(targetB_agonist, null, repTarget);
 
-                // 3. REGRA DE OURO (MISTURA): Se o par ideal esgotar, chama o Core para manter o Bi-Set vivo!
+                // A REGRA DO MISTO: Se o arsenal do par esgotou, puxamos o Core para manter a guerra ativa!
                 let isMixed = false;
                 if (!exB) {
-                    exB = pullExercise('Core', null, "15-20 rep"); // Tenta puxar um Abdominal
+                    exB = pullExercise('Core', null, "15-20 rep"); 
                     isMixed = true;
                     if (!exB && p[0] !== 'Panturrilhas') {
-                        exB = pullExercise('Panturrilhas', null, "15-20 rep"); // Fallback extremo para panturrilha
+                        exB = pullExercise('Panturrilhas', null, "15-20 rep"); 
                     }
                 }
 
                 if (exB) {
                     let blockTitle = style === 'sinergista' ? 'Sinergia Integrada' : (style === 'antagonista' ? 'Combate Cruzado (Opostos)' : 'Pré-Exaustão (Agonista)');
-                    if (isMixed) blockTitle += " + Core (Misto)"; // Avisa o utilizador que o par é misto
+                    if (isMixed) blockTitle += " + Core (Misto)"; 
 
                     generatedBlocks.push({
                         title: `Série ${idx + 1}: ${blockTitle}`,
                         exercises: [
                             { name: exA.name, sets: 4, target: repTarget },
-                            { name: exB.name, sets: 4, target: exB.target } // Mantém a repetição do Core se for misto
+                            { name: exB.name, sets: 4, target: exB.target } 
                         ]
                     });
                 } else {
@@ -243,7 +242,6 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
             }
         });
 
-        // Aplicadores Finais (O Core isolado sai, pois já está integrado nos bi-sets mistos)
         if (rawProfile === 'definicao') buildBlock("Finisher: Cardio Metabólico", [["Cardio/Mobilidade", "Sistema Anaeróbico", "1 min"]]);
         else if (rawProfile === 'tatico') buildBlock("Finisher: Core Blindado", [["Core", "Transverso do Abdômen", "1 min"]]);
     }
