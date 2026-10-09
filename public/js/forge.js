@@ -156,32 +156,51 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
         }
     } 
     
-    // 4. LÓGICA DO MOTOR DE BI-SETS (VOLUME CORRETO E PARES MISTOS)
+    // ==========================================================
+    // 4. LÓGICA DO MOTOR DE BI-SETS (MATRIZ DE VOLUME 3:2 & PARES MISTOS)
+    // ==========================================================
     else if (method.includes('biset')) {
         let style = 'sinergista';
         if (method.includes('antagonista')) style = 'antagonista';
         if (method.includes('agonista')) style = 'agonista';
 
         const s = subOpt.toLowerCase();
-        let primaryTargets = [];
-        let expectedSecondary = []; 
         
-        // VOLUME AUMENTADO: 4 Séries por treino
+        // A MATRIZ DE VOLUME: [Agonista Principal, SubNível, Sinergista Ideal, SubNível Sinergista]
+        // Garante 3-4 movimentos para o músculo grande e 2-3 para os pequenos.
+        let primaryTargets = [];
+        
         if (s.includes('peito') || s.includes('push')) {
-            primaryTargets = [['Peitoral', 'Esternocostal'], ['Peitoral', 'Clavicular'], ['Peitoral', 'Abdominal'], ['Ombros', 'Deltoide Anterior']];
-            expectedSecondary = ['tríceps', 'ombro anterior', 'ombros'];
+            primaryTargets = [
+                ['Peitoral', 'Esternocostal', 'Tríceps', null], 
+                ['Peitoral', 'Clavicular', 'Ombros', 'Deltoide Anterior'], 
+                ['Peitoral', 'Abdominal', 'Tríceps', null], 
+                ['Ombros', 'Deltoide Anterior', 'Tríceps', null]
+            ];
         }
         else if (s.includes('costa') || s.includes('pull')) {
-            primaryTargets = [['Costas', 'Latíssimo do Dorso'], ['Costas', 'Espessura (Romboides)'], ['Costas', null], ['Bíceps', 'Bíceps Braquial']];
-            expectedSecondary = ['bíceps', 'braquial', 'trapézio', 'lombar', 'ombro posterior'];
+            primaryTargets = [
+                ['Costas', 'Latíssimo do Dorso', 'Bíceps', null], 
+                ['Costas', 'Espessura (Romboides)', 'Lombar', null], 
+                ['Costas', null, 'Bíceps', null], 
+                ['Bíceps', 'Bíceps Braquial', 'Ombros', 'Deltoide Posterior']
+            ];
         }
         else if (s.includes('perna') || s.includes('quad')) {
-            primaryTargets = [['Quadríceps', 'Quadríceps (Vastos)'], ['Isquiotibiais', 'Isquiotibiais (Porção Alongada)'], ['Glúteos', 'Glúteo Máximo'], ['Quadríceps', 'Reto Femoral']];
-            expectedSecondary = ['panturrilhas', 'glúteos', 'isquiotibiais', 'adutores'];
+            primaryTargets = [
+                ['Quadríceps', 'Quadríceps (Vastos)', 'Panturrilhas', null], 
+                ['Isquiotibiais', 'Isquiotibiais (Porção Alongada)', 'Glúteos', null], 
+                ['Glúteos', 'Glúteo Máximo', 'Isquiotibiais', null], 
+                ['Quadríceps', 'Reto Femoral', 'Panturrilhas', null]
+            ];
         }
         else {
-            primaryTargets = [['Ombros', 'Deltoide Anterior'], ['Ombros', 'Deltoide Lateral'], ['Bíceps', 'Bíceps Braquial'], ['Tríceps', 'Tríceps (Cabeça Longa)']];
-            expectedSecondary = ['tríceps', 'trapézio', 'antebraço', 'ombro posterior'];
+            primaryTargets = [
+                ['Ombros', 'Deltoide Anterior', 'Tríceps', null], 
+                ['Ombros', 'Deltoide Lateral', 'Bíceps', null], 
+                ['Bíceps', 'Bíceps Braquial', 'Tríceps', null], 
+                ['Tríceps', 'Tríceps (Cabeça Longa)', 'Bíceps', null]
+            ];
         }
 
         let repTarget = rawProfile === 'definicao' ? "15-20 rep" : (rawProfile === 'tatico' ? "6-8 rep" : "10-12 rep");
@@ -191,31 +210,25 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
             
             if (exA) {
                 let targetB_agonist = p[0];
+                let targetB_sub = p[1];
                 let exB = null;
                 
-                if (style === 'sinergista' && exA.obj.synergist && exA.obj.synergist.length > 0) {
-                    const normalize = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
-                    
-                    const validSynergists = exA.obj.synergist.filter(syn => {
-                        const synNorm = normalize(syn);
-                        return expectedSecondary.some(expected => synNorm.includes(normalize(expected)));
-                    });
-
-                    if (validSynergists.length > 0) {
-                        targetB_agonist = validSynergists[Math.floor(Math.random() * validSynergists.length)];
-                    } else if (expectedSecondary.length > 0) {
-                        targetB_agonist = expectedSecondary[0];
-                    }
+                // Mágica Biomecânica Restrita pela Matriz de Volume
+                if (style === 'sinergista') {
+                    targetB_agonist = p[2];
+                    targetB_sub = p[3];
                 } else if (style === 'antagonista' && exA.obj.antagonist && exA.obj.antagonist !== 'Nenhum') {
                     targetB_agonist = exA.obj.antagonist;
+                    targetB_sub = null;
                 }
 
-                exB = pullExercise(targetB_agonist, null, repTarget);
+                // A BUSCA DO PAR IDEAL
+                exB = pullExercise(targetB_agonist, targetB_sub, repTarget);
 
-                // A REGRA DO MISTO: Se o arsenal do par esgotou, puxamos o Core para manter a guerra ativa!
+                // REGRA DE OURO (MISTURA): Se o par ideal esgotar, chama o Core para salvar a cadência do Bi-Set!
                 let isMixed = false;
                 if (!exB) {
-                    exB = pullExercise('Core', null, "15-20 rep"); 
+                    exB = pullExercise('Core', null, "15-20 rep");
                     isMixed = true;
                     if (!exB && p[0] !== 'Panturrilhas') {
                         exB = pullExercise('Panturrilhas', null, "15-20 rep"); 
@@ -224,7 +237,7 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
 
                 if (exB) {
                     let blockTitle = style === 'sinergista' ? 'Sinergia Integrada' : (style === 'antagonista' ? 'Combate Cruzado (Opostos)' : 'Pré-Exaustão (Agonista)');
-                    if (isMixed) blockTitle += " + Core (Misto)"; 
+                    if (isMixed) blockTitle += " + Core (Misto)";
 
                     generatedBlocks.push({
                         title: `Série ${idx + 1}: ${blockTitle}`,
@@ -242,6 +255,7 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
             }
         });
 
+        // Aplicadores Finais Baseados no Perfil
         if (rawProfile === 'definicao') buildBlock("Finisher: Cardio Metabólico", [["Cardio/Mobilidade", "Sistema Anaeróbico", "1 min"]]);
         else if (rawProfile === 'tatico') buildBlock("Finisher: Core Blindado", [["Core", "Transverso do Abdômen", "1 min"]]);
     }
