@@ -1,4 +1,5 @@
 import { state } from './state.js';
+import { getMuscleGroup } from './utils.js';
 
 export function openForgeModal() {
     document.getElementById('forgeModal').style.display = 'flex';
@@ -20,6 +21,14 @@ export function updateForgeOptions() {
             <option value="push">Empurrar (Peito, Ombro, Tríceps)</option>
             <option value="pull">Puxar (Costas, Trapézio, Bíceps)</option>
             <option value="legs">Pernas e Core (Quadríceps, Isquios, Glúteo)</option>
+        `;
+    } else if (method === 'abcd') {
+        subLabel.textContent = "Selecione a Divisão:";
+        subSelect.innerHTML = `
+            <option value="A">Treino A (Frontal)</option>
+            <option value="B">Treino B (Tração/Costas)</option>
+            <option value="C">Treino C (Posterior/Ombros)</option>
+            <option value="D">Treino D (Braços/Isoladores)</option>
         `;
     } else if (method === 'biset_agonista') {
         subLabel.textContent = "Músculo Alvo (Pré-Exaustão):";
@@ -54,21 +63,36 @@ export function generateForgedWorkout() {
     
     const activeChips = document.querySelectorAll('.forge-equip-chip.active');
     if (activeChips.length === 0) {
-        window.FitApp.showToast("Selecione pelo menos uma arma no arsenal.");
+        window.FitApp.showToast("⚠️ Operação Negada: Selecione pelo menos uma arma no seu arsenal.");
         return;
     }
 
     state.currentRoutine = executeForgeLogic(method, subOpt, []);
     state.currentWorkoutType = 'Livre';
+    
     document.getElementById('forgeModal').style.display = 'none';
     window.FitApp.loadWorkout(); 
+    
+    const selectEl = document.getElementById('forgeSubSelect');
+    let finalTitle = "Rotina Forjada";
+    if (selectEl && selectEl.options.length > 0 && selectEl.closest('div').style.display !== 'none') {
+        finalTitle = selectEl.options[selectEl.selectedIndex].text;
+    } else if (method === 'circuito') {
+        finalTitle = "Circuito Metabólico";
+    } else if (method === 'calistenia') {
+        finalTitle = "Calistenia Bodyweight";
+    }
+    
+    const nameInput = document.getElementById('customWorkoutName');
+    if (nameInput) nameInput.value = finalTitle;
+    
+    window.FitApp.showToast("Rotina forjada com sucesso. Verifique o plano.");
+    if(state.audioEnabled) window.FitApp.speak("Treino gerado conforme arsenal selecionado e literatura biomecânica.");
 }
 
 export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
     let generatedBlocks = [];
     let used = [...avoidNamesGlobal]; 
-    
-    // CORREÇÃO CRÍTICA 1: O Perfil agora está declarado para evitar o Crash Fatal
     const rawProfile = document.getElementById('profileSelector') ? document.getElementById('profileSelector').value : 'hipertrofia';
 
     // 1. MAPEAMENTO DE ARSENAL
@@ -86,7 +110,7 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
         });
     });
 
-    // 2. O MOTOR DE BUSCA (CORREÇÃO CRÍTICA 2: Agora aceita e devolve o targetReps)
+    // 2. O MOTOR DE BUSCA (Blindado e Preciso)
     const pullExercise = (targetAgonist, targetSubLevel = null, targetReps = "10-12 rep") => {
         const normalize = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
         const target = normalize(targetAgonist);
@@ -102,6 +126,7 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
             return hasEquip || d.equip === 'Peso Corporal';
         });
 
+        // Tenta ignorar o subnível se falhar
         if (pool.length === 0 && subTarget) {
             pool = window.dictionaryData.filter(d => {
                 if (used.includes(d.name)) return false;
@@ -113,6 +138,7 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
             });
         }
 
+        // Tenta peso corporal absoluto se falhar
         if (pool.length === 0) {
             pool = window.dictionaryData.filter(d => {
                 if (used.includes(d.name)) return false;
@@ -130,7 +156,6 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
 
             const ex = pool[Math.floor(Math.random() * pool.length)];
             used.push(ex.name);
-            // Agora devolve o obj e o target perfeitamente
             return { name: ex.name, sets: 4, target: targetReps, obj: ex, antagonist: ex.antagonist || 'Nenhum' };
         }
         return null;
@@ -165,11 +190,9 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
         if (method.includes('agonista')) style = 'agonista';
 
         const s = subOpt.toLowerCase();
-        
-        // A MATRIZ DE VOLUME: [Agonista Principal, SubNível, Sinergista Ideal, SubNível Sinergista]
-        // Garante 3-4 movimentos para o músculo grande e 2-3 para os pequenos.
         let primaryTargets = [];
         
+        // MATRIZ RÍGIDA: Garante rácio perfeito e ignora os devaneios do "synergist" original
         if (s.includes('peito') || s.includes('push')) {
             primaryTargets = [
                 ['Peitoral', 'Esternocostal', 'Tríceps', null], 
@@ -177,24 +200,21 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
                 ['Peitoral', 'Abdominal', 'Tríceps', null], 
                 ['Ombros', 'Deltoide Anterior', 'Tríceps', null]
             ];
-        }
-        else if (s.includes('costa') || s.includes('pull')) {
+        } else if (s.includes('costa') || s.includes('pull')) {
             primaryTargets = [
                 ['Costas', 'Latíssimo do Dorso', 'Bíceps', null], 
                 ['Costas', 'Espessura (Romboides)', 'Lombar', null], 
                 ['Costas', null, 'Bíceps', null], 
                 ['Bíceps', 'Bíceps Braquial', 'Ombros', 'Deltoide Posterior']
             ];
-        }
-        else if (s.includes('perna') || s.includes('quad')) {
+        } else if (s.includes('perna') || s.includes('quad')) {
             primaryTargets = [
                 ['Quadríceps', 'Quadríceps (Vastos)', 'Panturrilhas', null], 
                 ['Isquiotibiais', 'Isquiotibiais (Porção Alongada)', 'Glúteos', null], 
                 ['Glúteos', 'Glúteo Máximo', 'Isquiotibiais', null], 
                 ['Quadríceps', 'Reto Femoral', 'Panturrilhas', null]
             ];
-        }
-        else {
+        } else {
             primaryTargets = [
                 ['Ombros', 'Deltoide Anterior', 'Tríceps', null], 
                 ['Ombros', 'Deltoide Lateral', 'Bíceps', null], 
@@ -213,7 +233,7 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
                 let targetB_sub = p[1];
                 let exB = null;
                 
-                // Mágica Biomecânica Restrita pela Matriz de Volume
+                // Aplica a ordem direta da Matriz
                 if (style === 'sinergista') {
                     targetB_agonist = p[2];
                     targetB_sub = p[3];
@@ -222,10 +242,9 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
                     targetB_sub = null;
                 }
 
-                // A BUSCA DO PAR IDEAL
                 exB = pullExercise(targetB_agonist, targetB_sub, repTarget);
 
-                // REGRA DE OURO (MISTURA): Se o par ideal esgotar, chama o Core para salvar a cadência do Bi-Set!
+                // Fallback Anti-Asfixia
                 let isMixed = false;
                 if (!exB) {
                     exB = pullExercise('Core', null, "15-20 rep");
@@ -255,11 +274,70 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = []) {
             }
         });
 
-        // Aplicadores Finais Baseados no Perfil
         if (rawProfile === 'definicao') buildBlock("Finisher: Cardio Metabólico", [["Cardio/Mobilidade", "Sistema Anaeróbico", "1 min"]]);
         else if (rawProfile === 'tatico') buildBlock("Finisher: Core Blindado", [["Core", "Transverso do Abdômen", "1 min"]]);
     }
 
-    if(generatedBlocks.length === 0) generatedBlocks = [{ title: "Falta Arsenal para gerar este treino", exercises: [] }];
+    // ==========================================================
+    // CIRCUITOS & CALISTENIA
+    // ==========================================================
+    else if (method === 'circuito') {
+        let circRep = rawProfile === 'tatico' ? "1 min" : "15-20 rep";
+        buildBlock("Rodada Metabólica FullBody", [
+            ["Cardio/Mobilidade", "Sistema Anaeróbico", "45 seg"],
+            ["Quadríceps", "Quadríceps (Vastos)", circRep],
+            ["Costas", "Latíssimo do Dorso", circRep],
+            ["Isquiotibiais", "Isquiotibiais (Porção Alongada)", circRep],
+            ["Peitoral", "Esternocostal", circRep],
+            ["Core", "Reto Abdominal Superior", "1 min"]
+        ]);
+    }
+    else if (method === 'calistenia') {
+        buildBlock("Força Relativa (Push)", [["Peitoral", "Esternocostal", "Falha"], ["Tríceps", null, "Falha"]]);
+        buildBlock("Força Relativa (Pull)", [["Costas", "Latíssimo do Dorso", "Falha"], ["Bíceps", null, "Falha"]]);
+        buildBlock("Estabilidade Base", [["Quadríceps", null, "Falha"], ["Core", "Transverso do Abdômen", "Isometria Máx"]]);
+    }
+
+    // ==========================================================
+    // ALGORITMO DE GRAVIDADE (CORE FINISHER)
+    // ==========================================================
+    const isCoreEx = (exName) => {
+        const dictItem = typeof window.dictionaryData !== 'undefined' ? window.dictionaryData.find(d => d.name === exName) : null;
+        if (dictItem) {
+            const g = (dictItem.group || '').toLowerCase();
+            const f = (dictItem.subLevel || '').toLowerCase();
+            return g.includes('core') || f.includes('obliquo') || f.includes('abdom') || f.includes('estabiliza');
+        }
+        return false;
+    };
+
+    generatedBlocks.forEach(bloco => {
+        bloco.exercises.sort((a, b) => {
+            const aCore = isCoreEx(a.name);
+            const bCore = isCoreEx(b.name);
+            if (aCore && !bCore) return 1;
+            if (!aCore && bCore) return -1;
+            return 0;
+        });
+    });
+
+    generatedBlocks.sort((a, b) => {
+        const aHasCore = a.exercises.some(ex => isCoreEx(ex.name)) || a.title.toLowerCase().includes('core');
+        const bHasCore = b.exercises.some(ex => isCoreEx(ex.name)) || b.title.toLowerCase().includes('core');
+        if (aHasCore && !bHasCore) return 1;
+        if (!aHasCore && bHasCore) return -1;
+        return 0;
+    });
+
+    setTimeout(() => {
+        if (typeof FitApp !== 'undefined' && FitApp.adjustRestTime) {
+            if (rawProfile === 'definicao') FitApp.adjustRestTime(method === 'circuito' ? 30 : 45);
+            else FitApp.adjustRestTime(method === 'circuito' ? 45 : 60);
+        }
+    }, 500);
+
+    if(generatedBlocks.length === 0) generatedBlocks = [{ title: "Rotina de Contingência", exercises: [] }];
     return generatedBlocks;
 }
+
+export function forgeSmartBiset() { return null; } // Função obsoleta mantida para evitar quebra de referência global
