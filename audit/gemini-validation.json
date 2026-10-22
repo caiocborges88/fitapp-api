@@ -1,0 +1,7 @@
+{
+  "status": "ok",
+  "days": 1,
+  "exercises": 1,
+  "primary": "gemini-3.5-flash-lite",
+  "fallback": "gemini-3.8-flash"
+}

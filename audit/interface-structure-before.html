@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>FitApp - Diário de Treinos</title>
+    
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#121212">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" type="image/png" href="icon-192.png">
+
+    
+    <link rel="stylesheet" href="css/style.css">
+
+    
+    
+</head>
+<body>
+    
+    <div id="loginOverlay">
+        <div>⚡</div>
+        <h1>FitApp Elite</h1>
+        <p>Identifique-se para sincronizar seu histórico e conquistas na nuvem.</p>
+        <button onclick="FitAPI.loginComGoogle()">
+            [SVG]
+            Entrar com Google
+        </button>
+    </div>
+
+
+    <header>
+        <h1 class="header-title">💪 FitApp</h1>
+        <div>
+            
+            <button id="btnEnvToggle" onclick="FitApp.toggleGlobalEnv()">
+                <span id="envIcon">🏋️</span> <span id="envText">Academia</span> <span>🔄</span>
+            </button>
+            <button class="btn-audio" id="btnAudio">🔊</button>
+            <button onclick="document.getElementById('nav-perfil').click()">⚙️</button>
+        </div>
+    </header>
+
+    <div class="container" id="appContainer">
+        
+        
+        <main id="tab-treino" class="tab-content active">
+            <div id="timerContainer" class="timer-container">
+                <div id="timerDisplay" class="timer-display">01:00</div>
+                <div class="timer-controls">
+                    <button class="time-btn active" data-time="60">60s</button>
+                    <button class="time-btn" data-time="90">90s</button>
+                    <button class="time-btn" data-time="120">120s</button>
+                </div>
+            </div>
+
+            
+            <div id="campaignDashboard">
+                <div>
+                    <div>
+                        <h2 id="campaignDashTitle">Campanha Ativa</h2>
+                        <p id="campaignDashSubtitle">Foco Biomecânico Selado</p>
+                    </div>
+                    <div>
+                        <span id="campaignDashCount">0/24</span>
+                        <p>Treinos</p>
+                    </div>
+                </div>
+                <div>
+                    <div id="campaignDashBar"></div>
+                </div>
+                <button onclick="FitApp.resetCampaign()">🛑 Abortar e Reforjar Plano</button>
+            </div>
+
+            
+            <div id="smartBannerSetup">
+                <div>🛡️</div>
+                <h3>Plano Tático Ausente</h3>
+                <p>Defina seu método e nível de combate na Central de Comando antes de iniciar.</p>
+                <button onclick="document.getElementById('nav-perfil').click()">⚙️ Configurar Agora</button>
+            </div>
+        
+            <div class="workout-cards" id="workoutCards">
+                <div class="card-treino" id="card-A" onclick="FitApp.startWorkout('A')">
+                    <h3>Treino A</h3>
+                    <p>Peito & Tríceps</p>
+                </div>
+                <div class="card-treino" id="card-B" onclick="FitApp.startWorkout('B')">
+                    <h3>Treino B</h3>
+                    <p>Costas & Bíceps</p>
+                </div>
+                <div class="card-treino" id="card-C" onclick="FitApp.startWorkout('C')">
+                    <h3>Treino C</h3>
+                    <p>Pernas & Ombros</p>
+                </div>
+                
+                <div class="card-treino" id="card-D" onclick="FitApp.startWorkout('D')">
+                    <h3>Treino D</h3>
+                    <p>Foco Posterior</p>
+                </div>
+                
+                <div class="card-treino" id="card-Cardio" onclick="FitApp.startCardio()">
+                    <h3>🏃 Motor Aeróbico</h3>
+                    <p>Corrida, Bike, Elíptico...</p>
+                </div>
+            </div>
+
+            
+            <div id="templatesFrontline">
+                <div>
+                    <h3>Treino Pessoal</h3>
+                    <div>
+                        <button onclick="FitApp.openForgeModal()">➕ Forjar Treino</button>
+                    </div>
+                </div>
+                <div id="customWorkoutsList"></div>
+            </div>
+
+            
+            <div id="workoutPreview" class="preview-container">
+                <div>
+                    <h2 id="previewTitle">Treino Selecionado</h2>
+                    <p id="previewDesc">Revise seu plano de combate e adapte se necessário.</p>
+                    
+                    
+                    <div id="anatomyHeatmap">
+                        
+                        
+                        <div>
+                            <span>Frontal</span>
+                            [SVG]
+                        </div>
+                        
+                        
+                        <div>
+                            <span>Dorsal</span>
+                            [SVG]
+                        </div>
+                    </div>
+                    
+
+                    <div id="customWorkoutNameContainer">
+                        <input type="text" id="customWorkoutName" placeholder="Nome do Treino (Ex: Peito Focado)">
+                    </div>
+                </div>
+                
+                <div id="customWorkoutControls">
+                    <button class="btn-action" onclick="FitApp.openAddExerciseModal()">➕ Exercício</button>
+                    <button class="btn-action" onclick="FitApp.saveCustomWorkout()">💾 Salvar Template</button>
+                </div>
+
+                
+                <div>
+                    <button id="btnStartPrep" class="btn-action btn-start-pulse" onclick="FitApp.startPrepPhase()">🧘 Preparação Recomendada (3 min)</button>
+                    <button id="btnStartWorkout" class="btn-action" onclick="FitApp.beginWorkoutExecution()">▶️ Pular Direto para o Combate</button>
+                </div>
+
+                
+                <div id="previewList"></div>
+                
+                <button class="btn-action" onclick="FitApp.cancelWorkoutPreview()">⬅️ Cancelar e Voltar</button>
+            </div>
+
+            
+            <div id="prepArea">
+                <div>
+                    <div>🧘</div>
+                    <h2>Preparação</h2>
+                    <p>Lubrificação articular para a missão de hoje.</p>
+                </div>
+                <div id="prepList"></div>
+                <button class="btn-action btn-start-pulse" onclick="FitApp.beginWorkoutExecution()">🔥 Iniciar Combate (Força)</button>
+                <button class="btn-action" onclick="FitApp.cancelWorkoutPreview()">⬅️ Cancelar e Voltar</button>
+            </div>
+
+            
+            <div id="cooldownArea">
+                <h2>Missão Cumprida!</h2>
+                <p>O combate foi salvo. Reduza o batimento por 90s para ganhar <strong>+1 Ponto de Suor</strong>.</p>
+                
+                <div id="cooldownTimerDisplay">01:30</div>
+                
+                <div>
+                    <button id="btnStartCooldown" class="btn-action" onclick="FitApp.startCooldownTimer()">▶️ Iniciar Alongamento</button>
+                    <button class="btn-action" onclick="FitApp.skipCooldown()">Pular e Abrir Recompensas ➔</button>
+                </div>
+            </div>
+
+            <div id="workoutArea">
+                
+                <div id="workoutHud" class="workout-hud">
+                    <div id="globalTimerDisplay">00:00:00</div>
+                    <div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
+                </div>
+                <div id="exerciseList"></div>
+            </div>
+
+            
+            <div id="cardioArea">
+                <div>
+                    <div>
+                        <h2>Monitoramento</h2>
+                        <p>Inicie o cronômetro ou insira os dados do relógio no final</p>
+                    </div>
+
+                    <div id="cardioTimerDisplay">00:00:00</div>
+                    
+                    <div>
+                        <button id="btnToggleCardioTimer" onclick="FitApp.toggleCardioTimer()" class="btn-action">▶ Iniciar Relógio</button>
+                    </div>
+
+                    <div>
+                        <div>
+                            <label>Distância (Km)</label>
+                            <input type="number" id="cardioDist" placeholder="Ex: 5.2">
+                        </div>
+                        <div>
+                            <label>Calorias (Kcal)</label>
+                            <input type="number" id="cardioKcal" placeholder="Ex: 350">
+                        </div>
+                        <div>
+                            <label>Frequência Cardíaca (BPM Médio)</label>
+                            <input type="number" id="cardioBpm" placeholder="Ex: 145">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-finish-area" id="btnFinishArea">
+                <button id="btnFinishAction" class="btn-action btn-warning">⚠️ Encerrar e Salvar Dados</button>
+                <button onclick="abortarMissao()" class="btn-action">❌ Abortar Missão (Não Salvar)</button>
+            </div>
+        </main>
+        
+        
+        <main id="tab-evolucao" class="tab-content">
+            <div class="stats-panel">
+                <div class="stat-box" onclick="FitApp.openHistoryModal()">
+                    <span id="statTotal" class="stat-value">0</span>
+                    <span class="stat-label">Treinos Salvos 🔍</span>
+                </div>
+                <div class="stat-box">
+                    <span id="statLast" class="stat-value">-</span>
+                    <span class="stat-label">Último Treino</span>
+                </div>
+            </div>
+            
+            <div class="weekly-calendar" id="radarContainer">
+                <div>Distribuição de Séries (30 Dias)</div>
+                <p>Volume de séries concluídas por grupamento.</p>
+                <div>
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            
+            <div class="weekly-calendar" id="isolationContainer">
+                <div>Rastreador de Sobrecarga</div>
+                <select id="exerciseIsolationSelect" class="select-level" onchange="FitApp.renderIsolationChart()">
+                    <option value="">Selecione um exercício do histórico...</option>
+                </select>
+                <div>
+                    <canvas id="isolationChart"></canvas>
+                </div>
+            </div>
+            <div class="weekly-calendar">
+                <div>Histórico da Semana</div>
+                <div id="weeklyGrid"></div>
+            </div>
+            <div class="ai-panel">
+                <div class="ai-header">🧠 Central de IA Generativa</div>
+                <p>Aproveite o poder do processamento avançado para otimizar seus resultados.</p>
+                
+                <div>
+                    <button class="btn-ai" onclick="FitApp.openImportAiModal()">📥 Importar (WhatsApp)</button>
+                    <button class="btn-ai" id="btnAnalyzeAI">💬 Mensagem de motivação</button>
+                </div>
+                
+                <div class="loader" id="aiLoader">Processando dados na matriz... aguarde.</div>
+                <div class="ai-response" id="aiResponse"></div>
+            </div>
+        </main>
+
+        
+        <main id="tab-conquistas" class="tab-content">
+            <div class="album-header">
+                <h2>Galeria de Conquistas</h2>
+                <div class="album-progress" id="albumProgress">0 / 24 Conquistas</div>
+            </div>
+            <div class="album-grid" id="albumGrid"></div>
+        </main>
+        
+        
+        <main id="tab-biblioteca" class="tab-content">
+            <div class="library-header">
+                <h2>Base de Movimentos</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Buscar exercício ou músculo..." onkeyup="FitApp.filterLibrary()">
+                </div>
+            </div>
+            
+            
+            <div id="libraryHeatmap">
+                
+                <div>
+                    [SVG]
+                </div>
+                
+                <div>
+                    [SVG]
+                </div>
+            </div>
+            
+            <div id="libraryGrid" class="library-grid"></div>
+        </main>
+
+        
+        <main id="tab-arena" class="tab-content">
+            <div class="dashboard-header">
+                <h2>⚔️ Arena PvP</h2>
+                <p>
+                    Ranking Global de <strong>Poder de Combate</strong><br>
+                    <span>(Carta Única = 10 pts | Suor Repetido = 1 pt)</span>
+                </p>
+                <button onclick="FitGamification.loadLeaderboard()">
+                    🔄 Atualizar Radar
+                </button>
+            </div>
+            
+            <div id="leaderboardContainer">
+                
+            </div>
+        </main>
+
+        
+        <main id="tab-perfil" class="tab-content">
+            <div class="config-header">
+                <h2>Central de Comando</h2>
+            </div>
+
+            
+            <div class="profile-card">
+                <div class="profile-avatar">C</div>
+                <div class="profile-info">
+                    <h3>Caio César Borges Teodoro</h3>
+                    <p>Atleta de Elite <span>•</span> Nível <span id="profileLevelDisplay">Iniciante</span></p>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat"><span id="statWorkouts">0</span>Missões</div>
+                    <div class="stat"><span id="statSweat">0</span>Suor</div>
+                    <div class="stat"><span id="statCards">0</span>Cartas</div>
+                </div>
+            </div>
+
+            
+            <div class="config-section" id="biomechanicsPanel">
+                <div class="section-title">🎯 Plano Tático</div>
+                
+                <div class="input-group">
+                    <label>Divisão de Treino (Método)</label>
+                    
+                    <select id="mainMethodSelector" class="form-select">
+                        <option value="abc" selected>Treino ABC (Push / Pull / Legs)</option>
+                        <option value="abcd">Treino ABCD (Pernas Divididas)</option>
+                        <option value="biset_agonista">Bi-Set Agonista (Pré-Exaustão)</option>
+                        <option value="biset_antagonista">Bi-Set Antagônico & Misto</option>
+                        <option value="biset_sinergista">Bi-Set Sinergista (Peito/Tri, Costas/Bi)</option>
+                        <option value="circuito">Circuito Metabólico (FullBody)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Foco Biomecânico</label>
+                    <select id="profileSelector" class="form-select">
+                        <option value="hipertrofia">💪 Hipertrofia (Ganho de Massa)</option>
+                        <option value="definicao">🔥 Definição (Metabólico)</option>
+                        <option value="feminino">🍑 Foco em Inferiores</option>
+                        <option value="tatico">🪖 Condicionamento Tático</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Nível de Dificuldade</label>
+                    <select id="levelSelector" class="form-select">
+                        <option value="iniciante">🟢 Iniciante</option>
+                        <option value="intermediario">🟡 Intermediário</option>
+                        <option value="avancado">🔴 Avançado</option>
+                    </select>
+                </div>
+                
+                
+                <button onclick="FitApp.lockCampaign()">🔒 Travar Plano e Iniciar</button>
+
+                
+
+                
+            </div>
+
+            
+            <div class="config-section">
+                <div class="section-title">📡 Integrações & Sensores</div>
+                
+                <div class="integration-item">
+                    <div class="int-icon">⌚</div>
+                    <div class="int-details">
+                        <h4>Samsung Galaxy Watch7</h4>
+                        <p>Telemetria e Biossensores Android</p>
+                    </div>
+                    <button class="btn-toggle active">ON</button>
+                </div>
+
+                <div class="integration-item">
+                    <div class="int-icon">🔥</div>
+                    <div class="int-details">
+                        <h4>Strava Network</h4>
+                        <p>Exportação de Relatórios de Combate</p>
+                    </div>
+                    <button class="btn-toggle active">Sync</button>
+                </div>
+            </div>
+
+            
+            <div class="config-section">
+                <div class="section-title">⚙️ Segurança</div>
+                <button class="btn-action btn-danger" onclick="encerrarSessao()">
+                    🚪 Encerrar Turno (Log Out)
+                </button>
+            </div>
+        </main>
+
+    
+
+    <div id="forgeModal" class="swap-modal-overlay">
+        <div>
+            <div>
+                <div>🧬</div>
+                <h3>A Forja</h3>
+                <p>Gerador baseado em fisiologia e biomecânica.</p>
+            </div>
+            
+            <label>Metodologia Base</label>
+            <select id="forgeMethod" class="select-level" onchange="FitApp.updateForgeOptions()">
+                <option value="ppl">Push / Pull / Legs (Eixos)</option>
+                <option value="biset_agonista">Bi-Set Agonista (Pré-Exaustão)</option>
+                <option value="biset_antagonista">Bi-Set Antagônico & Misto</option>
+                <option value="biset_sinergista">Bi-Set Sinergista (Peito/Tri, Costas/Bi)</option>
+                <option value="circuito">Circuito Metabólico (FullBody)</option>
+                <option value="calistenia">Calistenia (Peso do Corpo)</option>
+            </select>
+
+            <div id="forgeSubOptionsBox">
+                <label id="forgeSubLabel">Foco do Treino</label>
+                <select id="forgeSubSelect" class="select-level"></select>
+            </div>
+            
+            
+            <label>Arsenal Disponível:</label>
+            <div id="forgeEquipChips">
+                <button class="forge-equip-chip active" data-equip="Pesos_Livres" onclick="this.classList.toggle('active'); if(this.classList.contains('active')){ this.style.background='rgba(166, 77, 255, 0.2)'; this.style.color='#a64dff'; this.style.borderColor='#a64dff'; } else { this.style.background='#2a2a2a'; this.style.color='#aaa'; this.style.borderColor='#444'; }">🏋️ Halteres</button>
+                <button class="forge-equip-chip active" data-equip="Maquinas_Polias" onclick="this.classList.toggle('active'); if(this.classList.contains('active')){ this.style.background='rgba(166, 77, 255, 0.2)'; this.style.color='#a64dff'; this.style.borderColor='#a64dff'; } else { this.style.background='#2a2a2a'; this.style.color='#aaa'; this.style.borderColor='#444'; }">⛓️ Máquinas</button>
+                <button class="forge-equip-chip active" data-equip="Barras_Anilhas" onclick="this.classList.toggle('active'); if(this.classList.contains('active')){ this.style.background='rgba(166, 77, 255, 0.2)'; this.style.color='#a64dff'; this.style.borderColor='#a64dff'; } else { this.style.background='#2a2a2a'; this.style.color='#aaa'; this.style.borderColor='#444'; }">📏 Barras</button>
+                <button class="forge-equip-chip active" data-equip="Peso_Corporal" onclick="this.classList.toggle('active'); if(this.classList.contains('active')){ this.style.background='rgba(166, 77, 255, 0.2)'; this.style.color='#a64dff'; this.style.borderColor='#a64dff'; } else { this.style.background='#2a2a2a'; this.style.color='#aaa'; this.style.borderColor='#444'; }">🏠 Peso corporal</button>
+                <button class="forge-equip-chip active" data-equip="Calistenia" onclick="this.classList.toggle('active'); if(this.classList.contains('active')){ this.style.background='rgba(166, 77, 255, 0.2)'; this.style.color='#a64dff'; this.style.borderColor='#a64dff'; } else { this.style.background='#2a2a2a'; this.style.color='#aaa'; this.style.borderColor='#444'; }">🏖️ Barras de calistenia</button>
+            </div>
+
+            <button onclick="FitApp.generateForgedWorkout()">⚡ Gerar Rotina</button>
+            <button onclick="document.getElementById('forgeModal').style.display='none'">Cancelar</button>
+        </div>
+    </div>
+    
+    <div id="snapModal" class="swap-modal-overlay">
+        <div>
+            <div>⚡</div>
+            <h2>Contrato de Elite</h2>
+            <p id="snapMessage">O Spotter detectou uma margem de evolução. Aumente a carga do seu primeiro exercício em <strong>+2kg</strong>.<br><br>Aceite o pacto e garanta <strong>100% de chance</strong> de um drop Ouro ao finalizar o treino.</p>
+            <div>
+                <button onclick="FitApp.acceptSnap()">🔥 Aceitar o Desafio</button>
+                <button onclick="FitApp.declineSnap()">Recusar (Treino Normal)</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="pack-modal" id="packModal">
+        <div class="pack-envelope" id="packEnvelope">
+            Pacotinho do Dia<br><br>👆 TOQUE PARA RASGAR
+        </div>
+        <div class="pack-reveal-area" id="packRevealArea"></div>
+        
+        
+        <button class="btn-action" onclick="FitApp.exportStravaCard(-1)">📸 Compartilhar no Instagram</button>
+        
+        <button class="btn-close-modal" id="btnClosePack">Ir para o Álbum</button>
+    </div>
+
+    
+    <div id="stravaCardContainer">
+        <div id="stravaCard">
+
+            
+            <div></div>
+            <div></div>
+
+            
+            <div>
+                <div>Registro de Combate</div>
+                <h2>
+                    Missão<br><span>Cumprida</span>
+                </h2>
+            </div>
+
+            
+            <div>
+                <div>🔥</div>
+                <div id="stravaWorkoutType">Treino C</div>
+            </div>
+
+            
+            <div>
+                <div>
+                    <div>Tempo</div>
+                    <div id="stravaDuration">40 min</div>
+                </div>
+                <div>
+                    <div>Volume</div>
+                    <div id="stravaVolume">1.9k kg</div>
+                </div>
+            </div>
+
+            
+            <div>
+                <div>FITAPP <span>ELITE</span></div>
+                <div>Forjado na disciplina</div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="autoPilotModal" class="swap-modal-overlay">
+        <div>
+            <h3>🤖 Piloto Automático</h3>
+            <p>Configure o ciclo tático. O Spotter guiará suas séries pelo áudio sem você tocar na tela.</p>
+            
+            <div>
+                <div>
+                    <label>Ação (seg)</label>
+                    <input type="number" id="autoExecTime" value="40">
+                </div>
+                <div>
+                    <label>Pausa (seg)</label>
+                    <input type="number" id="autoRestTime" value="45">
+                </div>
+            </div>
+            
+            <button onclick="FitApp.startAutoPilot()">▶️ Iniciar Automação</button>
+            <button onclick="document.getElementById('autoPilotModal').style.display='none'">Cancelar</button>
+        </div>
+    </div>
+
+    <div id="addExerciseModal" class="swap-modal-overlay">
+        <div class="swap-modal-content">
+            <div class="swap-modal-header">
+                <h3>Adicionar Exercício</h3>
+                <button class="btn-close-modal" onclick="document.getElementById('addExerciseModal').style.display='none'">&times;</button>
+            </div>
+            
+            <input type="text" id="searchAddInput" placeholder="Buscar exercício..." onkeyup="FitApp.filterAddModal()">
+            
+            <div>
+                <button class="filter-chip" onclick="FitApp.setCategoryFilter('todos', this)">Todos</button>
+                <button class="filter-chip" onclick="FitApp.setCategoryFilter('peito', this)">Peito</button>
+                <button class="filter-chip" onclick="FitApp.setCategoryFilter('costas', this)">Costas</button>
+                <button class="filter-chip" onclick="FitApp.setCategoryFilter('pernas', this)">Pernas</button>
+                <button class="filter-chip" onclick="FitApp.setCategoryFilter('ombros', this)">Ombros</button>
+                <button class="filter-chip" onclick="FitApp.setCategoryFilter('triceps', this)">Tríceps</button>
+                <button class="filter-chip" onclick="FitApp.setCategoryFilter('biceps', this)">Bíceps</button>
+                <button class="filter-chip" onclick="FitApp.setCategoryFilter('core', this)">Core</button>
+            </div>
+
+            <div id="addExerciseList" class="swap-list"></div>
+            
+            <div id="addExerciseConfig">
+                <h4 id="selectedExerciseName">Nome do Exercicio</h4>
+                <div>
+                    <div>
+                        <label>Séries</label>
+                        <input type="number" id="customSets" value="4">
+                    </div>
+                    <div>
+                        <label>Repetições</label>
+                        <input type="text" id="customReps" value="10-12">
+                    </div>
+                </div>
+                <button onclick="FitApp.confirmAddExercise()">✅ Adicionar ao Treino</button>
+            </div>
+            
+            <button onclick="document.getElementById('addExerciseModal').style.display='none'">Cancelar</button>
+        </div>
+    </div>
+
+    <div id="historyModal" class="swap-modal-overlay">
+        <div class="swap-modal-content">
+            <div class="swap-modal-header">
+                <h3>📖 Histórico de Treinos</h3>
+                <button class="btn-close-modal" onclick="document.getElementById('historyModal').style.display='none'">&times;</button>
+            </div>
+            
+            <div>
+                <button id="btnTabList" class="time-btn active" onclick="FitApp.switchHistoryTab('list')">📋 Lista</button>
+                <button id="btnTabCalendar" class="time-btn" onclick="FitApp.switchHistoryTab('calendar')">📅 Mensal</button>
+            </div>
+            
+            <div id="historyListView"></div>
+            <div id="historyCalendarView"></div>
+        </div>
+    </div>
+
+    <div id="importAiModal" class="swap-modal-overlay">
+        <div class="swap-modal-content">
+            <div class="swap-modal-header">
+                <h3>
+                    <span>🧠</span> Mente Mestra IA
+                </h3>
+                <button class="btn-close-modal" onclick="document.getElementById('importAiModal').style.display='none'">&times;</button>
+            </div>
+            
+            
+            <div>
+                <button id="btnTabAiCriar" onclick="FitApp.switchAiTab('criar')">🛠️ Criar Periodização</button>
+                <button id="btnTabAiImportar" onclick="FitApp.switchAiTab('importar')">📋 Colar Texto (WhatsApp)</button>
+            </div>
+
+            
+            <div id="aiRouteCriar">
+                <p>A IA montará uma grade de treinos perfeita usando apenas os exercícios do banco de dados para o equipamento escolhido.</p>
+                
+                <div>
+                    <div>
+                        <label>Metodologia</label>
+                        <select id="aiMethod">
+                            <option value="abc" selected>Treino ABC (Push / Pull / Legs)</option>
+                            <option value="abcd">Treino ABCD (Pernas Divididas)</option>
+                            <option value="biset_agonista">Bi-Set Agonista (Pré-Exaustão)</option>
+                            <option value="biset_antagonista">Bi-Set Antagônico & Misto</option>
+                            <option value="biset_sinergista">Bi-Set Sinergista (Peito/Tri, Costas/Bi)</option>
+                            <option value="circuito">Circuito Metabólico (FullBody)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Terreno / Equipamento</label>
+                        <select id="aiEnv">
+                            <option value="academia" selected>🏋️ Academia Completa</option>
+                            <option value="peso_corporal">🏠 Apenas Peso Corporal</option>
+                            <option value="calistenia">🏖️ Calistenia e Barras</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div id="aiRouteImportar">
+                <p>Cole o texto enviado pelo seu treinador. A IA identificará os dias de treino automaticamente.</p>
+                
+                <label>Nome do Treino (Opcional)</label>
+                <input type="text" id="aiWorkoutName" placeholder="Ex: Treino de Férias">
+                
+                <label>Texto do Treino</label>
+                <textarea id="aiWorkoutText" rows="6" placeholder="Cole a mensagem aqui..."></textarea>
+            </div>
+            
+            <button id="btnProcessAi" class="btn-action" onclick="FitApp.processWorkoutWithAI()">⚡ Enviar para o Cérebro Neural</button>
+            <div id="aiImportLoader" class="loader">Forjando matrizes táticas...</div>
+        </div>
+    </div>
+
+    
+    <nav id="bottomNav">
+        <button id="nav-treino" class="active"><span class="icon">🏋️</span> Treinar</button>
+        <button id="nav-evolucao"><span class="icon">🧠</span> Status</button>
+        <button id="nav-conquistas"><span class="icon">🏆</span> Álbum</button>
+        <button id="nav-arena"><span class="icon">⚔️</span> Arena</button>
+        <button id="nav-biblioteca"><span class="icon">🔍</span> Base</button>
+        
+        
+        <button id="nav-perfil"></button>
+    </nav>
+
+    <div id="toast" role="status" aria-live="polite" class="toast"></div>
+
+    
+    <script src="vendor/chart.js"></script>
+    
+    <script src="vendor/html2canvas.js"></script>
+    
+    
+    <script src="vendor/firebase-app.js"></script>
+    <script src="vendor/firebase-auth.js"></script>
+    <script src="vendor/firebase-firestore.js"></script>
+
+    
+    <script src="js/dados.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/api.js"></script> 
+    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/gamification.js"></script>
+
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Base segura: Service Worker ativado.', reg))
+                    .catch(err => console.error('Falha no motor offline:', err));
+            });
+        }
+    </script>
+</body>
+</html>

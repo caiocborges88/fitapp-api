@@ -1,0 +1,238 @@
+{
+  "date": "2026-10-15",
+  "localCommit": "5525ded095f30fb2c7537bfeb664dccd792da806",
+  "githubCommit": "73dfff970fe8ea9ff79477fee37a99b832140aec",
+  "note": "Simulações isoladas; sem navegador, sem credenciais e sem chamadas de produção.",
+  "results": [
+    {
+      "name": "Sintaxe de todos os módulos locais",
+      "observed": [
+        {
+          "file": "admin.js",
+          "ok": true
+        },
+        {
+          "file": "ai.js",
+          "ok": true
+        },
+        {
+          "file": "api.js",
+          "ok": true
+        },
+        {
+          "file": "app.js",
+          "ok": true
+        },
+        {
+          "file": "audio.js",
+          "ok": true
+        },
+        {
+          "file": "combat.js",
+          "ok": true
+        },
+        {
+          "file": "dados.js",
+          "ok": true
+        },
+        {
+          "file": "forge.js",
+          "ok": false,
+          "error": "SyntaxError: Identifier 'forgeSmartBiset' has already been declared\r"
+        },
+        {
+          "file": "gamification.js",
+          "ok": true
+        },
+        {
+          "file": "state.js",
+          "ok": true
+        },
+        {
+          "file": "sync.js",
+          "ok": true
+        },
+        {
+          "file": "ui.js",
+          "ok": true
+        },
+        {
+          "file": "utils.js",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "name": "ABCD local após contornar duplicação apenas em memória",
+      "observed": [
+        {
+          "day": "A",
+          "blocks": [
+            {
+              "title": "Rotina de Contingência",
+              "exercises": []
+            }
+          ],
+          "exercises": 0
+        },
+        {
+          "day": "B",
+          "blocks": [
+            {
+              "title": "Rotina de Contingência",
+              "exercises": []
+            }
+          ],
+          "exercises": 0
+        },
+        {
+          "day": "C",
+          "blocks": [
+            {
+              "title": "Rotina de Contingência",
+              "exercises": []
+            }
+          ],
+          "exercises": 0
+        },
+        {
+          "day": "D",
+          "blocks": [
+            {
+              "title": "Rotina de Contingência",
+              "exercises": []
+            }
+          ],
+          "exercises": 0
+        }
+      ]
+    },
+    {
+      "name": "Bi-set antagonista local após contornar duplicação apenas em memória",
+      "observed": [
+        {
+          "title": "Série 1: Pré-Exaustão (Agonista)",
+          "groups": [
+            "Peitoral",
+            "Peitoral"
+          ]
+        },
+        {
+          "title": "Série 2: Pré-Exaustão (Agonista)",
+          "groups": [
+            "Peitoral",
+            "Peitoral"
+          ]
+        },
+        {
+          "title": "Série 3: Pré-Exaustão (Agonista)",
+          "groups": [
+            "Peitoral",
+            "Peitoral"
+          ]
+        },
+        {
+          "title": "Série 4: Pré-Exaustão (Agonista)",
+          "groups": [
+            "Ombros",
+            "Ombros"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cobertura do motor remoto com seu próprio catálogo",
+      "observed": [
+        {
+          "day": "push",
+          "exercises": 11
+        },
+        {
+          "day": "pull",
+          "exercises": 9
+        },
+        {
+          "day": "legs",
+          "exercises": 8
+        }
+      ]
+    },
+    {
+      "name": "Filtro IA com catálogo local e remoto",
+      "observed": [
+        {
+          "version": "local",
+          "total": 85,
+          "home": 0,
+          "calisthenics": 0,
+          "missingFocus": 85
+        },
+        {
+          "version": "github",
+          "total": 85,
+          "home": 0,
+          "calisthenics": 0,
+          "missingFocus": 0
+        }
+      ]
+    },
+    {
+      "name": "Restaurar estado no formato realmente salvo",
+      "observed": "TypeError: Cannot read properties of undefined (reading 'currentRoutine')"
+    },
+    {
+      "name": "Gráfico de isolamento com histórico válido",
+      "observed": "ReferenceError: labstate is not defined"
+    },
+    {
+      "name": "Pacote de recompensa no escopo real do módulo",
+      "observed": "ReferenceError: FitAudio is not defined"
+    },
+    {
+      "name": "Identificador do primeiro template IA",
+      "observed": {
+        "persistedId": null,
+        "route": "custom_null",
+        "lookup": null
+      }
+    },
+    {
+      "name": "Ordem da decisão de descanso no handler real",
+      "observed": {
+        "domCheckbox": true,
+        "modelCheckboxBeforeUpdate": false,
+        "canRest": false,
+        "note": "updateState() só ocorre depois dessa decisão"
+      }
+    },
+    {
+      "name": "API aceita requisição sem token em simulação",
+      "observed": {
+        "modelCalls": 1,
+        "status": 200,
+        "body": {
+          "resultado": "[]"
+        }
+      }
+    },
+    {
+      "name": "Biblioteca: adicionar exercício com pesquisa que não casa com o nome",
+      "observed": "TypeError: Cannot read properties of undefined (reading 'toLowerCase')"
+    },
+    {
+      "name": "Duas sincronizações simultâneas da mesma fila",
+      "observed": {
+        "queued": 1,
+        "writes": 2,
+        "remaining": 0
+      }
+    },
+    {
+      "name": "Novo treino entra na fila enquanto sincroniza",
+      "observed": {
+        "remaining": [],
+        "expectedRemainingId": "added-during-sync"
+      }
+    }
+  ]
+}

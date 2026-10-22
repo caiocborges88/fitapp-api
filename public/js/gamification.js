@@ -1,9 +1,12 @@
+import { FitAudio } from './audio.js';
+import { escapeHTML } from './utils.js';
 // static/js/gamification.js
 'use strict';
 
 var FitGamification = (() => {
     let currentAlbumPage = 1;
-    let isSnapRewardActive = false; // NOVO: Memória tática do Contrato de Elite
+    let openingPack = false;
+    let rewardSessionId = null;
 
     // --- 1. MOTORES DE NUVEM (CLOUD SYNC) ---
     // Busca o cofre criptografado do usuário ativo
@@ -24,38 +27,8 @@ var FitGamification = (() => {
         }
     }
 
-    // Tranca e salva as novas conquistas na nuvem
-    async function savePlayerProfile(album, repetidas) {
-        const user = firebase.auth().currentUser;
-        if (!user) return;
-        
-        // CÉREBRO TÁTICO: Calcula o poder aqui e salva pronto na nuvem
-        const combatPower = (album.length * 10) + repetidas;
-
-        try {
-            await firebase.firestore().collection('jogadores').doc(user.uid).set({
-                album: album,
-                repetidas: repetidas,
-                poder_combate: combatPower, // NOVO: Salva o poder pré-calculado
-                nome: user.displayName,
-                email: user.email,
-                ultimoAcesso: firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true });
-        } catch (error) {
-            console.error("Erro ao selar o cofre na nuvem:", error);
-        }
-    }
-
-    // Adiciona moedas de suor diretamente no cofre (Usado pela Volta à Calma)
-    async function addBonusSweat(amount) {
-        const profile = await getPlayerProfile();
-        const currentSweat = profile.repetidas || 0;
-        await savePlayerProfile(profile.album || [], currentSweat + amount);
-        console.log(`[Gamificação] +${amount} Ponto(s) de Suor creditado(s) na nuvem.`);
-    }
-
-    function showPackModal(snapActive = false) { 
-        isSnapRewardActive = snapActive; // Grava se o desafio foi aceito
+    function showPackModal(snapActive = false, sessionId = null) {
+        rewardSessionId = sessionId || JSON.parse(window.FitApp.safeGet('fitapp_week_log') || '[]').at(-1)?._id;
         
         const envelope = document.getElementById('packEnvelope');
         
@@ -63,8 +36,8 @@ var FitGamification = (() => {
         envelope.innerHTML = `
             <div style="z-index: 2; position: relative;">
                 <div style="font-size: 55px; filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.8)); margin-bottom: 10px;">📦</div>
-                <div style="font-size: 15px; text-transform: uppercase; letter-spacing: 2px; color: #fff; font-weight: 900;">Drop Tático</div>
-                <div style="font-size: 10px; color: #00ff88; margin-top: 15px; letter-spacing: 3px; animation: pulse 1s infinite;">TOCAR PARA ABRIR</div>
+                <div style="font-size: 15px; text-transform: uppercase; letter-spacing: 2px; color: var(--ink); font-weight: 900;">Drop Tático</div>
+                <div style="font-size: 10px; color: var(--accent); margin-top: 15px; letter-spacing: 3px; animation: pulse 1s infinite;">TOCAR PARA ABRIR</div>
             </div>
         `;
         
@@ -75,6 +48,9 @@ var FitGamification = (() => {
     }
     
     async function openPack() {
+        if (openingPack) return;
+        openingPack = true;
+        try {
         FitAudio.packRip(); // Som do pacote abrindo
         const envelope = document.getElementById('packEnvelope');
         const revealArea = document.getElementById('packRevealArea'); 
@@ -82,7 +58,7 @@ var FitGamification = (() => {
         // 💥 EFEITO FLASH DE EXPLOSÃO (Imersão 100%)
         const flash = document.createElement('div');
         flash.style.position = 'fixed'; flash.style.top = '0'; flash.style.left = '0'; flash.style.width = '100%'; flash.style.height = '100%';
-        flash.style.background = '#fff'; flash.style.zIndex = '3000'; flash.style.transition = 'opacity 0.8s ease-out'; flash.style.pointerEvents = 'none';
+        flash.style.background = 'var(--ink)'; flash.style.zIndex = '3000'; flash.style.transition = 'opacity 0.8s ease-out'; flash.style.pointerEvents = 'none';
         document.body.appendChild(flash);
         
         setTimeout(() => { flash.style.opacity = '0'; }, 50);
@@ -91,48 +67,12 @@ var FitGamification = (() => {
         envelope.style.display = 'none'; 
         
         // Status visual de comunicação militar
-        revealArea.innerHTML = '<div style="color: #00ff88; font-weight: bold; margin-top: 20px; font-family: monospace; letter-spacing: 1px;">Descriptografando... 📡</div>';
+        revealArea.innerHTML = '<div style="color: var(--accent); font-weight: bold; margin-top: 20px; font-family: monospace; letter-spacing: 1px;">Descriptografando... 📡</div>';
         revealArea.style.display = 'flex';
         
-        const profile = await getPlayerProfile();
-        let savedCollection = profile.album || [];
-        let repetidas = profile.repetidas || 0; 
-        
-        const roll = Math.random(); 
-        let targetRarity = 'comum';
-        
-        if (isSnapRewardActive) {
-            targetRarity = roll > 0.70 ? 'holografico' : 'ouro';
-            isSnapRewardActive = false; 
-        } else {
-            if (roll > 0.95) targetRarity = 'holografico'; 
-            else if (roll > 0.85) targetRarity = 'ouro'; 
-            else if (roll > 0.60) targetRarity = 'prata';
-        }
-
-        let pool = stickersDB.filter(s => s.rarity === targetRarity);
-        if (pool.length === 0) pool = stickersDB.filter(s => s.rarity === 'comum'); 
-
-        let missingInPool = pool.filter(s => !savedCollection.includes(s.id));
-        
-        let drawn;
-        let isRepeated = false;
-
-        if ((targetRarity === 'ouro' || targetRarity === 'holografico') && missingInPool.length > 0) {
-            drawn = missingInPool[Math.floor(Math.random() * missingInPool.length)];
-        } else {
-            drawn = pool[Math.floor(Math.random() * pool.length)];
-        }
-        
-        if (!savedCollection.includes(drawn.id)) {
-            savedCollection.push(drawn.id);
-        } else {
-            isRepeated = true;
-            repetidas++;
-        }
-        
-        await savePlayerProfile(savedCollection, repetidas);
-
+        await window.FitApp.syncOfflineWorkouts();
+        const result = await FitAPI.solicitarRecompensa(rewardSessionId);
+        const { drawn, isRepeated } = result;
         revealArea.innerHTML = ''; // Limpa o aviso de sincronização
         
         const div = document.createElement('div'); 
@@ -143,7 +83,7 @@ var FitGamification = (() => {
         if (isRepeated) {
             FitAudio.repeated(); 
             const repMsg = document.createElement('div');
-            repMsg.style.color = '#ffaa00';
+            repMsg.style.color = 'var(--warning)';
             repMsg.style.marginTop = '45px'; 
             repMsg.style.fontSize = '14px';
             repMsg.style.fontWeight = 'bold';
@@ -165,8 +105,8 @@ var FitGamification = (() => {
         const shareBtn = document.createElement('button');
         shareBtn.className = 'btn-action btn-start-pulse';
         shareBtn.style.marginTop = isRepeated ? '15px' : '50px'; 
-        shareBtn.style.background = '#25D366'; 
-        shareBtn.style.color = '#000';
+        shareBtn.style.background = 'var(--accent)';
+        shareBtn.style.color = 'var(--on-accent)';
         shareBtn.style.border = 'none';
         shareBtn.style.width = '100%';
         shareBtn.style.maxWidth = '300px';
@@ -182,7 +122,7 @@ var FitGamification = (() => {
             const duration = lastLog && lastLog.duration_secs ? Math.floor(lastLog.duration_secs / 60) : '--';
             const workoutType = lastLog ? lastLog.tipo : 'Customizado';
             
-            const shareText = `🔥 Sobrevivi ao Treino ${workoutType} no FitApp!\n⏱️ Tempo de Combate: ${duration} min\n🏆 Recompensa: Carta ${drawn.name} (${drawn.rarity.toUpperCase()})\n🤖 O Spotter Digital calibrou minhas cargas.\n\nMonte seu esquadrão. Link na bio.`;
+            const shareText = `Registrei mais um treino no FitApp.\nDuração: ${duration} min.\nCarta da coleção: ${drawn.name} (${drawn.rarity}).`;
             
             if (navigator.share) {
                 try {
@@ -205,6 +145,12 @@ var FitGamification = (() => {
         btnClose.style.opacity = '0';
 
         if(window.FitApp) FitApp.speak(isRepeated ? "Conquista repetida detectada." : "Nova conquista revelada.");
+        } catch (error) {
+            window.FitApp.showToast(error.message || 'Recompensa pendente. Tente novamente quando estiver online.');
+            document.getElementById('packEnvelope').style.display = 'flex';
+            document.getElementById('packRevealArea').style.display = 'none';
+            document.getElementById('btnClosePack').style.display = 'block';
+        } finally { openingPack = false; }
     }
 
     async function renderAlbum() {
@@ -212,7 +158,7 @@ var FitGamification = (() => {
         if (!grid) return;
         
         grid.style.display = 'block';
-        grid.innerHTML = '<div style="color: #a64dff; text-align: center; padding: 20px; font-weight: bold;">Acessando Cofre de Elite... 📡</div>';
+        grid.innerHTML = '<div style="color: var(--secondary); text-align: center; padding: 20px; font-weight: bold;">Acessando Cofre de Elite... 📡</div>';
         
         const profile = await getPlayerProfile();
         let savedCollection = profile.album || [];
@@ -241,9 +187,9 @@ var FitGamification = (() => {
             btn.textContent = `Página ${pageNum}`;
             btn.style.padding = '8px 16px';
             btn.style.borderRadius = '20px';
-            btn.style.border = isActive ? '1px solid #a64dff' : '1px solid #444';
-            btn.style.background = isActive ? 'rgba(166, 77, 255, 0.2)' : '#2a2a2a';
-            btn.style.color = isActive ? '#a64dff' : '#aaa';
+            btn.style.border = isActive ? '1px solid var(--secondary)' : '1px solid var(--line)';
+            btn.style.background = isActive ? 'var(--secondary-soft)' : 'var(--surface-soft)';
+            btn.style.color = isActive ? 'var(--secondary)' : 'var(--muted)';
             btn.style.cursor = 'pointer';
             btn.style.whiteSpace = 'nowrap';
             btn.style.fontWeight = isActive ? 'bold' : 'normal';
@@ -290,9 +236,9 @@ var FitGamification = (() => {
         const forge = document.createElement('div');
         forge.className = 'forge-panel';
         forge.innerHTML = `
-            <h4 style="color: #ffaa00; margin-bottom: 10px;">🔥 Forja de Conquistas</h4>
-            <p style="font-size: 13px; color: #aaa; margin-bottom: 15px;">Pontos de Suor (Repetidas): <strong style="color: #fff; font-size: 16px;">${repetidas}</strong></p>
-            <button id="btnForge" class="btn-action" style="background: ${repetidas >= 3 ? '#ffaa00' : '#444'}; color: ${repetidas >= 3 ? '#000' : '#888'}; pointer-events: ${repetidas >= 3 ? 'auto' : 'none'}; border: none; width: 100%;">Forjar Nova Peça (Custa 3)</button>
+            <h4 style="color: var(--warning); margin-bottom: 10px;">🔥 Forja de Conquistas</h4>
+            <p style="font-size: 13px; color: var(--muted); margin-bottom: 15px;">Pontos de Suor (Repetidas): <strong style="color: var(--ink); font-size: 16px;">${repetidas}</strong></p>
+            <button id="btnForge" class="btn-action" style="background: ${repetidas >= 3 ? 'var(--warning)' : 'var(--line)'}; color: ${repetidas >= 3 ? 'var(--on-accent)' : 'var(--subtle)'}; pointer-events: ${repetidas >= 3 ? 'auto' : 'none'}; border: none; width: 100%;">Forjar Nova Peça (Custa 3)</button>
         `;
         grid.appendChild(forge);
         
@@ -303,44 +249,16 @@ var FitGamification = (() => {
     }
 
     async function craftSticker() {
-        // 🛡️ OPÇÃO HOTEL: Trava anti-duplo clique do Dedo Nervoso
-        const btnForge = document.getElementById('btnForge');
-        if (btnForge && btnForge.disabled) return;
-        if (btnForge) {
-            btnForge.disabled = true;
-            btnForge.style.opacity = '0.5';
-            btnForge.textContent = 'A processar...';
-        }
-
-        if(window.FitApp) FitApp.showToast("A forjar conquista na nuvem...");
-        
-        const profile = await getPlayerProfile();
-        let savedCollection = profile.album || [];
-        let repetidas = profile.repetidas || 0; 
-        
-        if (repetidas < 3) {
-            if(btnForge) { btnForge.disabled = false; btnForge.style.opacity = '1'; btnForge.textContent = 'Forjar Nova Peça (Custa 3)'; }
-            return;
-        }
-        
-        const faltantesForja = stickersDB.filter(s => !savedCollection.includes(s.id) && (s.rarity === 'comum' || s.rarity === 'prata'));
-        
-        if (faltantesForja.length === 0) {
-            if(window.FitApp) FitApp.showToast("Alerta: A Forja só fabrica Prata e Comum. Treine para achar as raras!");
-            return;
-        }
-        
-        const nova = faltantesForja[Math.floor(Math.random() * faltantesForja.length)];
-        savedCollection.push(nova.id);
-        repetidas -= 3;
-        
-        FitAudio.forge(); // NOVO: Som de martelada na forja
-        
-        await savePlayerProfile(savedCollection, repetidas);
-        
-        renderAlbum();
-        if(window.FitApp) FitApp.showToast(`Forja concluída: ${nova.name} desbloqueada!`);
-        if(window.FitApp) FitApp.speak("Conquista forjada com sucesso.");
+        const button = document.getElementById('btnForge');
+        if (button?.disabled) return;
+        if (button) button.disabled = true;
+        try {
+            const result = await FitAPI.solicitarRecompensa(null, 'craft');
+            FitAudio.forge();
+            await renderAlbum();
+            window.FitApp.showToast(`Peça fabricada: ${result.drawn.name}`);
+        } catch (error) { window.FitApp.showToast(error.message); }
+        finally { if (button) button.disabled = false; }
     }
 
 // --- NOVO: ARENA PVP (Cálculo do Poder de Combate e Radar Cloud) ---
@@ -349,11 +267,11 @@ var FitGamification = (() => {
         if (!container) return;
 
         // Efeito de escaneamento militar
-        container.innerHTML = '<div style="text-align: center; color: #ffaa00; padding: 20px; font-weight: bold; font-family: monospace;">Escaneando Base de Dados... 📡</div>';
+        container.innerHTML = '<div style="text-align: center; color: var(--warning); padding: 20px; font-weight: bold; font-family: monospace;">Escaneando Base de Dados... 📡</div>';
 
         try {
             // ESCUDO FINANCEIRO: Baixa apenas os 50 melhores, já ordenados pelo banco
-            const snapshot = await firebase.firestore().collection('jogadores')
+            const snapshot = await firebase.firestore().collection('rankings')
                 .orderBy('poder_combate', 'desc')
                 .limit(50)
                 .get();
@@ -362,7 +280,7 @@ var FitGamification = (() => {
 
             snapshot.forEach(doc => {
                 const data = doc.data();
-                const albumLength = data.album ? data.album.length : 0;
+                const albumLength = Number(data.cartas) || 0;
                 const repetidas = data.repetidas || 0;
                 const nome = data.nome || 'Atleta Anônimo';
                 const combatPower = data.poder_combate || 0;
@@ -379,7 +297,7 @@ var FitGamification = (() => {
             container.innerHTML = ''; // Limpa o radar
 
             if (players.length === 0) {
-                container.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">Nenhum atleta na base de dados.</div>';
+                container.innerHTML = '<div style="text-align: center; color: var(--subtle); padding: 20px;">Nenhum atleta na base de dados.</div>';
                 return;
             }
 
@@ -391,8 +309,8 @@ var FitGamification = (() => {
                 const position = index + 1;
                 
                 // Design das Medalhas do Top 3
-                let rankVisual = `<span style="font-size: 18px; font-weight: bold; color: #888; width: 30px; text-align: center;">${position}º</span>`;
-                if (position === 1) rankVisual = `<span style="font-size: 24px; text-shadow: 0 0 10px #ffaa00; width: 30px; text-align: center;">🥇</span>`;
+                let rankVisual = `<span style="font-size: 18px; font-weight: bold; color: var(--subtle); width: 30px; text-align: center;">${position}º</span>`;
+                if (position === 1) rankVisual = `<span style="font-size: 24px; text-shadow: 0 0 10px var(--warning); width: 30px; text-align: center;">🥇</span>`;
                 if (position === 2) rankVisual = `<span style="font-size: 24px; text-shadow: 0 0 10px #c0c0c0; width: 30px; text-align: center;">🥈</span>`;
                 if (position === 3) rankVisual = `<span style="font-size: 24px; text-shadow: 0 0 10px #cd7f32; width: 30px; text-align: center;">🥉</span>`;
 
@@ -402,24 +320,24 @@ var FitGamification = (() => {
                 block.style.justifyContent = 'space-between';
                 block.style.padding = '15px';
                 block.style.borderRadius = '8px';
-                block.style.background = isMe ? 'rgba(255, 170, 0, 0.1)' : '#1e1e1e';
-                block.style.border = isMe ? '1px solid #ffaa00' : '1px solid #333';
+                block.style.background = isMe ? 'rgba(255, 170, 0, 0.1)' : 'var(--surface)';
+                block.style.border = isMe ? '1px solid var(--warning)' : '1px solid var(--line)';
                 block.style.boxShadow = isMe ? '0 0 15px rgba(255, 170, 0, 0.2)' : 'none';
 
                 block.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 15px;">
                         ${rankVisual}
                         <div>
-                            <div style="font-weight: bold; color: ${isMe ? '#ffaa00' : '#fff'}; font-size: 15px;">${player.nome} ${isMe ? '(Você)' : ''}</div>
-                            <div style="font-size: 11px; color: #aaa; margin-top: 4px;">
-                                <span style="background: #111; padding: 2px 6px; border-radius: 4px;">🏆 ${player.cartas}/24</span>
-                                <span style="background: #111; padding: 2px 6px; border-radius: 4px; margin-left: 5px;">💧 ${player.suor} pts</span>
+                            <div style="font-weight: bold; color: ${isMe ? 'var(--warning)' : 'var(--ink)'}; font-size: 15px;">${escapeHTML(player.nome)} ${isMe ? '(Você)' : ''}</div>
+                            <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">
+                                <span style="background: var(--surface); padding: 2px 6px; border-radius: 4px;">🏆 ${player.cartas}/24</span>
+                                <span style="background: var(--surface); padding: 2px 6px; border-radius: 4px; margin-left: 5px;">💧 ${player.suor} pts</span>
                             </div>
                         </div>
                     </div>
                     <div style="text-align: right;">
-                        <div style="font-size: 20px; font-weight: bold; color: #ffaa00; font-family: monospace;">${player.poder}</div>
-                        <div style="font-size: 10px; color: #666; text-transform: uppercase;">Poder</div>
+                        <div style="font-size: 20px; font-weight: bold; color: var(--warning); font-family: monospace;">${player.poder}</div>
+                        <div style="font-size: 10px; color: var(--subtle); text-transform: uppercase;">Poder</div>
                     </div>
                 `;
                 container.appendChild(block);
@@ -427,7 +345,7 @@ var FitGamification = (() => {
 
         } catch (error) {
             console.error("Falha no radar da Arena:", error);
-            container.innerHTML = '<div style="color: #ff4444; text-align: center; padding: 20px;">Falha ao conectar com o servidor da Arena.</div>';
+            container.innerHTML = '<div style="color: var(--danger); text-align: center; padding: 20px;">Falha ao conectar com o servidor da Arena.</div>';
         }
     }
 
@@ -436,8 +354,7 @@ var FitGamification = (() => {
         openPack,
         renderAlbum,
         craftSticker,
-        loadLeaderboard,
-        addBonusSweat
+        loadLeaderboard
     };
 })();
 window.FitGamification = FitGamification;

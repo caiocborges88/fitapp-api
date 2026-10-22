@@ -1,0 +1,482 @@
+{
+  "scope": "Análise de propostas isoladas; não altera catálogo nem ambiente. Contagens são posições pendentes em cenários repetidos e podem sobrepor entre candidatos. Correspondência de metadados não comprova equivalência de resistência, execução ou prescrição.",
+  "activeCatalogueSize": 123,
+  "totalPendingPositions": 257,
+  "categories": [
+    {
+      "category": "Latíssimo do Dorso | puxar-vertical",
+      "positions": 51
+    },
+    {
+      "category": "Tríceps (Cabeça Lateral/Medial) | extensao-cotovelo",
+      "positions": 30
+    },
+    {
+      "category": "Bíceps Braquial | flexao-cotovelo-supinada",
+      "positions": 30
+    },
+    {
+      "category": "Reto Femoral | extensao-joelho",
+      "positions": 24
+    },
+    {
+      "category": "Deltoide Lateral | abducao-ombro",
+      "positions": 21
+    },
+    {
+      "category": "Espessura (Romboides) | puxar-horizontal",
+      "positions": 16
+    },
+    {
+      "category": "Esternocostal (Isolamento) | aducao-horizontal",
+      "positions": 12
+    },
+    {
+      "category": "Sóleo | flexao-plantar-joelho-flexionado",
+      "positions": 10
+    },
+    {
+      "category": "Tríceps (Cabeças Longa, Lateral e Medial) | mergulho",
+      "positions": 8
+    },
+    {
+      "category": "Latíssimo do Dorso | extensao-ombro",
+      "positions": 8
+    },
+    {
+      "category": "Clavicular | empurrar-horizontal",
+      "positions": 8
+    },
+    {
+      "category": "Espessura (Romboides/Miolo) | puxar-horizontal",
+      "positions": 6
+    },
+    {
+      "category": "Abdominal | empurrar-horizontal",
+      "positions": 6
+    },
+    {
+      "category": "Braquial / Braquiorradial | flexao-cotovelo-neutra-pronada",
+      "positions": 6
+    },
+    {
+      "category": "Deltoide Posterior | abducao-horizontal",
+      "positions": 6
+    },
+    {
+      "category": "Esternocostal | aducao-horizontal",
+      "positions": 3
+    },
+    {
+      "category": "Espessura (Romboides/Latíssimo) | puxar-horizontal",
+      "positions": 3
+    },
+    {
+      "category": "Braquial / Antebraço | flexao-cotovelo-neutra-pronada",
+      "positions": 3
+    },
+    {
+      "category": "Deltoide Anterior | flexao-ombro",
+      "positions": 3
+    },
+    {
+      "category": "Clavicular | aducao-horizontal",
+      "positions": 3
+    }
+  ],
+  "candidates": [
+    {
+      "id": "panturrilha-sentado-sem-carga",
+      "name": "Elevação de panturrilhas sentado sem carga",
+      "priority": 1,
+      "status": "ja-cadastrado",
+      "existingRegistration": "elevacao-de-panturrilhas-sentado-sem-carga",
+      "structuralMatchesUnderProposedClassification": 10,
+      "pendingPositionsReachableWithoutResourceChanges": 0,
+      "existingEquivalentNames": [
+        "Panturrilha Sentado (Máquina)",
+        "Elevação de Panturrilhas Sentado sem Carga",
+        "Elevação de Panturrilhas Sentado com Halteres"
+      ],
+      "sourceMovements": [
+        "Panturrilha Sentado (Máquina)"
+      ],
+      "newResourceIds": [],
+      "selectableInCurrentHomePolicy": true,
+      "notes": "Já existe no catálogo ativo. As pendências observadas ocorrem sem banco declarado; não inserir duplicata. Exige assento firme. Mesma família de movimento da opção sentada; resistência muito menor que a máquina. Exige revisão de metas/carga, sem herdar prescrição automaticamente.",
+      "sources": [
+        "https://www.puregym.com/exercises/legs/calf-exercises/seated-calf-raises/"
+      ]
+    },
+    {
+      "id": "panturrilha-sentado-halter",
+      "name": "Elevação de panturrilhas sentado com halteres",
+      "priority": 1,
+      "status": "ja-cadastrado",
+      "existingRegistration": "elevacao-de-panturrilhas-sentado-com-halteres",
+      "structuralMatchesUnderProposedClassification": 10,
+      "pendingPositionsReachableWithoutResourceChanges": 0,
+      "existingEquivalentNames": [
+        "Panturrilha Sentado (Máquina)",
+        "Elevação de Panturrilhas Sentado sem Carga",
+        "Elevação de Panturrilhas Sentado com Halteres"
+      ],
+      "sourceMovements": [
+        "Panturrilha Sentado (Máquina)"
+      ],
+      "newResourceIds": [],
+      "selectableInCurrentHomePolicy": true,
+      "notes": "Já existe no catálogo ativo. As pendências observadas ocorrem sem banco declarado; não inserir duplicata. Progressão com carga externa. Não é um segundo movimento independente para formar um par apenas mudando o implemento.",
+      "sources": [
+        "https://www.puregym.com/exercises/legs/calf-exercises/seated-calf-raises/"
+      ]
+    },
+    {
+      "id": "chin-up-assistido-pes",
+      "name": "Barra fixa supinada com apoio dos pés",
+      "priority": 1,
+      "status": "detalhar-variante",
+      "existingRegistration": null,
+      "structuralMatchesUnderProposedClassification": 51,
+      "pendingPositionsReachableWithoutResourceChanges": 0,
+      "existingEquivalentNames": [
+        "Barra Fixa Pronada (Pull-up)",
+        "Puxada Alta (Pegada Aberta)",
+        "Puxada Alta Supinada",
+        "Puxada Alta na Máquina",
+        "Barra Fixa Supinada (Chin-up)",
+        "Barra Fixa com Apoio dos Pés",
+        "Puxada Alta Neutra"
+      ],
+      "sourceMovements": [
+        "Puxada Alta (Pegada Aberta)",
+        "Puxada Alta Supinada",
+        "Barra Fixa Pronada (Pull-up)",
+        "Puxada Alta na Máquina"
+      ],
+      "newResourceIds": [],
+      "selectableInCurrentHomePolicy": true,
+      "notes": "Antes de inserir, esclarecer a pegada do cadastro genérico Barra Fixa com Apoio dos Pés. Só contar como variante distinta se a execução também for distinta, sem duplicar o mesmo cadastro para completar bi-set.",
+      "sources": [
+        "https://www.acefitness.org/continuing-education/prosource/december-2014/5153/essential-exercises-for-an-optimal-strength-training-workout/"
+      ]
+    },
+    {
+      "id": "remada-invertida-supinada",
+      "name": "Remada invertida supinada em barra baixa",
+      "priority": 1,
+      "status": "detalhar-variante",
+      "existingRegistration": null,
+      "structuralMatchesUnderProposedClassification": 22,
+      "pendingPositionsReachableWithoutResourceChanges": 0,
+      "existingEquivalentNames": [
+        "Remada Curvada com Barra",
+        "Remada Unilateral (Serrote)",
+        "Remada Baixa no Cabo (Triângulo)",
+        "Remada Máquina Apoiada no Peito",
+        "Remada Cavalinho (T-Bar)",
+        "Remada Invertida em Barra Baixa",
+        "Remada Unilateral em Pé com Halter"
+      ],
+      "sourceMovements": [
+        "Remada Máquina Apoiada no Peito",
+        "Remada Baixa no Cabo (Triângulo)",
+        "Remada Curvada com Barra",
+        "Remada Cavalinho (T-Bar)"
+      ],
+      "newResourceIds": [],
+      "selectableInCurrentHomePolicy": true,
+      "notes": "Confirmar pegada da remada invertida já existente. Mantém puxada horizontal; não deve atender a uma solicitação de puxada vertical nem ser confundida com rosca corporal.",
+      "sources": [
+        "https://calisteniapp.com/programs/your_first_pull_up/PL008"
+      ]
+    },
+    {
+      "id": "extensao-joelho-sentado-sem-carga",
+      "name": "Extensão de joelho sentado sem carga",
+      "priority": 2,
+      "status": "revisao-manual",
+      "existingRegistration": null,
+      "structuralMatchesUnderProposedClassification": 0,
+      "pendingPositionsReachableWithoutResourceChanges": 0,
+      "existingEquivalentNames": [],
+      "sourceMovements": [],
+      "newResourceIds": [],
+      "selectableInCurrentHomePolicy": true,
+      "notes": "A fonte descreve exercício de contexto de reabilitação e progressão de resistência. Não sustenta trocar cadeira extensora de hipertrofia por esta versão preservando séries/metas ou afirmar ênfase isolada no reto femoral. Não preenche automaticamente quadriceps-reto no modelo proposto.",
+      "sources": [
+        "https://www.opalreturntowork.nhs.uk/exercises/seated-knee-extension/"
+      ]
+    },
+    {
+      "id": "puxada-alta-elastico",
+      "name": "Puxada alta com elástico e ancoragem alta",
+      "priority": 1,
+      "status": "requer-novos-recursos",
+      "existingRegistration": null,
+      "structuralMatchesUnderProposedClassification": 51,
+      "pendingPositionsReachableWithoutResourceChanges": 0,
+      "existingEquivalentNames": [
+        "Barra Fixa Pronada (Pull-up)",
+        "Puxada Alta (Pegada Aberta)",
+        "Puxada Alta Supinada",
+        "Puxada Alta na Máquina",
+        "Barra Fixa Supinada (Chin-up)",
+        "Barra Fixa com Apoio dos Pés",
+        "Puxada Alta Neutra"
+      ],
+      "sourceMovements": [
+        "Puxada Alta (Pegada Aberta)",
+        "Puxada Alta Supinada",
+        "Barra Fixa Pronada (Pull-up)",
+        "Puxada Alta na Máquina"
+      ],
+      "newResourceIds": [
+        "resistance-band",
+        "anchor-high"
+      ],
+      "selectableInCurrentHomePolicy": false,
+      "notes": "Requer suporte real a elásticos e ponto alto adequado. Não presumir ancoragem por existir uma porta ou parede. A classificação proposta é baseada na execução de puxada vertical, sem equivalência de carga com máquina.",
+      "sources": [
+        "https://centr.com/blogs/thewarmup/cpah-tutorial-seated-banded-lat-pulldown"
+      ]
+    },
+    {
+      "id": "extensao-joelho-elastico",
+      "name": "Extensão de joelho sentado com elástico",
+      "priority": 1,
+      "status": "requer-novos-recursos-e-revisao-de-foco",
+      "existingRegistration": null,
+      "structuralMatchesUnderProposedClassification": 0,
+      "pendingPositionsReachableWithoutResourceChanges": 0,
+      "existingEquivalentNames": [],
+      "sourceMovements": [],
+      "newResourceIds": [
+        "resistance-band",
+        "anchor-low"
+      ],
+      "selectableInCurrentHomePolicy": false,
+      "notes": "Candidata prioritária para a função de extensão de joelho. O cadastro de ênfase e a adequação da resistência precisam de revisão; não rotular automaticamente quadriceps-reto só para fechar o relatório. Fonte clínica não valida uma prescrição esportiva universal.",
+      "sources": [
+        "https://www.opalreturntowork.nhs.uk/exercises/seated-knee-extension/",
+        "https://northcheshireandmersey.nhs.uk/media/exriqrct/post-op-knee-strengthening-exercises-patient-advice-sheet.pdf"
+      ]
+    },
+    {
+      "id": "elevacao-lateral-elastico",
+      "name": "Elevação lateral com elástico sob os pés",
+      "priority": 1,
+      "status": "requer-novos-recursos",
+      "existingRegistration": null,
+      "structuralMatchesUnderProposedClassification": 21,
+      "pendingPositionsReachableWithoutResourceChanges": 0,
+      "existingEquivalentNames": [
+        "Elevação Lateral com Halteres",
+        "Elevação Lateral no Cabo",
+        "Remada Alta no Cabo",
+        "Remada Alta com Barra"
+      ],
+      "sourceMovements": [
+        "Elevação Lateral com Halteres",
+        "Remada Alta no Cabo",
+        "Elevação Lateral no Cabo"
+      ],
+      "newResourceIds": [
+        "resistance-band"
+      ],
+      "selectableInCurrentHomePolicy": false,
+      "notes": "Variante autoancorada nos pés; não exige declarar ancoragem externa. Validar faixa de resistência e execução antes da seleção automática.",
+      "sources": [
+        "https://www.peak-physio.com.au/exercises/strength-shoulder-lateral-raise-with-theraband/"
+      ]
+    },
+    {
+      "id": "rosca-martelo-elastico",
+      "name": "Rosca martelo com elástico sob os pés",
+      "priority": 1,
+      "status": "requer-novos-recursos",
+      "existingRegistration": null,
+      "structuralMatchesUnderProposedClassification": 9,
+      "pendingPositionsReachableWithoutResourceChanges": 0,
+      "existingEquivalentNames": [
+        "Rosca Martelo com Halteres",
+        "Rosca Inversa no Cabo",
+        "Rosca Inversa com Barra"
+      ],
+      "sourceMovements": [
+        "Rosca Martelo com Halteres",
+        "Rosca Inversa no Cabo"
+      ],
+      "newResourceIds": [
+        "resistance-band"
+      ],
+      "selectableInCurrentHomePolicy": false,
+      "notes": "Pegada neutra explicitamente descrita. Não confundir com rosca corporal supinada. Elástico é resistência externa e não satisfaz bloco estritamente corporal.",
+      "sources": [
+        "https://www.pdx.edu/recreation/accessible-home-workouts"
+      ]
+    },
+    {
+      "id": "pull-apart-elastico",
+      "name": "Abertura horizontal com elástico (pull-apart)",
+      "priority": 1,
+      "status": "requer-novos-recursos",
+      "existingRegistration": null,
+      "structuralMatchesUnderProposedClassification": 6,
+      "pendingPositionsReachableWithoutResourceChanges": 0,
+      "existingEquivalentNames": [
+        "Crucifixo Invertido com Halteres",
+        "Crucifixo Invertido na Máquina (Peck Deck)"
+      ],
+      "sourceMovements": [
+        "Crucifixo Invertido com Halteres"
+      ],
+      "newResourceIds": [
+        "resistance-band"
+      ],
+      "selectableInCurrentHomePolicy": false,
+      "notes": "Proposta para abdução horizontal; participação escapular não permite renomeá-la como remada horizontal. Revisar classificação de ênfase e amplitude antes de liberar.",
+      "sources": [
+        "https://www.roguefitness.com/theindex/movement-library/how-to-do-band-pull-aparts"
+      ]
+    },
+    {
+      "id": "triceps-coice-elastico",
+      "name": "Tríceps coice com elástico sob os pés",
+      "priority": 1,
+      "status": "requer-novos-recursos-e-revisao-de-foco",
+      "existingRegistration": null,
+      "structuralMatchesUnderProposedClassification": 30,
+      "pendingPositionsReachableWithoutResourceChanges": 0,
+      "existingEquivalentNames": [
+        "Tríceps Pulley (Barra Reta/V)",
+        "Tríceps Corda no Cabo",
+        "Tríceps Coice (Kickback)"
+      ],
+      "sourceMovements": [
+        "Tríceps Pulley (Barra Reta/V)",
+        "Tríceps Corda no Cabo",
+        "Tríceps Coice (Kickback)"
+      ],
+      "newResourceIds": [
+        "resistance-band"
+      ],
+      "selectableInCurrentHomePolicy": false,
+      "notes": "A fonte sustenta extensão de cotovelo para tríceps. O código de ênfase proposto acompanha o coice já cadastrado; não é demonstração de isolamento das cabeças. Preferir esta variante autoancorada a instruções de prender faixa ao pescoço.",
+      "sources": [
+        "https://www.performancehealth.com/articles/33-theraband-resistance-band-exercises-to-do-at-home"
+      ]
+    },
+    {
+      "id": "crucifixo-elastico-torax",
+      "name": "Crucifixo com elástico à altura do tórax",
+      "priority": 1,
+      "status": "requer-novos-recursos-e-revisao-de-foco",
+      "existingRegistration": null,
+      "structuralMatchesUnderProposedClassification": 15,
+      "pendingPositionsReachableWithoutResourceChanges": 0,
+      "existingEquivalentNames": [
+        "Crucifixo Reto com Halteres",
+        "Voador (Peck Deck)",
+        "Crossover Polia Média"
+      ],
+      "sourceMovements": [
+        "Voador (Peck Deck)",
+        "Crossover Polia Média",
+        "Crucifixo Reto com Halteres"
+      ],
+      "newResourceIds": [
+        "resistance-band"
+      ],
+      "selectableInCurrentHomePolicy": false,
+      "notes": "Variante com faixa nas costas descrita pelo fabricante; definir comprimento/apoio e técnica. A fonte descreve peitorais em geral; a ênfase esternocostal é uma hipótese operacional, não isolamento comprovado.",
+      "sources": [
+        "https://www.performancehealth.com/articles/33-theraband-resistance-band-exercises-to-do-at-home"
+      ]
+    },
+    {
+      "id": "remada-elastico-ancoragem-media",
+      "name": "Remada com elástico e ancoragem média",
+      "priority": 2,
+      "status": "requer-novos-recursos",
+      "existingRegistration": null,
+      "structuralMatchesUnderProposedClassification": 22,
+      "pendingPositionsReachableWithoutResourceChanges": 0,
+      "existingEquivalentNames": [
+        "Remada Curvada com Barra",
+        "Remada Unilateral (Serrote)",
+        "Remada Baixa no Cabo (Triângulo)",
+        "Remada Máquina Apoiada no Peito",
+        "Remada Cavalinho (T-Bar)",
+        "Remada Invertida em Barra Baixa",
+        "Remada Unilateral em Pé com Halter"
+      ],
+      "sourceMovements": [
+        "Remada Máquina Apoiada no Peito",
+        "Remada Baixa no Cabo (Triângulo)",
+        "Remada Curvada com Barra",
+        "Remada Cavalinho (T-Bar)"
+      ],
+      "newResourceIds": [
+        "resistance-band",
+        "anchor-mid"
+      ],
+      "selectableInCurrentHomePolicy": false,
+      "notes": "Amplia a disponibilidade onde não há barra baixa ou halteres. Altura e tipo da ancoragem são requisitos propostos para a implementação, a validar na demonstração escolhida.",
+      "sources": [
+        "https://www.nasm.org/workout-exercise-guidance"
+      ]
+    },
+    {
+      "id": "reverse-nordic",
+      "name": "Reverse Nordic com amplitude controlada",
+      "priority": 3,
+      "status": "revisao-profissional-sem-substituicao-automatica",
+      "existingRegistration": null,
+      "structuralMatchesUnderProposedClassification": 0,
+      "pendingPositionsReachableWithoutResourceChanges": 0,
+      "existingEquivalentNames": [],
+      "sourceMovements": [],
+      "newResourceIds": [
+        "knee-padding"
+      ],
+      "selectableInCurrentHomePolicy": true,
+      "notes": "Não cadastrar como solução universal para o iniciante nem como isolamento garantido de reto femoral. O estudo de 2024 não encontrou superioridade de ativação excêntrica dos quadríceps frente a variantes de agachamento. Não usar esse achado de EMG para concluir equivalência de hipertrofia ou segurança.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/39214520/"
+      ]
+    },
+    {
+      "id": "rosca-direta-elastico",
+      "name": "Rosca direta com elástico sob os pés",
+      "priority": 1,
+      "status": "requer-novos-recursos",
+      "existingRegistration": null,
+      "structuralMatchesUnderProposedClassification": 30,
+      "pendingPositionsReachableWithoutResourceChanges": 0,
+      "existingEquivalentNames": [
+        "Rosca Direta com Barra",
+        "Rosca Alternada com Halteres",
+        "Rosca no Cabo (Polia Baixa)",
+        "Rosca Scott na Máquina",
+        "Rosca Scott com Barra",
+        "Rosca com Halteres em Supinação",
+        "Rosca Corporal em Barra Baixa"
+      ],
+      "sourceMovements": [
+        "Rosca Direta com Barra",
+        "Rosca Scott na Máquina",
+        "Rosca Alternada com Halteres",
+        "Rosca no Cabo (Polia Baixa)"
+      ],
+      "newResourceIds": [
+        "resistance-band"
+      ],
+      "selectableInCurrentHomePolicy": false,
+      "notes": "Flexão de cotovelo com supinação, descrita pelo fabricante. Confirmar o foco no vocabulário do catálogo e ajustar resistência; não tratar como exercício corporal.",
+      "sources": [
+        "https://www.performancehealth.com/articles/33-theraband-resistance-band-exercises-to-do-at-home"
+      ]
+    }
+  ]
+}

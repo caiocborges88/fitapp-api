@@ -1,18 +1,28 @@
+const cssColor = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const escapeAdmin = value => String(value ?? '').replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));
+let adminAuthorized = false;
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
     const db = firebase.firestore();
     const usersTable = document.getElementById('usersTableBody');
+    const names=document.getElementById('publishedExercises');
+    for(const exercise of window.dictionaryData||[]){const option=document.createElement('option');option.value=exercise.name;names.append(option);}
+    document.getElementById('dictName').addEventListener('input',event=>{
+        document.getElementById('dictGroup').value=(window.dictionaryData||[]).find(item=>item.name.toLowerCase()===event.target.value.trim().toLowerCase())?.group||'';
+    });
     
     // 1. Verificação de Crachá do Comandante
-    firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-            document.getElementById('adminStatus').innerHTML = `Comandante logado: <strong style="color:#00ff88;">${user.email || 'Admin'}</strong>`;
+    firebase.auth().onAuthStateChanged(async user => {
+        const claims = user ? (await user.getIdTokenResult().catch(() => ({claims:{}}))).claims : {};
+        adminAuthorized = Boolean(user && (claims.admin || (user.email === 'ccbteodoro@gmail.com' && user.emailVerified)));
+        if (adminAuthorized) {
+            document.getElementById('adminStatus').innerHTML = `Comandante logado: <strong style="color:var(--accent);">${escapeAdmin(user.email || 'Admin')}</strong>`;
             executarVarreduraDeTropa();
             carregarDicionario(); // NOVO: Manda baixar o Dicionário de Áudio
         } else {
-            document.getElementById('adminStatus').innerHTML = `<span style="color:#ff4444;">Acesso Negado. Faça login via App principal.</span>`;
-            usersTable.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#ff4444; padding: 30px;">Acesso restrito. Faça login como instrutor no celular primeiro.</td></tr>`;
+            document.getElementById('adminStatus').innerHTML = `<span style="color:var(--danger);">Acesso Negado. Faça login via App principal.</span>`;
+            usersTable.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--danger); padding: 30px;">Acesso restrito. Faça login como instrutor no celular primeiro.</td></tr>`;
         }
     });
 
@@ -53,11 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 html += `
                     <tr>
                         <td>
-                            <strong style="font-size: 15px;">${data.nome || doc.id}</strong><br>
-                            <span style="color:#666; font-size:11px; font-family: monospace;">ID: ${doc.id.substring(0,8)}...</span>
+                            <strong style="font-size: 15px;">${escapeAdmin(data.nome || doc.id)}</strong><br>
+                            <span style="color:var(--subtle); font-size:11px; font-family: monospace;">ID: ${doc.id.substring(0,8)}...</span>
                         </td>
-                        <td><span style="color:#00ff88; font-weight:bold;">${suor}</span> pts</td>
-                        <td style="color:#bbb; font-size:13px;">${lastSyncDate}</td>
+                        <td><span style="color:var(--accent); font-weight:bold;">${suor}</span> pts</td>
+                        <td style="color:var(--muted); font-size:13px;">${lastSyncDate}</td>
                         <td><span class="${statusClass}">${status}</span></td>
                         <td>
                             <button class="btn-audit" onclick="abrirDossie('${doc.id}')">Ver Dossiê</button>
@@ -66,11 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             });
             
-            usersTable.innerHTML = html || '<tr><td colspan="5" style="text-align: center; color: #888;">Base de dados vazia. Nenhum recruta alistado ainda.</td></tr>';
+            usersTable.innerHTML = html || '<tr><td colspan="5" style="text-align: center; color: var(--subtle);">Base de dados vazia. Nenhum recruta alistado ainda.</td></tr>';
             
         } catch (error) {
             console.error("Erro tático ao puxar dados da tropa:", error);
-            usersTable.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ff4444;">Falha de comunicação com o Firestore.</td></tr>`;
+            usersTable.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--danger);">Falha de comunicação com o Firestore.</td></tr>`;
         }
     }
 }); 
@@ -91,7 +101,8 @@ window.abrirDossie = async function(uid) {
     try {
         const db = firebase.firestore();
         // CORREÇÃO: Apontando o radar para a subcoleção 'treinos_concluidos' dentro de 'jogadores'
-        const snapshot = await db.collection('jogadores').doc(uid).collection('treinos_concluidos').get();
+        if (!adminAuthorized) throw new Error('Acesso restrito ao administrador.');
+        const snapshot = await db.collection('treinos_concluidos').where('userId', '==', uid).get();
         
         rawHistoryData = [];
         snapshot.forEach(doc => {
@@ -106,7 +117,7 @@ window.abrirDossie = async function(uid) {
 
     } catch (error) {
         console.error("Falha na varredura do histórico:", error);
-        document.getElementById('dossierStatus').innerHTML = `<span style="color:#ff4444;">Erro ao puxar histórico. Arquivos corrompidos ou inexistentes.</span>`;
+        document.getElementById('dossierStatus').innerHTML = `<span style="color:var(--danger);">Erro ao puxar histórico. Arquivos corrompidos ou inexistentes.</span>`;
     }
 };
 
@@ -120,12 +131,12 @@ function renderizarGrafico() {
     
     // Mineração de Dados: Procura qual foi a maior carga levantada naquele exercício em cada dia
     rawHistoryData.forEach(session => {
-        if (!session.log) return;
+        if (!session.data) return;
         
         let maxCarga = 0;
         let achouExercicio = false;
         
-        session.log.forEach(set => {
+        session.data.forEach(set => {
             if (set.exercise && set.exercise.toLowerCase() === targetExercise.toLowerCase() && set.kg > maxCarga) {
                 maxCarga = set.kg;
                 achouExercicio = true;
@@ -136,7 +147,7 @@ function renderizarGrafico() {
             // Se o app salva como 'YYYY-MM-DD', transformamos para o padrão visual
             let dataFormatada = session.date;
             try {
-                let d = new Date(session.date);
+                let d = new Date(session.date + 'T12:00:00');
                 dataFormatada = d.toLocaleDateString('pt-BR');
             } catch(e) {}
             
@@ -146,7 +157,7 @@ function renderizarGrafico() {
     });
     
     if (labels.length === 0) {
-        document.getElementById('dossierStatus').innerHTML = `<span style="color:#ffaa00;">Nenhum registro encontrado para <strong>${targetExercise}</strong>.</span>`;
+        document.getElementById('dossierStatus').innerHTML = `<span style="color:var(--warning);">Nenhum registro encontrado para <strong>${targetExercise}</strong>.</span>`;
         if (chartInstance) chartInstance.destroy();
         return;
     } else {
@@ -164,11 +175,11 @@ function renderizarGrafico() {
             datasets: [{
                 label: `Carga Máxima - ${targetExercise} (kg)`,
                 data: dataPoints,
-                borderColor: '#00ff88',
-                backgroundColor: 'rgba(0, 255, 136, 0.1)',
+                borderColor: cssColor('--accent'),
+                backgroundColor: cssColor('--accent-soft'),
                 borderWidth: 3,
-                pointBackgroundColor: '#a64dff',
-                pointBorderColor: '#fff',
+                pointBackgroundColor: cssColor('--secondary'),
+                pointBorderColor: cssColor('--ink'),
                 pointRadius: 6,
                 pointHoverRadius: 8,
                 fill: true,
@@ -178,11 +189,11 @@ function renderizarGrafico() {
         options: {
             responsive: true,
             scales: {
-                y: { beginAtZero: false, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#aaa' } },
-                x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#aaa' } }
+                y: { beginAtZero: false, grid: { color: cssColor('--line') }, ticks: { color: cssColor('--muted') } },
+                x: { grid: { color: cssColor('--line') }, ticks: { color: cssColor('--muted') } }
             },
             plugins: {
-                legend: { labels: { color: '#fff', font: { size: 14 } } }
+                legend: { labels: { color: cssColor('--ink'), font: { size: 14 } } }
             }
         }
     });
@@ -204,43 +215,44 @@ async function carregarDicionario() {
             html += `
                 <tr>
                     <td>
-                        <strong style="color: #ffaa00; font-size: 14px;">${data.nome}</strong><br>
-                        <span style="color: #666; font-size: 11px; text-transform: uppercase;">ALVO: ${data.grupo}</span>
+                        <strong style="color: var(--warning); font-size: 14px;">${escapeAdmin(data.nome)}</strong><br>
+                        <span style="color: var(--subtle); font-size: 11px; text-transform: uppercase;">ALVO: ${escapeAdmin(data.grupo)}</span>
                     </td>
-                    <td style="font-size: 13px; color: #ccc; font-style: italic; max-width: 300px; line-height: 1.4;">"${data.dica}"</td>
+                    <td style="font-size: 13px; color: var(--muted); font-style: italic; max-width: 300px; line-height: 1.4;">"${escapeAdmin(data.dica)}"</td>
                     <td style="text-align: center;">
-                        <button onclick="deletarDicionario('${doc.id}')" style="background: transparent; border: 1px solid #ff4444; color: #ff4444; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">Excluir</button>
+                        <button onclick="deletarDicionario('${doc.id}')" style="background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">Excluir</button>
                     </td>
                 </tr>
             `;
         });
         
-        dictTable.innerHTML = html || '<tr><td colspan="3" style="text-align: center; color: #888; padding: 30px;">Dicionário vazio. O sistema está aguardando as suas diretrizes, Comandante.</td></tr>';
+        dictTable.innerHTML = html || '<tr><td colspan="3" style="text-align: center; color: var(--subtle); padding: 30px;">Dicionário vazio. O sistema está aguardando as suas diretrizes, Comandante.</td></tr>';
     } catch (error) {
         console.error("Erro ao carregar dicionário:", error);
-        dictTable.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #ff4444; padding: 30px;">Falha ao comunicar com o servidor de dicionários.</td></tr>`;
+        dictTable.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--danger); padding: 30px;">Falha ao comunicar com o servidor de dicionários.</td></tr>`;
     }
 }
 
 window.salvarDicionario = async function() {
     // 🛡️ TRAVA DE SEGURANÇA B2B (Anti-Injeção)
     const user = firebase.auth().currentUser;
-    if (!user) {
-        document.getElementById('dictStatus').innerHTML = '<span style="color: #ff4444;">Acesso Negado: Autenticação de Comandante não detetada.</span>';
+    if (!user || !adminAuthorized) {
+        document.getElementById('dictStatus').innerHTML = '<span style="color: var(--danger);">Acesso Negado: Autenticação de Comandante não detetada.</span>';
         return;
     }
 
     const nome = document.getElementById('dictName').value.trim();
-    const grupo = document.getElementById('dictGroup').value.trim();
+    const exercise=(window.dictionaryData||[]).find(item=>item.name.toLowerCase()===nome.toLowerCase());
+    const grupo=exercise?.group;
     const dica = document.getElementById('dictTip').value.trim();
     const status = document.getElementById('dictStatus');
 
-    if (!nome || !dica) {
-        status.innerHTML = '<span style="color: #ff4444;">Erro tático: O nome do exercício e a instrução são obrigatórios.</span>';
+    if (!exercise || !dica || dica.length>2000) {
+        status.innerHTML = '<span style="color: var(--danger);">Escolha um exercício do catálogo publicado e informe uma dica de até 2.000 caracteres.</span>';
         return;
     }
 
-    status.innerHTML = '<span style="color: #aaa;">Estabelecendo conexão uplink... 📡</span>';
+    status.innerHTML = '<span style="color: var(--muted);">Estabelecendo conexão uplink... 📡</span>';
     const db = firebase.firestore();
 
     try {
@@ -248,13 +260,13 @@ window.salvarDicionario = async function() {
         const docId = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
         
         await db.collection('dicionario').doc(docId).set({
-            nome: nome,
+            nome: exercise.name,
             grupo: grupo || 'Base',
             dica: dica,
             atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        status.innerHTML = '<span style="color: #00ff88;">✅ Padrão Biomecânico gravado com sucesso!</span>';
+        status.innerHTML = '<span style="color: var(--accent);">Dica de execução gravada. Disponível na próxima consulta online.</span>';
         
         // Limpa a ficha para um novo cadastro
         document.getElementById('dictName').value = '';
@@ -266,19 +278,19 @@ window.salvarDicionario = async function() {
 
     } catch (error) {
         console.error("Erro no uplink:", error);
-        status.innerHTML = '<span style="color: #ff4444;">Erro de gravação no banco central.</span>';
+        status.innerHTML = '<span style="color: var(--danger);">Erro de gravação no banco central.</span>';
     }
 };
 
 window.deletarDicionario = async function(docId) {
     // 🛡️ TRAVA DE SEGURANÇA B2B (Anti-Exclusão)
     const user = firebase.auth().currentUser;
-    if (!user) {
+    if (!user || !adminAuthorized) {
         alert("Acesso Negado: Apenas oficiais autenticados podem apagar registos.");
         return;
     }
 
-    if (confirm("ATENÇÃO: Deseja realmente remover essa instrução do servidor de IA? Os alunos pararão de ouvir esta dica imediatamente.")) {
+    if (confirm("Remover esta dica complementar? A próxima consulta usará a dica original do catálogo.")) {
         const db = firebase.firestore();
         try {
             await db.collection('dicionario').doc(docId).delete();

@@ -1,0 +1,20 @@
+{
+  "status": "ok",
+  "url": "https://fitapp-operacional.web.app",
+  "version": "fc42a48734b53f0f",
+  "apiStatus": 401,
+  "ruleset": "projects/fitapp-operacional/rulesets/c3f32363-9552-4af4-894a-c70739c7efa6",
+  "historyIndexState": "READY",
+  "checks": [
+    "HTTPS e versão atual",
+    "API exige autenticação",
+    "regras publicadas iguais às testadas",
+    "índice de histórico pronto",
+    "manifesto instalável",
+    "inicialização móvel simulada",
+    "cache inclui revisão em abas",
+    "recarga offline sem exceções"
+  ],
+  "productionDataWrites": false,
+  "realAndroidTest": "a realizar pelo usuário"
+}

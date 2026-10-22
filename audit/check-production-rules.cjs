@@ -1,0 +1,20 @@
+const fs=require('node:fs');
+const path=require('node:path');
+const cli=path.join(process.env.APPDATA,'npm/node_modules/firebase-tools/lib');
+(async()=>{
+ const options={project:'fitapp-operacional',nonInteractive:true};
+ const auth=require(path.join(cli,'auth.js'));
+ const account=auth.selectAccount(undefined,process.cwd());
+ if(account)auth.setActiveAccount(options,account);
+ await require(path.join(cli,'requireAuth.js')).requireAuth(options);
+ const rules=require(path.join(cli,'gcp/rules.js'));
+ const releases=await rules.listAllReleases(options.project);
+ const name=await rules.getLatestRulesetName(options.project,'cloud.firestore',releases);
+ const files=await rules.getRulesetContent(name);
+ const local=fs.readFileSync('firestore.rules','utf8').replace(/\r\n/g,'\n').trim();
+ const remote=files.find(file=>file.name==='firestore.rules')||files[0];
+ const sameRules=remote.content.replace(/\r\n/g,'\n').trim()===local;
+ const result={project:options.project,ruleset:name,sameRules,localSyncContract:local.includes('syncVersion'),remoteSyncContract:remote.content.includes('syncVersion'),remoteRules:files};
+ fs.writeFileSync('audit/production-rules-before-mobile.json',JSON.stringify(result,null,2)+'\n');
+ console.log(JSON.stringify({project:result.project,sameRules,remoteSyncContract:result.remoteSyncContract}));
+})().catch(error=>{console.error(error.message);process.exitCode=1;});

@@ -1,12 +1,16 @@
 // js/state.js
 export const state = {
     totalSets: 0,
+    exerciseTimers: new Set(),
     checkedSets: 0,
     audioEnabled: false,
     restTimer: null,
     currentRestTime: 60,
+    previewModel: null,
+    coverageReference: null,
     todayLog: [],
     currentRoutine: [],
+    environmentProposal: null,
     currentWorkoutType: '',
     filaDeTreinosIA: [],
     cooldownTimerInterval: null,

@@ -1,0 +1,19 @@
+{
+  "viewport": "390x844",
+  "methods": 6,
+  "checks": [
+    "inicialização",
+    "forja",
+    "templates",
+    "registro",
+    "edição",
+    "restauração",
+    "histórico",
+    "importação IA simulada",
+    "nova sessão",
+    "abortamento",
+    "busca"
+  ],
+  "pageErrors": [],
+  "cloud": "Firebase e respostas de IA simulados; testes de autorização separados."
+}

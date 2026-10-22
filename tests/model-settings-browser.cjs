@@ -1,0 +1,74 @@
+const {chromium}=require('playwright');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const server=require('../scripts/serve.cjs');
+const fake=require('./fixtures/firebase.cjs');
+(async()=>{
+ await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+ let browser;const checks=[];
+ try{
+  browser=await chromium.launch({channel:'msedge',headless:true});
+  const context=await browser.newContext({viewport:{width:390,height:844},serviceWorkers:'block',reducedMotion:'reduce'});
+  await context.route('**/vendor/firebase-*.js',route=>route.fulfill({contentType:'text/javascript',body:route.request().url().endsWith('firebase-app.js')?fake:''}));
+  const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));page.on('dialog',dialog=>dialog.accept());
+  await page.goto(`http://127.0.0.1:${server.address().port}`);await page.waitForFunction(()=>window.FitStore?.get('fitapp_cloud_base'));
+  const readRest=()=>page.evaluate(async()=>(await import('/js/state.js')).state.currentRestTime);
+  await page.evaluate(()=>{
+   document.getElementById('mainMethodSelector').value='abc';document.getElementById('profileSelector').value='hipertrofia';document.getElementById('levelSelector').value='iniciante';
+   FitApp.adjustRestTime(120);FitApp.lockCampaign();
+  });
+  await page.waitForTimeout(650);assert.equal(await readRest(),120);
+  await page.evaluate(()=>FitApp.startWorkout('A'));
+  assert.equal(await readRest(),75);assert.equal(await page.locator('#sessionRestSeconds').inputValue(),'75');assert.equal(await page.locator('#timerDisplay').textContent(),'01:15');
+  await page.locator('#sessionRestSeconds').selectOption('90');await page.locator('#btnStartWorkout').click();
+  assert.equal(await readRest(),90);
+  await page.locator('.time-btn[data-time="120"]').click();assert.equal(await readRest(),120);assert.equal(await page.locator('#timerDisplay').textContent(),'02:00');
+  assert.equal(await page.evaluate(()=>JSON.parse(FitStore.get('fitapp_active_state')).restSeconds),120);
+  await page.reload();await page.waitForFunction(async()=>window.FitStore?.get('fitapp_cloud_base')&&(await import('/js/state.js')).state.isWorkoutActive);
+  assert.equal(await readRest(),120);assert.equal(await page.locator('.time-btn[data-time="120"]').getAttribute('aria-pressed'),'true');
+  await page.evaluate(()=>{const saved=JSON.parse(FitStore.get('fitapp_active_state'));delete saved.restSeconds;FitStore.set('fitapp_active_state',JSON.stringify(saved));});
+  await page.reload();await page.waitForFunction(async()=>window.FitStore?.get('fitapp_cloud_base')&&(await import('/js/state.js')).state.isWorkoutActive);
+  assert.equal(await readRest(),60,'sessão antiga sem descanso salvo recebe padrão compatível');
+  checks.push('plano abre com padrão explícito; ajuste acompanha relógio e sobrevive à recarga');
+  await page.evaluate(()=>window.abortarMissao());await page.waitForFunction(()=>!document.body.classList.contains('session-active'));
+  await page.evaluate(()=>{
+   document.getElementById('profileSelector').value='tatico';
+   FitStore.set('fitapp_custom_workouts',JSON.stringify([{id:'manual-rest',name:'Ficha manual',routine:[{title:'Peito',type:'traditional',exercises:[{name:'Supino Reto com Barra',sets:3,target:'10 rep'}]}]}]));
+   FitApp.startWorkout('custom_manual-rest');
+  });
+  assert.equal(await readRest(),60);assert.match(await page.locator('#sessionParameters').textContent(),/Ficha personalizada/);
+  await page.locator('#sessionRestSeconds').selectOption('90');
+  const snapshot=await page.evaluate(()=>FitStore.get('fitapp_custom_workouts'));
+  await page.locator('#btnStartWorkout').click();assert.equal(await page.evaluate(()=>FitStore.get('fitapp_custom_workouts')),snapshot);
+  assert.equal(await readRest(),90);checks.push('ficha pessoal não herda descanso ou objetivo do seletor global');
+  await page.evaluate(()=>window.abortarMissao());await page.waitForFunction(()=>!document.body.classList.contains('session-active'));
+  await page.evaluate(()=>{
+   FitApp.adjustRestTime(120);FitApp.openForgeModal();document.getElementById('forgeMethod').value='ppl';FitApp.updateForgeOptions();
+  });
+  assert.match(await page.locator('#forgeParameters').textContent(),/altera o descanso/);
+  await page.evaluate(()=>FitApp.generateForgedWorkout());
+  await page.waitForTimeout(650);assert.equal(await readRest(),60);
+  assert.match(await page.locator('#sessionParameters').textContent(),/mantém os exercícios solicitados e as metas/);
+  assert.equal(await page.locator('#sessionRestSeconds').count(),0,'a revisão do ciclo não oferece ajuste transitório que não será salvo');
+  checks.push('revisão de ciclo mostra efeitos reais do foco e não recebe ajuste atrasado');
+  await page.evaluate(()=>{FitApp.cancelWorkoutPreview();FitApp.switchTab('tab-perfil','nav-perfil');document.querySelector('.advanced-plan').open=true;});
+  await page.locator('#levelSelector').selectOption('avancado');
+  assert.match(await page.locator('#modelPreferencesDescription').textContent(),/não há progressão automática/);
+  assert.equal(await page.locator('#profileSelector option[value="definicao"]').textContent(),'Pausas menores');
+  await page.waitForFunction(()=>!document.getElementById('toast').classList.contains('show'));
+  await page.screenshot({path:'audit/model-settings-mobile.png',fullPage:true});
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),true);
+  await page.setViewportSize({width:1280,height:900});
+  await page.waitForFunction(()=>getComputedStyle(document.getElementById('appContainer')).marginLeft==='222px');
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),true);
+  await page.locator('.advanced-plan').scrollIntoViewIfNeeded();
+  assert.equal(await page.evaluate(()=>document.querySelector('.advanced-plan').getBoundingClientRect().left>=document.getElementById('bottomNav').getBoundingClientRect().right),true);
+  await page.screenshot({path:'audit/model-settings-desktop.png'});
+  assert.deepEqual(errors,[]);checks.push('preferências explicam diferenças e limites dos modelos');
+  await page.evaluate(()=>FitApp.startCardio());
+  await page.waitForFunction(()=>document.body.classList.contains('session-active')&&document.getElementById('timerContainer').hidden);
+  assert.equal(await page.locator('#timerContainer').isVisible(),false);checks.push('aeróbico não mostra controles de descanso entre séries');
+  fs.writeFileSync('audit/model-settings-validation.json',JSON.stringify({status:'ok',environment:'local Edge; Firebase simulated',checks},null,2)+'\n');
+  for(const check of checks)console.log('OK: '+check);
+ }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
+})().catch(error=>{console.error(error);process.exitCode=1;});

@@ -1,0 +1,16 @@
+{
+  "status": "ok",
+  "environment": "local; Firebase simulated",
+  "checks": [
+    "biset_sinergista · pares completos em academia",
+    "biset_sinergista · falha preserva plano e prévia",
+    "três combinações manuais livres criadas, salvas e executadas",
+    "biset_agonista · plano salvo reabre sem geração ou perda de pares",
+    "biset_antagonista · plano salvo reabre sem geração ou perda de pares",
+    "preferência antiga sem plano usa bi-set complementar",
+    "execução de par repetido bloqueada",
+    "adaptação com alternativa única sinalizada",
+    "largura móvel"
+  ],
+  "pageErrors": []
+}

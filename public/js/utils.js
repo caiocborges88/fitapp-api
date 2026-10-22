@@ -13,11 +13,10 @@ export const escapeHTML = (str) => {
 };
 
 export const parseSafeFloat = (val) => {
-    if (!val) return 0;
-    let str = String(val).replace(',', '.').replace(/[^0-9.]/g, ''); 
-    const parts = str.split('.');
-    if (parts.length > 2) str = parts[0] + '.' + parts.slice(1).join('');
-    return parseFloat(str) || 0;
+    const str = String(val ?? '').trim().replace(',', '.');
+    if (!/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(str)) return 0;
+    const number = Number(str);
+    return Number.isFinite(number) && number >= 0 ? number : 0;
 };
 
 export const getMuscleGroup = (item) => {

@@ -3,42 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Torre de Controle | FitApp B2B</title>
-    <style>
-        /* Base Tática B2B */
-        body { background: #0a0a0a; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; }
-        header { background: #111; padding: 20px 40px; border-bottom: 2px solid #a64dff; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(166, 77, 255, 0.2); }
-        h1 { margin: 0; color: #a64dff; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; }
-        
-        .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
-        .card { background: #1a1a1a; padding: 25px; border-radius: 8px; border: 1px solid #333; position: relative; overflow: hidden; }
-        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: #a64dff; }
-        .card h3 { margin-top: 0; color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
-        .card .value { font-size: 38px; font-weight: bold; color: #00ff88; font-family: monospace; }
-        
-        /* Tabela Radar */
-        h2 { border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px; color: #ddd; font-weight: 300; }
-        table { width: 100%; border-collapse: collapse; background: #151515; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        th, td { padding: 18px 20px; text-align: left; border-bottom: 1px solid #222; }
-        th { background: #111; color: #a64dff; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
-        tr:hover { background: #1e1e1e; }
-        
-        .status-active { color: #00ff88; font-weight: bold; background: rgba(0,255,136,0.1); padding: 4px 8px; border-radius: 4px; font-size: 12px; text-transform: uppercase; }
-        .status-inactive { color: #ff4444; font-weight: bold; background: rgba(255,68,68,0.1); padding: 4px 8px; border-radius: 4px; font-size: 12px; text-transform: uppercase; }
-        .btn-audit { background: transparent; border: 1px solid #a64dff; color: #a64dff; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: all 0.2s; }
-        .btn-audit:hover { background: #a64dff; color: #000; }
-    </style>
+    <title>FitApp · Administração</title>
+    <link rel="stylesheet" href="css/style.css"><meta name="color-scheme" content="light dark">
     <!-- Motor Gráfico Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="vendor/chart.js"></script>
 </head>
-<body>
+<body class="admin-page">
 
-    <header>
-        <h1>📡 FitApp: Visão do Comandante</h1>
+    <header class="app-header">
+        <h1>FitApp · Administração</h1>
         <div style="display: flex; align-items: center; gap: 20px;">
-            <div id="adminStatus" style="font-size: 14px; color: #aaa;">Iniciando satélite...</div>
-            <button onclick="encerrarSessaoAdmin()" style="background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; color: #ff4444; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px;">Desconectar</button>
+            <div id="adminStatus" style="font-size: 14px; color: var(--muted);">Iniciando satélite...</div>
+            <button onclick="encerrarSessaoAdmin()" style="background: rgba(255, 68, 68, 0.1); border: 1px solid var(--danger); color: var(--danger); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px;">Desconectar</button>
         </div>
     </header>
 
@@ -49,62 +25,62 @@
                 <h3>Total de Recrutas Base</h3>
                 <div class="value" id="totalUsers">--</div>
             </div>
-            <div class="card" style="border-left-color: #00ff88;">
+            <div class="card" style="border-left-color: var(--accent);">
                 <h3>Treinos Lançados (Nuvem)</h3>
                 <div class="value" id="totalWorkouts">--</div>
-                <div style="color: #666; font-size: 11px; margin-top: 5px;">Métrica de engajamento global</div>
+                <div style="color: var(--subtle); font-size: 11px; margin-top: 5px;">Métrica de engajamento global</div>
             </div>
         </div>
 
         <!-- Radar Nominal de Tropa (Monitoramento Ao Vivo) -->
         <h2>📋 Radar de Tropa (Monitoramento Ao Vivo)</h2>
-        <table style="margin-bottom: 50px;">
+        <div class="table-scroll"><table style="margin-bottom: 50px;">
             <thead>
                 <tr>
                     <th>Identificação do Recruta</th>
                     <th>Nível de Combate (Suor)</th>
-                    <th>Último Treino</th>
-                    <th>Status Operacional</th>
-                    <th>Ações Táticas</th>
+                    <th>Última recompensa</th>
+                    <th>Estado da coleção</th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody id="usersTableBody">
-                <tr><td colspan="5" style="text-align: center; color: #888; font-style: italic;">Sincronizando com Firestore...</td></tr>
+                <tr><td colspan="5" style="text-align: center; color: var(--subtle); font-style: italic;">Sincronizando com Firestore...</td></tr>
             </tbody>
-        </table>
+        </table></div>
 
         <!-- Módulo de Treinamento (Dicionário de Áudio) -->
-        <h2>📚 Base Tática de Movimentos (Dicionário IA)</h2>
+        <h2>Dicas do catálogo publicado</h2><p>Escolha um exercício da versão publicada. Novos exercícios e alterações de grupo, equipamento ou nome exigem revisão do catálogo e publicação conjunta do aplicativo e da API.</p>
         <div class="grid" style="grid-template-columns: 1fr 2fr;">
             
             <!-- Formulário de Cadastro -->
-            <div class="card" style="border-left-color: #ffaa00;">
-                <h3 style="color: #ffaa00; margin-bottom: 15px;">Cadastrar / Atualizar Padrão</h3>
+            <div class="card" style="border-left-color: var(--warning);">
+                <h3 style="color: var(--warning); margin-bottom: 15px;">Atualizar dica de execução</h3>
                 
-                <input type="text" id="dictName" placeholder="Nome do Exercício (ex: Supino Reto)" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #111; color: #fff; border: 1px solid #333; border-radius: 4px; box-sizing: border-box; font-size: 14px;">
+                <input type="text" id="dictName" list="publishedExercises" aria-label="Exercício do catálogo" placeholder="Nome do Exercício (ex: Supino Reto)" style="width: 100%; padding: 12px; margin-bottom: 10px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; box-sizing: border-box; font-size: 14px;">
                 
-                <input type="text" id="dictGroup" placeholder="Grupo Muscular (ex: Peitoral)" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #111; color: #fff; border: 1px solid #333; border-radius: 4px; box-sizing: border-box; font-size: 14px;">
+                <input type="text" id="dictGroup" readonly aria-label="Grupo do catálogo" placeholder="Grupo Muscular (ex: Peitoral)" style="width: 100%; padding: 12px; margin-bottom: 10px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; box-sizing: border-box; font-size: 14px;">
                 
-                <textarea id="dictTip" placeholder="Instrução Tática (O Spotter de áudio lerá esse texto no fone do aluno...)" rows="5" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #111; color: #fff; border: 1px solid #333; border-radius: 4px; box-sizing: border-box; resize: vertical; font-size: 14px; font-family: monospace;"></textarea>
+                <textarea id="dictTip" placeholder="Instrução Tática (O Spotter de áudio lerá esse texto no fone do aluno...)" rows="5" style="width: 100%; padding: 12px; margin-bottom: 10px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; box-sizing: border-box; resize: vertical; font-size: 14px; font-family: monospace;"></textarea>
                 
-                <button onclick="salvarDicionario()" style="width: 100%; padding: 14px; background: #ffaa00; color: #000; font-weight: bold; font-size: 14px; border: none; border-radius: 4px; cursor: pointer; text-transform: uppercase;">Gravar no Servidor</button>
+                <button onclick="salvarDicionario()" style="width: 100%; padding: 14px; background: var(--warning); color: var(--on-accent); font-weight: bold; font-size: 14px; border: none; border-radius: 4px; cursor: pointer; text-transform: uppercase;">Gravar no Servidor</button>
                 <div id="dictStatus" style="margin-top: 15px; font-size: 13px; text-align: center; font-weight: bold;"></div>
             </div>
 
             <!-- Lista de Arsenal Criptografado -->
-            <div class="card" style="border-left-color: #333; overflow-y: auto; max-height: 400px; padding: 0;">
-                <table style="margin: 0; box-shadow: none; border-radius: 0;">
+            <div class="card" style="border-left-color: var(--line); overflow-y: auto; max-height: 400px; padding: 0;">
+                <div class="table-scroll"><table style="margin: 0; box-shadow: none; border-radius: 0;">
                     <thead style="position: sticky; top: 0; z-index: 1; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
                         <tr>
                             <th>Exercício Cadastrado</th>
-                            <th>Instrução de Áudio (IA)</th>
+                            <th>Dica de execução</th>
                             <th style="text-align: center;">Ações</th>
                         </tr>
                     </thead>
                     <tbody id="dictTableBody">
-                        <tr><td colspan="3" style="text-align: center; color: #888; padding: 30px;">Iniciando varredura do arsenal...</td></tr>
+                        <tr><td colspan="3" style="text-align: center; color: var(--subtle); padding: 30px;">Iniciando varredura do arsenal...</td></tr>
                     </tbody>
-                </table>
+                </table></div>
             </div>
             
         </div>
@@ -112,16 +88,16 @@
 
     <!-- Modal do Dossiê de Combate -->
     <div id="dossierModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
-        <div style="background: #121212; padding: 30px; border-radius: 12px; border: 1px solid #a64dff; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 50px rgba(166, 77, 255, 0.2);">
+        <div style="background: var(--bg); padding: 30px; border-radius: 12px; border: 1px solid var(--secondary); max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 50px rgba(166, 77, 255, 0.2);">
             
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px;">
-                <h2 style="margin: 0; color: #a64dff; border: none; padding: 0;">📊 Dossiê de Evolução</h2>
-                <button onclick="document.getElementById('dossierModal').style.display='none'" style="background: transparent; color: #fff; border: none; font-size: 30px; cursor: pointer;">&times;</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 15px; margin-bottom: 20px;">
+                <h2 style="margin: 0; color: var(--secondary); border: none; padding: 0;">📊 Dossiê de Evolução</h2>
+                <button onclick="document.getElementById('dossierModal').style.display='none'" style="background: transparent; color: var(--ink); border: none; font-size: 30px; cursor: pointer;">&times;</button>
             </div>
             
             <div style="margin-bottom: 20px;">
-                <label style="color: #aaa; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">Alvo de Análise Biomecânica:</label>
-                <select id="exerciseSelect" style="width: 100%; padding: 12px; margin-top: 8px; background: #1a1a1a; color: #00ff88; border: 1px solid #444; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer;">
+                <label style="color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">Alvo de Análise Biomecânica:</label>
+                <select id="exerciseSelect" style="width: 100%; padding: 12px; margin-top: 8px; background: var(--surface); color: var(--accent); border: 1px solid var(--line); border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer;">
                     <option value="Supino Reto">Supino Reto</option>
                     <option value="Agachamento Livre">Agachamento Livre</option>
                     <option value="Leg Press 45º">Leg Press 45º</option>
@@ -129,23 +105,25 @@
                 </select>
             </div>
 
-            <div style="background: #1a1a1a; padding: 20px; border-radius: 8px; border: 1px solid #333;">
+            <div style="background: var(--surface); padding: 20px; border-radius: 8px; border: 1px solid var(--line);">
                 <canvas id="progressionChart" height="120"></canvas>
             </div>
             
-            <p id="dossierStatus" style="color: #888; font-size: 12px; text-align: center; margin-top: 15px;"></p>
+            <p id="dossierStatus" style="color: var(--subtle); font-size: 12px; text-align: center; margin-top: 15px;"></p>
         </div>
     </div>
 
     <!-- Motores do Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="vendor/firebase-app.js"></script>
+    <script src="vendor/firebase-auth.js"></script>
+    <script src="vendor/firebase-firestore.js"></script>
     
     <!-- Chamada das Credenciais e Inicialização -->
+    <script src="js/storage.js"></script>
     <script src="js/api.js"></script> 
     
     <!-- Cérebro da Torre de Controle -->
+    <script src="js/dados.js"></script><datalist id="publishedExercises"></datalist>
     <script src="js/admin.js"></script>
 
 <!-- Motor de Log Out B2B -->
@@ -153,7 +131,7 @@
         function encerrarSessaoAdmin() {
             if (confirm("Deseja desconectar a Torre de Controle?")) {
                 firebase.auth().signOut().then(() => {
-                    localStorage.clear();
+                    window.FitStore.bindUser(null);
                     window.location.href = 'index.html'; // Redireciona para o App Principal
                 });
             }

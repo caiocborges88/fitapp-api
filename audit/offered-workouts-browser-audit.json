@@ -1,0 +1,124 @@
+{
+  "scope": "Reproduções locais no Edge com Firebase simulado e contextos independentes. Nenhum dado real ou código funcional foi alterado. confirmed registra reprodução do comportamento, não validação clínica ou aprovação de uma regra de produto.",
+  "results": [
+    {
+      "name": "plan-lost-when-replacement-generation-fails",
+      "evidence": {
+        "confirmed": true,
+        "previousPlanId": "30ff8dde-86a3-426b-b12d-698892fe41f6",
+        "afterPlan": "",
+        "counterBefore": "5",
+        "counterAfter": "0",
+        "message": "Não há exercício abdominal compatível com os recursos selecionados."
+      },
+      "pageErrors": []
+    },
+    {
+      "name": "model-modal-ignores-persisted-exclusion",
+      "evidence": {
+        "confirmed": true,
+        "blacklist": [
+          "Cadeira Extensora"
+        ],
+        "kind": "cycle",
+        "dayC": [
+          "Afundo com Halteres",
+          "Cadeira Extensora",
+          "RDL com Halteres",
+          "Mesa Flexora (Deitado)",
+          "Elevação Pélvica na Máquina",
+          "Panturrilha em Pé na Máquina",
+          "Russian Twist com Halter"
+        ]
+      },
+      "pageErrors": []
+    },
+    {
+      "name": "timed-core-starts-with-repetition-unit",
+      "evidence": {
+        "confirmed": true,
+        "active": true,
+        "timed": [
+          {
+            "name": "Prancha Isométrica Frontal",
+            "target": "20-30 seg",
+            "units": [
+              "reps",
+              "reps",
+              "reps"
+            ],
+            "firstSet": {
+              "kg": "",
+              "reps": "",
+              "checked": false
+            }
+          }
+        ]
+      },
+      "pageErrors": []
+    },
+    {
+      "name": "global-calisthenics-plan-restricts-personal-freeweight-swaps",
+      "evidence": {
+        "confirmed": true,
+        "withCalisthenics": [
+          "Flexão de Braço (Padrão)",
+          "Flexão com Joelhos Apoiados"
+        ],
+        "withAbc": [
+          "Supino Reto com Halteres",
+          "Supino Reto na Máquina",
+          "Supino no Solo com Halteres",
+          "Flexão de Braço (Padrão)",
+          "Flexão com Joelhos Apoiados"
+        ]
+      },
+      "pageErrors": []
+    },
+    {
+      "name": "pullup-bar-chip-does-not-control-pullup-resource",
+      "evidence": {
+        "confirmed": true,
+        "selectedChips": [
+          "Peso corporal"
+        ],
+        "bars": [
+          {
+            "name": "Barra Fixa com Apoio dos Pés",
+            "resources": [
+              "pullup-bar",
+              "bench"
+            ]
+          },
+          {
+            "name": "Barra Fixa com Apoio dos Pés",
+            "resources": [
+              "pullup-bar",
+              "bench"
+            ]
+          },
+          {
+            "name": "Barra Fixa com Apoio dos Pés",
+            "resources": [
+              "pullup-bar",
+              "bench"
+            ]
+          }
+        ]
+      },
+      "pageErrors": []
+    },
+    {
+      "name": "beginner-swap-offers-high-complexity",
+      "evidence": {
+        "confirmed": true,
+        "level": "iniciante",
+        "advanced": [
+          "Barra Fixa Pronada (Pull-up)",
+          "Barra Fixa Supinada (Chin-up)"
+        ]
+      },
+      "pageErrors": []
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "fitapp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.cjs",
+    "build": "node scripts/build.cjs",
+    "check": "node scripts/check.cjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:browser": "node tests/browser.cjs",
+    "test:gemini": "node scripts/check-gemini.cjs",
+    "test:offline": "node tests/offline.cjs",
+    "test:integration": "node tests/emulator-browser.cjs",
+    "test:design": "node tests/design.cjs",
+    "test:editor": "node tests/editor-browser.cjs",
+    "test:sync": "node tests/sync-browser.cjs",
+    "test:catalogue": "node tests/catalogue-admin.cjs",
+    "test:environment": "node tests/environment-browser.cjs",
+    "test:environment-proposal": "node tests/environment-proposal-browser.cjs",
+    "test:biset": "node tests/biset-browser.cjs",
+    "test:workout-priorities": "node tests/workout-priorities-browser.cjs",
+    "test:model-settings": "node tests/model-settings-browser.cjs",
+    "test:coverage": "node tests/coverage-browser.cjs",
+    "test:circuit-calisthenics": "node tests/circuit-calisthenics-browser.cjs",
+    "test:ai-deferred": "node tests/ai-deferred-browser.cjs"
+  },
+  "dependencies": {
+    "chart.js": "^4.5.1",
+    "firebase": "^13.0.0",
+    "html2canvas": "^1.4.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@firebase/rules-unit-testing": "^6.0.0",
+    "eslint": "^10.12.0",
+    "globals": "^17.13.0",
+    "playwright": "^1.64.1"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "^1.14.5"
+  }
+}

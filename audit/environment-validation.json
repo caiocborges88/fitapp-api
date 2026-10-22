@@ -1,0 +1,16 @@
+{
+  "status": "ok",
+  "environment": "local; Firebase simulated",
+  "checks": [
+    "ficha pessoal adaptada em casa e parque",
+    "ficha original preservada",
+    "volta à academia reversível",
+    "execução sem equipamentos de academia",
+    "movimento sem alternativa bloqueado",
+    "barra apenas quando declarada",
+    "recursos independentes por ambiente",
+    "plano adaptado sem gravar substituições no original",
+    "largura móvel"
+  ],
+  "pageErrors": []
+}

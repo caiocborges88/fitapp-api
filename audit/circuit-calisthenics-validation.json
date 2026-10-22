@@ -1,0 +1,13 @@
+{
+  "status": "ok",
+  "environment": "local; Firebase simulated",
+  "checks": [
+    "circuito · academia · geração, salvamento e início",
+    "circuito · praia · geração, salvamento e início",
+    "circuito · falta de recursos preserva plano e prévia",
+    "modelo de calistenia retirado",
+    "atalho Casa compatível sem equipamentos",
+    "largura móvel"
+  ],
+  "pageErrors": []
+}

@@ -1,0 +1,44 @@
+const fs=require('node:fs');
+const path=require('node:path');
+const assert=require('node:assert/strict');
+const {chromium,devices}=require('playwright');
+const cli=path.join(process.env.APPDATA,'npm/node_modules/firebase-tools/lib');
+(async()=>{
+ const project='fitapp-operacional',base='https://fitapp-operacional.web.app';
+ const expected=JSON.parse(fs.readFileSync('public/version.json','utf8')).version;
+ const response=await fetch(base+'/version.json',{cache:'no-store'});
+ assert.equal(response.status,200);const version=await response.json();assert.equal(version.version,expected);
+ const manifest=await (await fetch(base+'/manifest.json')).json();assert.equal(manifest.display,'standalone');
+ const api=await fetch(base+'/api/coach');assert.equal(api.status,401);assert.ok((await api.json()).error);
+ const options={project,nonInteractive:true};
+ const auth=require(path.join(cli,'auth.js'));const account=auth.selectAccount(undefined,process.cwd());
+ if(account)auth.setActiveAccount(options,account);
+ await require(path.join(cli,'requireAuth.js')).requireAuth(options);
+ const rules=require(path.join(cli,'gcp/rules.js'));
+ const releases=await rules.listAllReleases(project);const ruleset=await rules.getLatestRulesetName(project,'cloud.firestore',releases);
+ const files=await rules.getRulesetContent(ruleset);
+ const remote=files.find(file=>file.name==='firestore.rules')||files[0];
+ const normalize=text=>text.replace(/\r\n/g,'\n').trim();
+ assert.equal(normalize(remote.content),normalize(fs.readFileSync('firestore.rules','utf8')));
+ const {FirestoreApi}=require(path.join(cli,'firestore/api.js'));
+ const indexes=await new FirestoreApi().listIndexes(project);
+ const historyIndex=indexes.find(index=>index.name.includes('/collectionGroups/treinos_concluidos/')&&index.fields.some(field=>field.fieldPath==='userId')&&index.fields.some(field=>field.fieldPath==='timestamp'));
+ assert.equal(historyIndex?.state,'READY');
+ const browser=await chromium.launch({channel:'msedge',headless:true});
+ const context=await browser.newContext({...devices['Pixel 7'],reducedMotion:'reduce'});
+ const errors=[];
+ try{
+  const page=await context.newPage();page.on('pageerror',error=>errors.push(error.message));
+  await page.goto(base);await page.waitForFunction(()=>window.FitApp&&window.dictionaryData?.length);
+  await page.waitForFunction(()=>navigator.serviceWorker.controller);
+  assert.equal(await page.locator('#loginOverlay').isVisible(),true);
+  const cachesReady=await page.evaluate(async()=>{const names=await caches.keys();const cache=await caches.open(names.find(name=>name.startsWith('fitapp-')));return Boolean(await cache.match('/js/cycle-review.js'));});
+  assert.equal(cachesReady,true);
+  await page.screenshot({path:'audit/mobile-production-login.png',fullPage:true});
+  await context.setOffline(true);await page.reload();await page.waitForFunction(()=>window.FitApp&&window.dictionaryData?.length);
+  assert.deepEqual(errors,[]);
+ }finally{await context.close();await browser.close();}
+ const result={status:'ok',url:base,version:expected,apiStatus:api.status,ruleset,historyIndexState:historyIndex.state,checks:['HTTPS e versão atual','API exige autenticação','regras publicadas iguais às testadas','índice de histórico pronto','manifesto instalável','inicialização móvel simulada','cache inclui revisão em abas','recarga offline sem exceções'],productionDataWrites:false,realAndroidTest:'a realizar pelo usuário'};
+ fs.writeFileSync('audit/mobile-production-validation.json',JSON.stringify(result,null,2)+'\n');
+ console.log(JSON.stringify(result,null,2));
+})().catch(error=>{console.error(error);process.exitCode=1;});

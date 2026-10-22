@@ -1,0 +1,42 @@
+{
+  "score": null,
+  "summary": "Não foi possível pontuar as regras publicadas: não há regras versionadas no repositório auditado e não houve acesso às regras efetivas do Firebase. Atribuir 1–5 inventaria uma conclusão de segurança.",
+  "findings": [
+    {
+      "check": "The Update Bypass",
+      "severity": "major",
+      "issue": "Não verificável sem as regras: create/update precisam preservar proprietário, tipos, limites e campos protegidos.",
+      "recommendation": "Versionar as regras e testar alteração de userId, roles, pontos e tipos após uma criação válida."
+    },
+    {
+      "check": "Authority Source",
+      "severity": "major",
+      "issue": "O cliente administrativo verifica apenas autenticação. O navegador escreve pontos, álbum e poder de combate.",
+      "recommendation": "Autoridade administrativa atribuída pelo servidor e concessões idempotentes de recompensa; rejeitar autoconcessão de privilégios."
+    },
+    {
+      "check": "Business Logic vs. Rules",
+      "severity": "major",
+      "issue": "Painel e cliente usam caminhos e campos diferentes para o histórico; ranking consulta documentos que contêm email.",
+      "recommendation": "Unificar histórico e vínculo treinador-aluno; separar projeção pública de ranking do perfil privado."
+    },
+    {
+      "check": "Storage Abuse",
+      "severity": "major",
+      "issue": "Não verificável nas regras; faltam limites de domínio explícitos no contrato da IA e nas escritas do cliente.",
+      "recommendation": "Validar tamanho de strings, listas, séries, campos permitidos e consumo por identidade."
+    },
+    {
+      "check": "Type Safety",
+      "severity": "major",
+      "issue": "Não verificável nas regras; o fluxo IA produz ID NaN/null e aceita valores sem validação de domínio consistente.",
+      "recommendation": "Schemas compartilhados no cliente/servidor e regras de tipos em create/update; migração de registros inválidos."
+    },
+    {
+      "check": "Field-Level vs. Identity-Level Security",
+      "severity": "major",
+      "issue": "Atribuir userId e filtrar consultas no cliente não comprova isolamento. Nenhuma exploração do banco publicado foi realizada.",
+      "recommendation": "Testar negação para usuário B sobre dados de A, inclusive delete e update; imutabilidade do proprietário; autorização explícita de treinador."
+    }
+  ]
+}

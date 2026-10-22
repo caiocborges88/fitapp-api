@@ -1,0 +1,327 @@
+{
+  "scope": "Análise isolada de possibilidades e registros existentes; nenhum movimento é ativado por este arquivo. Focos, padrões e complexidade propostos exigem validação de execução e prescrição.",
+  "candidates": [
+    {
+      "id": "panturrilha-sentado-sem-carga",
+      "name": "Elevação de panturrilhas sentado sem carga",
+      "priority": 1,
+      "status": "ja-cadastrado",
+      "equip": "Peso Corporal",
+      "resources": [
+        "bench"
+      ],
+      "agonist": "Panturrilhas",
+      "subLevel": "Sóleo",
+      "muscleFocus": [
+        "soleo"
+      ],
+      "movementPattern": "flexao-plantar-joelho-flexionado",
+      "nivel": 1,
+      "notes": "Já existe no catálogo ativo. As pendências observadas ocorrem sem banco declarado; não inserir duplicata. Exige assento firme. Mesma família de movimento da opção sentada; resistência muito menor que a máquina. Exige revisão de metas/carga, sem herdar prescrição automaticamente.",
+      "sources": [
+        "https://www.puregym.com/exercises/legs/calf-exercises/seated-calf-raises/"
+      ]
+    },
+    {
+      "id": "panturrilha-sentado-halter",
+      "name": "Elevação de panturrilhas sentado com halteres",
+      "priority": 1,
+      "status": "ja-cadastrado",
+      "equip": "Halter",
+      "resources": [
+        "bench",
+        "dumbbells"
+      ],
+      "agonist": "Panturrilhas",
+      "subLevel": "Sóleo",
+      "muscleFocus": [
+        "soleo"
+      ],
+      "movementPattern": "flexao-plantar-joelho-flexionado",
+      "nivel": 1,
+      "notes": "Já existe no catálogo ativo. As pendências observadas ocorrem sem banco declarado; não inserir duplicata. Progressão com carga externa. Não é um segundo movimento independente para formar um par apenas mudando o implemento.",
+      "sources": [
+        "https://www.puregym.com/exercises/legs/calf-exercises/seated-calf-raises/"
+      ]
+    },
+    {
+      "id": "chin-up-assistido-pes",
+      "name": "Barra fixa supinada com apoio dos pés",
+      "priority": 1,
+      "status": "detalhar-variante",
+      "equip": "Peso Corporal",
+      "resources": [
+        "pullup-bar",
+        "bench"
+      ],
+      "agonist": "Costas",
+      "subLevel": "Latíssimo do Dorso",
+      "muscleFocus": [
+        "costas-latissimo"
+      ],
+      "movementPattern": "puxar-vertical",
+      "nivel": 2,
+      "notes": "Antes de inserir, esclarecer a pegada do cadastro genérico Barra Fixa com Apoio dos Pés. Só contar como variante distinta se a execução também for distinta, sem duplicar o mesmo cadastro para completar bi-set.",
+      "sources": [
+        "https://www.acefitness.org/continuing-education/prosource/december-2014/5153/essential-exercises-for-an-optimal-strength-training-workout/"
+      ]
+    },
+    {
+      "id": "remada-invertida-supinada",
+      "name": "Remada invertida supinada em barra baixa",
+      "priority": 1,
+      "status": "detalhar-variante",
+      "equip": "Peso Corporal",
+      "resources": [
+        "low-bar"
+      ],
+      "agonist": "Costas",
+      "subLevel": "Espessura (Romboides)",
+      "muscleFocus": [
+        "costas-remada"
+      ],
+      "movementPattern": "puxar-horizontal",
+      "nivel": 2,
+      "notes": "Confirmar pegada da remada invertida já existente. Mantém puxada horizontal; não deve atender a uma solicitação de puxada vertical nem ser confundida com rosca corporal.",
+      "sources": [
+        "https://calisteniapp.com/programs/your_first_pull_up/PL008"
+      ]
+    },
+    {
+      "id": "extensao-joelho-sentado-sem-carga",
+      "name": "Extensão de joelho sentado sem carga",
+      "priority": 2,
+      "status": "revisao-manual",
+      "equip": "Peso Corporal",
+      "resources": [
+        "bench"
+      ],
+      "agonist": "Quadríceps",
+      "subLevel": "Quadríceps geral — ênfase pendente",
+      "muscleFocus": [
+        "quadriceps-geral"
+      ],
+      "movementPattern": "extensao-joelho",
+      "nivel": 1,
+      "notes": "A fonte descreve exercício de contexto de reabilitação e progressão de resistência. Não sustenta trocar cadeira extensora de hipertrofia por esta versão preservando séries/metas ou afirmar ênfase isolada no reto femoral. Não preenche automaticamente quadriceps-reto no modelo proposto.",
+      "sources": [
+        "https://www.opalreturntowork.nhs.uk/exercises/seated-knee-extension/"
+      ]
+    },
+    {
+      "id": "puxada-alta-elastico",
+      "name": "Puxada alta com elástico e ancoragem alta",
+      "priority": 1,
+      "status": "requer-novos-recursos",
+      "equip": "Elástico",
+      "resources": [
+        "resistance-band",
+        "anchor-high"
+      ],
+      "agonist": "Costas",
+      "subLevel": "Latíssimo do Dorso",
+      "muscleFocus": [
+        "costas-latissimo"
+      ],
+      "movementPattern": "puxar-vertical",
+      "nivel": 2,
+      "notes": "Requer suporte real a elásticos e ponto alto adequado. Não presumir ancoragem por existir uma porta ou parede. A classificação proposta é baseada na execução de puxada vertical, sem equivalência de carga com máquina.",
+      "sources": [
+        "https://centr.com/blogs/thewarmup/cpah-tutorial-seated-banded-lat-pulldown"
+      ]
+    },
+    {
+      "id": "extensao-joelho-elastico",
+      "name": "Extensão de joelho sentado com elástico",
+      "priority": 1,
+      "status": "requer-novos-recursos-e-revisao-de-foco",
+      "equip": "Elástico",
+      "resources": [
+        "resistance-band",
+        "bench",
+        "anchor-low"
+      ],
+      "agonist": "Quadríceps",
+      "subLevel": "Quadríceps geral — ênfase pendente",
+      "muscleFocus": [
+        "quadriceps-geral"
+      ],
+      "movementPattern": "extensao-joelho",
+      "nivel": 2,
+      "notes": "Candidata prioritária para a função de extensão de joelho. O cadastro de ênfase e a adequação da resistência precisam de revisão; não rotular automaticamente quadriceps-reto só para fechar o relatório. Fonte clínica não valida uma prescrição esportiva universal.",
+      "sources": [
+        "https://www.opalreturntowork.nhs.uk/exercises/seated-knee-extension/",
+        "https://northcheshireandmersey.nhs.uk/media/exriqrct/post-op-knee-strengthening-exercises-patient-advice-sheet.pdf"
+      ]
+    },
+    {
+      "id": "elevacao-lateral-elastico",
+      "name": "Elevação lateral com elástico sob os pés",
+      "priority": 1,
+      "status": "requer-novos-recursos",
+      "equip": "Elástico",
+      "resources": [
+        "resistance-band"
+      ],
+      "agonist": "Ombros",
+      "subLevel": "Deltoide Lateral",
+      "muscleFocus": [
+        "deltoide-lateral"
+      ],
+      "movementPattern": "abducao-ombro",
+      "nivel": 2,
+      "notes": "Variante autoancorada nos pés; não exige declarar ancoragem externa. Validar faixa de resistência e execução antes da seleção automática.",
+      "sources": [
+        "https://www.peak-physio.com.au/exercises/strength-shoulder-lateral-raise-with-theraband/"
+      ]
+    },
+    {
+      "id": "rosca-martelo-elastico",
+      "name": "Rosca martelo com elástico sob os pés",
+      "priority": 1,
+      "status": "requer-novos-recursos",
+      "equip": "Elástico",
+      "resources": [
+        "resistance-band"
+      ],
+      "agonist": "Bíceps",
+      "subLevel": "Braquial / Antebraço",
+      "muscleFocus": [
+        "braquial-antebraco"
+      ],
+      "movementPattern": "flexao-cotovelo-neutra-pronada",
+      "nivel": 2,
+      "notes": "Pegada neutra explicitamente descrita. Não confundir com rosca corporal supinada. Elástico é resistência externa e não satisfaz bloco estritamente corporal.",
+      "sources": [
+        "https://www.pdx.edu/recreation/accessible-home-workouts"
+      ]
+    },
+    {
+      "id": "pull-apart-elastico",
+      "name": "Abertura horizontal com elástico (pull-apart)",
+      "priority": 1,
+      "status": "requer-novos-recursos",
+      "equip": "Elástico",
+      "resources": [
+        "resistance-band"
+      ],
+      "agonist": "Ombros",
+      "subLevel": "Deltoide Posterior",
+      "muscleFocus": [
+        "deltoide-posterior"
+      ],
+      "movementPattern": "abducao-horizontal",
+      "nivel": 2,
+      "notes": "Proposta para abdução horizontal; participação escapular não permite renomeá-la como remada horizontal. Revisar classificação de ênfase e amplitude antes de liberar.",
+      "sources": [
+        "https://www.roguefitness.com/theindex/movement-library/how-to-do-band-pull-aparts"
+      ]
+    },
+    {
+      "id": "triceps-coice-elastico",
+      "name": "Tríceps coice com elástico sob os pés",
+      "priority": 1,
+      "status": "requer-novos-recursos-e-revisao-de-foco",
+      "equip": "Elástico",
+      "resources": [
+        "resistance-band"
+      ],
+      "agonist": "Tríceps",
+      "subLevel": "Tríceps — ênfase lateral/medial a revisar",
+      "muscleFocus": [
+        "triceps-lateral-medial"
+      ],
+      "movementPattern": "extensao-cotovelo",
+      "nivel": 2,
+      "notes": "A fonte sustenta extensão de cotovelo para tríceps. O código de ênfase proposto acompanha o coice já cadastrado; não é demonstração de isolamento das cabeças. Preferir esta variante autoancorada a instruções de prender faixa ao pescoço.",
+      "sources": [
+        "https://www.performancehealth.com/articles/33-theraband-resistance-band-exercises-to-do-at-home"
+      ]
+    },
+    {
+      "id": "crucifixo-elastico-torax",
+      "name": "Crucifixo com elástico à altura do tórax",
+      "priority": 1,
+      "status": "requer-novos-recursos-e-revisao-de-foco",
+      "equip": "Elástico",
+      "resources": [
+        "resistance-band"
+      ],
+      "agonist": "Peitoral",
+      "subLevel": "Esternocostal — ênfase a revisar",
+      "muscleFocus": [
+        "peitoral-esternocostal"
+      ],
+      "movementPattern": "aducao-horizontal",
+      "nivel": 2,
+      "notes": "Variante com faixa nas costas descrita pelo fabricante; definir comprimento/apoio e técnica. A fonte descreve peitorais em geral; a ênfase esternocostal é uma hipótese operacional, não isolamento comprovado.",
+      "sources": [
+        "https://www.performancehealth.com/articles/33-theraband-resistance-band-exercises-to-do-at-home"
+      ]
+    },
+    {
+      "id": "remada-elastico-ancoragem-media",
+      "name": "Remada com elástico e ancoragem média",
+      "priority": 2,
+      "status": "requer-novos-recursos",
+      "equip": "Elástico",
+      "resources": [
+        "resistance-band",
+        "anchor-mid"
+      ],
+      "agonist": "Costas",
+      "subLevel": "Espessura (Romboides)",
+      "muscleFocus": [
+        "costas-remada"
+      ],
+      "movementPattern": "puxar-horizontal",
+      "nivel": 2,
+      "notes": "Amplia a disponibilidade onde não há barra baixa ou halteres. Altura e tipo da ancoragem são requisitos propostos para a implementação, a validar na demonstração escolhida.",
+      "sources": [
+        "https://www.nasm.org/workout-exercise-guidance"
+      ]
+    },
+    {
+      "id": "reverse-nordic",
+      "name": "Reverse Nordic com amplitude controlada",
+      "priority": 3,
+      "status": "revisao-profissional-sem-substituicao-automatica",
+      "equip": "Peso Corporal",
+      "resources": [
+        "knee-padding"
+      ],
+      "agonist": "Quadríceps",
+      "subLevel": "Quadríceps geral — progressão excêntrica",
+      "muscleFocus": [
+        "quadriceps-geral"
+      ],
+      "movementPattern": "extensao-joelho",
+      "nivel": 3,
+      "notes": "Não cadastrar como solução universal para o iniciante nem como isolamento garantido de reto femoral. O estudo de 2024 não encontrou superioridade de ativação excêntrica dos quadríceps frente a variantes de agachamento. Não usar esse achado de EMG para concluir equivalência de hipertrofia ou segurança.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/39214520/"
+      ]
+    },
+    {
+      "id": "rosca-direta-elastico",
+      "name": "Rosca direta com elástico sob os pés",
+      "priority": 1,
+      "status": "requer-novos-recursos",
+      "equip": "Elástico",
+      "resources": [
+        "resistance-band"
+      ],
+      "agonist": "Bíceps",
+      "subLevel": "Bíceps Braquial",
+      "muscleFocus": [
+        "biceps"
+      ],
+      "movementPattern": "flexao-cotovelo-supinada",
+      "nivel": 2,
+      "notes": "Flexão de cotovelo com supinação, descrita pelo fabricante. Confirmar o foco no vocabulário do catálogo e ajustar resistência; não tratar como exercício corporal.",
+      "sources": [
+        "https://www.performancehealth.com/articles/33-theraband-resistance-band-exercises-to-do-at-home"
+      ]
+    }
+  ]
+}

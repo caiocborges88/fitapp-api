@@ -1,83 +1,15 @@
-const CACHE_NAME = 'fitapp-cache-v10'; // 🛡️ Versão 10: Blindagem Anti-Falhas e Nova Base de Dados
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/css/style.css',
-  '/js/app.js',
-  '/js/state.js',
-  '/js/utils.js',
-  '/js/audio.js',
-  '/js/sync.js',
-  '/js/forge.js',
-  '/js/ai.js',
-  '/js/combat.js',
-  '/js/ui.js',
-  '/js/dados.js',
-  '/js/api.js',            
-  '/js/gamification.js',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
-];
-
-self.addEventListener('install', event => {
-  self.skipWaiting(); 
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      // 🛡️ BLINDAGEM: Tenta guardar ficheiro a ficheiro. Se um falhar (ex: ai.js não existe), ele ignora o erro e salva os restantes.
-      return Promise.all(
-        urlsToCache.map(url => {
-          return cache.add(url).catch(err => {
-            console.warn(`[Spotter] Ficheiro não encontrado para cache, ignorando: ${url}`);
-          });
-        })
-      );
-    })
-  );
-});
-
+const CACHE = 'fitapp-81a8046d9b7d567e';
+const ASSETS = ["/","/index.html","/manifest.json","/icon-192.png","/icon-512.png","/icon.svg","/css/design.css","/css/style.css","/fonts/Manrope.ttf","/js/ai-features.js","/js/ai-policy.js","/js/ai.js","/js/api.js","/js/app.js","/js/audio.js","/js/biset-requirements.js","/js/campaign-store.js","/js/combat.js","/js/coverage-view.js","/js/cycle-review.js","/js/dados.js","/js/data-controls.js","/js/domain.js","/js/editor-domain.js","/js/editor.js","/js/environment-controls.js","/js/environment-proposal-controls.js","/js/environment-proposal.js","/js/environment.js","/js/experience.js","/js/forge.js","/js/gamification.js","/js/icons.js","/js/model-settings.js","/js/movement-requirements.js","/js/routine-coverage.js","/js/routine-review.js","/js/state.js","/js/storage.js","/js/sync-domain.js","/js/sync.js","/js/ui.js","/js/utils.js","/js/workout-methods.js","/vendor/chart.js","/vendor/firebase-app.js","/vendor/firebase-auth.js","/vendor/firebase-firestore.js","/vendor/html2canvas.js"];
+self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS.map(url => new Request(url, {cache:'reload'}))))));
+self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('fitapp-') && key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim())));
 self.addEventListener('fetch', event => {
-  // Ignora chamadas dinâmicas (Firebase, Auth, Firestore e Torre de Controlo)
-  if (event.request.url.includes('/api/') || 
-      event.request.url.includes('firestore.googleapis.com') ||
-      event.request.url.includes('identitytoolkit') ||
-      event.request.url.includes('admin.html') || 
-      event.request.url.includes('/js/admin.js')) {
-      return; 
-  }
-
-  // 🚀 ESTRATÉGIA STALE-WHILE-REVALIDATE (Imunidade ao "Lie-Fi" e Ecrãs Brancos)
-  event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      
-      const fetchPromise = fetch(event.request).then(networkResponse => {
-        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-            const responseToCache = networkResponse.clone();
-            caches.open(CACHE_NAME).then(cache => {
-              cache.put(event.request, responseToCache);
-            });
-        }
-        return networkResponse;
-      }).catch(() => {
-        console.log('[Spotter Digital] Operação Offline ativada.');
-      });
-
-      return cachedResponse || fetchPromise;
-    })
-  );
-});
-
-self.addEventListener('activate', event => {
-  const cacheAllowlist = [CACHE_NAME];
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheAllowlist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName); // Aniquila caches antigos
-          }
-        })
-      );
-    }).then(() => self.clients.claim())
-  );
+  const url = new URL(event.request.url);
+  if (event.request.method !== 'GET' || url.origin !== self.location.origin || url.pathname.startsWith('/api/') || url.pathname.includes('admin')) return;
+  if (!ASSETS.includes(url.pathname) && event.request.mode !== 'navigate') return;
+  event.respondWith(caches.open(CACHE).then(async cache => {
+    const cached = await cache.match(event.request, {ignoreSearch:true});
+    if (cached) return cached;
+    try { return await fetch(event.request); }
+    catch (error) { if(event.request.mode==='navigate') return cache.match('/index.html'); throw error; }
+  }));
 });

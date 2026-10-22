@@ -1,33 +1,38 @@
 import { state } from './state.js';
+import { normalizeRoutine } from './domain.js';
+import {aiWorkoutsEnabled,aiCoachEnabled,AI_DEFERRED_MESSAGE} from './ai-features.js';
 
 
 export async function fetchAIFeedback() {
+        if(!aiCoachEnabled()){window.FitApp.showToast(AI_DEFERRED_MESSAGE);return;}
         document.getElementById('aiLoader').style.display = 'block';
         document.getElementById('aiResponse').style.display = 'none';
         document.getElementById('btnAnalyzeAI').disabled = true;
 
         try {
             const data = await FitAPI.getCoachFeedback();
-            
-            document.getElementById('aiResponse').innerHTML = `<strong>Feedback do Coach:</strong><br>${data.feedback}`;
+
+            document.getElementById('aiResponse').textContent = `Mensagem de motivação: ${data.feedback}`;
             document.getElementById('aiResponse').style.display = 'block';
-            if(state.audioEnabled) window.FitApp.speak("Análise concluída.");
-        } catch (error) { window.FitApp.showToast("Erro ao contatar o servidor."); } 
+            if(state.audioEnabled) window.FitApp.speak("Mensagem recebida.");
+        } catch (error) { window.FitApp.showToast("Erro ao contatar o servidor."); }
         finally { document.getElementById('aiLoader').style.display = 'none'; document.getElementById('btnAnalyzeAI').disabled = false; }
     }
 
 export function openImportAiModal() {
+        if(!aiWorkoutsEnabled()){window.FitApp.showToast(AI_DEFERRED_MESSAGE);return;}
         document.getElementById('importAiModal').style.display = 'flex';
         const nameInput = document.getElementById('aiWorkoutName');
         const textInput = document.getElementById('aiWorkoutText');
         if (nameInput) nameInput.value = '';
         if (textInput) textInput.value = '';
-        
+
         // Sempre abre na aba de Criação por padrão
-        if(switchAiTab) switchAiTab('criar');
+        if(switchAiTab) switchAiTab('importar');
     }
 
 export function switchAiTab(tab) {
+        if(!aiWorkoutsEnabled())return;
         const btnCriar = document.getElementById('btnTabAiCriar');
         const btnImportar = document.getElementById('btnTabAiImportar');
         const routeCriar = document.getElementById('aiRouteCriar');
@@ -41,41 +46,46 @@ export function switchAiTab(tab) {
         }
 
         if (tab === 'criar') {
-            btnCriar.style.background = '#00ff88'; btnCriar.style.color = '#000';
-            btnImportar.style.background = 'transparent'; btnImportar.style.color = '#888';
+            btnCriar.style.background = 'var(--accent)'; btnCriar.style.color = 'var(--on-accent)';
+            btnImportar.style.background = 'transparent'; btnImportar.style.color = 'var(--subtle)';
             routeCriar.style.display = 'block';
             routeImportar.style.display = 'none';
             if(textInput) textInput.value = ''; // Limpa o texto para garantir a rota de criação
         } else {
-            btnImportar.style.background = '#00ff88'; btnImportar.style.color = '#000';
-            btnCriar.style.background = 'transparent'; btnCriar.style.color = '#888';
+            btnImportar.style.background = 'var(--accent)'; btnImportar.style.color = 'var(--on-accent)';
+            btnCriar.style.background = 'transparent'; btnCriar.style.color = 'var(--subtle)';
             routeImportar.style.display = 'block';
             routeCriar.style.display = 'none';
         }
     }
 
 export async function processWorkoutWithAI() {
+        if(!aiWorkoutsEnabled()){window.FitApp.showToast(AI_DEFERRED_MESSAGE);return;}
         const methodSelect = document.getElementById('aiMethod');
         const aiMethod = methodSelect ? methodSelect.value : 'abc';
         const methodName = methodSelect ? methodSelect.options[methodSelect.selectedIndex].text : 'IA';
-        
+
         const env = document.getElementById('aiEnv').value;
         const workoutName = document.getElementById('aiWorkoutName').value || `Rotina - ${methodName}`;
         const pastedText = document.getElementById('aiWorkoutText').value.trim();
-        
+        if (document.getElementById('aiRouteImportar').style.display !== 'none' && !pastedText) {
+            window.FitApp.showToast('Cole o texto da ficha antes de importar.'); return;
+        }
+        window.FitApp.switchTab('tab-treino','nav-treino');
+
         const loader = document.getElementById('aiImportLoader');
         const btn = document.getElementById('btnProcessAi');
-        
+
         loader.style.display = 'block';
         btn.disabled = true;
-        
+
         let megaPrompt = "";
 
         if (pastedText !== "") {
             megaPrompt = `
             O usuário quer importar este treino:
             "${pastedText}"
-            
+
             Se for apenas um dia de treino, chame-o de "${workoutName}".
             Retorne APENAS um JSON válido.
             `;
@@ -83,19 +93,13 @@ export async function processWorkoutWithAI() {
             let instruction = "";
             switch(aiMethod) {
                 case 'abc':
-                    instruction = "Crie uma periodização de 3 dias (ABC). Dia 1: Push (Peito, Ombro, Tríceps). Dia 2: Pull (Costas, Trapézio, Bíceps). Dia 3: Legs (Quadríceps, Isquiotibiais, Panturrilhas, Core). Para cada dia, escolha de 5 a 6 exercícios clássicos.";
+                    instruction = "Crie uma rascunho de ficha de 3 dias (ABC). Dia 1: Push (Peito, Ombro, Tríceps). Dia 2: Pull (Costas, Trapézio, Bíceps). Dia 3: Legs (Quadríceps, Isquiotibiais, Panturrilhas, Core). Para cada dia, escolha de 5 a 6 exercícios clássicos.";
                     break;
                 case 'abcd':
-                    instruction = "Crie uma periodização de 4 dias (ABCD). Dia 1: Peito e Tríceps. Dia 2: Foco Anterior (Quadríceps e Panturrilha). Dia 3: Costas e Bíceps. Dia 4: Foco Posterior (Isquiotibiais, Glúteos e Ombros). Para cada dia, escolha 5 a 6 exercícios.";
-                    break;
-                case 'biset_agonista':
-                    instruction = "Crie uma periodização de 3 dias (Push/Pull/Legs). OBRIGATÓRIO: Agrupe os movimentos em 'Bi-sets Agonistas' (2 exercícios seguidos para o MESMO músculo, ex: Supino reto + Crucifixo). Escolha 6 exercícios por dia formando 3 blocos de bi-sets.";
-                    break;
-                case 'biset_antagonista':
-                    instruction = "Crie uma periodização de 3 dias. OBRIGATÓRIO: Agrupe os movimentos em 'Bi-sets Antagônicos/Mistos' (2 exercícios seguidos para músculos OPOSTOS, ex: Peito + Costas, ou Quadríceps + Posterior). Escolha 6 exercícios por dia formando 3 blocos de bi-sets.";
+                    instruction = "Crie uma rascunho de ficha de 4 dias (ABCD). Dia 1: Peito e Tríceps. Dia 2: Foco Anterior (Quadríceps e Panturrilha). Dia 3: Costas e Bíceps. Dia 4: Foco Posterior (Isquiotibiais, Glúteos e Ombros). Para cada dia, escolha 5 a 6 exercícios.";
                     break;
                 case 'biset_sinergista':
-                    instruction = "Crie uma periodização de 3 dias. OBRIGATÓRIO: Agrupe os movimentos em 'Bi-sets Sinergistas' (ex: Peito + Tríceps, Costas + Bíceps, Pernas + Ombros). Escolha 6 exercícios por dia formando 3 blocos de bi-sets.";
+                    instruction = "Crie uma rascunho de ficha de 3 dias. OBRIGATÓRIO: Agrupe os movimentos em 'Bi-sets Complementares' (ex: Peito + Tríceps, Costas + Bíceps, Pernas + Ombros). Escolha 6 exercícios por dia formando 3 blocos de bi-sets.";
                     break;
                 case 'circuito':
                     instruction = "Crie 1 único treino no formato Circuito Metabólico FullBody. Escolha de 6 a 8 exercícios trabalhando o corpo todo de forma dinâmica. O objetivo é alto gasto calórico com mínimo descanso.";
@@ -103,37 +107,37 @@ export async function processWorkoutWithAI() {
             }
 
             const allowedExercises = window.dictionaryData.filter(d => {
-                if (env === 'academia') return d.equip !== 'peso_corporal' && d.equip !== 'calistenia'; 
-                if (env === 'calistenia') return d.equip === 'peso_corporal' || d.equip === 'calistenia';
-                return d.equip === 'peso_corporal';
+                if (env === 'academia') return true;
+                if (env === 'calistenia') return d.equip === 'Peso Corporal' || d.equip === 'Calistenia';
+                return d.equip === 'Peso Corporal';
             }).map(d => d.name).join(", ");
-            
+
             megaPrompt = `
             ${instruction}
-            
+
             REGRA ABSOLUTA: Você SÓ PODE usar os exercícios exatos desta lista abaixo. Não invente nenhum outro nome.
             LISTA PERMITIDA: [${allowedExercises}].
-            
+
             Defina séries lógicas (ex: 3 ou 4) e repetições adequadas (ex: 8-12, ou 15-20 para circuito).
             Retorne APENAS o JSON válido.
             `;
         }
 
         try {
-            const data = await FitAPI.importarTreinoIA(megaPrompt);
-            
+            const data = await FitAPI.importarTreinoIA(megaPrompt, pastedText ? 'academia' : env);
+
             if (data.resultado && data.resultado !== "[]") {
                 let cleanData = data.resultado;
-                
+
                 // 🛡️ ESCUDO ANTI-ALUCINAÇÃO: Extrai apenas o JSON puro (Arrays ou Objetos) ignorando texto extra do LLM
                 const jsonMatch = cleanData.match(/\[[\s\S]*\]|\{[\s\S]*\}/);
                 if (jsonMatch) {
                     cleanData = jsonMatch[0];
                 }
-                
+
                 const parsed = JSON.parse(cleanData);
-                state.currentWorkoutType = 'custom_ia';
-                
+                state.currentWorkoutType = 'novo_customizado';
+
                 // ESCUDO DE DADOS: Força a extração da Lista (Array), ignorando objetos externos
                 let workoutArray = [];
                 if (Array.isArray(parsed)) {
@@ -146,7 +150,7 @@ export async function processWorkoutWithAI() {
                 if (workoutArray.length === 0) {
                     throw new Error("Formato de JSON inválido. A IA não devolveu uma lista.");
                 }
-                
+
                 // 1. Converte o pacote inteiro da IA para o padrão do aplicativo
                 const todosOsTreinos = workoutArray.map((dia, index) => {
                     const idLetra = String.fromCharCode(65 + index);
@@ -154,51 +158,50 @@ export async function processWorkoutWithAI() {
                     const exercicios = dia.exercicios || dia.exercises || [];
 
                     return {
+                        tipo_bloco: !pastedText && aiMethod.startsWith('biset_') ? 'superset' : !pastedText && aiMethod === 'circuito' ? 'circuit' : 'traditional',
                         nome_treino: pastedText === "" && workoutArray.length > 1 ? `Treino ${idLetra} - ${nomeTreino}` : nomeTreino,
-                        exercicios: exercicios.map(ex => ({ 
-                            nome: ex.nome || ex.name || "Exercício Não Mapeado", 
-                            series: parseInt(ex.series || ex.sets) || 4, 
-                            repeticoes: ex.repeticoes || ex.reps || "10-12 rep" 
+                        exercicios: exercicios.map(ex => ({
+                            nome: ex.nome || ex.name || "Exercício Não Mapeado",
+                            series: parseInt(ex.series || ex.sets) || 4,
+                            repeticoes: ex.repeticoes || ex.reps || "10-12 rep"
                         }))
                     };
                 });
 
                 // 2. Extrai o Dia 1 para a tela atual
-                const treinoDia1 = todosOsTreinos.shift(); 
-                state.currentRoutine = [{
-                    title: treinoDia1.nome_treino,
-                    exercises: treinoDia1.exercicios.map(ex => ({ name: ex.nome, sets: ex.series, target: ex.repeticoes }))
-                }];
-
+                const treinoDia1 = todosOsTreinos.shift();
+                state.currentRoutine = routineFromAI(treinoDia1);
                 // 3. Joga o resto na Fila e salva na Memória Persistente
                 state.filaDeTreinosIA = todosOsTreinos;
                 window.FitApp.safeSet('fitapp_fila_ia', JSON.stringify(state.filaDeTreinosIA));
-                
+
                 document.getElementById('importAiModal').style.display = 'none';
-                
+
                 const customControls = document.getElementById('customWorkoutControls');
                 const nameContainer = document.getElementById('customWorkoutNameContainer');
                 const nameInput = document.getElementById('customWorkoutName');
-                
+
                 if(customControls) customControls.style.display = 'flex';
                 if(nameContainer) nameContainer.style.display = 'block';
                 if(nameInput) nameInput.value = workoutName;
-                
-                document.getElementById('previewTitle').textContent = pastedText ? `🤖 Treino Importado` : `🤖 Periodização Criada`;
-                document.getElementById('previewDesc').textContent = `Revise os movimentos. Clique em 'Salvar Template' para guardá-lo permanentemente na sua estante.`;
-                
+
+                document.getElementById('previewTitle').textContent = pastedText ? `🤖 Treino Importado` : `🤖 Rascunho criado`;
+                document.getElementById('previewDesc').textContent = `Revise os movimentos. Clique em 'Salvar ficha' para guardá-lo permanentemente na sua estante.`;
+
                 const workoutCards = document.getElementById('workoutCards');
                 if (workoutCards) workoutCards.style.display = 'none';
-                
+
                 const dashHeader = document.querySelector('.dashboard-header');
                 if (dashHeader) dashHeader.style.display = 'none';
-                
+
                 const workoutPreview = document.getElementById('workoutPreview');
                 if (workoutPreview) workoutPreview.style.display = 'block';
 
+                window.FitApp.adaptCurrentEnvironment();
                 window.FitApp.renderPreviewList();
+                window.FitEditor.configureEditor('new');
                 window.FitApp.showToast("A inteligência artificial processou os dados com sucesso!");
-                
+
                 document.getElementById('aiWorkoutText').value = "";
                 document.getElementById('aiWorkoutName').value = "";
             } else {
@@ -206,7 +209,7 @@ export async function processWorkoutWithAI() {
             }
         } catch (error) {
             console.error(error);
-            window.FitApp.showToast("Erro de conexão com o servidor de IA.");
+            window.FitApp.showToast(error.message || "Não foi possível processar o treino. Tente novamente.");
         } finally {
             loader.style.display = 'none';
             btn.disabled = false;
@@ -214,21 +217,22 @@ export async function processWorkoutWithAI() {
     }
 
 export function carregarProximoTreinoIA() {
+        if(!aiWorkoutsEnabled()){window.FitApp.showToast('Seus rascunhos antigos de IA estão preservados. A revisão assistida voltará em uma próxima fase.');return;}
         if (state.filaDeTreinosIA.length === 0) {
             window.FitApp.safeSet('fitapp_fila_ia', '[]'); // Limpa a memória
-            window.FitApp.showToast("Periodização importada e salva com sucesso!");
-            window.FitApp.cancelWorkoutPreview(); 
+            window.FitApp.showToast("Fichas revisadas e salvas.");
+            window.FitApp.cancelWorkoutPreview();
             window.FitApp.renderCustomWorkouts();
             return;
         }
 
-        const treinoAtual = state.filaDeTreinosIA.shift(); 
+        const treinoAtual = state.filaDeTreinosIA.shift();
         window.FitApp.safeSet('fitapp_fila_ia', JSON.stringify(state.filaDeTreinosIA)); // Atualiza a memória física
 
         document.getElementById('workoutCards').style.display = 'none';
         const header = document.querySelector('.dashboard-header');
         if (header) header.style.display = 'none';
-        
+
         const preview = document.getElementById('workoutPreview');
         const customControls = document.getElementById('customWorkoutControls');
         const nameContainer = document.getElementById('customWorkoutNameContainer');
@@ -243,24 +247,19 @@ export function carregarProximoTreinoIA() {
 
         state.currentWorkoutType = 'novo_customizado';
 
-        state.currentRoutine = [{
-            title: "Treino Importado",
-            exercises: treinoAtual.exercicios.map(ex => ({
-                name: ex.nome,
-                sets: parseInt(ex.series) || 4,
-                target: ex.repeticoes || "10"
-            }))
-        }];
+        state.currentRoutine = routineFromAI(treinoAtual);
 
-        window.FitApp.renderPreviewList(); 
-        
+        window.FitApp.adaptCurrentEnvironment();
+        window.FitApp.renderPreviewList();
+        window.FitEditor.configureEditor('new');
+
         const botoes = document.querySelectorAll('button');
         botoes.forEach(btn => {
-            if (btn.innerText.includes('Salvar Template') || btn.innerText.includes('Salvar e Revisar')) {
+            if (btn.innerText.includes('Salvar ficha') || btn.innerText.includes('Salvar e Revisar')) {
                 if (state.filaDeTreinosIA.length > 0) {
                     btn.innerText = `Salvar e Revisar Próximo (${state.filaDeTreinosIA.length} restantes)`;
                 } else {
-                    btn.innerText = "Salvar Template Final";
+                    btn.innerText = "Salvar ficha Final";
                 }
             }
         });
@@ -268,3 +267,10 @@ export function carregarProximoTreinoIA() {
         if (preview) preview.style.display = 'block';
     }
 
+
+function routineFromAI(day) {
+    const exercises = day.exercicios.map(ex => ({name:ex.nome,sets:Number(ex.series),target:ex.repeticoes}));
+    const type = day.tipo_bloco || 'traditional';
+    if (type === 'superset') return normalizeRoutine(Array.from({length:Math.ceil(exercises.length / 2)}, (_, i) => ({title:`${day.nome_treino} — Par ${i+1}`,type:exercises.slice(i*2,i*2+2).length === 2 ? 'superset' : 'traditional',exercises:exercises.slice(i*2,i*2+2)})));
+    return normalizeRoutine([{title:day.nome_treino,type,exercises}]);
+}

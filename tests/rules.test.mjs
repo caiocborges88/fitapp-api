@@ -1,0 +1,54 @@
+import test from 'node:test';
+import fs from 'node:fs';
+const enabled=Boolean(process.env.FIRESTORE_EMULATOR_HOST);
+test('regras: isolamento, privilégio, imutabilidade e consultas reais',{skip:!enabled},async()=>{
+  const {initializeTestEnvironment,assertSucceeds,assertFails}=await import('@firebase/rules-unit-testing');
+  const {doc,setDoc,getDoc,updateDoc,collection,query,where,orderBy,limit,getDocs,deleteDoc,serverTimestamp,writeBatch,runTransaction}=await import('firebase/firestore');
+  const env=await initializeTestEnvironment({projectId:'demo-fitapp',firestore:{rules:fs.readFileSync(new URL('../firestore.rules',import.meta.url),'utf8')}});
+  await env.clearFirestore();
+  const a=env.authenticatedContext('a').firestore(),b=env.authenticatedContext('b').firestore(),anon=env.unauthenticatedContext().firestore();
+  const payload={userId:'a',date:'2026-10-15',tipo:'A',method:'abc',duration_secs:180,data:[{exercise:'Supino',kg:20,reps:10}],createdAt:Date.now(),complete:true,campaignId:null,timestamp:serverTimestamp()};
+  try{
+    await assertSucceeds(getDoc(doc(a,'treinos_concluidos/new-id')));
+    await assertSucceeds(setDoc(doc(a,'treinos_concluidos/session'),payload));
+    await assertSucceeds(setDoc(doc(a,'treinos_concluidos/named'),{...payload,workoutName:'Ficha original'}));
+    await assertFails(setDoc(doc(a,'treinos_concluidos/long-name'),{...payload,workoutName:'x'.repeat(121)}));
+    await assertFails(setDoc(doc(a,'treinos_concluidos/invalid-name'),{...payload,workoutName:12}));
+    await assertSucceeds(getDoc(doc(a,'treinos_concluidos/session')));
+    await assertFails(getDoc(doc(b,'treinos_concluidos/session')));
+    await assertFails(getDoc(doc(anon,'treinos_concluidos/session')));
+    await assertFails(updateDoc(doc(a,'treinos_concluidos/session'),{userId:'b'}));
+    await assertFails(setDoc(doc(b,'treinos_concluidos/foreign'),payload));
+    await assertFails(setDoc(doc(a,'jogadores/a'),{poder_combate:9999}));
+    await assertFails(setDoc(doc(a,'rankings/a'),{nome:'X'}));
+    await assertFails(setDoc(doc(a,'dicionario/test'),{nome:'A',grupo:'Peito',dica:'Dica',atualizadoEm:serverTimestamp()}));
+    await assertSucceeds(getDocs(query(collection(a,'treinos_concluidos'),where('userId','==','a'),orderBy('timestamp','desc'),limit(500))));
+    await assertFails(getDocs(collection(a,'treinos_concluidos')));
+    await assertSucceeds(getDocs(query(collection(a,'rankings'),orderBy('poder_combate','desc'),limit(50))));
+    await assertFails(getDocs(collection(a,'rankings')));
+    const campanha={campaign_data:'',campaign_count:'0',blacklist:'[]',main_method:'abc',profile:'hipertrofia',level:'iniciante',custom_workouts:'[]',updatedAt:Date.now()};
+    await assertSucceeds(setDoc(doc(a,'usuarios/a'),{campanha}));
+    await assertFails(updateDoc(doc(a,'usuarios/a'),{role:'admin'}));
+    await assertFails(updateDoc(doc(a,'usuarios/a'),{'campanha.level':'super-admin'}));
+    await assertFails(deleteDoc(doc(b,'treinos_concluidos/session')));
+    const verifiedAdmin=env.authenticatedContext('existing-admin',{email:'ccbteodoro@gmail.com',email_verified:true}).firestore();
+    await assertSucceeds(getDocs(collection(verifiedAdmin,'jogadores')));
+    const fakeAdmin=env.authenticatedContext('fake-admin',{email:'ccbteodoro@gmail.com',email_verified:false}).firestore();
+    await assertFails(getDocs(collection(fakeAdmin,'jogadores')));
+    const admin=env.authenticatedContext('admin',{admin:true}).firestore();
+    await assertSucceeds(setDoc(doc(admin,'dicionario/test'),{nome:'A',grupo:'Peito',dica:'Dica',atualizadoEm:serverTimestamp()}));
+    await assertFails(deleteDoc(doc(a,'treinos_concluidos/session')));
+    const batch=writeBatch(a);
+    batch.set(doc(a,'usuarios/a/exclusoes/session'),{deletedAt:serverTimestamp()});
+    batch.delete(doc(a,'treinos_concluidos/session'));await assertSucceeds(batch.commit());
+    await assertFails(setDoc(doc(a,'treinos_concluidos/session'),payload));
+    await assertFails(getDoc(doc(b,'usuarios/a/exclusoes/session')));
+    await assertSucceeds(runTransaction(a,async tx=>{
+      const ref=doc(a,'usuarios/a');await tx.get(ref);
+      tx.set(ref,{campanha,syncVersion:1,lastOperation:'first'});
+      tx.set(doc(a,'usuarios/a/sync_operations/first'),{version:1,conflicts:'[]',createdAt:serverTimestamp()});
+    }));
+    await assertFails(updateDoc(doc(a,'usuarios/a'),{campanha:{...campanha,campaign_count:'999'}}));
+    await assertFails(updateDoc(doc(a,'usuarios/a'),{syncVersion:2,lastOperation:'first'}));
+  }finally{await env.cleanup();}
+});

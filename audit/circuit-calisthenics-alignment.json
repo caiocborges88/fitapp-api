@@ -1,0 +1,121 @@
+{
+  "scope": "Circuito, hipertrofia iniciante, por recursos; geração de calistenia retirada. Não valida prescrição.",
+  "rows": [
+    {
+      "scenario": "casa-halteres-sem-banco",
+      "method": "circuito",
+      "status": "bloqueado",
+      "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso. Ajuste os recursos ou a divisão do treino."
+    },
+    {
+      "scenario": "casa-apoio-equilibrio",
+      "method": "circuito",
+      "status": "bloqueado",
+      "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps. Ajuste os recursos ou a divisão do treino."
+    },
+    {
+      "scenario": "parque-apoio-equilibrio",
+      "method": "circuito",
+      "status": "bloqueado",
+      "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps. Ajuste os recursos ou a divisão do treino."
+    },
+    {
+      "scenario": "casa-banco-barra-alta",
+      "method": "circuito",
+      "status": "compatível",
+      "count": 8,
+      "movements": [
+        "Escalador (Mountain Climber)",
+        "Agachamento Búlgaro sem Carga",
+        "Barra Fixa com Apoio dos Pés",
+        "Ponte de quadril com apoio dos calcanhares",
+        "Flexão de Braço (Padrão)",
+        "Rosca Corporal Sentada com Resistência da Perna",
+        "Flexão com mãos próximas",
+        "Abdominal Supra no Solo"
+      ]
+    },
+    {
+      "scenario": "parque-banco-barra-alta",
+      "method": "circuito",
+      "status": "compatível",
+      "count": 8,
+      "movements": [
+        "Escalador (Mountain Climber)",
+        "Agachamento com peso corporal",
+        "Barra Fixa com Apoio dos Pés",
+        "Ponte de quadril com apoio dos calcanhares",
+        "Flexão de Braço (Padrão)",
+        "Rosca Corporal Sentada com Resistência da Perna",
+        "Mergulho no Banco",
+        "Abdominal Supra no Solo"
+      ]
+    },
+    {
+      "scenario": "academia",
+      "method": "circuito",
+      "status": "compatível",
+      "count": 8,
+      "movements": [
+        "Escalador (Mountain Climber)",
+        "Hack Machine",
+        "Puxada Alta (Pegada Aberta)",
+        "RDL com Barra",
+        "Crucifixo Reto com Halteres",
+        "Rosca Inversa no Cabo",
+        "Tríceps Coice (Kickback)",
+        "Abdominal Supra com Halter"
+      ]
+    },
+    {
+      "scenario": "casa-sem-recursos",
+      "method": "circuito",
+      "status": "bloqueado",
+      "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps. Ajuste os recursos ou a divisão do treino."
+    },
+    {
+      "scenario": "casa-halteres-bancos",
+      "method": "circuito",
+      "status": "bloqueado",
+      "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso. Ajuste os recursos ou a divisão do treino."
+    },
+    {
+      "scenario": "casa-banco-barras",
+      "method": "circuito",
+      "status": "compatível",
+      "count": 8,
+      "movements": [
+        "Escalador (Mountain Climber)",
+        "Afundo / Avanço",
+        "Barra Fixa com Apoio dos Pés",
+        "RDL Unilateral sem Carga",
+        "Flexão de Braço (Padrão)",
+        "Rosca Corporal Sentada com Resistência da Perna",
+        "Mergulho no Banco",
+        "Abdominal Supra no Solo"
+      ]
+    },
+    {
+      "scenario": "parque-sem-recursos",
+      "method": "circuito",
+      "status": "bloqueado",
+      "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps. Ajuste os recursos ou a divisão do treino."
+    },
+    {
+      "scenario": "parque-banco-barras",
+      "method": "circuito",
+      "status": "compatível",
+      "count": 8,
+      "movements": [
+        "Escalador (Mountain Climber)",
+        "Afundo / Avanço",
+        "Barra Fixa com Apoio dos Pés",
+        "RDL Unilateral sem Carga",
+        "Flexão com Joelhos Apoiados",
+        "Rosca Corporal em Barra Baixa",
+        "Flexão com mãos próximas",
+        "Abdominal Supra no Solo"
+      ]
+    }
+  ]
+}

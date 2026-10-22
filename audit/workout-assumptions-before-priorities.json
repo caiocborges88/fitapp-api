@@ -1,0 +1,616 @@
+{
+  "scope": "Sondas em academia com todos os equipamentos, sem exclusões. A ausência de um padrão é lacuna de contrato e não prova prescrição inadequada. Comparações ignoram UUIDs e o descanso ajustado fora da rotina.",
+  "coverage": [
+    {
+      "method": "abc",
+      "profile": "hipertrofia",
+      "plans": 30,
+      "missingHorizontal": 0,
+      "missingVertical": 0,
+      "missingKneeFlexion": 0,
+      "missingKneeExtension": 0,
+      "samples": {}
+    },
+    {
+      "method": "abc",
+      "profile": "feminino",
+      "plans": 30,
+      "missingHorizontal": 0,
+      "missingVertical": 0,
+      "missingKneeFlexion": 9,
+      "missingKneeExtension": 0,
+      "samples": {
+        "missingKneeFlexion": {
+          "seed": 2,
+          "day": "A",
+          "movements": [
+            {
+              "name": "RDL com Barra",
+              "pattern": "dobrar-quadril"
+            },
+            {
+              "name": "RDL com Halteres",
+              "pattern": "dobrar-quadril"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "abcd",
+      "profile": "hipertrofia",
+      "plans": 30,
+      "missingHorizontal": 0,
+      "missingVertical": 10,
+      "missingKneeFlexion": 0,
+      "missingKneeExtension": 0,
+      "samples": {
+        "missingVertical": {
+          "seed": 1,
+          "day": "C",
+          "movements": [
+            {
+              "name": "Remada Baixa no Cabo (Triângulo)",
+              "pattern": "puxar-horizontal"
+            },
+            {
+              "name": "Pulldown no Cabo (Braços Estendidos)",
+              "pattern": "extensao-ombro"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "abcd",
+      "profile": "feminino",
+      "plans": 30,
+      "missingHorizontal": 0,
+      "missingVertical": 0,
+      "missingKneeFlexion": 6,
+      "missingKneeExtension": 0,
+      "samples": {
+        "missingKneeFlexion": {
+          "seed": 5,
+          "day": "C",
+          "movements": [
+            {
+              "name": "RDL com Barra",
+              "pattern": "dobrar-quadril"
+            },
+            {
+              "name": "RDL com Halteres",
+              "pattern": "dobrar-quadril"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "profileComparisons": {
+    "abcHypertrophyEqualsDefinition": true,
+    "abcHypertrophyEqualsTactical": true,
+    "abcIntermediateEqualsAdvanced": true
+  },
+  "profileExamples": {
+    "hipertrofia": {
+      "A": [
+        {
+          "type": "traditional",
+          "title": "Peitoral Completo",
+          "exercises": [
+            {
+              "name": "Supino Reto com Halteres",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Crossover Polia Baixa",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Supino Declinado com Halteres",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Ombros & Tríceps",
+          "exercises": [
+            {
+              "name": "Desenvolvimento com Halteres",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Remada Alta no Cabo",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Tríceps Francês com Halter",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Tríceps Coice (Kickback)",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Abdominal",
+          "exercises": [
+            {
+              "name": "Abdominal na Máquina",
+              "sets": 3,
+              "target": "15-20 rep"
+            }
+          ]
+        }
+      ],
+      "B": [
+        {
+          "type": "traditional",
+          "title": "Dorsais Base",
+          "exercises": [
+            {
+              "name": "Puxada Alta (Pegada Aberta)",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Remada Máquina Apoiada no Peito",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Posterior & Bíceps",
+          "exercises": [
+            {
+              "name": "Face Pull no Cabo",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Rosca no Cabo (Polia Baixa)",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Rosca Martelo com Halteres",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Abdominal",
+          "exercises": [
+            {
+              "name": "Abdominal na Máquina",
+              "sets": 3,
+              "target": "15-20 rep"
+            }
+          ]
+        }
+      ],
+      "C": [
+        {
+          "type": "traditional",
+          "title": "Quadríceps",
+          "exercises": [
+            {
+              "name": "Leg Press Horizontal",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Cadeira Extensora",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Posteriores",
+          "exercises": [
+            {
+              "name": "RDL com Barra",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Cadeira Flexora (Sentado)",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Glúteos & Panturrilhas",
+          "exercises": [
+            {
+              "name": "Elevação Pélvica com Barra",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Panturrilha em Pé no Smith",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Abdominal",
+          "exercises": [
+            {
+              "name": "Abdominal na Máquina",
+              "sets": 3,
+              "target": "15-20 rep"
+            }
+          ]
+        }
+      ]
+    },
+    "definicao": {
+      "A": [
+        {
+          "type": "traditional",
+          "title": "Peitoral Completo",
+          "exercises": [
+            {
+              "name": "Supino Reto com Halteres",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Crossover Polia Baixa",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Supino Declinado com Halteres",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Ombros & Tríceps",
+          "exercises": [
+            {
+              "name": "Desenvolvimento com Halteres",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Remada Alta no Cabo",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Tríceps Francês com Halter",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Tríceps Coice (Kickback)",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Abdominal",
+          "exercises": [
+            {
+              "name": "Abdominal na Máquina",
+              "sets": 3,
+              "target": "15-20 rep"
+            }
+          ]
+        }
+      ],
+      "B": [
+        {
+          "type": "traditional",
+          "title": "Dorsais Base",
+          "exercises": [
+            {
+              "name": "Puxada Alta (Pegada Aberta)",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Remada Máquina Apoiada no Peito",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Posterior & Bíceps",
+          "exercises": [
+            {
+              "name": "Face Pull no Cabo",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Rosca no Cabo (Polia Baixa)",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Rosca Martelo com Halteres",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Abdominal",
+          "exercises": [
+            {
+              "name": "Abdominal na Máquina",
+              "sets": 3,
+              "target": "15-20 rep"
+            }
+          ]
+        }
+      ],
+      "C": [
+        {
+          "type": "traditional",
+          "title": "Quadríceps",
+          "exercises": [
+            {
+              "name": "Leg Press Horizontal",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Cadeira Extensora",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Posteriores",
+          "exercises": [
+            {
+              "name": "RDL com Barra",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Cadeira Flexora (Sentado)",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Glúteos & Panturrilhas",
+          "exercises": [
+            {
+              "name": "Elevação Pélvica com Barra",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Panturrilha em Pé no Smith",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Abdominal",
+          "exercises": [
+            {
+              "name": "Abdominal na Máquina",
+              "sets": 3,
+              "target": "15-20 rep"
+            }
+          ]
+        }
+      ]
+    },
+    "tatico": {
+      "A": [
+        {
+          "type": "traditional",
+          "title": "Peitoral Completo",
+          "exercises": [
+            {
+              "name": "Supino Reto com Halteres",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Crossover Polia Baixa",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Supino Declinado com Halteres",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Ombros & Tríceps",
+          "exercises": [
+            {
+              "name": "Desenvolvimento com Halteres",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Remada Alta no Cabo",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Tríceps Francês com Halter",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Tríceps Coice (Kickback)",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Abdominal",
+          "exercises": [
+            {
+              "name": "Abdominal na Máquina",
+              "sets": 3,
+              "target": "15-20 rep"
+            }
+          ]
+        }
+      ],
+      "B": [
+        {
+          "type": "traditional",
+          "title": "Dorsais Base",
+          "exercises": [
+            {
+              "name": "Puxada Alta (Pegada Aberta)",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Remada Máquina Apoiada no Peito",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Posterior & Bíceps",
+          "exercises": [
+            {
+              "name": "Face Pull no Cabo",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Rosca no Cabo (Polia Baixa)",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Rosca Martelo com Halteres",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Abdominal",
+          "exercises": [
+            {
+              "name": "Abdominal na Máquina",
+              "sets": 3,
+              "target": "15-20 rep"
+            }
+          ]
+        }
+      ],
+      "C": [
+        {
+          "type": "traditional",
+          "title": "Quadríceps",
+          "exercises": [
+            {
+              "name": "Leg Press Horizontal",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Cadeira Extensora",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Posteriores",
+          "exercises": [
+            {
+              "name": "RDL com Barra",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Cadeira Flexora (Sentado)",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Glúteos & Panturrilhas",
+          "exercises": [
+            {
+              "name": "Elevação Pélvica com Barra",
+              "sets": 3,
+              "target": "10-12 rep"
+            },
+            {
+              "name": "Panturrilha em Pé no Smith",
+              "sets": 3,
+              "target": "10-12 rep"
+            }
+          ]
+        },
+        {
+          "type": "traditional",
+          "title": "Abdominal",
+          "exercises": [
+            {
+              "name": "Abdominal na Máquina",
+              "sets": 3,
+              "target": "15-20 rep"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,1439 @@
+{
+  "scope": "Comparação estrutural com e sem os seis registros adicionados, usando as mesmas regras atuais. Fichas prontas: todos os perfis e níveis existentes. Geradores: hipertrofia iniciante. Não valida resistência, prescrição ou equivalência clínica. Não somar posições sobrepostas como treinos diferentes.",
+  "catalogueBefore": 123,
+  "catalogueAfter": 129,
+  "addedIds": [
+    "crucifixo-no-solo-com-halteres",
+    "crucifixo-invertido-curvado-em-pe-com-halteres",
+    "rosca-inversa-com-halteres",
+    "remada-bilateral-curvada-com-halteres",
+    "panturrilha-em-pe-joelhos-flexionados-com-apoio",
+    "rosca-corporal-sentada-resistencia-da-perna"
+  ],
+  "summary": [
+    {
+      "scenario": "casa-halteres-sem-banco",
+      "routines": 54,
+      "compatibleBefore": 22,
+      "compatibleAfter": 24,
+      "pendingBefore": 49,
+      "pendingAfter": 42
+    },
+    {
+      "scenario": "casa-apoio-equilibrio",
+      "routines": 54,
+      "compatibleBefore": 19,
+      "compatibleAfter": 20,
+      "pendingBefore": 97,
+      "pendingAfter": 92
+    },
+    {
+      "scenario": "parque-apoio-equilibrio",
+      "routines": 54,
+      "compatibleBefore": 19,
+      "compatibleAfter": 20,
+      "pendingBefore": 97,
+      "pendingAfter": 92
+    },
+    {
+      "scenario": "casa-banco-barra-alta",
+      "routines": 54,
+      "compatibleBefore": 25,
+      "compatibleAfter": 25,
+      "pendingBefore": 64,
+      "pendingAfter": 49
+    },
+    {
+      "scenario": "parque-banco-barra-alta",
+      "routines": 54,
+      "compatibleBefore": 25,
+      "compatibleAfter": 25,
+      "pendingBefore": 64,
+      "pendingAfter": 49
+    },
+    {
+      "scenario": "academia",
+      "routines": 54,
+      "compatibleBefore": 54,
+      "compatibleAfter": 54,
+      "pendingBefore": 0,
+      "pendingAfter": 0
+    },
+    {
+      "scenario": "casa-sem-recursos",
+      "routines": 54,
+      "compatibleBefore": 19,
+      "compatibleAfter": 19,
+      "pendingBefore": 97,
+      "pendingAfter": 97
+    },
+    {
+      "scenario": "casa-halteres-bancos",
+      "routines": 54,
+      "compatibleBefore": 32,
+      "compatibleAfter": 32,
+      "pendingBefore": 25,
+      "pendingAfter": 25
+    },
+    {
+      "scenario": "parque-sem-recursos",
+      "routines": 54,
+      "compatibleBefore": 19,
+      "compatibleAfter": 19,
+      "pendingBefore": 97,
+      "pendingAfter": 97
+    },
+    {
+      "scenario": "parque-banco-barras",
+      "routines": 54,
+      "compatibleBefore": 30,
+      "compatibleAfter": 30,
+      "pendingBefore": 38,
+      "pendingAfter": 38
+    }
+  ],
+  "generators": [
+    {
+      "scenario": "casa-halteres-sem-banco",
+      "method": "abc",
+      "day": "push",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Peitoral · Clavicular; Peitoral · Abdominal. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Peitoral · Clavicular; Peitoral · Abdominal. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-halteres-sem-banco",
+      "method": "abc",
+      "day": "pull",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Ombros · Deltoide Posterior. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-halteres-sem-banco",
+      "method": "abc",
+      "day": "legs",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-halteres-sem-banco",
+      "method": "biset_sinergista",
+      "day": "peito_triceps",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Peitoral · Clavicular; Par 3 · Peitoral · Abdominal. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Peitoral · Clavicular; Par 3 · Peitoral · Abdominal. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-halteres-sem-banco",
+      "method": "biset_sinergista",
+      "day": "costa_biceps",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 1 · Costas · Latíssimo do Dorso; Par 3 · Costas · Latíssimo do Dorso. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 1 · Costas · Latíssimo do Dorso; Par 3 · Costas · Latíssimo do Dorso. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-halteres-sem-banco",
+      "method": "biset_sinergista",
+      "day": "perna_ombro",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 3 · Ombros · Deltoide Posterior; Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-halteres-sem-banco",
+      "method": "circuito",
+      "day": "A",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-halteres-sem-banco",
+      "method": "calistenia",
+      "day": "A",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-apoio-equilibrio",
+      "method": "abc",
+      "day": "push",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Peitoral · Clavicular; Peitoral · Abdominal; Ombros · Deltoide Lateral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Peitoral · Clavicular; Peitoral · Abdominal; Ombros · Deltoide Lateral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-apoio-equilibrio",
+      "method": "abc",
+      "day": "pull",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Costas · Espessura (Romboides); Ombros · Deltoide Posterior; Bíceps · Bíceps Braquial; Bíceps · Braquial / Antebraço. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Costas · Espessura (Romboides); Ombros · Deltoide Posterior; Bíceps · Bíceps Braquial; Bíceps · Braquial / Antebraço. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-apoio-equilibrio",
+      "method": "abc",
+      "day": "legs",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-apoio-equilibrio",
+      "method": "biset_sinergista",
+      "day": "peito_triceps",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Peitoral · Clavicular; Par 3 · Peitoral · Abdominal. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Peitoral · Clavicular; Par 3 · Peitoral · Abdominal. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-apoio-equilibrio",
+      "method": "biset_sinergista",
+      "day": "costa_biceps",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 1 · Costas · Latíssimo do Dorso; Par 1 · Bíceps · Bíceps Braquial; Par 2 · Costas · Espessura (Romboides); Par 2 · Bíceps · Braquial / Antebraço; Par 3 · Costas · Latíssimo do Dorso; Par 3 · Bíceps · Bíceps Braquial; Par 4 · Costas · Espessura (Romboides); Par 4 · Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 1 · Costas · Latíssimo do Dorso; Par 1 · Bíceps · Bíceps Braquial; Par 2 · Costas · Espessura (Romboides); Par 2 · Bíceps · Braquial / Antebraço; Par 3 · Costas · Latíssimo do Dorso; Par 3 · Bíceps · Bíceps Braquial; Par 4 · Costas · Espessura (Romboides); Par 4 · Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-apoio-equilibrio",
+      "method": "biset_sinergista",
+      "day": "perna_ombro",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Ombros · Deltoide Lateral; Par 3 · Ombros · Deltoide Posterior; Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Ombros · Deltoide Lateral; Par 3 · Ombros · Deltoide Posterior; Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-apoio-equilibrio",
+      "method": "circuito",
+      "day": "A",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-apoio-equilibrio",
+      "method": "calistenia",
+      "day": "A",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-apoio-equilibrio",
+      "method": "abc",
+      "day": "push",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Peitoral · Clavicular; Peitoral · Abdominal; Ombros · Deltoide Lateral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Peitoral · Clavicular; Peitoral · Abdominal; Ombros · Deltoide Lateral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-apoio-equilibrio",
+      "method": "abc",
+      "day": "pull",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Costas · Espessura (Romboides); Ombros · Deltoide Posterior; Bíceps · Bíceps Braquial; Bíceps · Braquial / Antebraço. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Costas · Espessura (Romboides); Ombros · Deltoide Posterior; Bíceps · Bíceps Braquial; Bíceps · Braquial / Antebraço. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-apoio-equilibrio",
+      "method": "abc",
+      "day": "legs",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-apoio-equilibrio",
+      "method": "biset_sinergista",
+      "day": "peito_triceps",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Peitoral · Clavicular; Par 3 · Peitoral · Abdominal. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Peitoral · Clavicular; Par 3 · Peitoral · Abdominal. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-apoio-equilibrio",
+      "method": "biset_sinergista",
+      "day": "costa_biceps",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 1 · Costas · Latíssimo do Dorso; Par 1 · Bíceps · Bíceps Braquial; Par 2 · Costas · Espessura (Romboides); Par 2 · Bíceps · Braquial / Antebraço; Par 3 · Costas · Latíssimo do Dorso; Par 3 · Bíceps · Bíceps Braquial; Par 4 · Costas · Espessura (Romboides); Par 4 · Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 1 · Costas · Latíssimo do Dorso; Par 1 · Bíceps · Bíceps Braquial; Par 2 · Costas · Espessura (Romboides); Par 2 · Bíceps · Braquial / Antebraço; Par 3 · Costas · Latíssimo do Dorso; Par 3 · Bíceps · Bíceps Braquial; Par 4 · Costas · Espessura (Romboides); Par 4 · Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-apoio-equilibrio",
+      "method": "biset_sinergista",
+      "day": "perna_ombro",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Ombros · Deltoide Lateral; Par 3 · Ombros · Deltoide Posterior; Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Ombros · Deltoide Lateral; Par 3 · Ombros · Deltoide Posterior; Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-apoio-equilibrio",
+      "method": "circuito",
+      "day": "A",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-apoio-equilibrio",
+      "method": "calistenia",
+      "day": "A",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-banco-barra-alta",
+      "method": "abc",
+      "day": "push",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Ombros · Deltoide Lateral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Ombros · Deltoide Lateral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-banco-barra-alta",
+      "method": "abc",
+      "day": "pull",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Espessura (Romboides); Ombros · Deltoide Posterior; Bíceps · Bíceps Braquial; Bíceps · Braquial / Antebraço. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Espessura (Romboides); Ombros · Deltoide Posterior; Bíceps · Braquial / Antebraço. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-banco-barra-alta",
+      "method": "abc",
+      "day": "legs",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-banco-barra-alta",
+      "method": "biset_sinergista",
+      "day": "peito_triceps",
+      "before": {
+        "status": "compatível",
+        "movements": [
+          "Flexão com Joelhos Apoiados",
+          "Flexão com mãos próximas",
+          "Flexão Declinada (Pés no banco)",
+          "Extensão de Tríceps com Peso Corporal na Parede",
+          "Flexão Inclinada (Mãos no banco)",
+          "Flexão com mãos próximas",
+          "Flexão de Braço (Padrão)",
+          "Extensão de Tríceps com Peso Corporal na Parede",
+          "Abdominal Infra no Solo"
+        ]
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Flexão de Braço (Padrão)",
+          "Flexão com mãos próximas",
+          "Flexão Declinada (Pés no banco)",
+          "Extensão de Tríceps com Peso Corporal na Parede",
+          "Flexão Inclinada (Mãos no banco)",
+          "Flexão com mãos próximas",
+          "Flexão com Joelhos Apoiados",
+          "Extensão de Tríceps com Peso Corporal na Parede",
+          "Abdominal Bicicleta"
+        ]
+      }
+    },
+    {
+      "scenario": "casa-banco-barra-alta",
+      "method": "biset_sinergista",
+      "day": "costa_biceps",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 1 · Bíceps · Bíceps Braquial; Par 2 · Costas · Espessura (Romboides); Par 2 · Bíceps · Braquial / Antebraço; Par 3 · Bíceps · Bíceps Braquial; Par 4 · Costas · Espessura (Romboides); Par 4 · Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Costas · Espessura (Romboides); Par 2 · Bíceps · Braquial / Antebraço; Par 4 · Costas · Espessura (Romboides). Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-banco-barra-alta",
+      "method": "biset_sinergista",
+      "day": "perna_ombro",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Ombros · Deltoide Lateral; Par 3 · Ombros · Deltoide Posterior; Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Ombros · Deltoide Lateral; Par 3 · Ombros · Deltoide Posterior; Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-banco-barra-alta",
+      "method": "circuito",
+      "day": "A",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Bíceps. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Escalador (Mountain Climber)",
+          "Afundo / Avanço",
+          "Barra Fixa com Apoio dos Pés",
+          "RDL Unilateral sem Carga",
+          "Flexão com Joelhos Apoiados",
+          "Rosca Corporal Sentada com Resistência da Perna",
+          "Extensão de Tríceps com Peso Corporal na Parede",
+          "Abdominal Supra no Solo"
+        ]
+      }
+    },
+    {
+      "scenario": "casa-banco-barra-alta",
+      "method": "calistenia",
+      "day": "A",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Flexão de Braço (Padrão)",
+          "Flexão com mãos próximas",
+          "Barra Fixa com Apoio dos Pés",
+          "Rosca Corporal Sentada com Resistência da Perna",
+          "Agachamento com peso corporal",
+          "Prancha Isométrica Frontal"
+        ]
+      }
+    },
+    {
+      "scenario": "parque-banco-barra-alta",
+      "method": "abc",
+      "day": "push",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Ombros · Deltoide Lateral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Ombros · Deltoide Lateral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-banco-barra-alta",
+      "method": "abc",
+      "day": "pull",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Espessura (Romboides); Ombros · Deltoide Posterior; Bíceps · Bíceps Braquial; Bíceps · Braquial / Antebraço. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Espessura (Romboides); Ombros · Deltoide Posterior; Bíceps · Braquial / Antebraço. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-banco-barra-alta",
+      "method": "abc",
+      "day": "legs",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-banco-barra-alta",
+      "method": "biset_sinergista",
+      "day": "peito_triceps",
+      "before": {
+        "status": "compatível",
+        "movements": [
+          "Flexão de Braço (Padrão)",
+          "Flexão com mãos próximas",
+          "Flexão Declinada (Pés no banco)",
+          "Extensão de Tríceps com Peso Corporal na Parede",
+          "Flexão Inclinada (Mãos no banco)",
+          "Flexão com mãos próximas",
+          "Flexão com Joelhos Apoiados",
+          "Extensão de Tríceps com Peso Corporal na Parede",
+          "Abdominal Bicicleta"
+        ]
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Flexão de Braço (Padrão)",
+          "Flexão com mãos próximas",
+          "Flexão Declinada (Pés no banco)",
+          "Extensão de Tríceps com Peso Corporal na Parede",
+          "Flexão Inclinada (Mãos no banco)",
+          "Flexão com mãos próximas",
+          "Flexão com Joelhos Apoiados",
+          "Extensão de Tríceps com Peso Corporal na Parede",
+          "Abdominal Bicicleta"
+        ]
+      }
+    },
+    {
+      "scenario": "parque-banco-barra-alta",
+      "method": "biset_sinergista",
+      "day": "costa_biceps",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 1 · Bíceps · Bíceps Braquial; Par 2 · Costas · Espessura (Romboides); Par 2 · Bíceps · Braquial / Antebraço; Par 3 · Bíceps · Bíceps Braquial; Par 4 · Costas · Espessura (Romboides); Par 4 · Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Costas · Espessura (Romboides); Par 2 · Bíceps · Braquial / Antebraço; Par 4 · Costas · Espessura (Romboides). Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-banco-barra-alta",
+      "method": "biset_sinergista",
+      "day": "perna_ombro",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Ombros · Deltoide Lateral; Par 3 · Ombros · Deltoide Posterior; Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Ombros · Deltoide Lateral; Par 3 · Ombros · Deltoide Posterior; Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-banco-barra-alta",
+      "method": "circuito",
+      "day": "A",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Bíceps. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Escalador (Mountain Climber)",
+          "Agachamento com peso corporal",
+          "Barra Fixa com Apoio dos Pés",
+          "Ponte de quadril com apoio dos calcanhares",
+          "Flexão de Braço (Padrão)",
+          "Rosca Corporal Sentada com Resistência da Perna",
+          "Flexão com mãos próximas",
+          "Abdominal Supra no Solo"
+        ]
+      }
+    },
+    {
+      "scenario": "parque-banco-barra-alta",
+      "method": "calistenia",
+      "day": "A",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Flexão de Braço (Padrão)",
+          "Flexão com mãos próximas",
+          "Barra Fixa com Apoio dos Pés",
+          "Rosca Corporal Sentada com Resistência da Perna",
+          "Afundo / Avanço",
+          "Prancha Isométrica Frontal"
+        ]
+      }
+    },
+    {
+      "scenario": "academia",
+      "method": "abc",
+      "day": "push",
+      "before": {
+        "status": "compatível",
+        "movements": [
+          "Supino Reto com Halteres",
+          "Crucifixo Inclinado com Halteres",
+          "Crossover Polia Alta",
+          "Desenvolvimento Militar com Barra",
+          "Elevação Lateral com Halteres",
+          "Tríceps Francês no Cabo",
+          "Tríceps Pulley (Barra Reta/V)",
+          "Abdominal Supra com Halter"
+        ]
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Voador (Peck Deck)",
+          "Supino Inclinado com Barra",
+          "Supino Declinado com Barra",
+          "Desenvolvimento na Máquina",
+          "Elevação Lateral no Cabo",
+          "Tríceps Francês com Halter",
+          "Tríceps Coice (Kickback)",
+          "Abdominal Supra com Halter"
+        ]
+      }
+    },
+    {
+      "scenario": "academia",
+      "method": "abc",
+      "day": "pull",
+      "before": {
+        "status": "compatível",
+        "movements": [
+          "Puxada Alta Neutra",
+          "Remada Curvada com Barra",
+          "Crucifixo Invertido com Halteres",
+          "Rosca Direta com Barra",
+          "Rosca Inversa com Barra",
+          "Abdominal na Máquina"
+        ]
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Puxada Alta Neutra",
+          "Remada Baixa no Cabo (Triângulo)",
+          "Crucifixo Invertido Curvado em Pé com Halteres",
+          "Rosca com Halteres em Supinação",
+          "Rosca Inversa com Halteres",
+          "Russian Twist com Halter"
+        ]
+      }
+    },
+    {
+      "scenario": "academia",
+      "method": "abc",
+      "day": "legs",
+      "before": {
+        "status": "compatível",
+        "movements": [
+          "Afundo com Halteres",
+          "Cadeira Extensora",
+          "RDL com Barra",
+          "Mesa Flexora (Deitado)",
+          "Elevação Pélvica na Máquina",
+          "Panturrilha no Leg Press",
+          "Abdominal na Máquina"
+        ]
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Hack Machine",
+          "Cadeira Extensora",
+          "RDL com Barra",
+          "Cadeira Flexora (Sentado)",
+          "Elevação Pélvica na Máquina",
+          "Panturrilha em Pé na Máquina",
+          "Russian Twist com Halter"
+        ]
+      }
+    },
+    {
+      "scenario": "academia",
+      "method": "biset_sinergista",
+      "day": "peito_triceps",
+      "before": {
+        "status": "compatível",
+        "movements": [
+          "Crucifixo Reto com Halteres",
+          "Tríceps Pulley (Barra Reta/V)",
+          "Crossover Polia Baixa",
+          "Tríceps Testa com Halteres",
+          "Supino Declinado com Barra",
+          "Tríceps Corda no Cabo",
+          "Crossover Polia Média",
+          "Tríceps Testa com Barra W",
+          "Russian Twist com Halter"
+        ]
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Crucifixo Reto com Halteres",
+          "Tríceps Corda no Cabo",
+          "Supino Inclinado com Halteres",
+          "Tríceps Francês com Halter",
+          "Supino Declinado com Halteres",
+          "Tríceps Coice (Kickback)",
+          "Crucifixo no Solo com Halteres",
+          "Tríceps Francês no Cabo",
+          "Abdominal na Máquina"
+        ]
+      }
+    },
+    {
+      "scenario": "academia",
+      "method": "biset_sinergista",
+      "day": "costa_biceps",
+      "before": {
+        "status": "compatível",
+        "movements": [
+          "Puxada Alta (Pegada Aberta)",
+          "Rosca Scott com Barra",
+          "Remada Baixa no Cabo (Triângulo)",
+          "Rosca Martelo com Halteres",
+          "Puxada Alta Supinada",
+          "Rosca no Cabo (Polia Baixa)",
+          "Remada Unilateral em Pé com Halter",
+          "Rosca Alternada com Halteres",
+          "Abdominal na Máquina"
+        ]
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Puxada Alta (Pegada Aberta)",
+          "Rosca com Halteres em Supinação",
+          "Remada Cavalinho (T-Bar)",
+          "Rosca Inversa no Cabo",
+          "Puxada Alta na Máquina",
+          "Rosca Direta com Barra",
+          "Remada Máquina Apoiada no Peito",
+          "Rosca Alternada com Halteres",
+          "Abdominal na Máquina"
+        ]
+      }
+    },
+    {
+      "scenario": "academia",
+      "method": "biset_sinergista",
+      "day": "perna_ombro",
+      "before": {
+        "status": "compatível",
+        "movements": [
+          "Agachamento Frontal com Barra",
+          "Desenvolvimento na Máquina",
+          "RDL com Halteres",
+          "Remada Alta com Barra",
+          "Elevação Pélvica na Máquina",
+          "Crucifixo Invertido na Máquina (Peck Deck)",
+          "Cadeira Extensora",
+          "Desenvolvimento Militar com Barra",
+          "Russian Twist com Halter"
+        ]
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Agachamento com Barra nas Costas",
+          "Elevação Frontal com Halteres",
+          "RDL com Halteres",
+          "Remada Alta no Cabo",
+          "Elevação Pélvica na Máquina",
+          "Crucifixo Invertido na Máquina (Peck Deck)",
+          "Cadeira Extensora",
+          "Desenvolvimento na Máquina",
+          "Russian Twist com Halter"
+        ]
+      }
+    },
+    {
+      "scenario": "academia",
+      "method": "circuito",
+      "day": "A",
+      "before": {
+        "status": "compatível",
+        "movements": [
+          "Escalador (Mountain Climber)",
+          "Leg Press 45º",
+          "Puxada Alta na Máquina",
+          "RDL com Barra",
+          "Voador (Peck Deck)",
+          "Rosca Martelo com Halteres",
+          "Tríceps Corda no Cabo",
+          "Abdominal Supra com Halter"
+        ]
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Escalador (Mountain Climber)",
+          "Hack Machine",
+          "Puxada Alta Supinada",
+          "RDL com Barra",
+          "Crucifixo no Solo com Halteres",
+          "Rosca Scott com Barra",
+          "Tríceps Coice (Kickback)",
+          "Abdominal na Máquina"
+        ]
+      }
+    },
+    {
+      "scenario": "academia",
+      "method": "calistenia",
+      "day": "A",
+      "before": {
+        "status": "compatível",
+        "movements": [
+          "Flexão de Braço (Padrão)",
+          "Flexão com mãos próximas",
+          "Barra Fixa com Apoio dos Pés",
+          "Rosca Corporal em Barra Baixa",
+          "Agachamento Búlgaro sem Carga",
+          "Prancha Isométrica Frontal"
+        ]
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Flexão de Braço (Padrão)",
+          "Flexão com mãos próximas",
+          "Barra Fixa com Apoio dos Pés",
+          "Rosca Corporal em Barra Baixa",
+          "Agachamento Búlgaro sem Carga",
+          "Prancha Isométrica Frontal"
+        ]
+      }
+    },
+    {
+      "scenario": "casa-sem-recursos",
+      "method": "abc",
+      "day": "push",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Peitoral · Clavicular; Peitoral · Abdominal; Ombros · Deltoide Lateral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Peitoral · Clavicular; Peitoral · Abdominal; Ombros · Deltoide Lateral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-sem-recursos",
+      "method": "abc",
+      "day": "pull",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Costas · Espessura (Romboides); Ombros · Deltoide Posterior; Bíceps · Bíceps Braquial; Bíceps · Braquial / Antebraço. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Costas · Espessura (Romboides); Ombros · Deltoide Posterior; Bíceps · Bíceps Braquial; Bíceps · Braquial / Antebraço. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-sem-recursos",
+      "method": "abc",
+      "day": "legs",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-sem-recursos",
+      "method": "biset_sinergista",
+      "day": "peito_triceps",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Peitoral · Clavicular; Par 3 · Peitoral · Abdominal. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Peitoral · Clavicular; Par 3 · Peitoral · Abdominal. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-sem-recursos",
+      "method": "biset_sinergista",
+      "day": "costa_biceps",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 1 · Costas · Latíssimo do Dorso; Par 1 · Bíceps · Bíceps Braquial; Par 2 · Costas · Espessura (Romboides); Par 2 · Bíceps · Braquial / Antebraço; Par 3 · Costas · Latíssimo do Dorso; Par 3 · Bíceps · Bíceps Braquial; Par 4 · Costas · Espessura (Romboides); Par 4 · Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 1 · Costas · Latíssimo do Dorso; Par 1 · Bíceps · Bíceps Braquial; Par 2 · Costas · Espessura (Romboides); Par 2 · Bíceps · Braquial / Antebraço; Par 3 · Costas · Latíssimo do Dorso; Par 3 · Bíceps · Bíceps Braquial; Par 4 · Costas · Espessura (Romboides); Par 4 · Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-sem-recursos",
+      "method": "biset_sinergista",
+      "day": "perna_ombro",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Ombros · Deltoide Lateral; Par 3 · Ombros · Deltoide Posterior; Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Ombros · Deltoide Lateral; Par 3 · Ombros · Deltoide Posterior; Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-sem-recursos",
+      "method": "circuito",
+      "day": "A",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-sem-recursos",
+      "method": "calistenia",
+      "day": "A",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-halteres-bancos",
+      "method": "abc",
+      "day": "push",
+      "before": {
+        "status": "compatível",
+        "movements": [
+          "Supino no Solo com Halteres",
+          "Crucifixo Inclinado com Halteres",
+          "Flexão Inclinada (Mãos no banco)",
+          "Desenvolvimento com Halteres",
+          "Elevação Lateral com Halteres",
+          "Tríceps Francês com Halter",
+          "Tríceps Coice (Kickback)",
+          "Abdominal Supra com Halter"
+        ]
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Crucifixo Reto com Halteres",
+          "Supino Inclinado com Halteres",
+          "Flexão Inclinada (Mãos no banco)",
+          "Desenvolvimento com Halteres",
+          "Elevação Lateral com Halteres",
+          "Tríceps Testa com Halteres",
+          "Tríceps Coice (Kickback)",
+          "Russian Twist com Halter"
+        ]
+      }
+    },
+    {
+      "scenario": "casa-halteres-bancos",
+      "method": "abc",
+      "day": "pull",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-halteres-bancos",
+      "method": "abc",
+      "day": "legs",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-halteres-bancos",
+      "method": "biset_sinergista",
+      "day": "peito_triceps",
+      "before": {
+        "status": "compatível",
+        "movements": [
+          "Supino no Solo com Halteres",
+          "Tríceps Coice (Kickback)",
+          "Supino Inclinado com Halteres",
+          "Tríceps Testa no Solo com Halteres",
+          "Flexão Inclinada (Mãos no banco)",
+          "Flexão com mãos próximas",
+          "Supino Reto com Halteres",
+          "Tríceps Francês com Halter",
+          "Russian Twist com Halter"
+        ]
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Supino no Solo com Halteres",
+          "Tríceps Coice (Kickback)",
+          "Supino Inclinado com Halteres",
+          "Tríceps Testa com Halteres",
+          "Flexão Inclinada (Mãos no banco)",
+          "Flexão com mãos próximas",
+          "Crucifixo Reto com Halteres",
+          "Tríceps Testa no Solo com Halteres",
+          "Russian Twist com Halter"
+        ]
+      }
+    },
+    {
+      "scenario": "casa-halteres-bancos",
+      "method": "biset_sinergista",
+      "day": "costa_biceps",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 1 · Costas · Latíssimo do Dorso; Par 3 · Costas · Latíssimo do Dorso. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 1 · Costas · Latíssimo do Dorso; Par 3 · Costas · Latíssimo do Dorso. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-halteres-bancos",
+      "method": "biset_sinergista",
+      "day": "perna_ombro",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-halteres-bancos",
+      "method": "circuito",
+      "day": "A",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "casa-halteres-bancos",
+      "method": "calistenia",
+      "day": "A",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-sem-recursos",
+      "method": "abc",
+      "day": "push",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Peitoral · Clavicular; Peitoral · Abdominal; Ombros · Deltoide Lateral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Peitoral · Clavicular; Peitoral · Abdominal; Ombros · Deltoide Lateral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-sem-recursos",
+      "method": "abc",
+      "day": "pull",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Costas · Espessura (Romboides); Ombros · Deltoide Posterior; Bíceps · Bíceps Braquial; Bíceps · Braquial / Antebraço. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Costas · Espessura (Romboides); Ombros · Deltoide Posterior; Bíceps · Bíceps Braquial; Bíceps · Braquial / Antebraço. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-sem-recursos",
+      "method": "abc",
+      "day": "legs",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-sem-recursos",
+      "method": "biset_sinergista",
+      "day": "peito_triceps",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Peitoral · Clavicular; Par 3 · Peitoral · Abdominal. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Peitoral · Clavicular; Par 3 · Peitoral · Abdominal. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-sem-recursos",
+      "method": "biset_sinergista",
+      "day": "costa_biceps",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 1 · Costas · Latíssimo do Dorso; Par 1 · Bíceps · Bíceps Braquial; Par 2 · Costas · Espessura (Romboides); Par 2 · Bíceps · Braquial / Antebraço; Par 3 · Costas · Latíssimo do Dorso; Par 3 · Bíceps · Bíceps Braquial; Par 4 · Costas · Espessura (Romboides); Par 4 · Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 1 · Costas · Latíssimo do Dorso; Par 1 · Bíceps · Bíceps Braquial; Par 2 · Costas · Espessura (Romboides); Par 2 · Bíceps · Braquial / Antebraço; Par 3 · Costas · Latíssimo do Dorso; Par 3 · Bíceps · Bíceps Braquial; Par 4 · Costas · Espessura (Romboides); Par 4 · Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-sem-recursos",
+      "method": "biset_sinergista",
+      "day": "perna_ombro",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Ombros · Deltoide Lateral; Par 3 · Ombros · Deltoide Posterior; Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Ombros · Deltoide Lateral; Par 3 · Ombros · Deltoide Posterior; Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-sem-recursos",
+      "method": "circuito",
+      "day": "A",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-sem-recursos",
+      "method": "calistenia",
+      "day": "A",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso; Bíceps · Bíceps Braquial. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-banco-barras",
+      "method": "abc",
+      "day": "push",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Ombros · Deltoide Lateral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Ombros · Deltoide Lateral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-banco-barras",
+      "method": "abc",
+      "day": "pull",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Ombros · Deltoide Posterior; Bíceps · Braquial / Antebraço. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Ombros · Deltoide Posterior; Bíceps · Braquial / Antebraço. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-banco-barras",
+      "method": "abc",
+      "day": "legs",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-banco-barras",
+      "method": "biset_sinergista",
+      "day": "peito_triceps",
+      "before": {
+        "status": "compatível",
+        "movements": [
+          "Flexão de Braço (Padrão)",
+          "Flexão com mãos próximas",
+          "Flexão Declinada (Pés no banco)",
+          "Extensão de Tríceps com Peso Corporal na Parede",
+          "Flexão Inclinada (Mãos no banco)",
+          "Flexão com mãos próximas",
+          "Flexão com Joelhos Apoiados",
+          "Extensão de Tríceps com Peso Corporal na Parede",
+          "Abdominal Infra no Solo"
+        ]
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Flexão com Joelhos Apoiados",
+          "Flexão com mãos próximas",
+          "Flexão Declinada (Pés no banco)",
+          "Extensão de Tríceps com Peso Corporal na Parede",
+          "Flexão Inclinada (Mãos no banco)",
+          "Flexão com mãos próximas",
+          "Flexão de Braço (Padrão)",
+          "Extensão de Tríceps com Peso Corporal na Parede",
+          "Prancha Isométrica Frontal"
+        ]
+      }
+    },
+    {
+      "scenario": "parque-banco-barras",
+      "method": "biset_sinergista",
+      "day": "costa_biceps",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Bíceps · Braquial / Antebraço. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Bíceps · Braquial / Antebraço. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-banco-barras",
+      "method": "biset_sinergista",
+      "day": "perna_ombro",
+      "before": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Ombros · Deltoide Lateral; Par 3 · Ombros · Deltoide Posterior; Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      },
+      "after": {
+        "status": "bloqueado",
+        "reason": "Sem movimentos compatíveis para os focos: Par 2 · Ombros · Deltoide Lateral; Par 3 · Ombros · Deltoide Posterior; Par 4 · Quadríceps · Reto Femoral. Ajuste os recursos ou a divisão do treino."
+      }
+    },
+    {
+      "scenario": "parque-banco-barras",
+      "method": "circuito",
+      "day": "A",
+      "before": {
+        "status": "compatível",
+        "movements": [
+          "Escalador (Mountain Climber)",
+          "Agachamento com peso corporal",
+          "Barra Fixa com Apoio dos Pés",
+          "Ponte de quadril com apoio dos calcanhares",
+          "Flexão com Joelhos Apoiados",
+          "Rosca Corporal em Barra Baixa",
+          "Flexão com mãos próximas",
+          "Abdominal Supra no Solo"
+        ]
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Escalador (Mountain Climber)",
+          "Agachamento com peso corporal",
+          "Barra Fixa com Apoio dos Pés",
+          "RDL Unilateral sem Carga",
+          "Flexão de Braço (Padrão)",
+          "Rosca Corporal Sentada com Resistência da Perna",
+          "Extensão de Tríceps com Peso Corporal na Parede",
+          "Abdominal Supra no Solo"
+        ]
+      }
+    },
+    {
+      "scenario": "parque-banco-barras",
+      "method": "calistenia",
+      "day": "A",
+      "before": {
+        "status": "compatível",
+        "movements": [
+          "Flexão com Joelhos Apoiados",
+          "Flexão com mãos próximas",
+          "Barra Fixa com Apoio dos Pés",
+          "Rosca Corporal em Barra Baixa",
+          "Afundo / Avanço",
+          "Prancha Isométrica Frontal"
+        ]
+      },
+      "after": {
+        "status": "compatível",
+        "movements": [
+          "Flexão com Joelhos Apoiados",
+          "Flexão com mãos próximas",
+          "Barra Fixa com Apoio dos Pés",
+          "Rosca Corporal em Barra Baixa",
+          "Agachamento Búlgaro sem Carga",
+          "Prancha Isométrica Frontal"
+        ]
+      }
+    }
+  ]
+}

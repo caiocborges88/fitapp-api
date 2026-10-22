@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-10-15T21:51:22.149Z",
+  "source": "public/js/dados.js",
+  "exercises": 85,
+  "duplicateNames": [],
+  "missingNames": 0,
+  "missingGroups": [],
+  "missingEquipment": [],
+  "equipment": [
+    "Barra",
+    "Cabo",
+    "Calistenia",
+    "Halter",
+    "Máquina",
+    "Peso Corporal"
+  ],
+  "groups": [
+    "Adutores",
+    "Bíceps",
+    "Core",
+    "Corpo Todo",
+    "Costas",
+    "Glúteos",
+    "Glúteos (Abdutores)",
+    "Isquiotibiais",
+    "Lombar",
+    "Mobilidade Geral",
+    "Ombros",
+    "Panturrilhas",
+    "Peitoral",
+    "Quadríceps",
+    "Tríceps"
+  ],
+  "clinicalReview": "not performed; structural catalogue review only"
+}

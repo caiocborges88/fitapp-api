@@ -1,0 +1,17 @@
+{
+  "status": "ok",
+  "environment": "local; Firebase simulated",
+  "checks": [
+    "casa com halteres sem banco",
+    "apoio declarado remove lacuna de sóleo",
+    "remover apoio restaura bloqueio",
+    "apoio bloqueado durante execução",
+    "original preservado e academia restaurada",
+    "legado corporal com banco e barra alta sem barra baixa",
+    "política corporal mantida",
+    "execução do legado corporal",
+    "controle de apoio visível no parque",
+    "largura móvel"
+  ],
+  "pageErrors": []
+}

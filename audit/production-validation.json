@@ -1,0 +1,24 @@
+{
+  "project": "fitapp-operacional",
+  "version": "193be1b7ed58c253",
+  "checkedAt": "2026-10-15T15:26:49.191Z",
+  "matchingFiles": 28,
+  "api": [
+    {
+      "path": "coach",
+      "status": 401
+    },
+    {
+      "path": "importar-treino-ia",
+      "status": 401
+    },
+    {
+      "path": "recompensas",
+      "status": 401
+    }
+  ],
+  "loginVisible": true,
+  "serviceWorkerReady": true,
+  "browserErrors": [],
+  "authenticatedProductionFlow": "not exercised; validated in emulators"
+}

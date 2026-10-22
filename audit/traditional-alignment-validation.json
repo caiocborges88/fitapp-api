@@ -1,0 +1,185 @@
+{
+  "environment": "local; Firebase simulated",
+  "checks": [
+    {
+      "day": "A",
+      "environment": "academia",
+      "resources": [],
+      "missing": [],
+      "status": "ok"
+    },
+    {
+      "day": "A",
+      "environment": "casa",
+      "resources": [],
+      "missing": [
+        "Voador (Peck Deck)",
+        "Tríceps Pulley (Barra Reta/V)",
+        "Tríceps Máquina / Dip Machine"
+      ],
+      "status": "ok"
+    },
+    {
+      "day": "A",
+      "environment": "casa",
+      "resources": [
+        "dumbbells",
+        "bench",
+        "incline-bench"
+      ],
+      "missing": [],
+      "status": "ok"
+    },
+    {
+      "day": "A",
+      "environment": "casa",
+      "resources": [
+        "dumbbells",
+        "bench",
+        "incline-bench",
+        "pullup-bar"
+      ],
+      "missing": [],
+      "status": "ok"
+    },
+    {
+      "day": "A",
+      "environment": "parque",
+      "resources": [
+        "bench",
+        "pullup-bar",
+        "low-bar"
+      ],
+      "missing": [
+        "Voador (Peck Deck)",
+        "Tríceps Pulley (Barra Reta/V)"
+      ],
+      "status": "ok"
+    },
+    {
+      "day": "B",
+      "environment": "academia",
+      "resources": [],
+      "missing": [],
+      "status": "ok"
+    },
+    {
+      "day": "B",
+      "environment": "casa",
+      "resources": [],
+      "missing": [
+        "Puxada Alta na Máquina",
+        "Remada Máquina Apoiada no Peito",
+        "Rosca Direta com Barra",
+        "Rosca Scott na Máquina"
+      ],
+      "status": "ok"
+    },
+    {
+      "day": "B",
+      "environment": "casa",
+      "resources": [
+        "dumbbells",
+        "bench",
+        "incline-bench"
+      ],
+      "missing": [
+        "Puxada Alta na Máquina"
+      ],
+      "status": "ok"
+    },
+    {
+      "day": "B",
+      "environment": "casa",
+      "resources": [
+        "dumbbells",
+        "bench",
+        "incline-bench",
+        "pullup-bar"
+      ],
+      "missing": [],
+      "status": "ok"
+    },
+    {
+      "day": "B",
+      "environment": "parque",
+      "resources": [
+        "bench",
+        "pullup-bar",
+        "low-bar"
+      ],
+      "missing": [],
+      "status": "ok"
+    },
+    {
+      "day": "C",
+      "environment": "academia",
+      "resources": [],
+      "missing": [],
+      "status": "ok"
+    },
+    {
+      "day": "C",
+      "environment": "casa",
+      "resources": [],
+      "missing": [
+        "Cadeira Extensora"
+      ],
+      "status": "ok"
+    },
+    {
+      "day": "C",
+      "environment": "casa",
+      "resources": [
+        "dumbbells",
+        "bench",
+        "incline-bench"
+      ],
+      "missing": [
+        "Cadeira Extensora"
+      ],
+      "status": "ok"
+    },
+    {
+      "day": "C",
+      "environment": "casa",
+      "resources": [
+        "dumbbells",
+        "bench",
+        "incline-bench",
+        "pullup-bar"
+      ],
+      "missing": [
+        "Cadeira Extensora"
+      ],
+      "status": "ok"
+    },
+    {
+      "day": "C",
+      "environment": "parque",
+      "resources": [
+        "bench",
+        "pullup-bar",
+        "low-bar"
+      ],
+      "missing": [
+        "Cadeira Extensora"
+      ],
+      "status": "ok"
+    }
+  ],
+  "generator": {
+    "names": [
+      "Barra Fixa com Apoio dos Pés",
+      "Remada Unilateral (Serrote)",
+      "Crucifixo Invertido com Halteres",
+      "Rosca Alternada com Halteres",
+      "Rosca Inversa com Halteres",
+      "Russian Twist com Halter"
+    ],
+    "noBar": "Sem movimentos compatíveis para os focos: Costas · Latíssimo do Dorso. Ajuste os recursos ou a divisão do treino.",
+    "hasNeutralOrPronatedCurl": true,
+    "hasHorizontalRow": true
+  },
+  "pageErrors": []
+}

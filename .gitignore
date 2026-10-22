@@ -1,2 +1,12 @@
 .env
 __pycache__/
+node_modules/
+public/vendor/
+.tools/
+test-results/
+*-debug.log
+/.firebase/
+audit/*-document-extraction.json
+audit/ods-odt-comparison.json
+audit/*.zip
+audit/*.patch

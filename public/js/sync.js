@@ -1,82 +1,127 @@
-// js/sync.js
+import {emptyCampaign,mergeCampaign} from './sync-domain.js';
+import { mergeHistory, newId, normalizeDictionary, readJSON } from './domain.js';
 
-export async function syncOfflineWorkouts() {
-    let syncQueue = JSON.parse(window.FitApp.safeGet('fitapp_sync_queue') || '[]');
-    if (syncQueue.length === 0) return;
-
-    console.log(`Iniciando sincronização de ${syncQueue.length} treinos pendentes...`);
-    window.FitApp.showToast("Sincronizando treinos pendentes com a nuvem...");
-
-    let remainingQueue = [];
-    for (let i = 0; i < syncQueue.length; i++) {
-        const payload = syncQueue[i];
-        try {
-            await window.FitAPI.salvarTreino(payload);
-            console.log(`Treino de ${payload.date} sincronizado com sucesso.`);
-        } catch (error) {
-            console.warn("Rede instável. Sincronização interrompida.");
-            remainingQueue = syncQueue.slice(i);
-            break; 
+const inFlight = new Map();
+export function syncOfflineWorkouts() {
+    const uid = window.FitStore.uid;
+    if (!uid || firebase.auth().currentUser?.uid !== uid) return Promise.resolve();
+    if (inFlight.has(uid)) return inFlight.get(uid);
+    const run = async () => {
+        while (window.FitStore.uid === uid && firebase.auth().currentUser?.uid === uid) {
+            const queue = readJSON(window.FitApp.safeGet('fitapp_sync_queue'), []);
+            const payload = queue.find(item => item.userId === uid);
+            if (!payload) return;
+            if (!payload._id) {
+                payload._id = newId();
+                window.FitStore.set('fitapp_sync_queue', JSON.stringify(queue));
+            }
+            try {
+                const deleting = payload._action === 'delete';
+                const response = deleting ? await window.FitAPI.deletarTreino(payload._id) : await window.FitAPI.salvarTreino(payload);
+                if (window.FitStore.uid !== uid) return;
+                // Releitura após await: não apaga itens que chegaram durante o envio.
+                await window.FitStore.updateQueue(latest => latest.filter(item => item._id !== payload._id || item._action !== payload._action));
+                const deleted = new Set(readJSON(window.FitStore.get('fitapp_deleted_sessions'), []));
+                const saved = deleting || response?.deleted || deleted.has(payload._id) ? [] : [{...payload, _id: response.id, _sync:'synced'}];
+                window.FitStore.set('fitapp_week_log', JSON.stringify(mergeHistory(readJSON(window.FitApp.safeGet('fitapp_week_log'), []), saved).filter(item => !deleted.has(item._id))));
+            } catch (error) {
+                console.warn('Sincronização pendente:', error.message);
+                return;
+            }
         }
-    }
-
-    window.FitApp.safeSet('fitapp_sync_queue', JSON.stringify(remainingQueue));
-    if (remainingQueue.length === 0) {
-        window.FitApp.showToast("Sincronização concluída! Dados atualizados.");
-        window.FitApp.speak("Base de dados sincronizada com a nuvem.");
-    }
-}
-
-export async function saveCampaignToCloud() {
-    if (typeof firebase === 'undefined') return;
-    const user = firebase.auth().currentUser;
-    if (!user) return;
-    
-    const db = firebase.firestore();
-    const payload = {
-        campaign_data: window.FitApp.safeGet('fitapp_campaign_data') || '',
-        campaign_count: window.FitApp.safeGet('fitapp_campaign_count') || '0',
-        blacklist: window.FitApp.safeGet('fitapp_blacklist') || '[]',
-        main_method: window.FitApp.safeGet('fitapp_main_method') || 'abc',
-        profile: window.FitApp.safeGet('fitapp_profile') || 'hipertrofia',
-        level: window.FitApp.safeGet('fitapp_level') || 'intermediario'
     };
-    
-    try {
-        await db.collection('usuarios').doc(user.uid).set({ campanha: payload }, { merge: true });
-    } catch (error) {
-        console.warn("Aviso Tático: Falha ao sincronizar campanha com a nuvem.", error);
-    }
+    const task = (navigator.locks ? navigator.locks.request(`fitapp-sync:${uid}`, run) : run()).finally(() => inFlight.delete(uid));
+    inFlight.set(uid, task);
+    return task;
 }
 
-export async function loadCampaignFromCloud() {
-    if (typeof firebase === 'undefined') return;
-    const user = firebase.auth().currentUser;
-    if (!user) return;
-    
-    const db = firebase.firestore();
-    try {
-        const doc = await db.collection('usuarios').doc(user.uid).get();
-        if (doc.exists && doc.data().campanha) {
-            const data = doc.data().campanha;
-            
-            if (data.campaign_data) window.FitApp.safeSet('fitapp_campaign_data', data.campaign_data);
-            if (data.campaign_count) window.FitApp.safeSet('fitapp_campaign_count', data.campaign_count);
-            if (data.blacklist) window.FitApp.safeSet('fitapp_blacklist', data.blacklist);
-            if (data.main_method) window.FitApp.safeSet('fitapp_main_method', data.main_method);
-            if (data.profile) window.FitApp.safeSet('fitapp_profile', data.profile);
-            if (data.level) window.FitApp.safeSet('fitapp_level', data.level);
-            
-            const elsProfile = document.getElementById('profileSelector');
-            if (elsProfile && data.profile) elsProfile.value = data.profile;
-            const elsMethod = document.getElementById('mainMethodSelector');
-            if (elsMethod && data.main_method) elsMethod.value = data.main_method;
-            const elsLevel = document.getElementById('levelSelector');
-            if (elsLevel && data.level) elsLevel.value = data.level;
+const campaignFlights=new Map();
+const sameCampaign=(a,b)=>JSON.stringify({...a,updatedAt:0})===JSON.stringify({...b,updatedAt:0});
+export function captureCampaign(){
+    const get=key=>window.FitStore.get(key);
+    return {campaign_data:get('fitapp_campaign_data')||'',campaign_count:get('fitapp_campaign_count')||'0',blacklist:get('fitapp_blacklist')||'[]',main_method:get('fitapp_main_method')||'abc',profile:get('fitapp_profile')||'hipertrofia',level:get('fitapp_level')||'iniciante',custom_workouts:get('fitapp_custom_workouts')||'[]',deleted_templates:get('fitapp_deleted_templates')||'[]',updatedAt:Date.now()};
+}
+function applyCampaign(payload){
+    for(const [field,key]of Object.entries({campaign_data:'campaign_data',campaign_count:'campaign_count',blacklist:'blacklist',main_method:'main_method',profile:'profile',level:'level',custom_workouts:'custom_workouts',deleted_templates:'deleted_templates'}))window.FitStore.set('fitapp_'+key,payload[field]??emptyCampaign()[field]);
+    window.dispatchEvent?.(new Event('fitapp:cloudchange'));
+}
+function preserveConflicts(conflicts){
+    if(!conflicts.length)return;
+    const existing=readJSON(window.FitStore.get('fitapp_sync_conflicts'),[]);
+    window.FitStore.set('fitapp_sync_conflicts',JSON.stringify([...new Map([...existing,...conflicts].map(c=>[c.id,c])).values()]));
+}
+export function saveCampaignToCloud(){
+    const uid=window.FitStore.uid;
+    if(!uid||firebase.auth().currentUser?.uid!==uid)return Promise.resolve();
+    const previous=readJSON(window.FitStore.get('fitapp_campaign_dirty'),null);
+    // Confirma a operação anterior antes de atribuir outra identidade. Se o
+    // servidor já a gravou e a resposta se perdeu, suas diferenças não se repetem.
+    // Novas edições ficam nas chaves locais e são rebaseadas após essa confirmação.
+    if(previous?.payload)return flushCampaign();
+    const base=readJSON(window.FitStore.get('fitapp_cloud_base'),null)?.payload||previous?.base||emptyCampaign();
+    window.FitStore.set('fitapp_campaign_dirty',JSON.stringify({id:newId(),base,payload:captureCampaign()}));
+    return flushCampaign();
+}
+export function flushCampaign(){
+    const uid=window.FitStore.uid;
+    if(!uid||firebase.auth().currentUser?.uid!==uid)return Promise.resolve();
+    if(campaignFlights.has(uid))return campaignFlights.get(uid);
+    const run=async()=>{
+        const db=firebase.firestore(),ref=db.collection('usuarios').doc(uid);let collisionRetries=0;
+        while(window.FitStore.uid===uid&&firebase.auth().currentUser?.uid===uid){
+            let job=readJSON(window.FitStore.get('fitapp_campaign_dirty'),null);if(!job)return;
+            if(!job.payload){job={id:newId(),base:emptyCampaign(),payload:job};window.FitStore.set('fitapp_campaign_dirty',JSON.stringify(job));}
+            let observedVersion=null;
+            try{
+                const receipt=ref.collection('sync_operations').doc(job.id);
+                const committed=await db.runTransaction(async tx=>{
+                    const [doc,ack]=await Promise.all([tx.get(ref),tx.get(receipt)]);
+                    observedVersion=doc.data()?.syncVersion||0;
+                    const remote=doc.data()?.campanha||emptyCampaign();
+                    if(ack.exists)return{payload:remote,version:doc.data().syncVersion||0,conflicts:readJSON(ack.data().conflicts,[])};
+                    const merged=mergeCampaign(job.base,job.payload,remote),version=(doc.data()?.syncVersion||0)+1;
+                    tx.set(ref,{campanha:merged.payload,syncVersion:version,lastOperation:job.id},{merge:true});
+                    tx.set(receipt,{version,conflicts:JSON.stringify(merged.conflicts),createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+                    return{...merged,version};
+                });
+                if(window.FitStore.uid!==uid)return;
+                preserveConflicts(committed.conflicts);
+                const latest=readJSON(window.FitStore.get('fitapp_campaign_dirty'),null);
+                const live=captureCampaign();
+                window.FitStore.set('fitapp_cloud_base',JSON.stringify({payload:committed.payload,version:committed.version}));
+                if(latest?.id===job.id&&sameCampaign(live,latest.payload)){applyCampaign(committed.payload);window.FitStore.remove('fitapp_campaign_dirty');}
+                else if(latest){
+                    const rebased=mergeCampaign(job.payload,live,committed.payload);preserveConflicts(rebased.conflicts);
+                    applyCampaign(rebased.payload);window.FitStore.set('fitapp_campaign_dirty',JSON.stringify({id:newId(),base:committed.payload,payload:rebased.payload}));
+                }
+                collisionRetries=0;
+            }catch(error){
+                // Uma escrita concorrente pode fazer as regras rejeitarem a versão
+                // antes de o SDK receber ABORTED. Releia somente nesse caso comprovado.
+                if(error.code==='permission-denied'&&observedVersion!==null&&collisionRetries<5){
+                    try{const fresh=await ref.get({source:'server'});
+                        if(window.FitStore.uid===uid&&(fresh.data()?.syncVersion||0)>observedVersion){collisionRetries++;continue;}
+                    }catch{/* Mantém a operação pendente se a rede também falhou. */}
+                }
+                console.warn('Plano e fichas aguardam sincronização:',error.code||error.message);return;
+            }
         }
-    } catch (error) {
-        console.warn("Aviso Tático: Falha ao resgatar campanha da nuvem.", error);
-    }
+    };
+    const task=(navigator.locks?navigator.locks.request('fitapp-campaign:'+uid,run):run()).finally(()=>campaignFlights.delete(uid));campaignFlights.set(uid,task);return task;
+}
+export async function loadCampaignFromCloud(){
+    const uid=window.FitStore.uid;if(!uid||firebase.auth().currentUser?.uid!==uid)return;
+    if(window.FitStore.get('fitapp_campaign_dirty'))await flushCampaign();
+    if(window.FitStore.get('fitapp_campaign_dirty'))return;
+    try{
+        const doc=await firebase.firestore().collection('usuarios').doc(uid).get({source:'server'});if(window.FitStore.uid!==uid)return;
+        if(!window.FitStore.get('fitapp_cloud_base')){
+            const local=captureCampaign();
+            if(!sameCampaign(local,emptyCampaign())){await saveCampaignToCloud();return;}
+        }
+        const payload={...emptyCampaign(),...doc.data()?.campanha};
+        applyCampaign(payload);window.FitStore.set('fitapp_cloud_base',JSON.stringify({payload,version:doc.data()?.syncVersion||0}));
+    }catch(error){console.warn('Dados locais preservados. Nuvem indisponível:',error.code||error.message);}
 }
 
 export async function syncTacticalDictionary() {
@@ -87,35 +132,14 @@ export async function syncTacticalDictionary() {
 
         if (typeof window.dictionaryData === 'undefined') return;
 
-        let atualizados = 0, novos = 0;
+        // Estrutura publicada junto ao catálogo utilizado no servidor.
         snapshot.forEach(doc => {
             const data = doc.data();
-            const exerciseName = data.nome || data.name; 
-            if (!exerciseName) return; 
-            
-            const newTip = data.dica || data.desc;
-            const newGroup = data.grupo || data.group;
-            const newFocus = data.foco || data.focus || 'Geral';
-            const newEquip = data.equipamento || data.equip || 'Peso Corporal';
-            const newNivel = parseInt(data.nivel) || 1;
-
-            const existingIndex = window.dictionaryData.findIndex(item => item.name.toLowerCase() === exerciseName.toLowerCase());
-
-            if (existingIndex !== -1) {
-                if(newTip) window.dictionaryData[existingIndex].desc = newTip;
-                if(newGroup) window.dictionaryData[existingIndex].group = newGroup;
-                if(data.foco || data.focus) window.dictionaryData[existingIndex].focus = newFocus;
-                if(data.equipamento || data.equip) window.dictionaryData[existingIndex].equip = newEquip;
-                if(data.nivel) window.dictionaryData[existingIndex].nivel = newNivel;
-                atualizados++;
-            } else {
-                window.dictionaryData.push({
-                    name: exerciseName, group: newGroup || 'Geral', focus: newFocus, equip: newEquip, desc: newTip || 'Instrução pendente.', nivel: newNivel
-                });
-                novos++;
-            }
+            const name = data.nome || data.name;
+            const existing = window.dictionaryData.find(item => item.name.toLowerCase() === name?.toLowerCase());
+            if (existing && typeof data.dica === 'string') existing.desc = data.dica;
         });
-        console.log(`📡 Spotter Digital Sincronizado: ${atualizados} atualizados, ${novos} novos padrões.`);
+        window.dictionaryData = normalizeDictionary(window.dictionaryData);
         if (typeof window.FitApp.filterLibrary === 'function') window.FitApp.filterLibrary();
     } catch (error) {
         console.log("⚠️ Modo Offline: Utilizando dicionário de fábrica.");
