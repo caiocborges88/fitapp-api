@@ -1,8 +1,8 @@
 {
   "project": "fitapp-operacional",
-  "version": "193be1b7ed58c253",
-  "checkedAt": "2026-10-15T15:26:49.191Z",
-  "matchingFiles": 28,
+  "version": "81a8046d9b7d567e",
+  "checkedAt": "2026-10-22T19:33:55.079Z",
+  "matchingFiles": 53,
   "api": [
     {
       "path": "coach",

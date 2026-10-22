@@ -1,5 +1,9 @@
 # FitApp
 
+## Versão principal atualizada — 22/10/2026
+
+A versão `81a8046d9b7d567e` foi publicada em [FitApp](https://fitapp-operacional.web.app), com a API e a interface atualizadas. O backup anterior à publicação está no commit `ccde07c`, tag `fitapp-2026-10-22-treinos`, enviados ao GitHub. Os 99 testes passaram com Firestore emulado; a verificação pública confirmou os 53 arquivos, API protegida e inicialização sem exceções. Relatório: [docs/PUBLICACAO-2026-10-22.md](docs/PUBLICACAO-2026-10-22.md). Os registros abaixo descrevem as etapas e validações anteriores à publicação.
+
 ## Cobertura muscular real — 22/10/2026
 
 A prévia confere grupos principais, subníveis, padrões, repetições e mudanças em relação à ficha aberta. Core é identificado pelos movimentos; reabrir uma ficha salva não acrescenta abdominal automaticamente. Fichas manuais permanecem livres. Jornada completa local e 48.600 simulações verificadas. Evidências e limites: [docs/COBERTURA-MUSCULAR-DAS-FICHAS.md](docs/COBERTURA-MUSCULAR-DAS-FICHAS.md). Teste: `npm run test:coverage`. Sem publicação.

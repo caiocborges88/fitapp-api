@@ -1,7 +1,7 @@
 {
   "status": "ok",
   "url": "https://fitapp-operacional.web.app",
-  "version": "fc42a48734b53f0f",
+  "version": "81a8046d9b7d567e",
   "apiStatus": 401,
   "ruleset": "projects/fitapp-operacional/rulesets/c3f32363-9552-4af4-894a-c70739c7efa6",
   "historyIndexState": "READY",
