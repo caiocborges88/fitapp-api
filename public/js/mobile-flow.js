@@ -106,6 +106,7 @@ function refreshHome(){
     let panel=document.getElementById('quickWorkout');
     if(!panel){
         panel=element('section','quick-workout panel');panel.id='quickWorkout';
+        const art=element('img','quick-illustration');art.src='illustrations/preparation.svg';art.alt='';art.width=80;art.height=60;panel.append(art);
         panel.append(element('span','eyebrow','TREINAR HOJE'),element('h2','','Sua ficha, à mão.'));
         const name=element('p');name.id='quickWorkoutName';panel.append(name);
         const button=element('button','button primary','Conferir e começar');button.id='quickWorkoutOpen';button.type='button';panel.append(button);

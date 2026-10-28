@@ -1,3 +1,4 @@
+import {effectsReduced} from './appearance.js';
 import {availableInEnvironment,environmentOptions} from './environment.js';
 import {reviewRoutine} from './routine-review.js';
 import {modelSettings} from './model-settings.js';
@@ -72,7 +73,7 @@ let isolationChartInstance = null;
             header.style.display = 'flex';
             header.style.justifyContent = 'space-between';
             header.style.alignItems = 'center';
-            header.style.boxShadow = '0 4px 6px rgba(0,0,0,0.2)';
+            header.style.boxShadow = 'var(--shadow)';
 
             // O contador de exercícios agora aparece limpo ao lado do título
             header.innerHTML = `<span>${title} <span style="color: var(--subtle); font-size: 11px;">(${groups[key].length})</span></span><span class="toggle-arrow" style="font-size: 12px; color: var(--subtle); transition: transform 0.3s;">▼</span>`;
@@ -223,7 +224,7 @@ let isolationChartInstance = null;
             header.style.display = 'flex';
             header.style.justifyContent = 'space-between';
             header.style.alignItems = 'center';
-            header.style.boxShadow = '0 4px 6px rgba(0,0,0,0.2)';
+            header.style.boxShadow = 'var(--shadow)';
 
             const isOpen = query.length > 0;
             header.style.borderColor = isOpen ? 'var(--accent)' : 'var(--line)';
@@ -259,10 +260,10 @@ let isolationChartInstance = null;
                 card.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                         <div class="lib-name" style="flex: 1; font-size: 15px; color: var(--ink); font-weight: bold;">${safeName}</div>
-                        <a href="https://www.youtube.com/results?search_query=${ytQuery}" target="_blank" style="text-decoration: none; font-size: 18px; margin-left: 10px; background: rgba(255, 0, 0, 0.1); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,0,0,0.3);" title="Ver Execução no YouTube">${icon('video')}</a>
+                        <a href="https://www.youtube.com/results?search_query=${ytQuery}" target="_blank" style="text-decoration: none; font-size: 18px; margin-left: 10px; background: var(--secondary-soft); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--secondary);" title="Ver Execução no YouTube">${icon('video')}</a>
                     </div>
                     <div class="lib-focus" style="margin-top: 8px; font-size: 11px; color: var(--muted);">🎯 Alvo: ${escapeHTML(item.group || 'Geral')} (${escapeHTML(item.focus || '')})</div>
-                    <div style="font-size: 11px; color: var(--accent); margin-top: 8px; background: rgba(0, 255, 136, 0.05); padding: 4px 8px; border-radius: 4px; display: inline-block; border: 1px dashed var(--accent-soft);">
+                    <div style="font-size: 11px; color: var(--accent); margin-top: 8px; background: var(--accent-soft); padding: 4px 8px; border-radius: 4px; display: inline-block; border: 1px dashed var(--accent-soft);">
                         🎒 Requer: ${escapeHTML(equipStr)}
                     </div>
                 `;
@@ -345,7 +346,7 @@ let isolationChartInstance = null;
             const cardClass = isBiset ? 'biset-card' : 'tradicional-card';
 
             const card = document.createElement('div'); card.className = cardClass;
-            if (!isBiset) card.style.borderLeft = '4px solid #44aaff';
+            if (!isBiset) card.style.borderLeft = '4px solid var(--secondary)';
 
             card.innerHTML = `
                 <div class="biset-title" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
@@ -492,6 +493,7 @@ let isolationChartInstance = null;
 
                     row.innerHTML = `<div class="set-label">S${s}</div><input type="number" min="0" step="0.5" aria-label="Carga em kg, série ${s}" id="${kgId}" class="kg-val" placeholder="${placeholderKg}" value="${escapeHTML(displayKg)}"><input type="number" min="0" aria-label="Quantidade, série ${s}" id="${rpId}" class="rp-val" placeholder="${placeholderReps}" value="${escapeHTML(displayReps ?? '')}"><select class="set-measure" aria-label="Unidade, série ${s}"><option value="reps" ${data.measurementType !== 'duration' ? 'selected' : ''}>rep</option><option value="duration" ${data.measurementType === 'duration' ? 'selected' : ''}>seg</option></select><button class="btn-iso" title="Cronômetro para série por tempo" aria-label="Iniciar ou pausar cronômetro da série ${s}" ${data.measurementType !== 'duration' ? 'disabled' : ''}>⏱</button><input type="checkbox" aria-label="Série ${s} realizada" id="${chkId}" class="chk-set" ${data.checked ? 'checked' : ''}>`;
 
+                    row.classList.toggle('set-confirmed',Boolean(data.checked));
                     const chk = row.querySelector('.chk-set');
                     const kgInp = row.querySelector('.kg-val');
                     const rpInp = row.querySelector('.rp-val');
@@ -594,6 +596,7 @@ let isolationChartInstance = null;
                             window.FitApp.stopRestTimer();
                             state.todayLog = state.todayLog.filter(log => !(log.exercise === ex.name && log.set === s));
                         }
+                        row.classList.toggle('set-confirmed',chk.checked);
                         updateState();
                         window.FitApp.updateProgress();
 
@@ -822,7 +825,7 @@ let isolationChartInstance = null;
         const savedCustoms = readJSON(window.FitApp.safeGet('fitapp_custom_workouts'), []);
 
         if (savedCustoms.length === 0) {
-            listEl.innerHTML = '<div style="color: var(--subtle); font-size: 13px; text-align: center; padding: 10px; border: 1px dashed var(--line); border-radius: 8px;">Suas fichas vão aparecer aqui.</div>';
+            listEl.innerHTML = '<div class="empty-state"><img class="empty-illustration" src="illustrations/preparation.svg" alt="" width="160" height="120"><h3>Sua próxima sessão começa aqui.</h3><p>Suas fichas vão aparecer aqui.</p></div>';
             return;
         }
 
@@ -863,7 +866,7 @@ let isolationChartInstance = null;
         let history = readJSON(window.FitApp.safeGet('fitapp_week_log'), []);
 
         if (history.length === 0) {
-            container.innerHTML = '<div style="text-align: center; color: var(--subtle); padding: 20px;">Nenhum treino salvo ainda.</div>';
+            container.innerHTML = '<div class="empty-state"><img class="empty-illustration" src="illustrations/movement.svg" alt="" width="160" height="120"><p>Nenhum treino salvo ainda.</p></div>';
             return;
         }
 
@@ -898,7 +901,7 @@ let isolationChartInstance = null;
                     <div style="font-size: 12px; color: var(--muted);">${dateStr} • ⏱️ ${durationStr}</div>
                 </div>
                 <div style="display: flex; gap: 10px; align-items: center;">
-                    <button onclick="event.stopPropagation(); window.FitApp.exportStravaCard(${history.length - 1 - reversedHistory.indexOf(log)})" style="background: transparent; border: none; font-size: 20px; cursor: pointer; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));" title="Compartilhar resumo">${icon('share')}</button>
+                    <button onclick="event.stopPropagation(); window.FitApp.exportStravaCard(${history.length - 1 - reversedHistory.indexOf(log)})" style="background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--accent);" title="Compartilhar resumo">${icon('share')}</button>
                     <button onclick="event.stopPropagation(); window.FitApp.deleteHistoryLog('${log._id}')" style="display: ${trashBtnDisplay}; background: transparent; border: none; font-size: 18px; color: var(--danger); cursor: pointer;" title="Excluir Treino">${icon('trash')}</button>
                     ${log.complete && log.duration_secs >= 120 && log._id ? '<button data-claim-reward="true" title="Abrir recompensa deste treino" style="background:transparent;border:0;cursor:pointer;font-size:20px;">📦</button>' : ''}
                     <div class="toggle-arrow" style="color: var(--subtle); font-size: 12px; transition: transform 0.3s; margin-left: 5px;">▼</div>
@@ -1011,7 +1014,7 @@ let isolationChartInstance = null;
                 datasets: [{
                     label: 'Séries no Mês',
                     data: Object.values(muscleCounts),
-                    backgroundColor: cssColor('--accent-soft'),
+                    backgroundColor: cssColor('--accent'),
                     borderColor: cssColor('--accent'),
                     pointBackgroundColor: cssColor('--secondary'),
                     pointBorderColor: cssColor('--ink'),
@@ -1021,6 +1024,7 @@ let isolationChartInstance = null;
                 }]
             },
             options: {
+                animation: effectsReduced() ? false : {duration:220},
                 indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
@@ -1100,6 +1104,7 @@ let isolationChartInstance = null;
                 }]
             },
             options: {
+                animation: effectsReduced() ? false : {duration:220},
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {

@@ -1,0 +1,144 @@
+✔ IA rejeita exercícios fora do catálogo ou do ambiente e séries inválidas (4.0103ms)
+✔ IA usa contingência somente para falha transitória e valida o resultado (2.9891ms)
+API request failed: Error
+API request failed: Error
+✔ API autentica, valida entradas, aplica quotas e esconde erros internos (219.122ms)
+✔ política atual bloqueia toda IA antes de quota/provedor e mantém recompensas disponíveis (35.2811ms)
+✔ todas as modalidades mantêm pares completos e distintos em academia para os níveis e perfis (248.4636ms)
+✔ sinergista respeita peito/tríceps, costas/bíceps e pernas/ombros em todos os pares (18.6115ms)
+✔ falta de um lado bloqueia o dia em vez de omitir par ou introduzir core/panturrilha (6.0694ms)
+✔ em casa pares de costas/bíceps são completos e dependem da barra quando há puxada vertical (26.6732ms)
+✔ ciclo incompleto não retorna plano e exclusões continuam valendo na reutilização entre pares (17.8168ms)
+✔ bi-sets usam códigos musculares mesmo com rótulos visuais renomeados (17.6869ms)
+✔ modelos retirados não geram planos, mas fichas antigas são preservadas sem completar ou converter pares (2.1379ms)
+✔ edição manual aceita pares do mesmo grupo, opostos ou livres sem impor o modelo complementar (1.4628ms)
+✔ casa somente com halteres atende adução peitoral e deltoide posterior sem presumir banco (11.4317ms)
+✔ sóleo sem banco exige apoio de equilíbrio declarado e nunca troca para gastrocnêmios (5.3043ms)
+✔ rosca corporal sentada permite bíceps sem halter ou barra, mas não sem assento (1.57ms)
+✔ opções sem banda preservam direção de puxada, extensora e pares distintos (2.3607ms)
+✔ circuito mantém sete estações e abdominal final nos perfis e ambientes (139.9392ms)
+✔ estações ausentes bloqueiam o circuito inteiro, incluindo cardio (18.3995ms)
+✔ calistenia retirada não gera novos planos, mas mantém os dias e movimentos salvos (6.3736ms)
+✔ movimentos corporais continuam disponíveis em casa conforme o recurso declarado (4.4562ms)
+✔ circuito sem recursos não retorna versão silenciosamente incompleta (4.2343ms)
+✔ atalho de casa gera somente movimentos sem recursos e respeita exclusões e complexidade (10.9611ms)
+✔ restrição corporal acompanha a ficha salva e impede adaptação para halteres (4.1427ms)
+✔ todos os dias e métodos oferecidos produzem rotinas válidas (146.2088ms)
+✔ tradicional iniciante não entrega dia incompleto quando faltam subníveis (20.8758ms)
+✔ tradicional informa o subnível ausente mesmo com halteres em casa (12.9106ms)
+✔ tradicional iniciante de academia mantém todos os focos solicitados (20.9746ms)
+✔ ABC não salva um ciclo parcial e ABCD não omite grupos indisponíveis (5.387ms)
+✔ catálogo normalizado mantém contrato completo e IDs únicos (0.7605ms)
+✔ rotina vazia ou séries inválidas são rejeitadas (0.9503ms)
+✔ edição depois da marcação e exercícios repetidos conservam identidade (1.179ms)
+✔ reconciliação preserva pendentes e não duplica registros (32.8278ms)
+✔ séries por tempo conservam segundos sem inventar repetições (1.2879ms)
+✔ ficha completa contém todos os dias e abdominal final sem desfazer bi-sets (49.3308ms)
+✔ reabrir ficha antiga preserva edição manual sem acrescentar core pelo título do bloco (9.7254ms)
+✔ cada estrutura gera ciclo com peito, costas, braços, pernas e core (195.3409ms)
+✔ ficha e cópia não transportam séries realizadas nem referências mutáveis (13.2083ms)
+✔ ordenação preserva elementos e limites sem alterar a origem (2.7268ms)
+✔ editor permite ler legado mas exige pares completos ao salvar (3.9292ms)
+✔ editor não salva um bi-set formado pelo mesmo movimento duas vezes (0.8617ms)
+✔ proposta B mantém remada e bíceps e declara a puxada vertical ausente (10.3724ms)
+✔ proposta C declara perda de subnível sem trocar extensora por agachamento (11.5628ms)
+✔ proposta rejeita eliminar grupos inteiros e não entrega só core (6.6846ms)
+✔ proposta não altera pares, circuitos ou movimentos desconhecidos (1.3456ms)
+✔ a adição de recursos remove lacunas sem modificar a ficha ou propostas anteriores (4.0202ms)
+✔ casa e parque não presumem máquinas, banco, barras ou corda (4.662ms)
+✔ adaptação é reversível, mantém séries e não altera a ficha original (6.2552ms)
+✔ movimento sem alternativa é sinalizado e nunca recebe equivalência inventada (3.5114ms)
+✔ hotel sem equipamentos mantém foco e padrão ou informa a lacuna (6.9306ms)
+✔ halteres e bancos em casa são recursos independentes (0.8668ms)
+✔ parque permite bancos e distingue barra fixa alta de barra baixa (0.9853ms)
+✔ trocar recursos recalcula a partir do original e restaura a academia (2.1733ms)
+✔ cadastros têm IDs, recursos, subníveis e referências consistentes (3.5661ms)
+✔ variedade não substitui o foco e a direção de tração é preservada (1.7957ms)
+✔ adaptação não repete a mesma alternativa nos dois lados do bi-set (1.503ms)
+✔ nomes antigos continuam resolvíveis na adaptação (1.3759ms)
+✔ halteres atendem remadas horizontais sem se passarem por puxada vertical (1.8491ms)
+✔ nível iniciante também é aplicado ao movimento original disponível (1.155ms)
+✔ diagnóstico distingue cadastro ausente de falta de recursos ou nível (1.07ms)
+✔ ABC tradicional iniciante preserva posições, séries, foco e retorno em cada ambiente (55.4878ms)
+✔ rascunho permite montagem incompleta, mas rejeita conta ou versão diferentes e estruturas inválidas (7.2775ms)
+✔ rascunhos detectam revisão da ficha ou substituição do plano antes de gravar sobre a origem (1.3823ms)
+✔ equipamentos são independentes por ambiente e academia respeita escolhas também na revisão (7.9766ms)
+✔ parâmetros declarados mantêm os descansos e séries já usados pelos modelos (5.1423ms)
+✔ descanso restaurado é limitado e sessões antigas recebem padrão de 60 segundos (0.7657ms)
+✔ gerar ou rejeitar um ciclo não agenda efeitos no descanso da sessão (52.2176ms)
+✔ seleção canônica aceita rótulos variantes e rejeita padrão incompatível (3.5535ms)
+✔ gerador B em casa usa barra assistida e mantém padrões de remada e rosca neutra/pronada (22.6536ms)
+✔ rótulos visuais renomeados não alteram cobertura do tradicional (21.1859ms)
+✔ sem barra a remada não preenche a solicitação de puxada vertical (4.8342ms)
+✔ exclusão por nome antigo continua valendo na seleção e na reutilização (6.4108ms)
+✔ ABCD não completa peitoral ou tríceps com repetição de um único subnível (1.7271ms)
+✔ extensão de quadril e flexão de joelho permanecem solicitações distintas (0.602ms)
+(node:17504) MetadataLookupWarning: received unexpected error = All promises were rejected code = ETIMEDOUT, ENOTFOUND
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ recompensa é concedida uma única vez em chamadas concorrentes (12248.6132ms)
+✔ cobertura ignora títulos e não confunde peitoral inferior com core (12.0474ms)
+✔ relatório distingue posições e nomes canônicos por dia sem somar aliases como movimentos distintos (4.7654ms)
+✔ pendências não contam como cobertura disponível; cadastros ausentes não são adivinhados (1.817ms)
+✔ subníveis e padrões mostram a flexão de joelho sem presumir extensão de quadril (1.4762ms)
+✔ adaptação equivalente mantém referência; remoção ou alternativa de outro padrão aparece como perda (7.7536ms)
+✔ dias declarados vazios e séries editadas são refletidos sem preencher ficha (1.833ms)
+✔ rótulos de isolamento não criam lacuna fictícia da mesma ênfase peitoral (1.9212ms)
+✔ ficha salva é revisada sem mutação e exclusões posteriores impedem execução, inclusive aliases (3.9505ms)
+✔ academia diagnostica cadastro ausente e política corporal sem reconstruir ficha manual (2.3347ms)
+✔ adaptação em casa não escolhe alternativa excluída e devolve original ao retornar (2.2007ms)
+✔ revisão aceita pares manuais livres e detecta duplicatas, inclusive nomes antigos, recursos e séries (2.6287ms)
+✔ mudança da lista de exclusões invalida a proposta anterior (0.6983ms)
+✔ retirar uma exclusão resolve o diagnóstico antigo sem exigir regenerar a ficha (0.4983ms)
+[2026-10-28T13:18:48.657Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x34de7eff error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L32:24 for 'create' @ L32, false for 'create' @ L97, false for 'update' @ L34, false for 'update' @ L97, false for 'create' @ L32, false for 'create' @ L97
+[2026-10-28T13:18:48.694Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x34de7f00 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L32:24 for 'create' @ L32, false for 'create' @ L97, false for 'update' @ L34, false for 'update' @ L97, false for 'create' @ L32, false for 'create' @ L97
+[2026-10-28T13:18:48.950Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x34de7f03 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L34, false for 'update' @ L97
+[2026-10-28T13:18:48.992Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x34de7f04 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L32:24 for 'create' @ L32, false for 'create' @ L97, false for 'update' @ L34, false for 'update' @ L97, false for 'create' @ L32, false for 'create' @ L97
+[2026-10-28T13:18:49.012Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x34de7f05 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L80, false for 'create' @ L97, false for 'update' @ L80, false for 'update' @ L97
+[2026-10-28T13:18:49.030Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x34de7f06 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L84, false for 'create' @ L97, false for 'update' @ L84, false for 'update' @ L97
+[2026-10-28T13:18:49.059Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x34de7f07 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L93, false for 'create' @ L97, false for 'update' @ L93, false for 'update' @ L97
+[2026-10-28T13:18:49.594Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x34de7f08 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L61:24 for 'update' @ L61, false for 'update' @ L97, false for 'update' @ L61, false for 'update' @ L97
+[2026-10-28T13:18:49.622Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x34de7f09 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L61:24 for 'update' @ L61, false for 'update' @ L97, false for 'update' @ L61, false for 'update' @ L97
+[2026-10-28T13:18:49.645Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x34de7f0a error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L35:24 for 'delete' @ L35, false for 'delete' @ L97, false for 'delete' @ L35, false for 'delete' @ L97
+[2026-10-28T13:18:49.867Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x34de7f0e error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L35:24 for 'delete' @ L35, false for 'delete' @ L97, false for 'delete' @ L35, false for 'delete' @ L97
+[2026-10-28T13:18:49.925Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x34de7f0f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L32:24 for 'create' @ L32, false for 'create' @ L97, false for 'update' @ L34, false for 'update' @ L97, false for 'create' @ L32, false for 'create' @ L97
+[2026-10-28T13:18:50.048Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x34de7f12 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L61:24 for 'update' @ L61, false for 'update' @ L97, false for 'update' @ L61, false for 'update' @ L97
+[2026-10-28T13:18:50.093Z]  @firebase/firestore: Firestore (13.0.0): GrpcConnection RPC 'Write' stream 0x34de7f13 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L61:24 for 'update' @ L61, false for 'update' @ L97, false for 'update' @ L61, false for 'update' @ L97
+✔ regras: isolamento, privilégio, imutabilidade e consultas reais (6368.2344ms)
+✔ edições concorrentes conservam versões independentes e cópia estável (10.5592ms)
+✔ exclusão vence cópia antiga e preserva edição simultânea como ficha independente (1.1291ms)
+✔ preferências e plano conflitantes mantêm versão recuperável com contagem (0.7855ms)
+✔ progresso do mesmo plano soma apenas diferenças e preserva adições distintas (0.7959ms)
+Sincronização pendente: offline
+✔ sincronização concorrente envia uma vez e preserva novo item (50.9742ms)
+✔ contas distintas não enxergam fila/histórico uma da outra (1.0095ms)
+✔ rede indisponível preserva a fila original (1.5401ms)
+✔ exclusão solicitada durante envio permanece na fila e não reaparece (2.2894ms)
+✔ gravação de plano preserva dados e contador se preferências ou plano falharem (9.6028ms)
+✔ gravação concluída atualiza plano e preferências e emite apenas um evento consistente (2.5134ms)
+✔ unidade de séries por tempo é preservada no cadastro, na sessão e no registro (8.712ms)
+✔ troca de equipamento não apresenta carga textual antiga como meta já validada (2.2846ms)
+✔ chips de recursos bloqueiam barras fixas e não são contornados por Peso Corporal (71.6544ms)
+✔ ABCD e inferiores mantêm funções distintas dos posteriores e das costas em sorteios repetidos (336.1927ms)
+ℹ tests 102
+ℹ suites 0
+ℹ pass 102
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12693.2911
+

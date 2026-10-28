@@ -33,9 +33,12 @@
         try { return JSON.parse(get(key) || 'null') ?? fallback; }
         catch { return fallback; }
     };
+    const notifyAccount = () => {
+        if (typeof window.dispatchEvent === 'function' && typeof CustomEvent === 'function') window.dispatchEvent(new CustomEvent('fitapp:accountchange'));
+    };
     function bindUser(userId) {
         uid = userId || null;
-        if (!uid) return;
+        if (!uid) { notifyAccount(); return; }
         // Migração não destrutiva: guarda os originais e atribui dados legados
         // sem proprietário somente à primeira conta que efetua a atualização.
         const owner = localStorage.getItem('fitapp_legacy_owner');
@@ -52,6 +55,7 @@
             } else if (owner && owner !== uid) continue;
             set(key, value);
         }
+        notifyAccount();
     }
     async function updateQueue(update) {
         const account = uid;

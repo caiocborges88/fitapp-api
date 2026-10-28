@@ -1,32 +1,48 @@
 # Sistema visual do FitApp
 
-## Direção
+## Direção — Energia, alegria e foco
 
-Uma interface calma e legível para consultar e registrar treinos. A identidade deve servir ao registro, com menos metáforas e menos interrupções. Os temas claro e escuro seguem `prefers-color-scheme`, conforme preferência do responsável pelo produto.
+A identidade local de 28/10/2026 usa ciano e violeta, contornos luminosos, cartões geométricos e ilustrações esportivas próprias. Claro e escuro têm a mesma hierarquia. A ficha disponível e a ação de treinar são prioritárias; a sessão mantém números e fundos estáveis. Decisões, evidências e limites: [IDENTIDADE-ENERGIA.md](IDENTIDADE-ENERGIA.md).
 
 ## Base compartilhada
 
-- Fonte Manrope variável, servida em `public/fonts/Manrope.ttf`, licença OFL em `public/fonts/OFL.txt`. Sem dependência de um servidor externo para renderizar a interface.
-- Paleta semântica em `public/css/design.css`: fundo, superfície, texto, texto secundário, borda, ação principal, destaque secundário, aviso e erro. Os componentes não escolhem cores pelo objetivo físico da ficha.
-- Ação principal em verde, apoio em azul. Erro e aviso têm texto explícito; a cor não deve ser a única forma de comunicar estado.
-- Formas com cantos moderadamente arredondados, bordas discretas e espaçamento consistente. Ícones vetoriais sem preenchimento no fluxo principal; cartas mantêm ilustrações próprias.
-- Barra lateral no desktop e quatro destinos no rodapé do celular: Treinar, Meus treinos, Histórico e Mais.
-- Movimento curto na entrada de painéis e transições de estado. Respeitar `prefers-reduced-motion`. Evitar animação pulsante para ações comuns.
+- Manrope variável local, pesos 700–800 para títulos e números; corpo de 16 px e informações auxiliares de 13–14 px. Cronômetros e cargas usam números tabulares. A licença permanece em `public/fonts/OFL.txt`.
+- `public/css/design.css` mantém os tokens semânticos; `public/css/energy.css` aplica os tratamentos aos componentes; `mobile-flow.css` mantém os contratos móveis. Evitar novas cores ou efeitos diretamente nos templates JavaScript.
+- Fundo claro `#F5F7FF`, cartões brancos e texto `#111A33`. No escuro, fundo `#080D1B`, cartões `#111A2E` e texto `#F5F7FF`.
+- Ciano textual `--accent`: `#0E7490` no claro e `#22D3EE` no escuro. Violeta textual `--secondary`: `#6D28D9` e `#A78BFA`. Superfícies suaves têm tokens próprios.
+- Ações principais usam `--action:#22D3EE` e `--on-action:#08111F`, separados dos links. `--on-accent` continua compatível com os componentes legados que usam `--accent` como fundo.
+- `--control-line` identifica campos e controles; `--line` separa superfícies. Brilhos, elevação, raios e durações também usam tokens. Gradientes ficam em bordas decorativas, fora dos textos e números.
+- Sucesso verde, atenção âmbar e erro rosa/vermelho usam rótulos ou símbolos. A cor não representa capacidade física, objetivo ou qualidade de uma ficha.
+- Raio de 20 px nos destaques, 16 px nos cartões e 12 px nos controles. Espaçamentos seguem 8, 12, 16, 24 e 32 px. Celular mantém margens de 16 px.
 
-## Componentes e estados
+## Componentes, telas e ilustrações
 
-Na versão local de 28/10/2026, Treinar destaca a ficha de acesso rápido. A revisão usa campos recolhidos em Ajustar e Organizar bloco, pendências visíveis com acesso direto e uma barra inferior de ações. Detalhes de descanso/cobertura ficam em Mais opções; operações de organização ficam no menu de cada ficha. Consulte [EXPERIENCIA-MOVEL.md](EXPERIENCIA-MOVEL.md) para contratos de rascunho, teclado/área segura e validação.
+A ficha de acesso rápido recebe borda ciano/violeta e botão principal amplo. Meus treinos, biblioteca, revisão, formulários, gráficos, perfil e administração compartilham os mesmos estilos. A navegação mantém quatro destinos no celular e barra lateral no desktop. Edição e organização continuam sob demanda; pendências ficam visíveis e resolvíveis.
 
-Botão principal, secundário, texto e destrutivo; campos com rótulo; cartão de ficha; aviso; estado vazio; painel; navegação; indicadores de sincronização; diálogo de resumo e modais de edição. IDs antigos necessários à compatibilidade continuam no DOM, mas não definem a linguagem visual.
+Campos mantêm rótulos, borda contrastante e foco visível. Seletores usam marcas e contornos para comunicar seleção. Séries realizadas recebem marca verde, confirmação curta e checkbox com alvo de 44 px. O progresso expõe percentual acessível. O descanso usa o relógio existente, sem um segundo temporizador independente.
 
-Novos componentes usam classes e variáveis compartilhadas. Trechos gerados pelo `ui.js` ainda têm estilos de layout legados; suas cores foram migradas para variáveis. A consolidação desses trechos em componentes menores faz parte da evolução técnica, sem reescrita simultânea da persistência.
+As três ilustrações SVG locais (`preparation`, `movement` e `celebration`) são decorativas, com `alt` vazio e dimensões explícitas. Usam pessoas estilizadas com diferentes proporções e tons de pele; não ensinam execução de exercício. Login, ausência de fichas, ausência de histórico e resumo usam essas artes. A ficha de acesso rápido recebe apenas uma miniatura.
+
+A coleção continua opcional. O pacote pode ser aberto por teclado, não usa flash de tela inteira, e os controles do resultado aparecem imediatamente. O cartão compartilhável usa fundo opaco e preserva as métricas existentes. Nome e símbolo FitApp são preservados; os PNGs da PWA derivam do SVG por `npm run build:icons` (requer o navegador local do Playwright). O build normal continua sem exigir navegador.
+
+## Tema e movimento
+
+Perfil oferece Tema (Sistema/Claro/Escuro) e Efeitos (Completos/Reduzidos). O padrão é Sistema/Completos; `prefers-reduced-motion` sempre prevalece. Sem conta, valem as preferências do sistema.
+
+A preferência `fitapp_appearance` usa `FitStore`, com `{version:1,theme:'system'|'light'|'dark',effects:'full'|'reduced'}`. É local à conta/dispositivo e não entra na sincronização de planos. Formatos desconhecidos não são apagados; o aplicativo usa o padrão até uma escolha explícita. Falha ao gravar mantém o valor anterior e mostra a falha.
+
+`appearance.js` resolve `data-theme` e `data-effects`, a cor da barra do navegador e os controles. `FitStore.bindUser` emite `fitapp:accountchange` após vincular a conta; `fitapp:appearancechange` notifica mudança efetiva de tema/efeitos. Gráficos são atualizados quando visíveis. Mudanças em outra aba são reaplicadas a partir do namespace atual.
+
+Pressionar: até 120 ms; troca de aba: 200 ms e 6 px; diálogos: 240 ms; série: 240 ms; celebração: 800 ms, apenas ao abrir o resumo após salvamento local confirmado. Fechamento permanece imediato, sem atrasar a ação. Controles fixos não ficam em ancestrais transformados. Efeitos reduzidos removem animações decorativas, transições, desfoque de diálogos e reduzem brilhos. Chart.js também recebe animação desativada. Não há efeitos permanentes de partículas ou paralaxe.
 
 ## Acessibilidade e validação
 
-Foco visível, rótulos nos campos de séries, navegação principal identificada, atalho para conteúdo, unidades explícitas, controle de voz com estado acessível, fechamento por Escape e contenção de Tab nos modais. O resumo usa diálogo nativo.
+Foco visível, rótulos, unidades explícitas, navegação identificada, atalho para conteúdo, Escape e contenção de Tab em modais permanecem. Avisos de armazenamento, offline e sincronização mantêm significados distintos. Sucesso visual não substitui a confirmação de persistência.
 
-O teste `npm run test:design` verifica tarefas reais, largura de página e quatro combinações de tela/tema. Também verifica contraste mínimo de 4,5:1 em pares centrais da paleta; isso não certifica toda a interface como conforme à WCAG. Testes com leitor de tela, ampliação e dispositivos iOS/Android reais continuam no plano.
+`npm run test:appearance` cobre 16 combinações de tamanho/tema/efeitos, preferências, duas abas, contas, versão desconhecida, falha de armazenamento, redução do sistema, texto ampliado, sessão, gráficos, coleção e recarga autenticada offline com SDK Firebase simulado no cache. `npm run test:design` cobre tarefas e exportação do resumo; novas capturas recebem prefixo `energy-design`.
 
-## Linguagem
+Os testes verificam contraste mínimo de 4,5:1 nos pares textuais centrais e 3:1 em contornos de campos. Esses testes não certificam toda a interface como conforme à WCAG. Conferência manual com leitor de tela e Android/iPhone físicos continua necessária.
 
-Usar ficha, treino, exercício, série, equipamento, salvar, descartar, histórico e preferências. IA gera um rascunho revisável. Referência anterior não é recorde histórico. Recompensa é opcional e não descreve capacidade física.
+## Linguagem e contratos
+
+Usar ficha, treino, exercício, série, equipamento, salvar, descartar, histórico e preferências. Referência anterior não é recorde histórico. Recompensa é opcional e não mede capacidade física. IA permanece adiada. A reformulação não muda prescrição, catálogo, ficha/rascunho/sessão, revisões, histórico ou fila offline.

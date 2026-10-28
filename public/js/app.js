@@ -608,6 +608,7 @@ function saveWorkoutState() {
     function updateProgress() {
         const pct = state.totalSets === 0 ? 0 : Math.round((state.checkedSets / state.totalSets) * 100);
         state.els.progressBar.style.width = pct + '%';
+        for(const [name,value]of Object.entries({role:'progressbar','aria-label':'Séries realizadas','aria-valuemin':'0','aria-valuemax':'100','aria-valuenow':String(pct)}))state.els.progressBar.setAttribute(name,value);
         const btn = document.getElementById('btnFinishAction');
         if(pct === 100) { btn.className = 'btn-action button primary'; btn.textContent = 'Concluir treino'; stopRestTimer(); speak("Treino finalizado."); }
         else { btn.className = 'btn-action button primary'; btn.textContent = 'Salvar treino parcial'; }

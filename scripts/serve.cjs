@@ -2,7 +2,7 @@ const http=require('node:http');
 const fs=require('node:fs');
 const path=require('node:path');
 const base=path.resolve(__dirname,'../public');
-const types={'.js':'text/javascript','.json':'application/json','.css':'text/css','.html':'text/html','.png':'image/png'};
+const types={'.js':'text/javascript','.json':'application/json','.css':'text/css','.html':'text/html','.png':'image/png','.svg':'image/svg+xml','.ttf':'font/ttf'};
 const server=http.createServer((req,res)=>{
     const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
     const file=path.resolve(base,'.'+(pathname==='/'?'/index.html':pathname));

@@ -1,3 +1,4 @@
+import {setupAppearance} from './appearance.js';
 import './data-controls.js';
 import './environment-controls.js';
 import {state} from './state.js';
@@ -18,6 +19,8 @@ function refresh(){
     text('profileName',name);text('profileEmail',user?.email || '');text('profileAvatar',initial);text('headerAvatar',initial);
     text('profileLevelDisplay',({iniciante:'Iniciante',intermediario:'Intermediário',avancado:'Avançado'})[globalThis.FitStore?.get('fitapp_level')]||'Não informada');
     text('greetingName',user ? ', '+name.split(/\s/)[0] : '');
+    const emptyHistory=document.getElementById('historyEmpty');
+    if(emptyHistory)emptyHistory.hidden=history.length>0;
     text('homeTotal',history.length);text('statWorkouts',history.length);
     const last=history.at(-1);
     text('homeLast',last?new Date(last.date+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'short'}):'—');
@@ -40,6 +43,7 @@ function requestRefresh(){if(!scheduled){scheduled=true;requestAnimationFrame(re
 
 function setup(){
     setupMobileFlow();
+    setupAppearance();
     globalThis.firebase.auth().onAuthStateChanged(requestRefresh);
     for(const event of ['fitapp:datachange','storage','online','offline'])window.addEventListener(event,requestRefresh);
     document.getElementById('syncStatus')?.addEventListener('click',()=>{
@@ -59,12 +63,9 @@ function setup(){
     document.querySelectorAll('.tab-content').forEach(tab=>observer.observe(tab,{attributes:true,attributeFilter:['class']}));
     const viewObserver=new MutationObserver(requestRefresh);
     for(const id of ['workoutPreview','prepArea','workoutArea'])viewObserver.observe(document.getElementById(id),{attributes:true,attributeFilter:['style']});
-    const media=matchMedia('(prefers-color-scheme: dark)');
-    const theme=()=>{
-        document.querySelector('meta[name="theme-color"]')?.setAttribute('content',media.matches?'#0c1520':'#f4f7f9');
+    window.addEventListener('fitapp:appearancechange',()=>{
         if(document.getElementById('tab-evolucao')?.classList.contains('active'))globalThis.FitApp.renderMetricsChart();
-    };
-    media.addEventListener('change',theme);theme();
+    });
     document.addEventListener('keydown',event=>{
         if(document.querySelector('dialog[open]'))return;
         const open=[...document.querySelectorAll('.swap-modal-overlay,.pack-modal')].filter(el=>getComputedStyle(el).display!=='none').at(-1);

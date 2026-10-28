@@ -1,5 +1,9 @@
 # FitApp
 
+## Identidade visual — versão local de 28/10/2026
+
+Ciano e violeta, cartões luminosos, três ilustrações esportivas locais e novos controles de tema/efeitos no Perfil. A aparência é separada por conta e funciona offline. O treino preserva seus dados e fluxos. Implementação local, sem publicação. Decisões, evidências e limites em [docs/IDENTIDADE-ENERGIA.md](docs/IDENTIDADE-ENERGIA.md). Testes: `npm run test:appearance` e `npm run test:design`. Referência visual sem autenticação: iniciar `node scripts/serve.cjs` e abrir [a comparação de temas](http://127.0.0.1:4173/design-reference.html).
+
 ## Experiência móvel — publicada em 28/10/2026
 
 Treinar prioriza uma ficha de acesso rápido. A revisão recolhe edição e detalhes, mantém a ação principal acessível e permite salvar/iniciar sem retornar à lista. Ambiente e equipamentos usam escolhas compartilhadas; rascunhos locais separados por conta podem ser recuperados após recarga. A versão `2ad39ed4993cf64c` foi publicada no [endereço oficial](https://fitapp-operacional.web.app), somente com atualização do Hosting. Os 58 arquivos foram conferidos, o login iniciou sem exceções e a recarga offline passou; nenhum dado de treino foi gravado na verificação. Publicação, backup e instruções para Android: [docs/PUBLICACAO-2026-10-28.md](docs/PUBLICACAO-2026-10-28.md). O guia de desenvolvimento está em [AGENTS.md](AGENTS.md). Fases e limites em [docs/EXPERIENCIA-MOVEL.md](docs/EXPERIENCIA-MOVEL.md). Teste específico: `npm run test:mobile-flow`. Android/iPhone físicos ainda precisam de conferência.

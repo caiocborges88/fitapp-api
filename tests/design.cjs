@@ -21,7 +21,7 @@ const fakeFirebase=require('./fixtures/firebase.cjs');
             const capture=async(name)=>{
                 await page.evaluate(()=>document.fonts.ready);
                 assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,`${device}/${scheme}/${name}: overflow`);
-                await page.screenshot({path:`audit/redesign-${device}-${scheme}-${name}.png`,fullPage:true});
+                await page.screenshot({path:`audit/energy-design-${device}-${scheme}-${name}.png`,fullPage:true});
             };
             try{
                 await page.goto(origin);await page.waitForFunction(()=>globalThis.FitStore?.uid==='browser-test');
@@ -65,7 +65,7 @@ const fakeFirebase=require('./fixtures/firebase.cjs');
                     const download=page.waitForEvent('download').catch(()=>null);
                     await page.evaluate(()=>FitApp.exportStravaCard(-1));
                     assert.doesNotMatch(await page.locator('#toast').textContent(),/Falha/,consoleErrors.join('\n'));
-                    const file=await download;assert.ok(file,consoleErrors.join('\n'));await file.saveAs('audit/redesign-shared-summary.png');
+                    const file=await download;assert.ok(file,consoleErrors.join('\n'));await file.saveAs('audit/energy-design-shared-summary.png');
                 }
                 await page.evaluate(()=>document.getElementById('sessionSummary').close());
                 await page.evaluate(()=>FitApp.openHistoryModal());await page.locator('#historyListView .toggle-arrow').first().click();
@@ -75,9 +75,9 @@ const fakeFirebase=require('./fixtures/firebase.cjs');
                 evidence.push({device,scheme,status:'ok',checks:['navigation','account identity','manual template','direct start','timed set','short session saved','optional reward','history units','no horizontal overflow'],pageErrors:errors});
             }finally{await context.close();}
             const login=await contextFor(viewport,scheme,false);
-            try{const page=await login.newPage();await page.goto(origin);await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:`audit/redesign-${device}-${scheme}-login.png`,fullPage:true});}finally{await login.close();}
+            try{const page=await login.newPage();await page.goto(origin);await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:`audit/energy-design-${device}-${scheme}-login.png`,fullPage:true});}finally{await login.close();}
         }
-        fs.writeFileSync('audit/redesign-validation.json',JSON.stringify({checkedAt:new Date().toISOString(),environment:'local; Firebase simulated',evidence},null,2)+'\n');
+        fs.writeFileSync('audit/energy-design-validation.json',JSON.stringify({checkedAt:new Date().toISOString(),environment:'local; Firebase simulated',evidence},null,2)+'\n');
         console.log('Reformulação: celular e desktop nos dois temas; registro por tempo e sessão curta aprovados.');
     }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);server.close();process.exitCode=1;});

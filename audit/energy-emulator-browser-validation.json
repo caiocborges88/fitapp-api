@@ -1,0 +1,16 @@
+{
+  "status": "ok",
+  "viewport": "390x844",
+  "checks": [
+    "Firebase Auth real no emulador",
+    "Firestore real no emulador",
+    "função HTTP autenticada",
+    "salvamento",
+    "restauração",
+    "recompensa idempotente",
+    "recarga offline autenticada"
+  ],
+  "pageErrors": [],
+  "project": "demo-fitapp",
+  "productionWrites": false
+}

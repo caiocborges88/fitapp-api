@@ -1,0 +1,83 @@
+{
+  "environment": "Local Edge; Firebase simulated except unauthenticated offline test; no production writes",
+  "startedAt": "2026-10-28T13:20:21.761Z",
+  "suites": [
+    {
+      "suite": "browser",
+      "status": "passed",
+      "durationMs": 5632,
+      "output": "Navegador: fluxos principais aprovados, sem exceções.\n",
+      "errors": ""
+    },
+    {
+      "suite": "design",
+      "status": "passed",
+      "durationMs": 18026,
+      "output": "Reformulação: celular e desktop nos dois temas; registro por tempo e sessão curta aprovados.\n",
+      "errors": ""
+    },
+    {
+      "suite": "editor-browser",
+      "status": "passed",
+      "durationMs": 3806,
+      "output": "Editor: isolamento, cópia, ordenação, plano e histórico preservados.\n",
+      "errors": ""
+    },
+    {
+      "suite": "environment-browser",
+      "status": "passed",
+      "durationMs": 3897,
+      "output": "Ambientes: adaptação, recursos declarados, reversão e execução aprovados.\n",
+      "errors": ""
+    },
+    {
+      "suite": "environment-proposal-browser",
+      "status": "passed",
+      "durationMs": 13386,
+      "output": "Propostas por ambiente: revisão, cobertura explícita, aplicação, execução e restauração aprovadas.\n",
+      "errors": ""
+    },
+    {
+      "suite": "workout-priorities-browser",
+      "status": "passed",
+      "durationMs": 19139,
+      "output": "OK: geração inválida preserva plano, contador e preferências\nOK: quota local preserva plano e reverte contador e preferências\nOK: modal respeita exclusão e mantém o plano quando o ciclo não pode fechar\nOK: série por tempo inicia em segundos e registra duração sem repetições fictícias\nOK: barras desmarcadas bloqueiam circuito dependente e não geram sessão incompleta\nOK: calistenia retirada; legado preservado e movimentos continuam nas trocas de Casa\nOK: trocas sugeridas ao iniciante respeitam complexidade e a ficha pessoal não herda método global\nOK: carga textual antiga exige revisão da meta e não impede restaurar o original\nOK: ficha salva mostra exclusão posterior, revalida ao iniciar e permite corrigir só a sessão\nOK: academia sinaliza cadastro desconhecido e bloco corporal inválido antes de começar\n",
+      "errors": ""
+    },
+    {
+      "suite": "coverage-browser",
+      "status": "passed",
+      "durationMs": 15688,
+      "output": "OK: título abdominal não promete core; duplicatas e séries editadas são refletidas sem reescrever legado\nOK: jornada completa: Casa, lacuna, edição da sessão, ficha nova, execução, recarga e registro\nOK: ciclo mostra core real por dia e mantém ficha manual sem impor cobertura automática\nOK: Parque não conta puxada indisponível e recalcula quando barra alta e banco são declarados\n",
+      "errors": ""
+    },
+    {
+      "suite": "model-settings-browser",
+      "status": "passed",
+      "durationMs": 9396,
+      "output": "OK: plano abre com padrão explícito; ajuste acompanha relógio e sobrevive à recarga\nOK: ficha pessoal não herda descanso ou objetivo do seletor global\nOK: revisão de ciclo mostra efeitos reais do foco e não recebe ajuste atrasado\nOK: preferências explicam diferenças e limites dos modelos\nOK: aeróbico não mostra controles de descanso entre séries\n",
+      "errors": ""
+    },
+    {
+      "suite": "biset-browser",
+      "status": "passed",
+      "durationMs": 4434,
+      "output": "Bi-sets: pares completos, divisões, bloqueios e preservação de plano aprovados.\n",
+      "errors": ""
+    },
+    {
+      "suite": "catalogue-admin",
+      "status": "passed",
+      "durationMs": 2417,
+      "output": "Catálogo: dicas administrativas funcionam sem alterar a estrutura publicada.\n",
+      "errors": ""
+    },
+    {
+      "suite": "offline",
+      "status": "passed",
+      "durationMs": 2896,
+      "output": "Offline: aplicação e dependências carregadas sem rede.\n",
+      "errors": ""
+    }
+  ]
+}

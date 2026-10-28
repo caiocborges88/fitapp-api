@@ -1,0 +1,12 @@
+Failed to load resource: the server responded with a status of 403 (Forbidden)
+[2026-10-28T13:18:59.685Z]  @firebase/firestore: Firestore (13.0.0): RestConnection RPC 'Commit' 0x553f109e failed with error:  {"code":"permission-denied","name":"FirebaseError"} url:  http://127.0.0.1:8080/v1/projects/demo-fitapp/databases/(default)/documents:commit?key=AIzaSyDaFhCNgg53Toaqhiz9LNAgqapBAMOqJUk request: {"writes":[{"update":{"name":"projects/demo-fitapp/databases/(default)/documen
+Plano e fichas aguardam sincronização: resposta perdida após commit
+Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+[2026-10-28T13:19:01.699Z]  @firebase/firestore: Firestore (13.0.0): RestConnection RPC 'BatchGetDocuments' 0x3dd540a1 failed with error:  {"code":"unavailable","name":"FirebaseError"} url:  http://127.0.0.1:8080/v1/projects/demo-fitapp/databases/(default)/documents:batchGet?key=AIzaSyDaFhCNgg53Toaqhiz9LNAgqapBAMOqJUk request: {"documents":["projects/demo-fitapp/databases/(default)/documents/usuar
+Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+[2026-10-28T13:19:01.704Z]  @firebase/firestore: Firestore (13.0.0): WebChannelConnection RPC 'Listen' stream 0x3dd540a3 transport errored. Name: undefined Message: undefined
+Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+Sincronização, paginação e exportação validadas em dois dispositivos com emuladores.
+

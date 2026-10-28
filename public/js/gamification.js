@@ -33,14 +33,7 @@ var FitGamification = (() => {
         const envelope = document.getElementById('packEnvelope');
         
         // Injeta o Design Premium da Caixa de Suprimentos via JS
-        envelope.innerHTML = `
-            <div style="z-index: 2; position: relative;">
-                <div style="font-size: 55px; filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.8)); margin-bottom: 10px;">📦</div>
-                <div style="font-size: 15px; text-transform: uppercase; letter-spacing: 2px; color: var(--ink); font-weight: 900;">Drop Tático</div>
-                <div style="font-size: 10px; color: var(--accent); margin-top: 15px; letter-spacing: 3px; animation: pulse 1s infinite;">TOCAR PARA ABRIR</div>
-            </div>
-        `;
-        
+        envelope.innerHTML = '<span><span class="pack-symbol" aria-hidden="true">📦</span><span class="pack-label">Sua próxima carta</span><span class="pack-instruction">Toque para abrir</span></span>';
         envelope.style.display = 'flex'; 
         document.getElementById('packRevealArea').style.display = 'none'; 
         document.getElementById('btnClosePack').style.display = 'none'; 
@@ -55,19 +48,10 @@ var FitGamification = (() => {
         const envelope = document.getElementById('packEnvelope');
         const revealArea = document.getElementById('packRevealArea'); 
         
-        // 💥 EFEITO FLASH DE EXPLOSÃO (Imersão 100%)
-        const flash = document.createElement('div');
-        flash.style.position = 'fixed'; flash.style.top = '0'; flash.style.left = '0'; flash.style.width = '100%'; flash.style.height = '100%';
-        flash.style.background = 'var(--ink)'; flash.style.zIndex = '3000'; flash.style.transition = 'opacity 0.8s ease-out'; flash.style.pointerEvents = 'none';
-        document.body.appendChild(flash);
-        
-        setTimeout(() => { flash.style.opacity = '0'; }, 50);
-        setTimeout(() => { flash.remove(); }, 850);
-
         envelope.style.display = 'none'; 
         
         // Status visual de comunicação militar
-        revealArea.innerHTML = '<div style="color: var(--accent); font-weight: bold; margin-top: 20px; font-family: monospace; letter-spacing: 1px;">Descriptografando... 📡</div>';
+        revealArea.innerHTML = '<div class="pack-loading" role="status">Abrindo sua carta…</div>';
         revealArea.style.display = 'flex';
         
         await window.FitApp.syncOfflineWorkouts();
@@ -76,7 +60,7 @@ var FitGamification = (() => {
         revealArea.innerHTML = ''; // Limpa o aviso de sincronização
         
         const div = document.createElement('div'); 
-        div.className = `sticker-slot filled ${drawn.rarity}`; 
+        div.className = `sticker-slot filled pack-result ${drawn.rarity}`;
         div.innerHTML = `<div class="sticker-icon">${drawn.icon}</div><div style="font-size: 13px; font-weight: 800; text-transform: uppercase;">${drawn.name}</div>`; 
         revealArea.appendChild(div);
         
@@ -88,9 +72,6 @@ var FitGamification = (() => {
             repMsg.style.fontSize = '14px';
             repMsg.style.fontWeight = 'bold';
             repMsg.style.textAlign = 'center';
-            repMsg.style.animation = 'popInDelayed 0.5s forwards';
-            repMsg.style.animationDelay = '1s';
-            repMsg.style.opacity = '0';
             repMsg.textContent = "⚠️ Conquista Repetida! (+1 Ponto de Suor)";
             revealArea.appendChild(repMsg);
         } else {
@@ -105,14 +86,11 @@ var FitGamification = (() => {
         const shareBtn = document.createElement('button');
         shareBtn.className = 'btn-action btn-start-pulse';
         shareBtn.style.marginTop = isRepeated ? '15px' : '50px'; 
-        shareBtn.style.background = 'var(--accent)';
-        shareBtn.style.color = 'var(--on-accent)';
+        shareBtn.style.background = 'var(--action)';
+        shareBtn.style.color = 'var(--on-action)';
         shareBtn.style.border = 'none';
         shareBtn.style.width = '100%';
         shareBtn.style.maxWidth = '300px';
-        shareBtn.style.animation = 'popInDelayed 0.5s forwards';
-        shareBtn.style.animationDelay = '1.2s';
-        shareBtn.style.opacity = '0';
         shareBtn.innerHTML = '📲 Compartilhar Vitória';
         
         shareBtn.onclick = async () => {
@@ -139,10 +117,7 @@ var FitGamification = (() => {
         revealArea.appendChild(shareBtn);
 
         const btnClose = document.getElementById('btnClosePack');
-        btnClose.style.display = 'block'; 
-        btnClose.style.animation = 'popInDelayed 0.5s forwards';
-        btnClose.style.animationDelay = '1.5s';
-        btnClose.style.opacity = '0';
+        btnClose.style.display = 'block';
 
         if(window.FitApp) FitApp.speak(isRepeated ? "Conquista repetida detectada." : "Nova conquista revelada.");
         } catch (error) {
@@ -311,8 +286,8 @@ var FitGamification = (() => {
                 // Design das Medalhas do Top 3
                 let rankVisual = `<span style="font-size: 18px; font-weight: bold; color: var(--subtle); width: 30px; text-align: center;">${position}º</span>`;
                 if (position === 1) rankVisual = `<span style="font-size: 24px; text-shadow: 0 0 10px var(--warning); width: 30px; text-align: center;">🥇</span>`;
-                if (position === 2) rankVisual = `<span style="font-size: 24px; text-shadow: 0 0 10px #c0c0c0; width: 30px; text-align: center;">🥈</span>`;
-                if (position === 3) rankVisual = `<span style="font-size: 24px; text-shadow: 0 0 10px #cd7f32; width: 30px; text-align: center;">🥉</span>`;
+                if (position === 2) rankVisual = `<span class="rank-medal">🥈</span>`;
+                if (position === 3) rankVisual = `<span class="rank-medal">🥉</span>`;
 
                 const block = document.createElement('div');
                 block.style.display = 'flex';
@@ -320,9 +295,9 @@ var FitGamification = (() => {
                 block.style.justifyContent = 'space-between';
                 block.style.padding = '15px';
                 block.style.borderRadius = '8px';
-                block.style.background = isMe ? 'rgba(255, 170, 0, 0.1)' : 'var(--surface)';
+                block.style.background = isMe ? 'var(--secondary-soft)' : 'var(--surface)';
                 block.style.border = isMe ? '1px solid var(--warning)' : '1px solid var(--line)';
-                block.style.boxShadow = isMe ? '0 0 15px rgba(255, 170, 0, 0.2)' : 'none';
+                block.style.boxShadow = isMe ? 'var(--glow)' : 'none';
 
                 block.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 15px;">

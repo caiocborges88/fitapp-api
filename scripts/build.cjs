@@ -24,7 +24,7 @@ const manifest=cp.spawnSync(process.execPath,[resolve('functions/node_modules/fi
     cwd:resolve('functions'),env:{...process.env,FUNCTIONS_MANIFEST_OUTPUT_PATH:resolve('functions/functions.yaml')},encoding:'utf8'
 });
 if(manifest.status!==0)throw new Error('Não foi possível gerar o manifesto das funções: '+manifest.stderr);
-const files=['/','/index.html','/manifest.json','/icon-192.png','/icon-512.png','/icon.svg',...fs.readdirSync(resolve('public/css')).filter(f=>f.endsWith('.css')).map(f=>'/css/'+f),...fs.readdirSync(resolve('public/fonts')).filter(f=>f.endsWith('.ttf')).map(f=>'/fonts/'+f),...fs.readdirSync(resolve('public/js')).filter(f=>f.endsWith('.js')&&f!=='admin.js').map(f=>'/js/'+f),...fs.readdirSync(resolve('public/vendor')).filter(f=>f.endsWith('.js')).map(f=>'/vendor/'+f)];
+const files=['/','/index.html','/manifest.json','/icon-192.png','/icon-512.png','/icon.svg',...fs.readdirSync(resolve('public/illustrations')).filter(f=>f.endsWith('.svg')).map(f=>'/illustrations/'+f),...fs.readdirSync(resolve('public/css')).filter(f=>f.endsWith('.css')).map(f=>'/css/'+f),...fs.readdirSync(resolve('public/fonts')).filter(f=>f.endsWith('.ttf')).map(f=>'/fonts/'+f),...fs.readdirSync(resolve('public/js')).filter(f=>f.endsWith('.js')&&f!=='admin.js').map(f=>'/js/'+f),...fs.readdirSync(resolve('public/vendor')).filter(f=>f.endsWith('.js')).map(f=>'/vendor/'+f)];
 const hash=crypto.createHash('sha256');
 hash.update(fs.readFileSync(__filename));
 for(const file of files)hash.update(fs.readFileSync(resolve('public'+(file==='/'?'/index.html':file))));

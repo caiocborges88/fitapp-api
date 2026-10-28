@@ -1,0 +1,326 @@
+{
+  "version": "609fa6af6364615e",
+  "baseCommit": "c759513d0de77c1b3ab20c258d3ae7009df70c59",
+  "files": [
+    {
+      "path": "public/admin.html",
+      "sha256": "346307e61c78d07cd3417ea13ba844902d82057f4af730c615695f07088f405f",
+      "bytes": 8835
+    },
+    {
+      "path": "public/css/design.css",
+      "sha256": "ba6f0ec22a40379ac88cf64ecc44c7bc88185ccbf5d8a6eece30499748d704dc",
+      "bytes": 46817
+    },
+    {
+      "path": "public/css/energy.css",
+      "sha256": "8e9d092d0584875c3ea213eda245ef8f108e73545e12ff7cdf5ab0dbd46a4c21",
+      "bytes": 16235
+    },
+    {
+      "path": "public/css/mobile-flow.css",
+      "sha256": "da38dce8fcd14edf31d66f3e04dc104dbdeefb5a7810a0502c5735627ddeafd3",
+      "bytes": 6707
+    },
+    {
+      "path": "public/css/style.css",
+      "sha256": "0b7c62c952e8dfafad673079995a34d6083a99d96b7d8733f355b43bc3a3eafd",
+      "bytes": 3845
+    },
+    {
+      "path": "public/design-reference.html",
+      "sha256": "0c85a4d5dee615435ae9cd4d250c82ec8ae18c60cd9b2b6bd918d33efef797d1",
+      "bytes": 4265
+    },
+    {
+      "path": "public/fonts/Manrope.ttf",
+      "sha256": "3ae11c49db0455a3cc33e37d380f20fdb8c7f8b41dc07625c177e3d87a9d6ae6",
+      "bytes": 164700
+    },
+    {
+      "path": "public/fonts/OFL.txt",
+      "sha256": "58172e0c0fac2cda8a37b348164bb55e44b0e69051e557e92b1d3f6910141f7b",
+      "bytes": 4387
+    },
+    {
+      "path": "public/icon-192.png",
+      "sha256": "df5c5ed3a58a3d2af04b6d4881e7ed5e618d93a49718d3c484b8ada4fc8cb33b",
+      "bytes": 7910
+    },
+    {
+      "path": "public/icon-512.png",
+      "sha256": "f9de83055e5f1e84cbb00dfc6baf0788a37308f94c2d5d70f6617ffd02c4f9af",
+      "bytes": 31026
+    },
+    {
+      "path": "public/icon.svg",
+      "sha256": "2aeaa881327435a4f303ccaa6c6930ed6fdcb0ed90652ed68fa4b3bc579b7012",
+      "bytes": 557
+    },
+    {
+      "path": "public/illustrations/celebration.svg",
+      "sha256": "bb427aa6c000d309fd64c87369e6b60c4a28b677af0121bb24028f65772f419e",
+      "bytes": 1669
+    },
+    {
+      "path": "public/illustrations/movement.svg",
+      "sha256": "d360bd934f01404111975500190ae493a79847734781f86d6b8aee6c83e036a5",
+      "bytes": 1476
+    },
+    {
+      "path": "public/illustrations/preparation.svg",
+      "sha256": "94d971e63d1060f13145c89a6fda9ab9fbda940083890e5d280c33fb7cba4bae",
+      "bytes": 1634
+    },
+    {
+      "path": "public/index.html",
+      "sha256": "1a495c047a8237b96236bfc48ca33f6dead61a4e4f46931401dc517a318e782f",
+      "bytes": 35801
+    },
+    {
+      "path": "public/js/admin.js",
+      "sha256": "c7c61e441d8dbf9fc3fb8c471ec5e11da43a45b5af72620f0f58a6ab65ff518e",
+      "bytes": 14655
+    },
+    {
+      "path": "public/js/ai-features.js",
+      "sha256": "f3b81fd9b79e208fb6540008910e646a271d47813c3875912fbe6c15bf5f5d38",
+      "bytes": 314
+    },
+    {
+      "path": "public/js/ai-policy.js",
+      "sha256": "2c1d10ba9a23683a871dd77ee77dfd9812a821694c2e8002d420e943b2f5f24c",
+      "bytes": 156
+    },
+    {
+      "path": "public/js/ai.js",
+      "sha256": "5d6a28a7a138e58885d5285e8c95f95022a0f3d9dc62c96a355da7462ea872f1",
+      "bytes": 14729
+    },
+    {
+      "path": "public/js/api.js",
+      "sha256": "a4527539eeea9e9c2a76b1ef031156703673ac0d79eb2b0a2ad8db9ccf2f95a0",
+      "bytes": 11103
+    },
+    {
+      "path": "public/js/app.js",
+      "sha256": "37fc8e9ed4c8d5d4fe9a0c6b8002d33ca08f44c2b8af18366d54ea589d0f7b33",
+      "bytes": 88435
+    },
+    {
+      "path": "public/js/appearance.js",
+      "sha256": "23c20fb8afba88ebbe455b2593f47a8dfbf160520bb21e66b4df257dcf82be99",
+      "bytes": 3204
+    },
+    {
+      "path": "public/js/audio.js",
+      "sha256": "847c8caba72d81e7f89fca265d9425a4e6bffa75e1e8cc721633babe3e2a7dc1",
+      "bytes": 2156
+    },
+    {
+      "path": "public/js/biset-requirements.js",
+      "sha256": "0cbb7b8e3da560dd1a1b3c96c639da29887c7ad37ae2c50ef141557581e22a71",
+      "bytes": 1507
+    },
+    {
+      "path": "public/js/campaign-store.js",
+      "sha256": "a8ddb14130e7c61094e1035a58ebae3cfec6c33a4def530bb672e9f9d4fbf162",
+      "bytes": 555
+    },
+    {
+      "path": "public/js/combat.js",
+      "sha256": "1f1abb52e06a66039f15440750407ea4b1cab1077b4437be3280ac47670c25d7",
+      "bytes": 11548
+    },
+    {
+      "path": "public/js/coverage-view.js",
+      "sha256": "79b5e89dc1d5e15ac714f6dbac657896d1f9d4231a80dbd818764d40b4644866",
+      "bytes": 4498
+    },
+    {
+      "path": "public/js/cycle-review.js",
+      "sha256": "b97dab9b5e1946882969c003583dc689b5be0d619fd47b9833c585b89ede16ee",
+      "bytes": 10628
+    },
+    {
+      "path": "public/js/dados.js",
+      "sha256": "a8d69da1be08394573fdc1a6c38b9c2b6ce962cebdefa64e8b15b3c2231662c3",
+      "bytes": 176064
+    },
+    {
+      "path": "public/js/data-controls.js",
+      "sha256": "4be876677666655ece69a6ff433028a76cf998628e381edf5c6427f8e000ebe6",
+      "bytes": 7068
+    },
+    {
+      "path": "public/js/domain.js",
+      "sha256": "ec05f5a64759cc0f76332c0eed739c59f4b790aabb00b943560dc9099e1852d1",
+      "bytes": 4008
+    },
+    {
+      "path": "public/js/draft-domain.js",
+      "sha256": "1764aa5c13dd8cdc0c24ea780b35155ffe3134e4a3e12c292fd769a39983ad84",
+      "bytes": 2348
+    },
+    {
+      "path": "public/js/drafts.js",
+      "sha256": "74e2412b8a61a05f80e3e50e1545b5ea0aeb7371c4e7c1b32b690b05f9d337bd",
+      "bytes": 6182
+    },
+    {
+      "path": "public/js/editor-domain.js",
+      "sha256": "3f0ec287bc11f909f6761d356fc958347c9da35c498600e4ad522235081c7f58",
+      "bytes": 2175
+    },
+    {
+      "path": "public/js/editor.js",
+      "sha256": "1b689b0ea4218b7cfde11999543998ff0f0bb9b6c2b13878ebab442278cd85d1",
+      "bytes": 12735
+    },
+    {
+      "path": "public/js/environment-controls.js",
+      "sha256": "eb9c1d08bbb92a9332dfd7a6f235f12e7b768c1c07d5dc5601fc2ffe0d59c918",
+      "bytes": 5105
+    },
+    {
+      "path": "public/js/environment-proposal-controls.js",
+      "sha256": "ba06c48e154590ee096735dd82c1997960793d65c8d95c32d533303fae70ec24",
+      "bytes": 3754
+    },
+    {
+      "path": "public/js/environment-proposal.js",
+      "sha256": "a0ce29343df3591c9cf4d6b3db37567c2323a9409db33b8d67cba99be550e697",
+      "bytes": 2889
+    },
+    {
+      "path": "public/js/environment.js",
+      "sha256": "f4ece84ab5728b2ba0c40019e4acca702de5a8f03272e98ae8e0422e369d1436",
+      "bytes": 7560
+    },
+    {
+      "path": "public/js/equipment-settings.js",
+      "sha256": "42fda6e72003be63b8deefc5bf718df35ca7f925ee6c7c509e267bab995a4d11",
+      "bytes": 1963
+    },
+    {
+      "path": "public/js/experience.js",
+      "sha256": "971b6308452a14af0af9326d6ed0d00deb42ac02cb0e9ef0bc0d4183b30a020f",
+      "bytes": 5980
+    },
+    {
+      "path": "public/js/forge.js",
+      "sha256": "28cb95b78761cf9d993f11c04ec1354c875f411d3d9c9bb15753dcc797915e58",
+      "bytes": 20084
+    },
+    {
+      "path": "public/js/gamification.js",
+      "sha256": "8c350860d847bdf888a8b005e0c4f1538963c01d50f92aee8529e42b7384c5ef",
+      "bytes": 16163
+    },
+    {
+      "path": "public/js/icons.js",
+      "sha256": "a18ab7f04e16bc107df38ce97727521d75b08026c5c65f6a6100dbdffcb7bdb5",
+      "bytes": 728
+    },
+    {
+      "path": "public/js/mobile-flow.js",
+      "sha256": "9673c8faba555030e3d504698ae4bc334b1e1942bde7d2393a91f53ff9d7eb2e",
+      "bytes": 13174
+    },
+    {
+      "path": "public/js/model-settings.js",
+      "sha256": "14245af0b425bac0b507e62ba658e870466130c4c6f67c0a39e46d1aa3d22919",
+      "bytes": 2388
+    },
+    {
+      "path": "public/js/movement-requirements.js",
+      "sha256": "bf8727d29712a1434ef2f92190dc973d8984b72f96b5ee67ce3d5e1fc0ba470a",
+      "bytes": 3129
+    },
+    {
+      "path": "public/js/routine-coverage.js",
+      "sha256": "365127786f5f7dab4b74b15ec2b7ffa21d16836b03be5f4f7054b4ed1aea790f",
+      "bytes": 2929
+    },
+    {
+      "path": "public/js/routine-review.js",
+      "sha256": "d3241f36c92a27b16a07c0adb398a56b144783dc2d8671d8a585fc801687e0e9",
+      "bytes": 2166
+    },
+    {
+      "path": "public/js/state.js",
+      "sha256": "6f719e635419dba5786c3d84126ac2fafe341656df31854be4756feef565e622",
+      "bytes": 636
+    },
+    {
+      "path": "public/js/storage.js",
+      "sha256": "4764656d557d1fa7177bab8c9f1a2f7ede4281a252d4bb5349e7828e7e342e49",
+      "bytes": 4086
+    },
+    {
+      "path": "public/js/sync-domain.js",
+      "sha256": "f93256706a7f0d5a0b891fba809654cf9180541582ff9c00c70b54866cd7c856",
+      "bytes": 3314
+    },
+    {
+      "path": "public/js/sync.js",
+      "sha256": "efb4fd63d77aab46066b5437243284e78b32b66857cccd6de5a1ad48e07f9f51",
+      "bytes": 9809
+    },
+    {
+      "path": "public/js/ui.js",
+      "sha256": "6d7cbd231a26d02978b3139bec7c2699d02c7b41f28ca6425a2993f86e47a088",
+      "bytes": 86535
+    },
+    {
+      "path": "public/js/utils.js",
+      "sha256": "743c6f45b19089cff3f425ee39379bb24d5c53d742dc5d3ff35765136baf3895",
+      "bytes": 2515
+    },
+    {
+      "path": "public/js/workout-methods.js",
+      "sha256": "28932d431320e185fbeb9372c33f6bd772f00baea798233377fb6971d2610a4d",
+      "bytes": 991
+    },
+    {
+      "path": "public/manifest.json",
+      "sha256": "cedbc7c26c09bb1777df96ab3a67a6c5d9c91bee079936a7e84a5aa1adc5f8ca",
+      "bytes": 433
+    },
+    {
+      "path": "public/sw.js",
+      "sha256": "49c3862f5eead69d5f4e42d98d3b9087791db48818f55f9a104848481b7a961f",
+      "bytes": 2327
+    },
+    {
+      "path": "public/vendor/chart.js",
+      "sha256": "ecc3cd1eeb8c34d2178e3f59fd63ec5a3d84358c11730af0b9958dc886d7652a",
+      "bytes": 208518
+    },
+    {
+      "path": "public/vendor/firebase-app.js",
+      "sha256": "ea496cf11c04c22f4472b953b2571d9837bef6c2172742e0d12d6cf113bc29fe",
+      "bytes": 32035
+    },
+    {
+      "path": "public/vendor/firebase-auth.js",
+      "sha256": "8fd505bd78e9df31526019424eea695141a083c686e01783317b3b3759db9eac",
+      "bytes": 140695
+    },
+    {
+      "path": "public/vendor/firebase-firestore.js",
+      "sha256": "4631281ec75348173cb1f20dfdbff84bff3044c04de67580ffb0361c22275327",
+      "bytes": 568808
+    },
+    {
+      "path": "public/vendor/html2canvas.js",
+      "sha256": "e87e550794322e574a1fda0c1549a3c70dae5a93d9113417a429016838eab8cb",
+      "bytes": 198689
+    },
+    {
+      "path": "public/version.json",
+      "sha256": "51f668d841cbb26ea19c748172668a9929f48e840bad6ed647dc2d2d6ffa2a7a",
+      "bytes": 31
+    }
+  ]
+}

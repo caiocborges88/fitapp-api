@@ -1,0 +1,11 @@
+{
+  "status": "ok",
+  "environment": "local Edge; Firebase simulated",
+  "checks": [
+    "plano abre com padrão explícito; ajuste acompanha relógio e sobrevive à recarga",
+    "ficha pessoal não herda descanso ou objetivo do seletor global",
+    "revisão de ciclo mostra efeitos reais do foco e não recebe ajuste atrasado",
+    "preferências explicam diferenças e limites dos modelos",
+    "aeróbico não mostra controles de descanso entre séries"
+  ]
+}

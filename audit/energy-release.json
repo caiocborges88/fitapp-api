@@ -1,0 +1,22 @@
+{
+  "preparedAt": "2026-10-28T13:26:59.815111+00:00",
+  "version": "609fa6af6364615e",
+  "deployment": "local only; not published",
+  "checks": {
+    "build": "passed",
+    "check": "passed",
+    "unitTestsWithFirestoreEmulator": 102,
+    "appearanceMatrix": 16,
+    "browserRegressions": "audit/energy-regressions.json",
+    "emulatorIntegration": "audit/energy-emulator-validation.json",
+    "appearance": "audit/energy-validation.json",
+    "design": "audit/energy-design-validation.json",
+    "mobileFlow": "audit/energy-mobile-flow-validation.json"
+  },
+  "physicalDevicesVerified": false,
+  "productionWrites": false,
+  "limitations": [
+    "Android and iPhone physical validation pending",
+    "No full WCAG certification or physical-device performance benchmark"
+  ]
+}

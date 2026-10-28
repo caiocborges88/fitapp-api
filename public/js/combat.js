@@ -34,6 +34,7 @@ export function startRestTimer(targetEl, exerciseName = "", isAdjust = false) {
     // Calcula o tempo alvo baseando-se no tempo real do sistema (evita atrasos do navegador)
     const endTime = Date.now() + (state.currentRestTime * 1000) + 1000;
     let tenSecondNotice = false;
+    let lastSeconds = -1;
 
     if (!isAdjust && state.audioEnabled) {
         window.FitApp.speak(`Descanso. Respire.`);
@@ -46,7 +47,11 @@ export function startRestTimer(targetEl, exerciseName = "", isAdjust = false) {
         
         let m = Math.floor(secs / 60).toString().padStart(2, '0');
         let s = (secs % 60).toString().padStart(2, '0');
-        currentTimerEl.textContent = `⏱️ Descanso: ${m}:${s}`;
+        if (secs !== lastSeconds) {
+            currentTimerEl.textContent = `⏱️ Descanso: ${m}:${s}`;
+            currentTimerEl.style.setProperty('--rest-progress', Math.min(1,secs/state.currentRestTime));
+            lastSeconds = secs;
+        }
         
         if (secs <= 10 && !tenSecondNotice && !isAdjust && state.audioEnabled) {
             tenSecondNotice = true;
