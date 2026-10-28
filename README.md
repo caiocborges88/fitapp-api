@@ -1,5 +1,9 @@
 # FitApp
 
+## Experiência móvel — publicada em 28/10/2026
+
+Treinar prioriza uma ficha de acesso rápido. A revisão recolhe edição e detalhes, mantém a ação principal acessível e permite salvar/iniciar sem retornar à lista. Ambiente e equipamentos usam escolhas compartilhadas; rascunhos locais separados por conta podem ser recuperados após recarga. A versão `2ad39ed4993cf64c` foi publicada no [endereço oficial](https://fitapp-operacional.web.app), somente com atualização do Hosting. Os 58 arquivos foram conferidos, o login iniciou sem exceções e a recarga offline passou; nenhum dado de treino foi gravado na verificação. Publicação, backup e instruções para Android: [docs/PUBLICACAO-2026-10-28.md](docs/PUBLICACAO-2026-10-28.md). O guia de desenvolvimento está em [AGENTS.md](AGENTS.md). Fases e limites em [docs/EXPERIENCIA-MOVEL.md](docs/EXPERIENCIA-MOVEL.md). Teste específico: `npm run test:mobile-flow`. Android/iPhone físicos ainda precisam de conferência.
+
 ## Versão principal atualizada — 22/10/2026
 
 A versão `81a8046d9b7d567e` foi publicada em [FitApp](https://fitapp-operacional.web.app), com a API e a interface atualizadas. O backup anterior à publicação está no commit `ccde07c`, tag `fitapp-2026-10-22-treinos`, enviados ao GitHub. Os 99 testes passaram com Firestore emulado; a verificação pública confirmou os 53 arquivos, API protegida e inicialização sem exceções. Relatório: [docs/PUBLICACAO-2026-10-22.md](docs/PUBLICACAO-2026-10-22.md). Os registros abaixo descrevem as etapas e validações anteriores à publicação.
@@ -40,7 +44,7 @@ O desenvolvimento agora segue [PLANO-DE-DESENVOLVIMENTO.md](PLANO-DE-DESENVOLVIM
 
 `npm run test:design` verifica a interface em celular e desktop nos temas claro e escuro, com serviços simulados, e grava evidências em `audit/`. A validação com serviços reais de demonstração continua em `npm run test:integration`. A fonte e os estilos essenciais são servidos localmente e incluídos no cache offline.
 
-`npm run test:editor` verifica isolamento entre sessão e ficha, edição, duplicação, ordenação, alteração de dia do plano e preservação do histórico. A entrega 2 acrescenta o campo opcional `workoutName` às sessões: publicar as regras atualizadas antes da hospedagem. Alterações não salvas na prévia ainda não são recuperadas ao fechar a página.
+`npm run test:editor` verifica isolamento entre sessão e ficha, edição, duplicação, ordenação, alteração de dia do plano e preservação do histórico. A entrega 2 acrescenta o campo opcional `workoutName` às sessões: publicar as regras atualizadas antes da hospedagem. A versão local de 28/10/2026 acrescenta recuperação de rascunhos da prévia, descrita em `docs/EXPERIENCIA-MOVEL.md`.
 
 Diário de treinos em JavaScript, Firebase Authentication, Firestore e Cloud Functions. A montagem atual usa regras verificáveis e revisão do usuário; o nível de treinamento não sobe automaticamente por participação.
 

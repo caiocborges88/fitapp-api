@@ -18,7 +18,7 @@ const fake=require('./fixtures/firebase.cjs');
   await page.evaluate(()=>FitApp.switchTab('tab-workouts','nav-workouts'));
   assert.equal(await page.locator('[onclick*="openImportAiModal"]').count(),0);
   assert.equal(await page.locator('#importAiModal').count(),0);
-  assert.match(await page.locator('#tab-workouts').textContent(),/IA ficaram para uma próxima fase/);
+  assert.match(await page.locator('#tab-workouts').textContent(),/Cadastrar minha ficha/);
   assert.equal(await page.locator('.creation-card').count(),2);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
   await page.screenshot({path:'audit/ai-deferred-mobile.png',fullPage:true,animations:'disabled'});

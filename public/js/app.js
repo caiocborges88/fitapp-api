@@ -8,6 +8,8 @@ import {commitWorkoutPlan} from './campaign-store.js';
 import {reviewRoutine} from './routine-review.js';
 import {modelSettings} from './model-settings.js';
 import {refreshCoverage} from './ui.js';
+import {persistDraft,finishDraft} from './drafts.js';
+import {equipmentGroups} from './equipment-settings.js';
 'use strict';
 
 // 🌐 IMPORTAÇÕES MODULARES GLOBAIS (Devem estar sempre no topo)
@@ -249,6 +251,7 @@ async function exportStravaCard(historyIndex = -1) {
 
     function createManualWorkout() {
         if (state.isWorkoutActive) { showToast('Salve ou descarte a sessão atual antes de criar uma ficha.'); return; }
+        if(!persistDraft())return;
         switchTab('tab-treino','nav-treino');
         state.currentWorkoutType='Livre';
         state.currentRoutine=[{title:'Minha ficha',type:'traditional',exercises:[]}];
@@ -260,6 +263,8 @@ async function exportStravaCard(historyIndex = -1) {
     }
 
     function startWorkout(type) {
+        if(state.isWorkoutActive){showToast('Conclua ou descarte a sessão atual antes de abrir outra ficha.');return;}
+        if(!persistDraft())return;
         const tabTreino = document.getElementById('nav-treino');
         if (tabTreino) {
             tabTreino.click();
@@ -508,6 +513,7 @@ function saveWorkoutState() {
     }
 
     function cancelWorkoutPreview() {
+        if(!persistDraft())return false;
         document.getElementById('workoutPreview').style.display = 'none';
         document.getElementById('prepArea').style.display = 'none';
         document.getElementById('workoutCards').style.display = 'flex';
@@ -527,6 +533,7 @@ function saveWorkoutState() {
         const templatesFront = document.getElementById('templatesFrontline');
         if (templatesFront) templatesFront.style.display = 'block';
         updateCampaignDashboard();
+        return true;
     }
 
 
@@ -585,7 +592,15 @@ function saveWorkoutState() {
         if (bioPanel) bioPanel.style.display = 'none';
         
         renderCurrentRoutine();
-        saveWorkoutState(); 
+        if(saveWorkoutState()){
+            safeSet('fitapp_last_workout',state.currentWorkoutType);finishDraft();
+        }else{
+            clearInterval(state.globalTimer);state.isWorkoutActive=false;
+            state.els.workoutArea.style.display='none';state.els.btnFinishArea.style.display='none';
+            document.getElementById('workoutPreview').style.display='block';
+            document.getElementById('bottomNav').style.display='flex';
+            showToast('Não foi possível guardar a sessão. Sua revisão continua aberta; libere espaço e tente novamente.');
+        }
     }
 
 
@@ -850,7 +865,7 @@ window.abortarMissao = function() {
         if (templatesFront) templatesFront.style.display = 'block';
 
         // 5. Confirmação Visual
-        showToast('Missão abortada. O combate não foi registrado.');
+        showToast('Sessão descartada. Nenhum registro foi criado.');
         
         // Atualiza a tela base se necessário e restaura a gamificação visual
         checkSequence(); 
@@ -862,7 +877,8 @@ window.abortarMissao = function() {
 // LOG OUT E DESTRUIÇÃO DE CACHE LOCAL
 // ==========================================
 window.encerrarSessao = function() {
-    if (confirm("Tem certeza que deseja sair? O aplicativo será desconectado e o cachê local será apagado.")) {
+    if(!persistDraft())return;
+    if (confirm('Sair da conta? Os registros e rascunhos locais serão preservados e separados por conta.')) {
         firebase.auth().signOut().then(() => {
             // Expurgo tático da memória
             window.FitStore.bindUser(null);
@@ -884,6 +900,20 @@ window.encerrarSessao = function() {
         }else{
             cancelWorkoutPreview();switchTab('tab-workouts','nav-workouts');
         }
+    }
+
+    function saveAndStartWorkout(){
+        const context=state.editorContext;
+        if(!context||!['new','cycle'].includes(context.kind)||state.isWorkoutActive)return;
+        const day=context.activeDay||context.days?.[0];
+        const requestedRest=state.currentRestTime;
+        const routine=context.kind==='cycle'?state.currentRoutine.filter(block=>block.day===day):state.currentRoutine;
+        const issues=reviewRoutine(routine,window.dictionaryData,environmentOptions());
+        if(issues.length){showToast(issues[0].message);document.getElementById('routineReview')?.scrollIntoView({block:'start'});return;}
+        if(!saveEditor())return;
+        const type=state.savedWorkoutType;
+        if(!cancelWorkoutPreview())return;
+        startWorkout(type);if(context.kind==='new')adjustRestTime(requestedRest);beginWorkoutExecution();
     }
 
     function deleteCustomWorkout(id, event) {
@@ -1296,14 +1326,37 @@ function lockCampaign() {
         else if (currentEnv === 'casa') currentEnv = 'praia';
         else currentEnv = 'academia';
         
-        if (!safeSet('fitapp_global_env', currentEnv)) return;
-        updateEnvUI();
+        setGlobalEnvironment(currentEnv);
         
         let envText = currentEnv === 'academia' ? 'Academia' : (currentEnv === 'casa' ? 'Casa' : 'Praia');
         if(typeof state.audioEnabled !== 'undefined' && state.audioEnabled) speak(`Modo ${envText} ativado.`);
         showToast(`Terreno alterado para: ${envText}`);
 
-        if(document.getElementById('workoutPreview').style.display==='block'&&!['template','plan'].includes(state.editorContext?.kind)){adaptCurrentEnvironment();renderPreviewList();}
+    }
+
+    function setGlobalEnvironment(environment){
+        if(state.isWorkoutActive){showToast('Conclua ou descarte a sessão antes de mudar o ambiente.');return false;}
+        if(!['academia','casa','praia','parque'].includes(environment))return false;
+        if(!safeSet('fitapp_global_env',environment))return false;
+        updateEnvUI();
+        if(document.getElementById('workoutPreview').style.display==='block'){
+            if(state.editorContext?.kind==='session')adaptCurrentEnvironment();
+            renderPreviewList();
+        }
+        return true;
+    }
+
+    function setEnvironmentEquipment(equipment){
+        if(state.isWorkoutActive){showToast('Conclua ou descarte a sessão antes de mudar os equipamentos.');return false;}
+        if(environmentOptions().environment!=='academia')return false;
+        const selected=equipment.filter(value=>equipmentGroups.some(([key])=>key===value));
+        if(!safeSet('fitapp_equipment_academia',JSON.stringify(selected)))return false;
+        updateEnvUI();
+        if(document.getElementById('workoutPreview').style.display==='block'){
+            if(state.editorContext?.kind==='session')adaptCurrentEnvironment();
+            renderPreviewList();
+        }
+        return true;
     }
 
     function updateEnvUI() {
@@ -1330,15 +1383,9 @@ function lockCampaign() {
         if (equipChips.length > 0) {
             equipChips.forEach(chip => {
                 const eq = chip.getAttribute('data-equip') || '';
-                chip.classList.remove('active'); // Desliga todos primeiro
-                
-                if (currentEnv === 'casa' && eq.includes('Peso_Corporal')) {
-                    chip.classList.add('active'); // Liga só peso corporal
-                } else if (currentEnv === 'praia' && (eq.includes('Peso_Corporal') || eq.includes('Calistenia'))) {
-                    chip.classList.add('active'); // Liga barras e peso corporal
-                } else if (currentEnv === 'academia') {
-                    chip.classList.add('active'); // Liga tudo
-                }
+                const active=environmentOptions().equipment.includes(eq);
+                chip.classList.toggle('active',active);chip.setAttribute('aria-pressed',String(active));
+                chip.disabled=currentEnv!=='academia';
             });
         }
     }
@@ -1483,7 +1530,10 @@ function lockCampaign() {
         const environment=environmentOptions().environment;
         if(!safeSet('fitapp_resources_'+environment,JSON.stringify(resources)))return;
         updateEnvUI();
-        if(document.getElementById('workoutPreview').style.display==='block'&&!['template','plan'].includes(state.editorContext?.kind)){adaptCurrentEnvironment();renderPreviewList();}
+        if(document.getElementById('workoutPreview').style.display==='block'){
+            if(state.editorContext?.kind==='session')adaptCurrentEnvironment();
+            renderPreviewList();
+        }
     }
     return { 
         init, createManualWorkout, loadWorkout, syncOfflineWorkouts, filterLibrary, openSwapModal, confirmSwap, startWorkout, startCardio, toggleCardioTimer, updateDynamicCards,
@@ -1492,7 +1542,7 @@ function lockCampaign() {
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,
         renderIsolationChart, exportStravaCard,
         openHistoryModal, switchHistoryTab, deleteHistoryLog,
-        saveCustomWorkout, deleteCustomWorkout,
+        saveCustomWorkout, saveAndStartWorkout, deleteCustomWorkout, setGlobalEnvironment, setEnvironmentEquipment,
         finalizeSession, checkSequence, startPrepPhase,
         safeGet, safeSet, showToast, speak, saveWorkoutState, updateProgress, clearWorkoutState,
         openDict: (name) => { 

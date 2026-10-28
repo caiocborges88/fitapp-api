@@ -3,6 +3,7 @@ import './environment-controls.js';
 import {state} from './state.js';
 import {readJSON} from './domain.js';
 import {flushCampaign,syncOfflineWorkouts} from './sync.js';
+import {setupMobileFlow} from './mobile-flow.js';
 
 const text = (id,value) => {const el=document.getElementById(id);if(el && el.textContent!==String(value))el.textContent=value;};
 let scheduled=false;
@@ -32,12 +33,13 @@ function refresh(){
     if(document.body.classList.contains('session-active')!==state.isWorkoutActive)document.body.classList.toggle('session-active',state.isWorkoutActive);
     const restPanel=document.getElementById('timerContainer');
     if(restPanel)restPanel.hidden=state.currentWorkoutType==='Cardio';
-    const preview=!state.isWorkoutActive && ['workoutPreview','prepArea'].some(id=>{const el=document.getElementById(id);return el && getComputedStyle(el).display!=='none';});
+    const preview=!state.isWorkoutActive && document.getElementById('tab-treino').classList.contains('active') && ['workoutPreview','prepArea'].some(id=>{const el=document.getElementById(id);return el && getComputedStyle(el).display!=='none';});
     if(document.body.classList.contains('preview-active')!==preview)document.body.classList.toggle('preview-active',preview);
 }
 function requestRefresh(){if(!scheduled){scheduled=true;requestAnimationFrame(refresh);}}
 
 function setup(){
+    setupMobileFlow();
     globalThis.firebase.auth().onAuthStateChanged(requestRefresh);
     for(const event of ['fitapp:datachange','storage','online','offline'])window.addEventListener(event,requestRefresh);
     document.getElementById('syncStatus')?.addEventListener('click',()=>{
@@ -64,6 +66,7 @@ function setup(){
     };
     media.addEventListener('change',theme);theme();
     document.addEventListener('keydown',event=>{
+        if(document.querySelector('dialog[open]'))return;
         const open=[...document.querySelectorAll('.swap-modal-overlay,.pack-modal')].filter(el=>getComputedStyle(el).display!=='none').at(-1);
         if(!open)return;
         if(event.key==='Escape'){open.style.display='none';event.preventDefault();return;}

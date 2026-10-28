@@ -4,6 +4,7 @@ import {modelSettings} from './model-settings.js';
 import {createCoverageView} from './coverage-view.js';
 import {renderEnvironmentProposalReview} from './environment-proposal-controls.js';
 import {renderCycleReview} from './cycle-review.js';
+import {decoratePreview} from './mobile-flow.js';
 import {icon} from './icons.js';
 import {retiredMethod} from './workout-methods.js';
 const cssColor = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -839,13 +840,13 @@ let isolationChartInstance = null;
                     <span class="template-name">${escapeHTML(workout.name)}</span>
                     <span class="template-detail">${workout.routine.reduce((sum,block)=>sum+block.exercises.length,0)} exercícios</span>
                 </button>
-                <div class="template-actions">
+                <details class="template-menu"><summary>Opções<span class="visually-hidden"> de ${escapeHTML(workout.name)}</span></summary><div class="template-actions">
                     <button class="text-button" data-edit-template="true">Editar</button>
                     <button class="text-button" data-duplicate-template="true">Duplicar</button>
                     <button class="icon-button" data-order="-1" aria-label="Mover ficha para cima" ${index===0?'disabled':''}>↑</button>
                     <button class="icon-button" data-order="1" aria-label="Mover ficha para baixo" ${index===savedCustoms.length-1?'disabled':''}>↓</button>
                 </div>
-                <button data-delete-workout="${escapeHTML(workout.id)}" style="background: none; border: none; color: var(--danger); font-size: 18px; cursor: pointer; padding: 5px; margin-left: 10px;" title="Excluir">${icon('trash')}</button>
+                <button data-delete-workout="${escapeHTML(workout.id)}" class="text-button" title="Excluir ficha" aria-label="Excluir ${escapeHTML(workout.name)}">Excluir ficha</button></details>
             `;
             div.querySelector('[data-start-template]')?.addEventListener('click', () => window.FitApp.startWorkout('custom_' + workout.id));
             div.querySelector('[data-edit-template]').addEventListener('click',()=>window.FitEditor.editTemplate(workout.id));
@@ -1136,6 +1137,7 @@ let isolationChartInstance = null;
 
         if (state.editorContext?.kind === 'cycle') {
             renderCycleReview(list);
+            decoratePreview(list,issues);
             return;
         }
 
@@ -1239,6 +1241,7 @@ let isolationChartInstance = null;
                 el.style.stroke = 'var(--ink)';
             }
         });
+        decoratePreview(list,issues);
     }
 
     export function refreshCoverage(){
@@ -1255,11 +1258,11 @@ let isolationChartInstance = null;
         let panel=document.getElementById('sessionParameters');
         if(!panel){panel=document.createElement('section');panel.id='sessionParameters';panel.className='panel';list.before(panel);}
         panel.replaceChildren();
-        const heading=document.createElement('h3');heading.textContent='Parâmetros da ficha';
+        const heading=document.createElement('summary');heading.textContent='Como este modelo foi organizado';
         const description=document.createElement('p');
         const settings=state.previewModel;
         description.textContent=settings?modelSettings(settings.method,settings.profile,settings.level).description+' Séries e metas editadas na ficha prevalecem sobre essa base.':'Ficha personalizada: séries e metas seguem os exercícios cadastrados. O descanso desta sessão começa em 60 s e pode ser ajustado.';
-        panel.append(heading,description);
+        const explanation=document.createElement('details');explanation.className='parameter-explanation';explanation.append(heading,description);panel.append(explanation);
         if(state.editorContext?.kind==='cycle')return;
         const label=document.createElement('label');label.className='field';label.textContent='Descanso desta sessão';
         const select=document.createElement('select');select.id='sessionRestSeconds';

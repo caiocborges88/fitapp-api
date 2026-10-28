@@ -5,6 +5,7 @@ import {retiredMethod,retiredMethodMessage} from './workout-methods.js';
 import {modelSettings} from './model-settings.js';
 import { state } from './state.js';
 import { normalizeRoutine,readJSON } from './domain.js';
+import {persistDraft} from './drafts.js';
 
 export function executeForgePlan(method, avoidNames = [], options = environmentOptions(), existingWorkouts = {}) {
     if(retiredMethod(method)){
@@ -28,16 +29,24 @@ export function executeForgePlan(method, avoidNames = [], options = environmentO
     }));
 }
 
-export function openForgeModal() {
+export function openForgeModal({fromPreferences=false}={}) {
+    if(state.isWorkoutActive){window.FitApp.showToast('Conclua ou descarte a sessão antes de criar um plano.');return;}
+    if(!persistDraft())return;
+    for(const [target,source]of [['forgeProfile','profileSelector'],['forgeLevel','levelSelector']]){
+        const field=document.getElementById(target);if(field)field.value=document.getElementById(source).value;
+    }
+    if(fromPreferences){const method=document.getElementById('mainMethodSelector').value;document.getElementById('forgeMethod').value=method==='abc'?'ppl':method;}
+    window.FitEnvironment?.refresh();
     document.getElementById('forgeModal').style.display = 'flex';
     updateForgeOptions();
+    document.getElementById('forgeMethod').focus();
 }
 
 export function updateForgeOptions() {
     const box = document.getElementById('forgeSubOptionsBox');
     if (box) box.hidden = true;
     const description=document.getElementById('forgeParameters');
-    if(description)description.textContent=modelSettings(document.getElementById('forgeMethod').value,document.getElementById('profileSelector').value,state.els.levelSelector?.value).description;
+    if(description)description.textContent=modelSettings(document.getElementById('forgeMethod').value,document.getElementById('forgeProfile')?.value||document.getElementById('profileSelector').value,document.getElementById('forgeLevel')?.value||state.els.levelSelector?.value).description;
 }
 
 export function generateForgedWorkout() {
@@ -45,13 +54,16 @@ export function generateForgedWorkout() {
         window.FitApp.showToast('Conclua ou descarte a sessão antes de gerar um ciclo.');
         return;
     }
+    if(!persistDraft())return;
+    const profile=document.getElementById('forgeProfile')?.value||document.getElementById('profileSelector').value;
+    const level=document.getElementById('forgeLevel')?.value||state.els.levelSelector.value;
     const method = document.getElementById('forgeMethod').value;
     if (!document.querySelectorAll('.forge-equip-chip.active').length) {
         window.FitApp.showToast('Selecione pelo menos um equipamento disponível.');
         return;
     }
     let workouts;
-    try { workouts = executeForgePlan(method,readJSON(window.FitStore?.get('fitapp_blacklist'),[])); }
+    try { workouts = executeForgePlan(method,readJSON(window.FitStore?.get('fitapp_blacklist'),[]),{...environmentOptions(),profile,level}); }
     catch (error) { window.FitApp.showToast(error.message); return; }
     state.currentRoutine = Object.entries(workouts).flatMap(([day, blocks]) =>
         blocks.map(block => ({...block, day})));
@@ -63,14 +75,14 @@ export function generateForgedWorkout() {
     Object.assign(state.editorContext, {
         method: method === 'ppl' ? 'abc' : method,
         days: Object.keys(workouts),
-        profile: document.getElementById('profileSelector').value,
-        level: state.els.levelSelector.value
+        profile,level
     });
     state.previewModel={method:state.editorContext.method,profile:state.editorContext.profile,level:state.editorContext.level};
     window.FitApp.adjustRestTime(modelSettings(method,state.editorContext.profile,state.editorContext.level).restSeconds);
     const structure = document.getElementById('forgeMethod').selectedOptions[0].textContent;
-    document.getElementById('customWorkoutName').value = 'Ciclo ABC · ' + structure;
-    document.getElementById('previewTitle').textContent = 'Revise o ciclo ABC completo';
+    const cycle=Object.keys(workouts).join('');
+    document.getElementById('customWorkoutName').value = 'Ciclo '+cycle+' · ' + structure;
+    document.getElementById('previewTitle').textContent = 'Revise o ciclo '+cycle+' completo';
     window.FitApp.renderPreviewList();
     window.FitApp.showToast('Todos os dias foram gerados. Revise o ciclo completo antes de salvar.');
 }
@@ -88,12 +100,12 @@ export function executeForgeLogic(method, subOpt, avoidNamesGlobal = [], options
     let used = [...avoided];
     const selectedFocus=new Set(),missingFocus=new Set(); 
     
-    const rawProfile = document.getElementById('profileSelector') ? document.getElementById('profileSelector').value : 'hipertrofia';
+    const rawProfile = options.profile || (document.getElementById('profileSelector') ? document.getElementById('profileSelector').value : 'hipertrofia');
     
     // ==========================================================
     // A NOVA ENGRENAGEM: O MODULADOR DE VOLUME E FADIGA
     // ==========================================================
-    const userLevel = state.els.levelSelector ? state.els.levelSelector.value : 'intermediario';
+    const userLevel = options.level || (state.els.levelSelector ? state.els.levelSelector.value : 'intermediario');
     const baseSets = modelSettings(method,rawProfile,userLevel).baseSets;
 
     // 1. MAPEAMENTO DE ARSENAL

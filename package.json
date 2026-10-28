@@ -23,7 +23,8 @@
     "test:model-settings": "node tests/model-settings-browser.cjs",
     "test:coverage": "node tests/coverage-browser.cjs",
     "test:circuit-calisthenics": "node tests/circuit-calisthenics-browser.cjs",
-    "test:ai-deferred": "node tests/ai-deferred-browser.cjs"
+    "test:ai-deferred": "node tests/ai-deferred-browser.cjs",
+    "test:mobile-flow": "node tests/mobile-flow-browser.cjs"
   },
   "dependencies": {
     "chart.js": "^4.5.1",

@@ -1,6 +1,7 @@
 import {mergeHistory,readJSON} from './domain.js';
 import {saveCampaignToCloud} from './sync.js';
 import {state} from './state.js';
+import {listDrafts} from './drafts.js';
 
 const store=()=>window.FitStore;
 const read=(key,fallback=[])=>readJSON(store().get(key),fallback);
@@ -62,7 +63,8 @@ async function exportData(button){
             campaignCount:Number(store().get('fitapp_campaign_count'))||0,
             pendingOperations:read('fitapp_sync_queue'),pendingCampaign:read('fitapp_campaign_dirty',null),
             cloudCampaign:account.data()?.campanha||null,cloudVersion:account.data()?.syncVersion||0,
-            conflicts:read('fitapp_sync_conflicts'),deletedSessions:[...deleted],deletedTemplates:read('fitapp_deleted_templates')};
+            conflicts:read('fitapp_sync_conflicts'),deletedSessions:[...deleted],deletedTemplates:read('fitapp_deleted_templates'),
+            localDrafts:listDrafts().map(({key})=>({key,raw:store().get(key)}))};
         const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
         const link=document.createElement('a');link.href=url;link.download=`fitapp-dados-${new Date().toISOString().slice(0,10)}.json`;link.click();setTimeout(()=>URL.revokeObjectURL(url),10000);
         notice('Arquivo de treinos, fichas e plano exportado.');

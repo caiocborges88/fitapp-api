@@ -3,12 +3,15 @@ import {newId,readJSON,measurementForTarget} from './domain.js';
 import {commitWorkoutPlan} from './campaign-store.js';
 import {duplicateTemplate,moveItem,routineForTemplate} from './editor-domain.js';
 import {saveCampaignToCloud} from './sync.js';
+import {beginDraft,finishDraft,persistDraft} from './drafts.js';
 
 const app=()=>window.FitApp;
 const templates=()=>readJSON(app().safeGet('fitapp_custom_workouts'),[]);
 const plan=()=>readJSON(app().safeGet('fitapp_campaign_data'),null);
 function allowed(){if(state.isWorkoutActive){app().showToast('Conclua ou descarte a sessão antes de editar uma ficha.');return false;}return true;}
 export function configureEditor(kind='session',id=null){
+    beginDraft();
+    document.getElementById('previewMore')?.removeAttribute('open');
     if(kind!=='session')state.environmentProposal=null;
     document.getElementById('workoutPreview').classList.toggle('cycle-review-mode',kind==='cycle');
     const nameContainer=document.getElementById('customWorkoutNameContainer');
@@ -28,8 +31,8 @@ export function configureEditor(kind='session',id=null){
     document.getElementById('previewDesc').textContent=kind==='template'?'Altere o nome, os exercícios e a estrutura da ficha. Salvar não modifica treinos anteriores.':kind==='plan'?'Revise este dia do plano sem substituir os demais dias.':kind==='new'?'Revise os exercícios, a ordem e as metas antes de salvar.':'Adapte o treino de hoje sem sobrescrever a versão salva.';
     document.getElementById('saveTemplateButton').textContent=kind==='template'?'Salvar alterações':kind==='plan'?'Salvar dia do plano':kind==='new'?'Salvar ficha':'Salvar como nova ficha';
     document.getElementById('editOriginalButton').hidden=kind!=='session'||!(/^custom_/.test(state.currentWorkoutType)||/^[A-D]$/.test(state.currentWorkoutType));
-    document.getElementById('btnStartWorkout').hidden=['template','plan','cycle'].includes(kind);
-    document.getElementById('btnStartPrep').hidden=['template','plan','cycle'].includes(kind);
+    document.getElementById('btnStartWorkout').hidden=['new','template','plan','cycle'].includes(kind);
+    document.getElementById('btnStartPrep').hidden=['new','template','plan','cycle'].includes(kind);
     if(kind==='cycle'){
         status.textContent='Revisando o ciclo completo. Salve o plano e depois escolha o dia para treinar.';
         document.getElementById('previewDesc').textContent='Seu ciclo completo está pronto. Navegue pelos dias e abra a edição apenas quando precisar ajustar.';
@@ -62,6 +65,7 @@ export function editOriginal(){
 }
 export function saveEditor(){
     if(!allowed())return false;
+    if(state.currentRoutine.some(block=>!block.exercises.length)){app().showToast('Preencha ou remova os blocos vazios antes de salvar.');return false;}
     if(state.environmentProposal?.status==='pending'){app().showToast('Revise a proposta do ambiente ou volte sem aplicar antes de salvar.');return false;}
     if(state.currentRoutine.some(block=>block.exercises.some(ex=>ex.reviewCode==='target-review'))){app().showToast('Edite as metas de carga sinalizadas antes de salvar a ficha adaptada.');return false;}
     const name=document.getElementById('customWorkoutName').value.trim();
@@ -76,6 +80,7 @@ export function saveEditor(){
         try{
             for(const day of context.days)workouts[day]=routineForTemplate(state.currentRoutine.filter(block=>block.day===day),{validatePairs:true});
         }catch(error){app().showToast(error.message);return false;}
+        if(saved&&!confirm('Salvar este ciclo substituirá o plano atual e reiniciará seu contador. As fichas pessoais e o histórico serão preservados. Continuar?'))return false;
         const next={id:newId(),name,method:context.method,level:context.level,profile:context.profile,workouts,startDate:new Date().toISOString(),revision:1,updatedAt:Date.now()};
         try{commitWorkoutPlan(window.FitStore,next,{resetCount:true});}
         catch(error){app().showToast('Não foi possível gravar o novo plano. O plano anterior foi mantido.');return false;}
@@ -83,7 +88,8 @@ export function saveEditor(){
         document.getElementById('profileSelector').value=context.profile;
         document.getElementById('levelSelector').value=context.level;
         saveCampaignToCloud();app().updateDynamicCards();app().updateCampaignDashboard();
-        app().showToast('Ciclo completo salvo. Escolha A, B ou C para treinar.');return true;
+        state.savedWorkoutType=context.activeDay||context.days[0];finishDraft();
+        app().showToast('Ciclo completo salvo. Escolha o dia para treinar.');return true;
     }else if(context.kind==='plan'){
         const saved=plan();
         if(!saved||(saved.id||null)!==context.planId||(saved.revision||0)!==context.revision){app().showToast('O plano mudou enquanto você editava. Reabra o dia antes de salvar.');return false;}
@@ -91,12 +97,15 @@ export function saveEditor(){
         saved.workouts[context.id]=routine;saved.workoutNames={...saved.workoutNames,[context.id]:name};saved.revision=(saved.revision||0)+1;saved.updatedAt=Date.now();
         if(!app().safeSet('fitapp_campaign_data',JSON.stringify(saved)))return false;
         saveCampaignToCloud();app().updateDynamicCards();app().updateCampaignDashboard();
+        state.savedWorkoutType=context.id;
     }else{
         const list=templates();const previous=context.kind==='template'?list.find(t=>String(t.id)===String(context.id)):null;
         if(context.kind==='template'&&(!previous||(previous.revision||0)!==context.revision)){app().showToast('A ficha mudou enquanto você editava. Reabra a versão salva.');return false;}
         const next={id:previous?.id||newId(),name,routine,revision:(previous?.revision||0)+1,updatedAt:Date.now()};
         if(!persistTemplates(previous?list.map(t=>String(t.id)===String(previous.id)?next:t):[...list,next]))return false;
+        state.savedWorkoutType='custom_'+next.id;
     }
+    finishDraft();
     app().showToast('Ficha salva. Os registros anteriores foram preservados.');return true;
 }
 export function duplicateWorkout(id){
@@ -121,12 +130,20 @@ export function addBlock(){
     }else state.currentRoutine.push(block);
     render();
 }
+export function removeBlock(index){
+    if(!allowed())return;
+    const block=state.currentRoutine[index];if(!block)return;
+    if(state.currentRoutine.filter(item=>item.day===block.day).length<=1){app().showToast('Mantenha pelo menos um bloco por dia.');return;}
+    if(block.exercises.length&&!confirm('Remover este bloco e seus exercícios da edição? A ficha salva só muda após salvar.'))return;
+    state.currentRoutine.splice(index,1);render();
+}
 export function changeExercise(block,index,field,value){
     if(!allowed()||!['sets','target'].includes(field))return;
     if(field==='sets'&&(!Number.isInteger(Number(value))||Number(value)<1||Number(value)>10)){app().showToast('Use de 1 a 10 séries.');return;}
     state.currentRoutine[block].exercises[index][field]=field==='sets'?Number(value):String(value).slice(0,50);
     if(field==='target')state.currentRoutine[block].exercises[index].measurementType=measurementForTarget(value);
     app().refreshCoverage?.();
+    persistDraft();
     if(field==='target'&&state.currentRoutine[block].exercises[index].reviewCode==='target-review'){
         const exercise=state.currentRoutine[block].exercises[index];
         delete exercise.needsReview;delete exercise.reviewCode;delete exercise.reviewReason;render();
@@ -142,4 +159,4 @@ export function changeBlock(index,field,value){
         render();
     }
 }
-window.FitEditor={configureEditor,editTemplate,editPlanDay,editOriginal,saveEditor,duplicateWorkout,reorderTemplate,moveExercise,moveBlock,addBlock,changeExercise,changeBlock};
+window.FitEditor={configureEditor,editTemplate,editPlanDay,editOriginal,saveEditor,duplicateWorkout,reorderTemplate,moveExercise,moveBlock,addBlock,removeBlock,changeExercise,changeBlock};

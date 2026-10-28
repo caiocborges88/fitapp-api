@@ -1,0 +1,273 @@
+{
+  "checkedAt": "2026-10-28T11:53:24.662Z",
+  "environment": "local; simulated Firebase for browser tests; demo-fitapp Firestore emulator for rules/rewards",
+  "build": "2ad39ed4993cf64c",
+  "unitTestsWithEmulator": {
+    "total": 102,
+    "passed": 102,
+    "skipped": 0
+  },
+  "syntaxAndLint": "passed",
+  "additionalBrowserSuites": {
+    "complete-plan-browser.cjs": "passed"
+  },
+  "results": {
+    "browser": {
+      "viewport": "390x844",
+      "methods": 4,
+      "checks": [
+        "inicialização",
+        "forja",
+        "templates",
+        "registro",
+        "edição",
+        "restauração",
+        "histórico",
+        "IA adiada; duplicação de ficha",
+        "nova sessão",
+        "abortamento",
+        "busca"
+      ],
+      "pageErrors": [],
+      "cloud": "Firebase simulado; IA adiada; autorização verificada separadamente"
+    },
+    "editor": {
+      "status": "ok",
+      "environment": "local; Firebase simulated",
+      "checks": [
+        "session changes isolated",
+        "no copied completion flags",
+        "explicit permanent editing",
+        "exercise order",
+        "duplicate with independent IDs",
+        "template ordering",
+        "plan day isolated",
+        "campaign count preserved",
+        "local stale edit rejected",
+        "history unchanged",
+        "mobile width"
+      ],
+      "pageErrors": []
+    },
+    "biset-browser": {
+      "status": "ok",
+      "environment": "local; Firebase simulated",
+      "checks": [
+        "biset_sinergista · pares completos em academia",
+        "biset_sinergista · falha preserva plano e prévia",
+        "três combinações manuais livres criadas, salvas e executadas",
+        "biset_agonista · plano salvo reabre sem geração ou perda de pares",
+        "biset_antagonista · plano salvo reabre sem geração ou perda de pares",
+        "preferência antiga sem plano usa bi-set complementar",
+        "execução de par repetido bloqueada",
+        "adaptação com alternativa única sinalizada",
+        "largura móvel"
+      ],
+      "pageErrors": []
+    },
+    "catalogue-expansion": {
+      "status": "ok",
+      "environment": "local; Firebase simulated",
+      "checks": [
+        "casa com halteres sem banco",
+        "apoio declarado remove lacuna de sóleo",
+        "remover apoio restaura bloqueio",
+        "apoio bloqueado durante execução",
+        "original preservado e academia restaurada",
+        "legado corporal com banco e barra alta sem barra baixa",
+        "política corporal mantida",
+        "execução do legado corporal",
+        "controle de apoio visível no parque",
+        "largura móvel"
+      ],
+      "pageErrors": []
+    },
+    "circuit-calisthenics": {
+      "status": "ok",
+      "environment": "local; Firebase simulated",
+      "checks": [
+        "circuito · academia · geração, salvamento e início",
+        "circuito · praia · geração, salvamento e início",
+        "circuito · falta de recursos preserva plano e prévia",
+        "modelo de calistenia retirado",
+        "atalho Casa compatível sem equipamentos",
+        "largura móvel"
+      ],
+      "pageErrors": []
+    },
+    "coverage": {
+      "status": "ok",
+      "environment": "local Edge; Firebase simulated",
+      "checks": [
+        "título abdominal não promete core; duplicatas e séries editadas são refletidas sem reescrever legado",
+        "jornada completa: Casa, lacuna, edição da sessão, ficha nova, execução, recarga e registro",
+        "ciclo mostra core real por dia e mantém ficha manual sem impor cobertura automática",
+        "Parque não conta puxada indisponível e recalcula quando barra alta e banco são declarados"
+      ]
+    },
+    "environment": {
+      "status": "ok",
+      "environment": "local; Firebase simulated",
+      "checks": [
+        "ficha pessoal adaptada em casa e parque",
+        "ficha original preservada",
+        "volta à academia reversível",
+        "execução sem equipamentos de academia",
+        "movimento sem alternativa bloqueado",
+        "barra apenas quando declarada",
+        "recursos independentes por ambiente",
+        "plano adaptado sem gravar substituições no original",
+        "largura móvel"
+      ],
+      "pageErrors": []
+    },
+    "environment-proposal": {
+      "status": "ok",
+      "environment": "local; Firebase simulated",
+      "checks": [
+        "revisão não altera prévia",
+        "cobertura ausente visível",
+        "salvamento e execução bloqueados durante revisão",
+        "cancelamento sem aplicar",
+        "aplicação explícita somente na sessão",
+        "restauração da ficha",
+        "proposta obsoleta rejeitada",
+        "mudança de recursos recalcula ficha completa",
+        "grupo inteiro ausente bloqueado",
+        "volta à academia restaura extensora",
+        "início separado da aplicação",
+        "largura móvel"
+      ],
+      "pageErrors": []
+    },
+    "model-settings": {
+      "status": "ok",
+      "environment": "local Edge; Firebase simulated",
+      "checks": [
+        "plano abre com padrão explícito; ajuste acompanha relógio e sobrevive à recarga",
+        "ficha pessoal não herda descanso ou objetivo do seletor global",
+        "revisão de ciclo mostra efeitos reais do foco e não recebe ajuste atrasado",
+        "preferências explicam diferenças e limites dos modelos",
+        "aeróbico não mostra controles de descanso entre séries"
+      ]
+    },
+    "workout-priorities": {
+      "status": "ok",
+      "environment": "local Edge; Firebase simulated",
+      "checks": [
+        "geração inválida preserva plano, contador e preferências",
+        "quota local preserva plano e reverte contador e preferências",
+        "modal respeita exclusão e mantém o plano quando o ciclo não pode fechar",
+        "série por tempo inicia em segundos e registra duração sem repetições fictícias",
+        "barras desmarcadas bloqueiam circuito dependente e não geram sessão incompleta",
+        "calistenia retirada; legado preservado e movimentos continuam nas trocas de Casa",
+        "trocas sugeridas ao iniciante respeitam complexidade e a ficha pessoal não herda método global",
+        "carga textual antiga exige revisão da meta e não impede restaurar o original",
+        "ficha salva mostra exclusão posterior, revalida ao iniciar e permite corrigir só a sessão",
+        "academia sinaliza cadastro desconhecido e bloco corporal inválido antes de começar"
+      ]
+    },
+    "redesign": {
+      "checkedAt": "2026-10-28T11:41:14.848Z",
+      "environment": "local; Firebase simulated",
+      "evidence": [
+        {
+          "device": "mobile",
+          "scheme": "light",
+          "status": "ok",
+          "checks": [
+            "navigation",
+            "account identity",
+            "manual template",
+            "direct start",
+            "timed set",
+            "short session saved",
+            "optional reward",
+            "history units",
+            "no horizontal overflow"
+          ],
+          "pageErrors": []
+        },
+        {
+          "device": "desktop",
+          "scheme": "light",
+          "status": "ok",
+          "checks": [
+            "navigation",
+            "account identity",
+            "manual template",
+            "direct start",
+            "timed set",
+            "short session saved",
+            "optional reward",
+            "history units",
+            "no horizontal overflow"
+          ],
+          "pageErrors": []
+        },
+        {
+          "device": "mobile",
+          "scheme": "dark",
+          "status": "ok",
+          "checks": [
+            "navigation",
+            "account identity",
+            "manual template",
+            "direct start",
+            "timed set",
+            "short session saved",
+            "optional reward",
+            "history units",
+            "no horizontal overflow"
+          ],
+          "pageErrors": []
+        },
+        {
+          "device": "desktop",
+          "scheme": "dark",
+          "status": "ok",
+          "checks": [
+            "navigation",
+            "account identity",
+            "manual template",
+            "direct start",
+            "timed set",
+            "short session saved",
+            "optional reward",
+            "history units",
+            "no horizontal overflow"
+          ],
+          "pageErrors": []
+        }
+      ]
+    },
+    "ai-deferred": {
+      "status": "ok",
+      "environment": "local; Firebase simulated; no AI provider calls",
+      "checks": [
+        "entradas de IA removidas",
+        "chamadas legadas locais bloqueadas",
+        "cliente não envia requisições de IA",
+        "fila antiga preservada sem restauração automática",
+        "cadastro manual disponível",
+        "modelo validado gera ciclo"
+      ],
+      "aiRequests": [],
+      "pageErrors": []
+    },
+    "offline": {
+      "status": "ok",
+      "cachedAssets": 54,
+      "checks": [
+        "instalação atômica do cache",
+        "SDKs locais",
+        "recarga offline",
+        "inicialização offline sem exceções"
+      ],
+      "authenticatedSync": "verificado separadamente pelos testes de fila; este teste não autentica em produção"
+    }
+  },
+  "physicalAndroidOrIPhone": "not tested",
+  "production": "not published",
+  "finalVerification": "Mobile flow, account transition, build, syntax/lint and offline cache passed after final changes"
+}

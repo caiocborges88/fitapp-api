@@ -15,6 +15,8 @@ Uma interface calma e legível para consultar e registrar treinos. A identidade 
 
 ## Componentes e estados
 
+Na versão local de 28/10/2026, Treinar destaca a ficha de acesso rápido. A revisão usa campos recolhidos em Ajustar e Organizar bloco, pendências visíveis com acesso direto e uma barra inferior de ações. Detalhes de descanso/cobertura ficam em Mais opções; operações de organização ficam no menu de cada ficha. Consulte [EXPERIENCIA-MOVEL.md](EXPERIENCIA-MOVEL.md) para contratos de rascunho, teclado/área segura e validação.
+
 Botão principal, secundário, texto e destrutivo; campos com rótulo; cartão de ficha; aviso; estado vazio; painel; navegação; indicadores de sincronização; diálogo de resumo e modais de edição. IDs antigos necessários à compatibilidade continuam no DOM, mas não definem a linguagem visual.
 
 Novos componentes usam classes e variáveis compartilhadas. Trechos gerados pelo `ui.js` ainda têm estilos de layout legados; suas cores foram migradas para variáveis. A consolidação desses trechos em componentes menores faz parte da evolução técnica, sem reescrita simultânea da persistência.

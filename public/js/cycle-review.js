@@ -39,7 +39,7 @@ export function renderCycleReview(container) {
         button.innerHTML = `<strong>Treino ${escapeHTML(day)}</strong><span>${exerciseCount(blocks)} exercícios · ${blocks.length} blocos</span>`;
         const select = selectedDay => {
             context.activeDay = selectedDay;
-            renderCycleReviewInto(container);
+            window.FitApp.renderPreviewList();
             document.getElementById('cycle-tab-' + selectedDay)?.focus({preventScroll:true});
         };
         button.addEventListener('click', () => select(day));
@@ -140,6 +140,8 @@ export function renderCycleReview(container) {
         moves.innerHTML = `<button type="button" class="text-button" data-block-up ${position === 0 ? 'disabled' : ''}>↑ Subir bloco</button><button type="button" class="text-button" data-block-down ${position === dayEntries.length-1 ? 'disabled' : ''}>↓ Descer bloco</button>`;
         moves.querySelector('[data-block-up]').addEventListener('click', () => window.FitEditor.moveBlock(index, -1));
         moves.querySelector('[data-block-down]').addEventListener('click', () => window.FitEditor.moveBlock(index, 1));
+        const remove=document.createElement('button');remove.type='button';remove.className='text-button';remove.textContent='Remover bloco';remove.disabled=dayEntries.length<=1;
+        remove.addEventListener('click',()=>window.FitEditor.removeBlock(index));moves.append(remove);
         fields.append(moves);
         details.append(fields);
         card.append(details);
@@ -147,9 +149,4 @@ export function renderCycleReview(container) {
     });
     panel.append(grid);
     container.append(panel);
-}
-
-function renderCycleReviewInto(container) {
-    container.replaceChildren();
-    renderCycleReview(container);
 }

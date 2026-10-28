@@ -77,7 +77,7 @@ const fake=require('./fixtures/firebase.cjs');
   const retained=await page.evaluate(()=>FitStore.get('fitapp_campaign_data'));
   await page.evaluate(()=>{FitApp.openForgeModal();document.getElementById('forgeMethod').value='ppl';FitApp.generateForgedWorkout();});
   await page.getByRole('tab',{name:/Treino B/}).click();
-  await page.getByRole('button',{name:'Adicionar bloco',exact:true}).click();
+  await page.locator('#previewMore > summary').click();await page.getByRole('button',{name:'Adicionar bloco',exact:true}).click();
   const extra=await page.evaluate(async()=>{const {state}=await import('/js/state.js');return state.currentRoutine.filter(b=>!b.exercises.length).map(b=>b.day);});
   assert.deepEqual(extra,['B']);
   assert.equal(await page.getByRole('tabpanel').locator('.cycle-block-editor[open]').count(),1);

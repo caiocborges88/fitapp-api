@@ -1,26 +1,32 @@
 import {readJSON} from './domain.js';
+import {equipmentForEnvironment,equipmentNames} from './equipment-settings.js';
 
 const normalize=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 const outdoor=environment=>['praia','parque','parque/praia'].includes(environment);
 const outdoorResources=new Set(['bench','pullup-bar','low-bar','balance-support']);
 export function environmentOptions(){
     const environment=window.FitStore?.get('fitapp_global_env')||'academia';
-    return {environment,resources:readJSON(window.FitStore?.get('fitapp_resources_'+environment),[]),blacklist:readJSON(window.FitStore?.get('fitapp_blacklist'),[])};
+    const resources=readJSON(window.FitStore?.get('fitapp_resources_'+environment),[]);
+    return {environment,resources,equipment:equipmentForEnvironment(window.FitStore,environment,resources),blacklist:readJSON(window.FitStore?.get('fitapp_blacklist'),[])};
 }
 export function movementExcluded(exercise,blacklist=[]){
     return Boolean(exercise)&&blacklist.some(name=>name===exercise.name||exercise.aliases?.includes(name));
 }
-export function availableInEnvironment(exercise,{environment='academia',resources=[],equipmentPolicy,excludedResources=[],blacklist=[]}={}){
+export function availableInEnvironment(exercise,{environment='academia',resources=[],equipment,equipmentPolicy,excludedResources=[],blacklist=[]}={}){
     if(!exercise)return false;
     if(movementExcluded(exercise,blacklist))return false;
     if(equipmentPolicy==='bodyweight'&&!['Peso Corporal','Calistenia'].includes(exercise.equip))return false;
     const requirements=exercise.resourcesAny||[exercise.resources||[]];
     const allowedRequirements=requirements.filter(option=>option.every(resource=>!excludedResources.includes(resource)));
     if(!allowedRequirements.length)return false;
-    if(environment==='academia')return true;
+    if(environment==='academia'){
+        if(!equipment)return true;
+        const needsBar=allowedRequirements.every(option=>option.some(resource=>['pullup-bar','low-bar'].includes(resource)));
+        return equipmentNames(equipment).includes(needsBar?'Calistenia':exercise.equip);
+    }
     if(environment!=='casa'&&!outdoor(environment))return false;
-    const equipment=['Peso Corporal','Calistenia',...(environment==='casa'?['Halter']:[])];
-    if(!equipment.includes(exercise.equip))return false;
+    const allowedEquipment=['Peso Corporal','Calistenia',...(environment==='casa'?['Halter']:[])];
+    if(!allowedEquipment.includes(exercise.equip))return false;
     if(exercise.equip==='Calistenia'&&!exercise.resources&&!exercise.resourcesAny)return false;
     return allowedRequirements.some(option=>{
         const required=[...option,...(exercise.equip==='Halter'?['dumbbells']:[])];

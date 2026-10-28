@@ -63,5 +63,6 @@
         };
         return navigator.locks ? navigator.locks.request(`fitapp-store:${account}`, run) : run();
     }
-    window.FitStore = { get, set, setMany, remove, readJSON, bindUser, updateQueue, get uid() { return uid; } };
+    const keys = () => Object.keys(localStorage).filter(key=>key.startsWith(prefix())).map(key=>key.slice(prefix().length));
+    window.FitStore = { get, set, setMany, remove, readJSON, keys, bindUser, updateQueue, get uid() { return uid; } };
 })();

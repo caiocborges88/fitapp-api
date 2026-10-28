@@ -1,24 +1,50 @@
 import {environmentOptions} from './environment.js';
+import {equipmentGroups,resourceLabels,environmentSummary} from './equipment-settings.js';
 import {state} from './state.js';
-const resources=[['bench','Banco firme'],['balance-support','Parede ou apoio firme para equilíbrio'],['pullup-bar','Barra fixa'],['low-bar','Barra baixa para remada'],['dumbbells','Halteres'],['incline-bench','Banco de musculação inclinado'],['decline-bench','Banco de musculação declinado'],['parallel-bars','Barras paralelas'],['rope','Corda']];
+
 const outdoorResources=new Set(['bench','pullup-bar','low-bar','balance-support']);
-function setup(){
-    const panel=document.createElement('section');panel.className='panel';panel.id='environmentResources';
-    const heading=document.createElement('h2');heading.textContent='Recursos disponíveis';
-    const description=document.createElement('p');description.textContent='Marque o que existe no local. Em casa ou no hotel, halteres são opcionais. Parque/praia permite peso corporal, barras fixas, bancos e apoio para equilíbrio. Banco e apoio para equilíbrio são recursos distintos. A adaptação preserva o foco muscular quando há alternativa; sua ficha original é mantida.';
-    const group=document.createElement('div');group.className='environment-resources';
-    for(const [value,text]of resources){
-        const label=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.value=value;input.dataset.environmentResource=value;
-        input.addEventListener('change',()=>{window.FitApp.setEnvironmentResources([...group.querySelectorAll('input:checked')].filter(item=>!item.closest('label').hidden).map(item=>item.value));refresh();});
-        label.append(input,document.createTextNode(text));group.append(label);
+export function syncEquipmentChips(){
+    const options=environmentOptions();
+    for(const chip of document.querySelectorAll('.forge-equip-chip')){
+        const active=options.equipment.includes(chip.dataset.equip);
+        chip.classList.toggle('active',active);chip.setAttribute('aria-pressed',String(active));
+        chip.disabled=options.environment!=='academia';
     }
-    panel.append(heading,description,group);document.querySelector('#tab-treino .page-heading')?.after(panel);
+}
+function setup(){
+    const panel=document.createElement('section');panel.className='environment-summary';panel.id='environmentResources';
+    const open=document.createElement('button');open.className='text-button';open.type='button';open.setAttribute('aria-haspopup','dialog');
+    panel.append(open);document.querySelector('#tab-treino .page-heading')?.after(panel);
+    const dialog=document.createElement('dialog');dialog.id='environmentDialog';dialog.className='environment-dialog';dialog.setAttribute('aria-label','Ambiente e equipamentos do treino');
+    dialog.innerHTML='<form method="dialog"><button class="icon-button dialog-close" aria-label="Fechar ambiente">×</button></form><span class="eyebrow">LOCAL DO TREINO</span><h2>Onde você vai treinar?</h2><label class="field">Ambiente<select id="environmentSelect"><option value="academia">Academia</option><option value="casa">Casa</option><option value="praia">Parque/praia</option></select></label><p>As escolhas ficam salvas neste dispositivo para cada ambiente. Confira o que está disponível hoje.</p><fieldset class="environment-equipment"><legend>Equipamentos disponíveis</legend></fieldset><fieldset class="environment-resources"><legend>Recursos disponíveis</legend></fieldset><p>Banco firme e apoio para equilíbrio são recursos distintos. Mudanças adaptam apenas a sessão aberta; sua ficha salva é preservada.</p><form method="dialog"><button class="button primary">Concluir</button></form>';
+    document.body.append(dialog);
+    const show=()=>{if(state.isWorkoutActive){window.FitApp.showToast('Conclua ou descarte a sessão antes de mudar o ambiente.');return;}refresh();dialog.showModal();};
+    open.addEventListener('click',show);
+    const header=document.getElementById('btnEnvToggle');header.onclick=show;header.setAttribute('aria-haspopup','dialog');
+    for(const [value,labelText]of resourceLabels){
+        const label=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.value=value;input.dataset.environmentResource=value;
+        input.addEventListener('change',()=>window.FitApp.setEnvironmentResources([...dialog.querySelectorAll('[data-environment-resource]:checked')].filter(item=>!item.closest('label').hidden).map(item=>item.value)));
+        label.append(input,document.createTextNode(labelText));dialog.querySelector('.environment-resources').append(label);
+    }
+    for(const [value,labelText]of equipmentGroups){
+        const label=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.value=value;input.dataset.environmentEquipment=value;
+        input.addEventListener('change',()=>window.FitApp.setEnvironmentEquipment([...dialog.querySelectorAll('[data-environment-equipment]:checked')].map(item=>item.value)));
+        label.append(input,document.createTextNode(labelText));dialog.querySelector('.environment-equipment').append(label);
+    }
+    dialog.querySelector('select').addEventListener('change',event=>window.FitApp.setGlobalEnvironment(event.target.value));
+    window.FitEnvironment={open:show,refresh};
     function refresh(){
-        const options=environmentOptions();panel.hidden=options.environment==='academia';
-        for(const input of group.querySelectorAll('input')){
+        const options=environmentOptions();open.textContent=environmentSummary(options)+' · Alterar';
+        dialog.querySelector('select').value=['parque','parque/praia'].includes(options.environment)?'praia':options.environment;
+        dialog.querySelector('.environment-equipment').hidden=options.environment!=='academia';
+        dialog.querySelector('.environment-resources').hidden=options.environment==='academia';
+        for(const input of dialog.querySelectorAll('[data-environment-resource]')){
             input.closest('label').hidden=options.environment!=='casa'&&!outdoorResources.has(input.value);
             input.checked=options.resources.includes(input.value);input.disabled=state.isWorkoutActive;
         }
+        for(const input of dialog.querySelectorAll('[data-environment-equipment]')){input.checked=options.equipment.includes(input.value);input.disabled=state.isWorkoutActive;}
+        syncEquipmentChips();
+        const summary=document.getElementById('forgeEnvironmentSummary');if(summary)summary.textContent=environmentSummary(options)+' · Alterar';
     }
     for(const event of ['fitapp:environmentchange','fitapp:datachange'])window.addEventListener(event,refresh);
     refresh();

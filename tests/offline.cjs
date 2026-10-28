@@ -16,9 +16,9 @@ const server=require('../scripts/serve.cjs');
         assert.ok(assets>=20);
         const newAssets=await page.evaluate(async()=>{
             const cache=await caches.open((await caches.keys()).find(k=>k.startsWith('fitapp-')));
-            return Promise.all(['/css/design.css','/fonts/Manrope.ttf','/js/experience.js','/js/icons.js','/js/editor.js','/js/editor-domain.js','/js/routine-review.js','/js/model-settings.js','/js/routine-coverage.js','/js/coverage-view.js'].map(async path=>Boolean(await cache.match(path))));
+            return Promise.all(['/css/design.css','/fonts/Manrope.ttf','/js/experience.js','/js/icons.js','/js/editor.js','/js/editor-domain.js','/js/routine-review.js','/js/model-settings.js','/js/routine-coverage.js','/js/coverage-view.js','/css/mobile-flow.css','/js/mobile-flow.js','/js/drafts.js','/js/draft-domain.js','/js/equipment-settings.js'].map(async path=>Boolean(await cache.match(path))));
         });
-        assert.deepEqual(newAssets,[true,true,true,true,true,true,true,true,true,true]);
+        assert.equal(newAssets.length,15);assert.ok(newAssets.every(Boolean));
         await context.setOffline(true);await page.reload();
         await page.waitForFunction(()=>window.FitApp&&window.dictionaryData.length);
         assert.equal(await page.locator('#loginOverlay').isVisible(),true);
