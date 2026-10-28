@@ -1,8 +1,8 @@
 # FitApp
 
-## Identidade visual — versão local de 28/10/2026
+## Identidade visual — publicada em 28/10/2026
 
-Ciano e violeta, cartões luminosos, três ilustrações esportivas locais e novos controles de tema/efeitos no Perfil. A aparência é separada por conta e funciona offline. O treino preserva seus dados e fluxos. Implementação local, sem publicação. Decisões, evidências e limites em [docs/IDENTIDADE-ENERGIA.md](docs/IDENTIDADE-ENERGIA.md). Testes: `npm run test:appearance` e `npm run test:design`. Referência visual sem autenticação: iniciar `node scripts/serve.cjs` e abrir [a comparação de temas](http://127.0.0.1:4173/design-reference.html).
+Ciano e violeta, cartões luminosos, três ilustrações esportivas locais e novos controles de tema/efeitos no Perfil. A aparência é separada por conta e funciona offline. O treino preserva seus dados e fluxos. Versão `609fa6af6364615e` publicada no [endereço oficial](https://fitapp-operacional.web.app), somente com atualização do Hosting. Os 64 arquivos, login nos dois temas e recarga offline foram conferidos sem gravação de dados reais. Release, recuperação e atualização em [docs/PUBLICACAO-ENERGIA-2026-10-28.md](docs/PUBLICACAO-ENERGIA-2026-10-28.md). Android/iPhone físicos continuam pendentes. Decisões, evidências e limites em [docs/IDENTIDADE-ENERGIA.md](docs/IDENTIDADE-ENERGIA.md). Testes: `npm run test:appearance` e `npm run test:design`. Referência visual sem autenticação: iniciar `node scripts/serve.cjs` e abrir [a comparação de temas](http://127.0.0.1:4173/design-reference.html).
 
 ## Experiência móvel — publicada em 28/10/2026
 

@@ -1,6 +1,6 @@
 # FitApp — identidade Energia, alegria e foco
 
-28/10/2026. Implementação local solicitada pelo usuário. Sem publicação ou alteração de produção.
+28/10/2026. Implementação e publicação autorizadas pelo usuário. Versão `609fa6af6364615e` publicada somente no Hosting; detalhes e recuperação em [PUBLICACAO-ENERGIA-2026-10-28.md](PUBLICACAO-ENERGIA-2026-10-28.md).
 
 ## Decisões aplicadas
 
@@ -28,10 +28,10 @@ Três SVGs locais totalizam menos de 10 KB; fontes, artes e estilos estão no ca
 - `audit/energy-emulator-validation.json`: testes unitários, sincronização e integração com Auth, Firestore, Functions e Hosting do projeto `demo-fitapp`.
 - Capturas `audit/energy-*.png`: temas, tamanhos, referência visual, sessão, resumo, coleção e ampliação de texto. Nenhuma captura representa aparelho físico.
 
-## Limites e versão preparada
+## Limites e versão publicada
 
 A validação automatizada usa Edge no Windows. Não certifica Safari/iOS, teclado físico/virtual real, área segura real, leitores de tela ou desempenho em aparelhos modestos. Android/iPhone físicos continuam pendentes.
 
 Os efeitos são CSS/SVG, sem nova biblioteca de animação. Brilhos são estáticos; a atualização de descanso reutiliza o relógio atual. Não foi realizado benchmark em aparelho físico, teste de percepção de alegria/foco com usuários nem certificação WCAG integral.
 
-Versão preparada: `609fa6af6364615e`, registrada em `public/version.json`, junto ao cache gerado pelo build. Build e check aprovados; 102 testes passaram com Firestore emulado, além das regressões de aparência, fluxo móvel, editor, ambientes, prioridades, cobertura, sincronização, recompensas e offline. Antes de publicar futuramente, preservar snapshot, concluir a conferência física e revisar a versão. A alteração é de Hosting; não exige migração dos dados ou reativação de IA. Recuperação: restaurar o Hosting anterior e preservar os namespaces locais; a preferência nova pode ser ignorada pelas versões antigas sem afetar treinos.
+Versão publicada: `609fa6af6364615e`, registrada em `public/version.json`, junto ao cache gerado pelo build. Build e check aprovados; 102 testes passaram com Firestore emulado, além das regressões de aparência, fluxo móvel, editor, ambientes, prioridades, cobertura, sincronização, recompensas e offline. A publicação autorizada preservou snapshot e a versão anterior do Hosting. A verificação pública confirmou 64 arquivos e recarga offline sem gravar dados de treino; conferência física permanece pendente. A alteração é de Hosting; não exige migração dos dados ou reativação de IA. Recuperação: restaurar o Hosting anterior e preservar os namespaces locais; a preferência nova pode ser ignorada pelas versões antigas sem afetar treinos.

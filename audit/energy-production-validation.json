@@ -1,0 +1,48 @@
+{
+  "status": "ok",
+  "url": "https://fitapp-operacional.web.app",
+  "version": "609fa6af6364615e",
+  "checkedAt": "2026-10-28T13:33:22.300Z",
+  "matchingFiles": 64,
+  "api": [
+    {
+      "route": "coach",
+      "status": 401
+    },
+    {
+      "route": "importar-treino-ia",
+      "status": 401
+    },
+    {
+      "route": "recompensas",
+      "status": 401
+    }
+  ],
+  "cacheAssets": [
+    {
+      "path": "/css/energy.css",
+      "cached": true
+    },
+    {
+      "path": "/js/appearance.js",
+      "cached": true
+    },
+    {
+      "path": "/illustrations/preparation.svg",
+      "cached": true
+    },
+    {
+      "path": "/illustrations/movement.svg",
+      "cached": true
+    },
+    {
+      "path": "/illustrations/celebration.svg",
+      "cached": true
+    }
+  ],
+  "offlineReload": true,
+  "browserErrors": [],
+  "productionDataWrites": false,
+  "scope": "Hosting only; no database, rules, indexes or API deployment",
+  "physicalAndroidTest": "a realizar pelo usuário"
+}
