@@ -3,7 +3,7 @@
   "status": "passed",
   "scope": "Fluxo simplificado: modelos prontos como principal; cadastro manual secundário",
   "version": "8025f00c044b5983",
-  "productionDeployment": false,
+  "productionDeployment": true,
   "productionWrites": false,
   "physicalDevices": false,
   "environment": "Edge automatizado; Firebase simulado e emuladores Auth/Firestore/Hosting demo-fitapp",
@@ -52,7 +52,7 @@
   "github": {
     "branch": "codex/simplificar-fluxo-treino",
     "prerequisiteCommit": "5824b845b5858e9c8022168d1512c4f3c56aced5",
-    "deploymentAuthorized": false,
+    "deploymentAuthorized": true,
     "status": "pull_request_open",
     "repository": "caiocborges88/fitapp-api",
     "visibility": "public",
@@ -68,5 +68,17 @@
       "resolvedAfterUserConfirmation": true,
       "alternativeUploadAttempted": false
     }
+  },
+  "productionUserDataWrites": false,
+  "productionRelease": {
+    "status": "passed",
+    "version": "8025f00c044b5983",
+    "release": "projects/fitapp-operacional/sites/fitapp-operacional/channels/live/releases/1793365047961000",
+    "services": [
+      "hosting"
+    ],
+    "releaseTime": "2026-10-30T12:57:27.961Z",
+    "evidence": "audit/simplificacao-release-validation.json",
+    "publicEvidence": "audit/simplificacao-production-validation.json"
   }
 }

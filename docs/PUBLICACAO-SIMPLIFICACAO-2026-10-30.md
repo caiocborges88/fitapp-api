@@ -1,12 +1,12 @@
 # Publicação do fluxo simplificado — 30/10/2026
 
-Publicação solicitada explicitamente pelo usuário depois da implementação e do envio ao GitHub. Preparação concluída; envio e conferência pública pendentes neste registro inicial.
+Publicação solicitada explicitamente pelo usuário depois da implementação e do envio ao GitHub. Concluída em 30/10/2026 às 09h57 (America/Sao_Paulo), com conferência pública aprovada. Somente Hosting; regras, API e índices preservados.
 
 ## Escopo autorizado
 
 - Aplicativo: https://fitapp-operacional.web.app.
 - Projeto/site: `fitapp-operacional`.
-- Versão preparada: `8025f00c044b5983`, reproduzida pelo build antes de publicar.
+- Versão publicada: `8025f00c044b5983`, reproduzida pelo build antes de publicar.
 - Somente Hosting. API, índices e regras Firestore não precisam ser publicados nesta etapa.
 - As regras vigentes já correspondem ao arquivo local e aceitam ABC tradicional/sinergista, `padrao` e `trainingContext`.
 - Nenhuma migração, autenticação de teste em produção ou gravação de dados reais de treino.
@@ -30,9 +30,21 @@ O verificador público foi ampliado para conferir os elementos do fluxo simplifi
 
 Em incidente, preservar armazenamento local, sessões, fila, fichas e histórico. Preferir correção compatível usando o snapshot. Se for necessário recuperar o Hosting anterior, usar o identificador acima ou gerar novamente a versão anterior a partir do snapshot preservado; conferir o escopo antes de qualquer restauração. A simplificação não mudou formatos de dados ou receitas. Manter as regras compatíveis que já aceitam `trainingContext` e os ABCs; não limpar dados nem reverter regras para tentar recuperar a interface. Nenhuma restauração faz parte desta publicação.
 
-## Conferência pública planejada
+## Resultado confirmado
 
-Comparar a versão e todos os arquivos públicos por SHA-256, conferir cabeçalhos e proteção das APIs sem credenciais, login em temas claro/escuro em viewport móvel, elementos estruturais da simplificação e recarga offline. Usar `FITAPP_RELEASE_PREFIX=simplificacao`, preservando as evidências anteriores. Isso não representa uso em Android/iPhone físicos ou teste autenticado de treino em produção.
+- Versão pública: `8025f00c044b5983`.
+- Hosting: `projects/fitapp-operacional/sites/fitapp-operacional/versions/ee27c668d062eed5`.
+- Release: `projects/fitapp-operacional/sites/fitapp-operacional/channels/live/releases/1793365047961000`.
+- Regras Firestore: `projects/fitapp-operacional/rulesets/3e2e012b-664e-49c6-82e6-987f9808f77b`; identificador e SHA-256 iguais aos preservados antes da publicação.
+- Os 70 arquivos públicos correspondem aos locais por SHA-256. Cabeçalhos X-Content-Type-Options e X-Frame-Options aprovados.
+- Login claro/escuro em viewport móvel simulado e elementos estruturais do fluxo simplificado aprovados, sem transbordamento horizontal ou exceções de navegador.
+- Os 14 recursos críticos estavam no cache, incluindo os arquivos alterados do início direto; recarga offline aprovada.
+- APIs protegidas recusaram chamadas sem autenticação com HTTP 401. Nenhuma conta foi autenticada para a conferência e nenhum documento de usuário foi lido ou gravado.
+- API, regras e índices não publicados; nenhum teste físico Android/iPhone foi realizado.
+
+Evidências separadas com `FITAPP_RELEASE_PREFIX=simplificacao`: `audit/simplificacao-release-before.json`, `audit/simplificacao-release-after.json`, `audit/simplificacao-source-manifest.json`, `audit/simplificacao-production-validation.json`, `audit/simplificacao-production-login-light.png`, `audit/simplificacao-production-login-dark.png` e `audit/simplificacao-release-validation.json`.
+
+O predeploy reproduziu a versão validada `8025f00c044b5983` e publicou somente os 70 arquivos do Hosting. O pacote atual e o anterior foram conferidos por SHA-256 antes do envio. O [PR #1](https://github.com/caiocborges88/fitapp-api/pull/1) recebe o registro de preparação, resultado e recuperação; permanece sem merge. A publicação não transforma testes de navegador em conferência em aparelhos físicos.
 
 ## Atualização no aplicativo
 

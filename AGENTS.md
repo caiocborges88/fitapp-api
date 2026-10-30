@@ -25,6 +25,7 @@
 - Preserve a recuperação de sessão em andamento, o editor manual, rascunhos por conta, cópias, exclusões, sincronização, histórico e receitas ABC. Esta etapa não muda formatos, regras Firestore ou API.
 - Valide com `npm run test:simple-flow`, além das regressões obrigatórias. Use `FITAPP_AUDIT_PREFIX=simplificacao` para separar novas evidências; aparência/design/fluxo móvel acrescentam sufixos próprios ao prefixo. Testes usam Firebase simulado ou `demo-fitapp`; aparelhos físicos e produção não são inferidos dessas evidências.
 - Registre a mudança no GitHub em branch/PR, distinguindo os pré-requisitos anteriores que ainda estavam sem commit. Não confunda envio de código ao GitHub com autorização para publicar em produção.
+- A simplificação foi publicada com autorização posterior em 30/10/2026, versão `8025f00c044b5983`, somente Hosting. Regras existentes foram conferidas e preservadas; API e índices não foram publicados. Release, evidências, atualização da PWA e recuperação: `docs/PUBLICACAO-SIMPLIFICACAO-2026-10-30.md`. Preservar os snapshots e distinguir os testes públicos sem autenticação de uso em aparelhos físicos.
 
 ## Modelos ABC com regras próprias
 - A referência vigente é `docs/NOVOS-MODELOS-ABC.md`. Novas escolhas oferecem `abc_tradicional` e `abc_sinergista`, com exercícios fixos e receitas versionadas em `public/js/workout-models.js`.

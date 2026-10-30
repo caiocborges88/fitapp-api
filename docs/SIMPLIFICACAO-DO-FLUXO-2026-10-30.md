@@ -1,6 +1,6 @@
 # Simplificação do fluxo de treino
 
-30/10/2026. Implementação autorizada após análise das cinco capturas enviadas pelo usuário. O aplicativo entrega modelos prontos como caminho principal e mantém o cadastro de ficha própria como alternativa. Esta etapa é local e será registrada no GitHub; não inclui publicação em produção.
+30/10/2026. Implementação autorizada após análise das cinco capturas enviadas pelo usuário. O aplicativo entrega modelos prontos como caminho principal e mantém o cadastro de ficha própria como alternativa. Registrada no [PR #1](https://github.com/caiocborges88/fitapp-api/pull/1) e publicada, após autorização posterior, em 30/10/2026 às 09h57, versão `8025f00c044b5983`. Release e recuperação: [PUBLICACAO-SIMPLIFICACAO-2026-10-30.md](PUBLICACAO-SIMPLIFICACAO-2026-10-30.md).
 
 ## Decisões aprovadas
 
@@ -46,10 +46,10 @@ Registro no GitHub concluído em 30/10/2026, após autorização explícita para
 
 O commit `5824b845b5858e9c8022168d1512c4f3c56aced5` registra separadamente os pré-requisitos ABC/acompanhamento anteriores, recuperados do snapshot publicado `d2f51cd46fa4626c` e da documentação local já existente. O commit `3034f363e98bbea4f7b3cc6f4071690ef38bfcb7` contém esta simplificação. Auditorias anteriores e a extração de chat não foram incluídas indiscriminadamente; as novas evidências usam dados de teste. Um commit documental posterior registra o envio e o PR.
 
-A primeira tentativa de push foi recusada pela revisão automática por exigir autorização específica do destino público e do conteúdo. Após a confirmação explícita do usuário, o mesmo push foi aceito. Não houve envio alternativo durante o bloqueio, publicação em produção ou inclusão de credenciais/dados reais de treino.
+A primeira tentativa de push foi recusada pela revisão automática por exigir autorização específica do destino público e do conteúdo. Após a confirmação explícita do usuário, o mesmo push foi aceito. Não houve envio alternativo durante o bloqueio nem inclusão de credenciais/dados reais de treino. A publicação em produção recebeu autorização posterior e está registrada abaixo.
 
 ## Publicação e recuperação
 
-Não foi autorizada publicação em produção. O build gera versão e cache; nenhuma execução de teste equivale a deploy. Uma futura publicação deverá seguir o procedimento de snapshot e conferência pública do AGENTS.md. Os pré-requisitos ABC/acompanhamento já publicados têm seus próprios registros de regras e recuperação.
+Publicação autorizada posteriormente e concluída em 30/10/2026 às 09h57, somente Hosting, versão `8025f00c044b5983`. Os 70 arquivos, temas e offline foram conferidos; as regras permaneceram iguais. O snapshot anterior foi preservado e nenhum dado real foi usado para testar o treino. O procedimento, identificadores e evidências estão em [PUBLICACAO-SIMPLIFICACAO-2026-10-30.md](PUBLICACAO-SIMPLIFICACAO-2026-10-30.md). Os pré-requisitos ABC/acompanhamento já publicados têm seus próprios registros de regras e recuperação.
 
 Para recuperar o comportamento anterior desta etapa, reverta somente o commit da simplificação e gere novamente o build. Preserve os pré-requisitos, dados locais, modelos e regras compatíveis. Não normalize versões futuras nem apague sessões ou fichas para recuperar a interface.
