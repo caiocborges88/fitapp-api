@@ -8,9 +8,13 @@ import {renderCycleReview} from './cycle-review.js';
 import {decoratePreview} from './mobile-flow.js';
 import {icon} from './icons.js';
 import {retiredMethod} from './workout-methods.js';
+import {isWorkoutModel,modelLabel} from './workout-models.js';
+import {appendBlockControls,appendOptionalControls,appendSaveSessionChanges} from './model-controls.js';
+import {createSessionComparison,renderTrainingTracking} from './training-tracking-view.js';
+import {sideLabel} from './training-tracking.js';
 const cssColor = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 import { state } from './state.js';
-import { completedSets, readJSON , sessionLabel,newExerciseSet,measurementForTarget} from './domain.js';
+import { completedSets, readJSON , sessionLabel,newExerciseSet,measurementForTarget,blockEnabled,setsForDisplay} from './domain.js';
 import { FitAudio } from './audio.js';
 import { escapeHTML, parseSafeFloat, getMuscleGroup } from './utils.js';
 let radarChartInstance = null;
@@ -277,10 +281,13 @@ let isolationChartInstance = null;
 
     export function updateDynamicCards() {
         const method = document.getElementById('mainMethodSelector')?.value || 'abc';
+        for(const id of ['profileSelector','levelSelector'])document.getElementById(id)?.closest('label')?.toggleAttribute('hidden',isWorkoutModel(method));
         const lowerFocus = document.getElementById('profileSelector')?.value === 'feminino';
         const parameters=document.getElementById('modelPreferencesDescription');
         if(parameters)parameters.textContent=modelSettings(method,document.getElementById('profileSelector')?.value,state.els.levelSelector?.value).description;
         const labels = {
+            abc_tradicional:[['Push','Peito, ombros, tríceps e core'],['Pull','Costas, ombro posterior, braços e core'],['Pernas','Quadríceps, posteriores, quadril e panturrilhas']],
+            abc_sinergista:[['Push','Pares selecionados, complementos e core'],['Pull','Pares selecionados, braços e core'],['Pernas','Pares e séries convencionais; adutora e abdutora incluídas']],
             abc: lowerFocus ? [['Posterior e Glúteos','Posteriores, glúteos e core'],['Superiores','Costas, peito e braços'],['Anterior','Quadríceps e panturrilhas']] : [['Push','Peito, ombros e tríceps'],['Pull','Costas, ombros e bíceps'],['Legs','Pernas e panturrilhas']],
             abcd: lowerFocus ? [['Anterior','Quadríceps e panturrilhas'],['Superiores','Costas, peito e braços'],['Posterior','Isquiotibiais e glúteos'],['Glúteos','Glúteos e panturrilhas']] : [['Push','Peito e tríceps'],['Anterior','Quadríceps e panturrilhas'],['Pull','Costas e bíceps'],['Posterior','Isquiotibiais e ombros']],
             biset_sinergista: [['Peito + Tríceps','Pares complementares'],['Costas + Bíceps','Pares complementares'],['Pernas + Ombros','Pares complementares']],
@@ -292,7 +299,7 @@ let isolationChartInstance = null;
         if (planTitle) planTitle.textContent = {
             abc:'Treino ABC', ppl:'Treino ABC · Push / Pull / Legs', abcd:'Treino ABCD',
             biset_sinergista:'Treino ABC · Bi-set complementar', circuito:'Circuito · corpo inteiro'
-        }[method] || (retiredMethod(method)?'Plano salvo · personalizado':'Ficha de treino');
+        }[method] || (isWorkoutModel(method)?modelLabel(method):retiredMethod(method)?'Plano salvo · personalizado':'Ficha de treino');
         if(planTitle && savedPlan?.method===method && savedPlan.name)planTitle.textContent=savedPlan.name;
         const daysList=document.getElementById('planDaysList');if(daysList)daysList.innerHTML='';
         ['A','B','C','D'].forEach((day,index) => {
@@ -342,6 +349,7 @@ let isolationChartInstance = null;
         const virtualFragment = document.createDocumentFragment();
 
         state.currentRoutine.forEach((bloco, bIndex) => {
+            if(!blockEnabled(bloco))return;
             const isBiset = bloco.type === 'superset' || bloco.type === 'circuit';
             const cardClass = isBiset ? 'biset-card' : 'tradicional-card';
 
@@ -359,6 +367,7 @@ let isolationChartInstance = null;
                 card.classList.toggle('minimized-block');
             });
 
+            appendBlockControls(card,bloco,bIndex);
             bloco.exercises.forEach((ex, eIndex) => {
                 const blockDiv = document.createElement('div'); blockDiv.className = 'exercise-block';
 
@@ -418,7 +427,7 @@ let isolationChartInstance = null;
                             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                                 <div style="display: flex; align-items: center; background: var(--surface-soft); border-radius: 8px; padding: 2px 6px; border: 1px solid var(--line);">
                                     <button class="btn-edit-set" onclick="window.FitApp.changeSets(${bIndex}, ${eIndex}, -1)" style="background: none; border: none; color: var(--danger); font-weight: bold; font-size: 16px; padding: 0 5px; cursor: pointer;">-</button>
-                                    <span style="font-size: 12px; color: var(--muted); margin: 0 5px; font-weight: bold;">${ex.sets}x</span>
+                                    <span style="font-size: 12px; color: var(--muted); margin: 0 5px; font-weight: bold;">${ex.sideMode==='alternating'?ex.sets/2+' por lado':ex.sets+'x'}</span>
                                     <button class="btn-edit-set" onclick="window.FitApp.changeSets(${bIndex}, ${eIndex}, 1)" style="background: none; border: none; color: var(--accent); font-weight: bold; font-size: 16px; padding: 0 5px; cursor: pointer;">+</button>
                                 </div>
                                 <span class="target-reps" style="padding: 4px 8px; font-size: 11px;">${safeTarget}</span>
@@ -491,7 +500,8 @@ let isolationChartInstance = null;
                     const placeholderKg = ghostKg !== '' ? ghostKg : 'Kg';
                     const placeholderReps = data.measurementType === 'duration' ? 'Seg' : ghostReps !== '' ? ghostReps : 'Reps';
 
-                    row.innerHTML = `<div class="set-label">S${s}</div><input type="number" min="0" step="0.5" aria-label="Carga em kg, série ${s}" id="${kgId}" class="kg-val" placeholder="${placeholderKg}" value="${escapeHTML(displayKg)}"><input type="number" min="0" aria-label="Quantidade, série ${s}" id="${rpId}" class="rp-val" placeholder="${placeholderReps}" value="${escapeHTML(displayReps ?? '')}"><select class="set-measure" aria-label="Unidade, série ${s}"><option value="reps" ${data.measurementType !== 'duration' ? 'selected' : ''}>rep</option><option value="duration" ${data.measurementType === 'duration' ? 'selected' : ''}>seg</option></select><button class="btn-iso" title="Cronômetro para série por tempo" aria-label="Iniciar ou pausar cronômetro da série ${s}" ${data.measurementType !== 'duration' ? 'disabled' : ''}>⏱</button><input type="checkbox" aria-label="Série ${s} realizada" id="${chkId}" class="chk-set" ${data.checked ? 'checked' : ''}>`;
+                    const sideLabel=ex.sideMode==='alternating'?(s%2?'E':'D')+Math.ceil(s/2):'S'+s;
+                    row.innerHTML = `<div class="set-label">${sideLabel}</div><input type="number" min="0" step="0.5" aria-label="Carga em kg, série ${s}" id="${kgId}" class="kg-val" placeholder="${placeholderKg}" value="${escapeHTML(displayKg)}"><input type="number" min="0" aria-label="Quantidade, série ${s}" id="${rpId}" class="rp-val" placeholder="${placeholderReps}" value="${escapeHTML(displayReps ?? '')}"><select class="set-measure" aria-label="Unidade, série ${s}" ${ex.sideMode?'disabled':''}><option value="reps" ${data.measurementType !== 'duration' ? 'selected' : ''}>rep</option><option value="duration" ${data.measurementType === 'duration' ? 'selected' : ''}>seg</option></select><button class="btn-iso" title="Cronômetro para série por tempo" aria-label="Iniciar ou pausar cronômetro da série ${s}" ${data.measurementType !== 'duration' ? 'disabled' : ''}>⏱</button><input type="checkbox" aria-label="${ex.sideMode==='alternating'?'Série '+Math.ceil(s/2)+', lado '+(s%2?'esquerdo':'direito'):'Série '+s} realizada" id="${chkId}" class="chk-set" ${data.checked ? 'checked' : ''}>`;
 
                     row.classList.toggle('set-confirmed',Boolean(data.checked));
                     const chk = row.querySelector('.chk-set');
@@ -583,8 +593,8 @@ let isolationChartInstance = null;
                                 return true;
                             });
 
-                            if ((!isBiset || allInSetChecked) && state.checkedSets < state.totalSets) {
-                                window.FitApp.startRestTimer(card, ex.name);
+                            if ((!isBiset || allInSetChecked) && (ex.sideMode!=='alternating'||ex.setsData[(s-1)^1]?.checked) && state.checkedSets < state.totalSets) {
+                                window.FitApp.startRestTimer(card, ex.name,false,bloco);
                             } else if (isBiset && pendingCompanions > 0) {
                                 window.FitApp.showToast(`🔗 Bi-Set Ativo: Complete o movimento parceiro (Série ${s}) para iniciar o descanso.`);
                             }
@@ -628,6 +638,8 @@ let isolationChartInstance = null;
         // ⚡ OPÇÃO GOLF: Injeta todo o treino no ecrã num único cálculo do processador
         state.els.exerciseList.innerHTML = '';
         state.els.exerciseList.appendChild(virtualFragment);
+        appendOptionalControls(state.els.exerciseList);
+        appendSaveSessionChanges(state.els.exerciseList);
 
         window.FitApp.updateProgress();
 
@@ -899,6 +911,7 @@ let isolationChartInstance = null;
                 <div style="flex: 1;">
                     <div style="font-weight: bold; color: var(--ink);">${escapeHTML(sessionLabel(log,readJSON(window.FitApp.safeGet('fitapp_custom_workouts'),[])))}</div>
                     <div style="font-size: 12px; color: var(--muted);">${dateStr} • ⏱️ ${durationStr}</div>
+                    <span class="badge history-completion">${log.complete===true?'Completo':log.complete===false?'Parcial':'Conclusão não informada'}</span>
                 </div>
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <button onclick="event.stopPropagation(); window.FitApp.exportStravaCard(${history.length - 1 - reversedHistory.indexOf(log)})" style="background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--accent);" title="Compartilhar resumo">${icon('share')}</button>
@@ -935,7 +948,7 @@ let isolationChartInstance = null;
                         const timeStr = c.tempo_segundos > 0 ? `<span style="background: var(--surface); padding: 2px 6px; border-radius: 4px; margin-right: 4px; border: 1px solid var(--line); color: var(--muted);">⏱️ ${Math.floor(c.tempo_segundos/60)} min</span>` : '';
                         exDiv.innerHTML += `<div style="margin-top: 6px;">${distStr}${kcalStr}${bpmStr}${timeStr}</div>`;
                     } else {
-                        const setStr = sets.map(s => `<span class="history-set">S${Number(s.set)||0}: ${Number(s.kg)||0} kg · ${s.measurementType === 'duration' ? (Number(s.durationSecs)||0)+' s' : (Number(s.reps)||0)+' rep'}</span>`).join('');
+                        const setStr = sets.map(s => `<span class="history-set">${sideLabel(s)}: ${Number(s.kg)||0} kg · ${s.measurementType === 'duration' ? (Number(s.durationSecs)||0)+' s' : (Number(s.reps)||0)+' rep'}</span>`).join('');
                         exDiv.innerHTML += `<div style="margin-top: 4px; line-height: 1.8;">${setStr}</div>`;
                     }
                     body.appendChild(exDiv);
@@ -944,6 +957,7 @@ let isolationChartInstance = null;
                 body.innerHTML = '<div style="font-size: 12px; color: var(--subtle);">Sem dados detalhados.</div>';
             }
 
+            if(log.tipo!=='Cardio')body.append(createSessionComparison(log));
             header.querySelector('[data-claim-reward]')?.addEventListener('click', event => { event.stopPropagation(); window.FitGamification.showPackModal(false, log._id); });
             header.onclick = () => {
                 const isVisible = body.style.display === 'block';
@@ -959,6 +973,7 @@ let isolationChartInstance = null;
     }
 
     export function renderMetricsChart() {
+        renderTrainingTracking();
         const history = readJSON(window.FitApp.safeGet('fitapp_week_log'), []);
         const radarCtx = document.getElementById('radarChart');
         const radarContainer = document.getElementById('radarContainer');
@@ -1142,6 +1157,7 @@ let isolationChartInstance = null;
 
         if (state.editorContext?.kind === 'cycle') {
             renderCycleReview(list);
+            appendOptionalControls(list);
             decoratePreview(list,issues);
             return;
         }
@@ -1155,8 +1171,10 @@ let isolationChartInstance = null;
         });
 
         const activeMuscles = new Set();
+        appendOptionalControls(list);
 
         state.currentRoutine.forEach((bloco, bIndex) => {
+            if(!blockEnabled(bloco))return;
             if (bloco.day && (bIndex === 0 || state.currentRoutine[bIndex-1].day !== bloco.day)) {
                 const heading = document.createElement('h3');
                 heading.className = 'cycle-day-heading';
@@ -1177,11 +1195,13 @@ let isolationChartInstance = null;
             list.appendChild(blockTools);
             if(bloco.equipmentPolicy==='bodyweight'){const policy=document.createElement('p');policy.className='badge';policy.textContent='Somente peso corporal e calistenia';list.append(policy);}
             const blockFields=document.createElement('div');blockFields.className='form-grid editor-block-fields';
+            blockFields.dataset.blockIndex=bIndex;
             blockFields.innerHTML=`<label class="field">Nome do bloco<input maxlength="120" data-block-title value="${escapeHTML(bloco.title)}"></label><label class="field">Execução<select data-block-type><option value="traditional">Séries tradicionais</option><option value="superset">Par de exercícios</option><option value="circuit">Circuito</option></select></label>`;
             blockFields.querySelector('[data-block-type]').value=bloco.type||'traditional';
             blockFields.querySelector('[data-block-title]').addEventListener('input',event=>{window.FitEditor.changeBlock(bIndex,'title',event.target.value);blockTitle.textContent=state.currentRoutine[bIndex].title;});
             blockFields.querySelector('[data-block-type]').addEventListener('change',event=>window.FitEditor.changeBlock(bIndex,'type',event.target.value));
             list.appendChild(blockFields);
+            appendBlockControls(blockFields,bloco,bIndex);
 
             bloco.exercises.forEach((ex, eIndex) => {
                 const dictItem = typeof window.dictionaryData !== 'undefined' ? window.dictionaryData.find(d => d.name === ex.name) : null;
@@ -1215,7 +1235,7 @@ let isolationChartInstance = null;
                             ${safeName}
                             <a href="${ytLink}" target="_blank" title="Buscar demonstração no YouTube" style="text-decoration: none; font-size: 16px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">${icon('video')}</a>
                         </div>
-                        <div style="font-size: 12px; color: var(--theme-primary); margin-top: 4px; font-weight: bold;">${ex.sets}x ${safeTarget}</div>
+                        <div style="font-size: 12px; color: var(--theme-primary); margin-top: 4px; font-weight: bold;">${setsForDisplay(ex)}x ${safeTarget}</div>
                     </div>
                     <div style="display: flex; gap: 8px;">
                         <button onclick="window.FitApp.openSwapModal(${bIndex}, ${eIndex})" style="background: var(--line); border: none; color: var(--ink); padding: 6px 10px; border-radius: 4px; cursor: pointer;">${icon('swap')}</button>
@@ -1232,7 +1252,8 @@ let isolationChartInstance = null;
                 list.appendChild(item);
                 const fields=document.createElement('div');fields.className='editor-exercise-fields';
                 fields.innerHTML=`<label>Séries<input class="editor-sets" type="number" min="1" max="10" value="${Number(ex.sets)}"></label><label>Meta<input class="editor-target" maxlength="50" value="${escapeHTML(ex.target)}"></label><button class="icon-button" data-move-exercise="-1" aria-label="Mover exercício para cima no bloco" ${eIndex===0?'disabled':''}>↑</button><button class="icon-button" data-move-exercise="1" aria-label="Mover exercício para baixo no bloco" ${eIndex===bloco.exercises.length-1?'disabled':''}>↓</button>`;
-                fields.querySelector('.editor-sets').addEventListener('change',event=>{window.FitEditor.changeExercise(bIndex,eIndex,'sets',event.target.value);event.target.value=state.currentRoutine[bIndex].exercises[eIndex].sets;});
+                if(ex.sideMode==='alternating'){fields.querySelector('label').firstChild.nodeValue='Séries por lado';fields.querySelector('.editor-sets').value=setsForDisplay(ex);fields.querySelector('.editor-sets').max=5;}
+                fields.querySelector('.editor-sets').addEventListener('change',event=>{window.FitEditor.changeExercise(bIndex,eIndex,'sets',Number(event.target.value)*(ex.sideMode==='alternating'?2:1));event.target.value=setsForDisplay(state.currentRoutine[bIndex].exercises[eIndex]);});
                 fields.querySelector('.editor-target').addEventListener('input',event=>window.FitEditor.changeExercise(bIndex,eIndex,'target',event.target.value));
                 fields.querySelectorAll('[data-move-exercise]').forEach(button=>button.addEventListener('click',()=>window.FitEditor.moveExercise(bIndex,eIndex,Number(button.dataset.moveExercise))));
                 list.appendChild(fields);
@@ -1268,6 +1289,10 @@ let isolationChartInstance = null;
         const settings=state.previewModel;
         description.textContent=settings?modelSettings(settings.method,settings.profile,settings.level).description+' Séries e metas editadas na ficha prevalecem sobre essa base.':'Ficha personalizada: séries e metas seguem os exercícios cadastrados. O descanso desta sessão começa em 60 s e pode ser ajustado.';
         const explanation=document.createElement('details');explanation.className='parameter-explanation';explanation.append(heading,description);panel.append(explanation);
+        if(state.currentRoutine.some(block=>block.modelVersion)){
+            description.textContent='Séries, metas e descansos pertencem a cada bloco desta ficha. As trocas preservam a função da posição. Ajustes da sessão só mudam a ficha original pela ação de salvar.';
+            appendSaveSessionChanges(panel);return;
+        }
         if(state.editorContext?.kind==='cycle')return;
         const label=document.createElement('label');label.className='field';label.textContent='Descanso desta sessão';
         const select=document.createElement('select');select.id='sessionRestSeconds';

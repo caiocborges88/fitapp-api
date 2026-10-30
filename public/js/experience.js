@@ -17,7 +17,7 @@ function refresh(){
     const name=user?.displayName?.trim() || user?.email?.split('@')[0] || 'Atleta';
     const initial=Array.from(name)[0]?.toLocaleUpperCase('pt-BR') || '?';
     text('profileName',name);text('profileEmail',user?.email || '');text('profileAvatar',initial);text('headerAvatar',initial);
-    text('profileLevelDisplay',({iniciante:'Iniciante',intermediario:'Intermediário',avancado:'Avançado'})[globalThis.FitStore?.get('fitapp_level')]||'Não informada');
+    text('profileLevelDisplay',({padrao:'Regras por bloco',iniciante:'Iniciante',intermediario:'Intermediário',avancado:'Avançado'})[globalThis.FitStore?.get('fitapp_level')]||'Regras do modelo');
     text('greetingName',user ? ', '+name.split(/\s/)[0] : '');
     const emptyHistory=document.getElementById('historyEmpty');
     if(emptyHistory)emptyHistory.hidden=history.length>0;

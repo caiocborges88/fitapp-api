@@ -4,12 +4,13 @@ export const retiredMethodMessage='Este modelo foi removido. Escolha um modelo d
 
 // A retired method can identify an existing plan, but is never a new-plan option.
 export function selectSavedMethod(select,value,plan){
-    if(retiredMethod(value)&&!(plan?.method===value&&Object.values(plan.workouts||{}).some(routine=>Array.isArray(routine)&&routine.length)))value=retiredBiset(value)?'biset_sinergista':'abc';
+    if(['abc','ppl','abcd','biset_sinergista','circuito'].includes(value)&&!Object.values(plan?.workouts||{}).some(routine=>Array.isArray(routine)&&routine.length))value='abc_tradicional';
+    if(retiredMethod(value)&&!(plan?.method===value&&Object.values(plan.workouts||{}).some(routine=>Array.isArray(routine)&&routine.length)))value='abc_tradicional';
     if(retiredMethod(value)&&![...select.options].some(option=>option.value===value)){
         const option=document.createElement('option');
         option.value=value;option.textContent='Plano salvo · personalizado';
         option.hidden=true;option.disabled=true;select.append(option);
     }
     select.value=value;
-    if(!select.value)select.value='abc';
+    if(!select.value)select.value='abc_tradicional';
 }

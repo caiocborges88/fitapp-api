@@ -1,5 +1,7 @@
 import {state} from './state.js';
-import {readJSON} from './domain.js';
+import {readJSON,blockEnabled} from './domain.js';
+import {isWorkoutModel,nextModelDay} from './workout-models.js';
+import {renderReviewReminder} from './model-controls.js';
 import {persistDraft,listDrafts,restoreDraft,discardDraft} from './drafts.js';
 import {validDraft} from './draft-domain.js';
 
@@ -12,7 +14,7 @@ export function decoratePreview(list,issues){
     preview.dataset.kind=kind;
     let summary=document.getElementById('previewSummary');
     if(!summary){summary=element('p','preview-summary');summary.id='previewSummary';list.before(summary);}
-    const exercises=state.currentRoutine.flatMap(block=>block.exercises);
+    const exercises=state.currentRoutine.filter(blockEnabled).flatMap(block=>block.exercises);
     const series=exercises.reduce((total,ex)=>total+Number(ex.sets||0),0);
     summary.textContent=`${exercises.length} ${exercises.length===1?'exercício':'exercícios'} · ${series} ${series===1?'série':'séries'}${issues.length?' · '+issues.length+' pendências':''}`;
     summary.setAttribute('role','status');
@@ -21,7 +23,7 @@ export function decoratePreview(list,issues){
         const settings=disclosure('Organizar bloco','block-settings');fields.before(settings);
         if(tools?.classList.contains('editor-block-tools'))settings.append(tools);
         settings.append(fields);settings.open=['template','plan'].includes(kind);
-        const index=Array.from(list.querySelectorAll('.block-settings')).indexOf(settings),block=state.currentRoutine[index];
+        const index=Number(fields.dataset.blockIndex??Array.from(list.querySelectorAll('.block-settings')).indexOf(settings)),block=state.currentRoutine[index];
         const remove=element('button','text-button','Remover bloco');remove.type='button';remove.disabled=state.currentRoutine.filter(item=>item.day===block.day).length<=1;
         remove.addEventListener('click',()=>window.FitEditor.removeBlock(index));settings.append(remove);
     }
@@ -101,6 +103,11 @@ const issuesCount=()=>document.querySelectorAll('#routineReview li').length;
 function refreshHome(){
     if(!window.FitStore?.uid)return;
     const templates=readJSON(window.FitStore.get('fitapp_custom_workouts'),[]),plan=readJSON(window.FitStore.get('fitapp_campaign_data'),null);
+    document.getElementById('planReviewReminder')?.remove();
+    if(isWorkoutModel(plan?.method)){
+        const reminder=element('div');reminder.id='planReviewReminder';
+        document.querySelector('.home-overview').before(reminder);renderReviewReminder(reminder,plan);
+    }
     const choices=[...Object.entries(plan?.workouts||{}).map(([day,routine])=>({type:day,name:plan.workoutNames?.[day]||'Treino '+day,routine})),...templates.map(item=>({type:'custom_'+item.id,...item}))];
     document.body.classList.toggle('has-saved-workouts',choices.length>0);
     let panel=document.getElementById('quickWorkout');
@@ -117,16 +124,19 @@ function refreshHome(){
     panel.hidden=!choices.length;
     if(!choices.length)return;
     const preferred=window.FitStore.get('fitapp_quick_workout')||window.FitStore.get('fitapp_last_workout');
-    const current=choices.find(item=>item.type===preferred)||choices[0];
+    if(state.quickPlanId!==plan?.id){state.quickPlanId=plan?.id;state.quickDayOverride=null;}
+    const next=isWorkoutModel(plan?.method)?nextModelDay(plan,readJSON(window.FitStore.get('fitapp_week_log'),[]),readJSON(window.FitStore.get('fitapp_sync_queue'),[])):null;
+    const pinned=window.FitStore.get('fitapp_quick_workout');
+    const current=choices.find(item=>item.type===(state.quickDayOverride||(next&&!pinned?.startsWith('custom_')?next:preferred)))||choices[0];
     const select=document.getElementById('quickWorkoutSelect');
     if(JSON.stringify(choices.map(item=>[item.type,item.name]))!==select.dataset.choices){
         select.replaceChildren(...choices.map(item=>{const option=element('option','',item.name);option.value=item.type;return option;}));
         select.dataset.choices=JSON.stringify(choices.map(item=>[item.type,item.name]));
     }
     select.value=current.type;
-    select.onchange=()=>{window.FitApp.safeSet('fitapp_quick_workout',select.value);refreshHome();};
-    document.getElementById('quickWorkoutName').textContent=current.name+' · '+current.routine.reduce((total,block)=>total+block.exercises.length,0)+' exercícios';
-    document.getElementById('quickWorkoutOpen').onclick=()=>window.FitApp.startWorkout(current.type);
+    select.onchange=()=>{state.quickDayOverride=select.value;window.FitApp.safeSet('fitapp_quick_workout',select.value);refreshHome();};
+    document.getElementById('quickWorkoutName').textContent=current.name+' · '+current.routine.filter(blockEnabled).reduce((total,block)=>total+block.exercises.length,0)+' exercícios';
+    document.getElementById('quickWorkoutOpen').onclick=()=>window.FitApp.startWorkout(select.value);
 }
 
 function refreshDrafts(){
@@ -152,6 +162,7 @@ export function setupMobileFlow(){
     const refresh=()=>{scheduled=false;refreshHome();refreshDrafts();};
     const schedule=()=>{if(!scheduled){scheduled=true;requestAnimationFrame(refresh);}};
     for(const name of ['fitapp:datachange','fitapp:cloudchange','fitapp:draftschange','storage'])window.addEventListener(name,schedule);
+    document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')schedule();});
     for(const name of ['input','change'])document.getElementById('workoutPreview').addEventListener(name,()=>{persistDraft();const status=document.getElementById('previewDraftStatus');if(status)status.textContent=state.draftId?'Rascunho salvo neste dispositivo':'';});
     window.addEventListener('pagehide',persistDraft);
     document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')persistDraft();});

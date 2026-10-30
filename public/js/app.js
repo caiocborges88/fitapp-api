@@ -10,6 +10,9 @@ import {modelSettings} from './model-settings.js';
 import {refreshCoverage} from './ui.js';
 import {persistDraft,finishDraft} from './drafts.js';
 import {equipmentGroups} from './equipment-settings.js';
+import {isWorkoutModel,modelLabel,principalComplete,nextModelDay} from './workout-models.js';
+import {roleCandidates} from './workout-models.js';
+import {snapshotRoutine,encodeTrainingContext} from './training-tracking.js';
 'use strict';
 
 // 🌐 IMPORTAÇÕES MODULARES GLOBAIS (Devem estar sempre no topo)
@@ -126,9 +129,10 @@ async function exportStravaCard(historyIndex = -1) {
         const currentEnv = safeGet('fitapp_global_env') || 'academia';
 
         // 1. Busca todos os exercícios da mesma gaveta muscular
-        let pool = window.dictionaryData.filter(d => 
+        let pool = roleCandidates(ex,window.dictionaryData,environmentOptions())||window.dictionaryData.filter(d =>
             getMuscleGroup(d.group) === broadGroup && d.name !== currentName && (!currentDict || sameMuscleFocus(currentDict,d)) && (level!=='iniciante'||d.nivel!==3)
         );
+        pool=pool.filter(item=>item.name!==currentName&&!state.currentRoutine[bIndex].exercises.some((other,i)=>i!==eIndex&&other.name===item.name));
 
         // Blindagem de Ambiente
         pool=pool.filter(d=>availableInEnvironment(d,{...environmentOptions(),environment:type==='Casa'?'casa':currentEnv,equipmentPolicy:state.currentRoutine[bIndex].equipmentPolicy}));
@@ -212,13 +216,21 @@ async function exportStravaCard(historyIndex = -1) {
         modal.innerHTML = html;
         modal.querySelector('[data-swap-original]')?.addEventListener('click', () => confirmSwap(bIndex, eIndex, originalName));
         modal.querySelectorAll('[data-swap-index]').forEach(el => el.addEventListener('click', () => confirmSwap(bIndex, eIndex, pool[Number(el.dataset.swapIndex)].name)));
+        modal.querySelectorAll('[data-swap-index],[data-swap-original]').forEach(el=>{
+            el.setAttribute('role','button');el.tabIndex=0;
+            el.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();el.click();}});
+        });
         modal.style.display = 'flex';
     }
 
     function confirmSwap(bIndex, eIndex, newName) {
         if (state.isWorkoutActive && state.currentRoutine[bIndex].exercises[eIndex].setsData?.some(set => set.checked)) { showToast('Este exercício já tem séries registradas. Adicione o novo movimento separadamente para preservar os registros.'); return; }
         const candidate=window.dictionaryData.find(item=>item.name===newName);
-        if(candidate?.nivel===3&&state.els.levelSelector?.value==='iniciante'){showToast('Escolha uma alternativa de complexidade básica ou moderada para esta troca.');return;}
+        const exercise=state.currentRoutine[bIndex].exercises[eIndex];
+        const approved=roleCandidates(exercise,window.dictionaryData,environmentOptions());
+        if(approved&&!approved.some(item=>item.name===newName)){showToast('Escolha uma alternativa revisada para a função deste movimento.');return;}
+        if(!approved&&candidate?.nivel===3&&state.els.levelSelector?.value==='iniciante'){showToast('Escolha uma alternativa de complexidade básica ou moderada para esta troca.');return;}
+        if(state.currentRoutine[bIndex].type==='superset'&&state.currentRoutine[bIndex].exercises.some((other,i)=>i!==eIndex&&other.name===newName)){showToast('Use dois movimentos distintos no par.');return;}
         if(!availableInEnvironment(candidate,{...environmentOptions(),equipmentPolicy:state.currentRoutine[bIndex].equipmentPolicy})){showToast('Este movimento não atende aos recursos ou ao tipo de equipamento deste bloco.');return;}
         delete state.currentRoutine[bIndex].exercises[eIndex]._environmentOriginal;
         delete state.currentRoutine[bIndex].exercises[eIndex].setsData;
@@ -264,6 +276,9 @@ async function exportStravaCard(historyIndex = -1) {
 
     function startWorkout(type) {
         if(state.isWorkoutActive){showToast('Conclua ou descarte a sessão atual antes de abrir outra ficha.');return;}
+        const chosen=document.getElementById('mainMethodSelector')?.value;
+        const saved=readJSON(safeGet('fitapp_campaign_data'),null);
+        if(/^[A-C]$/.test(type)&&isWorkoutModel(chosen)&&saved?.method!==chosen){openForgeModal({fromPreferences:true});showToast('Revise e salve o ciclo completo antes de escolher o dia.');return;}
         if(!persistDraft())return;
         const tabTreino = document.getElementById('nav-treino');
         if (tabTreino) {
@@ -384,7 +399,9 @@ async function exportStravaCard(historyIndex = -1) {
 function saveWorkoutState() {
         if (!state.isWorkoutActive) return;
         const activeState = { 
-            version: 2, userId: window.FitStore.uid, sessionId: state.sessionId,
+            version: 4, userId: window.FitStore.uid, sessionId: state.sessionId,
+            sessionPlanned:state.sessionPlanned,
+            sessionOrigin:state.sessionOrigin,blockRestOverrides:state.blockRestOverrides,activeRestBlockId:state.activeRestBlockId,
             currentRoutine: state.currentRoutine, 
             currentWorkoutType: state.currentWorkoutType, 
             workoutStartTime: state.workoutStartTime,
@@ -403,11 +420,14 @@ function saveWorkoutState() {
 
     function loadWorkout() {
         state.environmentProposal=null;
+        state.blockRestOverrides={};state.activeRestBlockId=null;state.sessionOrigin=null;state.sessionPlanned=null;
         const style = state.els.styleSelector ? state.els.styleSelector.value : 'biset';
-        const level = state.els.levelSelector ? state.els.levelSelector.value : 'intermediario';
-        const profile = state.els.profileSelector ? state.els.profileSelector.value : 'masculino'; // NOVO: Leitura do Perfil
+        const fixed=isWorkoutModel(document.getElementById('mainMethodSelector')?.value);
+        const level = fixed?'padrao':state.els.levelSelector ? state.els.levelSelector.value : 'intermediario';
+        const profile = fixed?'hipertrofia':state.els.profileSelector ? state.els.profileSelector.value : 'masculino';
         const type = state.currentWorkoutType;
         if (!type) return;
+        if(/^[A-D]$/.test(type)){state.currentRoutine=[];state.editorContext=null;}
         state.previewModel=null;
         state.coverageReference=null;
         adjustRestTime(60);
@@ -457,6 +477,7 @@ function saveWorkoutState() {
             
             if (customWorkout) {
                 state.currentRoutine = routineForTemplate(customWorkout.routine);
+                state.sessionOrigin={userId:window.FitStore.uid,templateId:customWorkout.id,revision:customWorkout.revision||0,method:'personalizado'};
                 if(preview) {
                     document.getElementById('previewTitle').textContent = customWorkout.name;
                     document.getElementById('previewDesc').textContent = `Ajuste a sessão ou abra a versão salva para edição permanente.`;
@@ -483,15 +504,18 @@ function saveWorkoutState() {
                 campaignData.workouts = executeForgePlan(method, readJSON(safeGet('fitapp_blacklist'), []),
                     {environment:'academia', allEquipment:true}, campaignData.workouts);
             } catch (error) { showToast(error.message); cancelWorkoutPreview(); return; }
+            if(!campaignData.workouts[type]?.length){showToast('Este dia não está presente na ficha salva. Revise o plano; nenhum dia foi acrescentado.');cancelWorkoutPreview();return;}
             campaignData.id = campaignData.id || newId();
             if(!retiredMethod(method))campaignData.profile = profile;
             if(replacing){try{commitWorkoutPlan(window.FitStore,campaignData,{resetCount:true});}catch(error){showToast('Não foi possível gravar o novo plano. O plano anterior foi mantido.');cancelWorkoutPreview();return;}}
             else if(!safeSet(campaignKey, JSON.stringify(campaignData))){cancelWorkoutPreview();return;}
             saveCampaignToCloud();
             state.currentRoutine = JSON.parse(JSON.stringify(campaignData.workouts[type]));
+            state.sessionOrigin={userId:window.FitStore.uid,planId:campaignData.id,revision:campaignData.revision||0,day:type,method:campaignData.method};
+            state.activeRestBlockId=state.currentRoutine.find(block=>!block.optional)?.id||null;
             if(!retiredMethod(campaignData.method)){
                 state.previewModel={method:campaignData.method,profile:campaignData.profile||'hipertrofia',level:campaignData.level||'iniciante'};
-                adjustRestTime(modelSettings(state.previewModel.method,state.previewModel.profile,state.previewModel.level).restSeconds);
+                adjustRestTime(state.currentRoutine.find(block=>!block.optional)?.restSeconds??modelSettings(state.previewModel.method,state.previewModel.profile,state.previewModel.level).restSeconds,true);
             }
             if(preview) {
                 const cardRef = document.getElementById('card-' + type);
@@ -558,6 +582,9 @@ function saveWorkoutState() {
         if(issues.length){renderPreviewList();showToast(issues[0].message);document.getElementById('routineReview')?.scrollIntoView({block:'start',behavior:'smooth'});return;}
         try { state.currentRoutine = normalizeRoutine(state.currentRoutine); }
         catch (error) { showToast(error.message); return; }
+        state.sessionPlanned=snapshotRoutine(state.currentRoutine,window.dictionaryData,state.blockRestOverrides,state.currentRestTime);
+        try{encodeTrainingContext(state.sessionPlanned,state.currentRoutine,window.dictionaryData,state.blockRestOverrides,state.sessionOrigin,state.currentRestTime);}
+        catch(error){showToast(error.message);return;}
         state.sessionId = newId();
         const finishButton = document.getElementById('btnFinishAction');
         if (finishButton) { finishButton.disabled = false; finishButton.style.opacity = '1'; }
@@ -610,7 +637,8 @@ function saveWorkoutState() {
         state.els.progressBar.style.width = pct + '%';
         for(const [name,value]of Object.entries({role:'progressbar','aria-label':'Séries realizadas','aria-valuemin':'0','aria-valuemax':'100','aria-valuenow':String(pct)}))state.els.progressBar.setAttribute(name,value);
         const btn = document.getElementById('btnFinishAction');
-        if(pct === 100) { btn.className = 'btn-action button primary'; btn.textContent = 'Concluir treino'; stopRestTimer(); speak("Treino finalizado."); }
+        const mainDone=state.currentRoutine.some(block=>block.modelVersion)&&principalComplete(state.currentRoutine);
+        if(pct === 100||mainDone) { btn.className = 'btn-action button primary'; btn.textContent = mainDone&&pct<100?'Concluir parte principal':'Concluir treino'; if(pct===100)stopRestTimer(); }
         else { btn.className = 'btn-action button primary'; btn.textContent = 'Salvar treino parcial'; }
     }
 
@@ -646,6 +674,11 @@ function saveWorkoutState() {
         }
         // --- FIM DA TRAVA ANTI-EXPLOIT ---
 
+        let trainingContext;
+        if(state.currentWorkoutType!=='Cardio'){
+            try{trainingContext=encodeTrainingContext(state.sessionPlanned??null,state.currentRoutine,window.dictionaryData,state.blockRestOverrides,state.sessionOrigin,state.currentRestTime);}
+            catch(error){showToast(error.message);return;}
+        }
         // 🛡️ OPÇÃO HOTEL: Trava de Duplo Clique ativada apenas após passar nas validações
         const btnFinish = document.getElementById('btnFinishAction');
         if (btnFinish) {
@@ -657,7 +690,7 @@ function saveWorkoutState() {
 
         stopRestTimer(); 
         
-        const isComplete = state.checkedSets === state.totalSets;
+        const isComplete = state.currentWorkoutType!=='Cardio'&&state.currentRoutine.some(block=>block.modelVersion)?principalComplete(state.currentRoutine):state.checkedSets === state.totalSets;
         const tipoTreino = state.currentWorkoutType; 
         
         const d = new Date();
@@ -668,15 +701,16 @@ function saveWorkoutState() {
         
         const totalTimeSecs = state.currentWorkoutType === 'Cardio' ? cardioElapsedSeconds : tempTotalTimeSecs;
         const campaign = readJSON(safeGet('fitapp_campaign_data'), null);
-        const currentMethod = document.getElementById('mainMethodSelector')?.value || 'abc';
+        const currentMethod = state.sessionOrigin?.method||document.getElementById('mainMethodSelector')?.value || 'abc';
         const payload = {
             _id: state.sessionId || newId(), userId: window.FitStore.uid,
             date: dataHoje, tipo: tipoTreino, method: currentMethod,
             workoutName: (tipoTreino==='Cardio'?'Aeróbico':document.getElementById('customWorkoutName').value.trim() || workoutLabel(tipoTreino)).slice(0,120),
             duration_secs: totalTimeSecs, data: state.todayLog,
             createdAt: Date.now(), complete: isComplete,
-            campaignId: ['A','B','C','D'].includes(tipoTreino) ? campaign?.id || null : null,
-            _sync: 'pending'
+            campaignId: ['A','B','C','D'].includes(tipoTreino) ? state.sessionOrigin?.planId||campaign?.id || null : null,
+            _sync: 'pending',
+            ...(trainingContext?{trainingContext}:{})
         };
         // A sessão só é encerrada depois de uma gravação local confirmada.
         try {
@@ -687,6 +721,7 @@ function saveWorkoutState() {
             btnFinish.textContent = 'Tentar salvar novamente'; return;
         }
         const history = mergeHistory(readJSON(safeGet('fitapp_week_log'), []), [], [payload]);
+        state.quickDayOverride=null;
         safeSet('fitapp_week_log', JSON.stringify(history));
         clearInterval(state.globalTimer); clearInterval(cardioTimerInterval);
         state.workoutStartTime = null; state.isWorkoutActive = false;
@@ -696,7 +731,7 @@ function saveWorkoutState() {
         if (payload.campaignId && isComplete) campCount++;
         safeSet('fitapp_campaign_count', campCount);
         const daysPassed = campaign ? Math.floor((Date.now() - new Date(campaign.startDate)) / 86400000) : 0;
-        const isPromotionTime = Boolean(campaign && !campaign.reviewRequested && (campCount >= 24 || daysPassed >= 56));
+        const isPromotionTime = Boolean(campaign && !isWorkoutModel(campaign.method) && !campaign.reviewRequested && (campCount >= 24 || daysPassed >= 56));
         if (isPromotionTime) {
             campaign.reviewRequested = true;
             safeSet('fitapp_campaign_data', JSON.stringify(campaign));
@@ -1189,6 +1224,7 @@ window.encerrarSessao = function() {
         if (savedState) {
             const restored = readJSON(savedState, null);
             if (!restored || (restored.userId && restored.userId !== window.FitStore.uid)) return;
+            if(restored.version&&![1,2,3,4].includes(restored.version)){showToast('Esta versão de sessão não é reconhecida. O registro salvo foi preservado.');return;}
             if (state.isWorkoutActive) return;
             if (restored.currentWorkoutType === 'Cardio') {
                 startCardio();
@@ -1204,9 +1240,14 @@ window.encerrarSessao = function() {
             catch { showToast('Não foi possível restaurar a sessão salva. Seus demais dados foram preservados.'); return; }
             state.sessionId = restored.sessionId || newId();
             state.currentWorkoutType = restored.currentWorkoutType;
+            state.sessionOrigin=restored.sessionOrigin||null;
+            state.sessionPlanned=restored.sessionPlanned??null;
+            state.previewOwner=window.FitStore.uid;
+            state.blockRestOverrides=restored.blockRestOverrides||{};
+            state.activeRestBlockId=restored.activeRestBlockId||null;
             state.workoutStartTime = restored.workoutStartTime;
             state.isWorkoutActive = true;
-            adjustRestTime(restored.restSeconds);
+            adjustRestTime(restored.restSeconds,true);
             
             document.getElementById('workoutCards').style.display = 'none';
             const header = document.querySelector('.dashboard-header');
@@ -1276,6 +1317,7 @@ function lockCampaign() {
         if (!methodSelector || !profileSelector || !levelSelector) return;
         
         const method = methodSelector.value;
+        if(isWorkoutModel(method)){openForgeModal({fromPreferences:true});return;}
         if(retiredMethod(method)){showToast('Para criar outro plano, escolha um modelo disponível ou monte sua ficha manualmente.');return;}
         const profile = profileSelector.value;
         const level = levelSelector.value;
@@ -1402,6 +1444,16 @@ function lockCampaign() {
         }
         const banner = document.getElementById('smartBannerSetup'); // NOVO
         const history = readJSON(safeGet('fitapp_week_log'), []); // NOVO
+        const fixedPlan=readJSON(campaignStr,null);
+        if(isWorkoutModel(fixedPlan?.method)){
+            if(dash)dash.style.display='block';if(banner)banner.style.display='none';
+            const title=document.getElementById('campaignDashTitle'),subtitle=document.getElementById('campaignDashSubtitle'),countText=document.getElementById('campaignDashCount'),bar=document.getElementById('campaignDashBar');
+            if(title)title.textContent=modelLabel(fixedPlan.method);
+            if(subtitle)subtitle.textContent='Sequência contínua · próximo treino '+nextModelDay(fixedPlan,history);
+            if(countText)countText.textContent=history.filter(item=>item.campaignId===fixedPlan.id).length+' sessões registradas';
+            if(bar)bar.style.width='0%';
+            return;
+        }
         const onboardingDone = safeGet('fitapp_onboarding_done') === 'true'; // NOVO
         
         // 1. Puxamos a leitura da contagem para ANTES do IF

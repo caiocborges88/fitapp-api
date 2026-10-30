@@ -3,6 +3,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const server=require('../scripts/serve.cjs');
 const fake=require('./fixtures/firebase.cjs').replace("uid:'browser-test'","uid:sessionStorage.getItem('appearance-test-uid')||'browser-test'");
+const auditPrefix=process.env.FITAPP_AUDIT_PREFIX||'energy';
 (async()=>{
     await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
     const browser=await chromium.launch({...(process.platform==='win32'?{channel:'msedge'}:{}),headless:true});
@@ -15,7 +16,7 @@ const fake=require('./fixtures/firebase.cjs').replace("uid:'browser-test'","uid:
     page.on('dialog',dialog=>dialog.accept());
     const ready=async p=>{await p.waitForFunction(()=>globalThis.FitStore?.uid&&FitStore.get('fitapp_cloud_base'));await p.waitForFunction(()=>document.documentElement.dataset.theme);await p.evaluate(()=>document.fonts.ready);};
     const attr=async(name,value)=>{await page.waitForFunction(({name,value})=>document.documentElement.getAttribute(name)===value,{name,value});assert.equal(await page.locator('html').getAttribute(name),value);};
-    const capture=async name=>{await page.screenshot({path:`audit/energy-${name}.png`,animations:'disabled',fullPage:!name.endsWith('-treino')});};
+    const capture=async name=>{await page.screenshot({path:`audit/${auditPrefix}-${name}.png`,animations:'disabled',fullPage:!name.endsWith('-treino')});};
     try{
         await page.goto(origin);await ready(page);
         await attr('data-theme','light');await attr('data-effects','full');
@@ -136,11 +137,11 @@ const fake=require('./fixtures/firebase.cjs').replace("uid:'browser-test'","uid:
         const loginContext=await browser.newContext({viewport:{width:390,height:844},colorScheme:'light',serviceWorkers:'block'});
         await loginContext.route('**/vendor/firebase-*.js',route=>route.fulfill({contentType:'text/javascript',body:route.request().url().endsWith('firebase-app.js')?fake.replace('currentUser:user','currentUser:null'):''}));
         const login=await loginContext.newPage();await login.goto(origin);await login.evaluate(()=>document.fonts.ready);
-        await login.screenshot({path:'audit/energy-login-light.png',fullPage:false});
+        await login.screenshot({path:`audit/${auditPrefix}-login-light.png`,fullPage:false});
         await login.emulateMedia({colorScheme:'dark'});await login.waitForFunction(()=>document.documentElement.dataset.theme==='dark');
-        await login.screenshot({path:'audit/energy-login-dark.png',fullPage:false});await loginContext.close();
-        await page.setViewportSize({width:1280,height:1000});await page.goto(origin+'/design-reference.html');await page.waitForFunction(()=>[...document.querySelectorAll('iframe')].every(frame=>parseFloat(frame.style.height)>1100));await page.screenshot({path:'audit/energy-reference.png',fullPage:true});
-        fs.writeFileSync('audit/energy-validation.json',JSON.stringify({checkedAt:new Date().toISOString(),environment:'Local Edge automation; Firebase simulated; no physical devices',checks,matrix,errors},null,2)+'\n');
+        await login.screenshot({path:`audit/${auditPrefix}-login-dark.png`,fullPage:false});await loginContext.close();
+        await page.setViewportSize({width:1280,height:1000});await page.goto(origin+'/design-reference.html');await page.waitForFunction(()=>[...document.querySelectorAll('iframe')].every(frame=>parseFloat(frame.style.height)>1100));await page.screenshot({path:`audit/${auditPrefix}-reference.png`,fullPage:true});
+        fs.writeFileSync(`audit/${auditPrefix}-validation.json`,JSON.stringify({checkedAt:new Date().toISOString(),environment:'Local Edge automation; Firebase simulated; no physical devices',checks,matrix,errors},null,2)+'\n');
         console.log('Aparência: preferências, contas, contraste, 16 combinações e sessão aprovados.');
     }finally{await context.close();await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);server.close();process.exitCode=1;});

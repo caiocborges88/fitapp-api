@@ -12,7 +12,7 @@ export function validDraft(value,userId){
         const review=value.proposal,proposal=review.proposal;
         if(!['pending','accepted'].includes(review.status)||typeof review.signature!=='string'||!routineShape(review.source)||!routineShape(proposal?.routine)||!Number.isFinite(proposal.originalCount)||!Number.isFinite(proposal.proposedCount)||!Array.isArray(proposal.omitted)||!proposal.omitted.every(item=>item&&typeof item.name==='string'&&typeof item.subLevel==='string'&&Number.isFinite(Number(item.sets))))return false;
     }
-    if(value.context.kind==='cycle')return Array.isArray(value.context.days)&&value.context.days.length>0&&value.context.days.length<=4&&value.context.days.every(day=>/^[A-D]$/.test(day))&&['abc','abcd','biset_sinergista','circuito'].includes(value.context.method);
+    if(value.context.kind==='cycle')return Array.isArray(value.context.days)&&value.context.days.length>0&&value.context.days.length<=4&&value.context.days.every(day=>/^[A-D]$/.test(day))&&['abc','abcd','biset_sinergista','circuito','abc_tradicional','abc_sinergista'].includes(value.context.method);
     return true;
 }
 export function draftSourceChanged(draft,plan,templates){

@@ -1,6 +1,7 @@
 import {findMovement,sameMuscleFocus} from './environment.js';
 import {movementEmphases} from './movement-requirements.js';
 import {reviewRoutine} from './routine-review.js';
+import {blockEnabled} from './domain.js';
 
 const groupOf=movement=>movement.agonist||movement.group;
 const unique=values=>[...new Set(values.filter(Boolean))];
@@ -11,7 +12,7 @@ export function analyzeCoverage(routine,catalogue,options={},sourceRoutine=routi
     const issues=reviewRoutine(routine,catalogue,options);
     const days=unique([...(options.days||[]),...routine.map(block=>block.day||'Sessão'),...sourceRoutine.map(block=>block.day||'Sessão')]);
     return days.map(day=>{
-        const entries=routine.flatMap((block,bi)=>(block.day||'Sessão')===day?(block.exercises||[]).map((exercise,ei)=>({exercise,movement:findMovement(catalogue,exercise.name),pending:issues.some(issue=>issue.blockIndex===bi&&(issue.exerciseIndex===undefined||issue.exerciseIndex===ei))})):[]);
+        const entries=routine.flatMap((block,bi)=>blockEnabled(block)&&(block.day||'Sessão')===day?(block.exercises||[]).map((exercise,ei)=>({exercise,movement:findMovement(catalogue,exercise.name),pending:issues.some(issue=>issue.blockIndex===bi&&(issue.exerciseIndex===undefined||issue.exerciseIndex===ei))})):[]);
         const ready=entries.filter(entry=>entry.movement&&!entry.pending);
         const movements=ready.map(entry=>entry.movement);
         const counts=new Map();
@@ -22,7 +23,7 @@ export function analyzeCoverage(routine,catalogue,options={},sourceRoutine=routi
             return {group,subLevels,patterns:unique(items.map(item=>item.movementPattern)),
                 otherSubLevels:unique(catalogue.filter(item=>groupOf(item)===group).flatMap(movementEmphases)).filter(subLevel=>!subLevels.includes(subLevel))};
         });
-        const source=sourceRoutine.filter(block=>(block.day||'Sessão')===day).flatMap(block=>block.exercises||[]);
+        const source=sourceRoutine.filter(block=>blockEnabled(block)&&(block.day||'Sessão')===day).flatMap(block=>block.exercises||[]);
         const lost=unique(source.filter(ex=>{
             const original=findMovement(catalogue,ex._environmentOriginal?.name||ex.name);
             return original&&!movements.some(item=>sameMuscleFocus(original,item));

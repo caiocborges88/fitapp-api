@@ -220,3 +220,27 @@ body.preview-active #tab-treino,body.session-active #tab-treino { animation:none
     .illustrated-empty h2 { font-size:18px; }
     .toast { font-size:13px; }
 }
+/* Versioned workout recipes share the existing theme and motion tokens. */
+.model-block-tools{margin-block:12px}
+.model-block-tools>summary{min-height:44px;padding-block:12px;cursor:pointer;color:var(--accent)}
+.model-block-controls{display:flex;flex-wrap:wrap;align-items:end;gap:12px;margin-block:12px}
+.model-block-controls .field{min-width:0;flex:1 1 130px}
+.model-block-controls input{max-width:100%}
+.model-block-controls .button{white-space:normal;flex:1 1 150px}
+.model-block-controls p{flex-basis:100%;color:var(--muted)}
+.model-optionals{margin-block:16px}
+.model-optional-choice{display:flex;gap:12px;align-items:center;min-height:44px;padding-block:8px}
+.model-optional-choice input{width:22px;height:22px;flex:none;accent-color:var(--accent)}
+.model-dialog{background:var(--surface);color:var(--ink);border:1px solid var(--control-line);border-radius:var(--radius,16px);padding:24px;max-width:min(520px,calc(100vw - 32px));max-height:85dvh;overflow:auto}
+.model-dialog .field{margin-block:16px}
+.model-dialog .button{margin:8px 8px 0 0}
+.model-dialog::backdrop{background:var(--scrim)}
+.model-review-reminder .button{margin:8px 8px 0 0;white-space:normal}
+/* Tracking remains readable without animation in both themes. */
+.tracking-day,.tracking-period,.tracking-comparison{margin-block:12px;padding:12px;border:1px solid var(--line);border-radius:var(--radius-sm,12px);overflow-wrap:anywhere}
+.tracking-day summary,.tracking-period summary,.tracking-comparison summary{cursor:pointer;min-height:32px;font-weight:700}
+.tracking-day p,.tracking-period p,.tracking-comparison p,.model-coverage p{line-height:1.6}
+.tracking-comparison li{margin-block:12px}
+.tracking-comparison li p{margin-block:4px}
+.tracking-comparison ul,.model-coverage ul{padding-inline-start:20px}
+.history-completion{display:inline-block;margin-block-start:6px}

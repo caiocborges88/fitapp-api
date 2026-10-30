@@ -26,7 +26,10 @@
     "test:ai-deferred": "node tests/ai-deferred-browser.cjs",
     "test:mobile-flow": "node tests/mobile-flow-browser.cjs",
     "build:icons": "node scripts/build-icons.cjs",
-    "test:appearance": "node tests/appearance-browser.cjs"
+    "test:appearance": "node tests/appearance-browser.cjs",
+    "test:models": "node tests/workout-models-browser.cjs",
+    "test:tracking": "node tests/training-tracking-browser.cjs",
+    "test:models:emulated": "node scripts/verify-models-emulated.cjs"
   },
   "dependencies": {
     "chart.js": "^4.5.1",

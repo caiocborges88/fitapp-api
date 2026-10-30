@@ -1,5 +1,7 @@
-// Defaults of the current templates, not an individual progression prescription.
+import {isWorkoutModel,modelDescription} from './workout-models.js';
+// Legacy defaults remain available for saved plans. New models own every block's parameters.
 export function modelSettings(method='abc',profile='hipertrofia',level='iniciante'){
+    if(isWorkoutModel(method))return {restSeconds:120,description:modelDescription(method)};
     let restSeconds=profile==='definicao'?(method==='circuito'?30:45):profile==='tatico'?45:60;
     if(level==='iniciante')restSeconds+=15;
     const baseSets=level==='iniciante'?3:4;

@@ -19,11 +19,13 @@ const server=require('../scripts/serve.cjs');
             return Promise.all(['/css/design.css','/fonts/Manrope.ttf','/js/experience.js','/js/icons.js','/js/editor.js','/js/editor-domain.js','/js/routine-review.js','/js/model-settings.js','/js/routine-coverage.js','/js/coverage-view.js','/css/mobile-flow.css','/js/mobile-flow.js','/js/drafts.js','/js/draft-domain.js','/js/equipment-settings.js','/js/appearance.js','/css/energy.css','/illustrations/preparation.svg','/illustrations/movement.svg','/illustrations/celebration.svg'].map(async path=>Boolean(await cache.match(path))));
         });
         assert.equal(newAssets.length,20);assert.ok(newAssets.every(Boolean));
+        const trackingAssets=await page.evaluate(async()=>{const cache=await caches.open((await caches.keys()).find(k=>k.startsWith('fitapp-')));return Promise.all(['/js/model-coverage.js','/js/model-coverage-view.js','/js/training-tracking.js','/js/training-tracking-view.js'].map(async path=>Boolean(await cache.match(path))));});
+        assert.ok(trackingAssets.every(Boolean));
         await context.setOffline(true);await page.reload();
         await page.waitForFunction(()=>window.FitApp&&window.dictionaryData.length);
         assert.equal(await page.locator('#loginOverlay').isVisible(),true);
         assert.deepEqual(errors,[]);
-        fs.writeFileSync(path.resolve(__dirname,'../audit/offline-validation.json'),JSON.stringify({status:'ok',cachedAssets:assets,checks:['instalação atômica do cache','SDKs locais','recarga offline','inicialização offline sem exceções'],authenticatedSync:'verificado separadamente pelos testes de fila; este teste não autentica em produção'},null,2)+'\n');
+        fs.writeFileSync(path.resolve(__dirname,'../audit/offline-validation.json'),JSON.stringify({status:'ok',cachedAssets:assets,checks:['instalação atômica do cache','SDKs locais','quatro módulos de cobertura e acompanhamento no cache','recarga offline','inicialização offline sem exceções'],authenticatedSync:'verificado separadamente pelos testes de fila; este teste não autentica em produção'},null,2)+'\n');
         console.log('Offline: aplicação e dependências carregadas sem rede.');
     }finally{await context.close();await browser.close();await new Promise(r=>server.close(r));}
 })().catch(error=>{console.error(error);server.close();process.exitCode=1;});

@@ -3,6 +3,7 @@ import { mergeHistory, newId, normalizeDictionary, readJSON } from './domain.js'
 
 const inFlight = new Map();
 export function syncOfflineWorkouts() {
+    if(globalThis.navigator?.onLine===false)return Promise.resolve();
     const uid = window.FitStore.uid;
     if (!uid || firebase.auth().currentUser?.uid !== uid) return Promise.resolve();
     if (inFlight.has(uid)) return inFlight.get(uid);
@@ -39,7 +40,8 @@ const campaignFlights=new Map();
 const sameCampaign=(a,b)=>JSON.stringify({...a,updatedAt:0})===JSON.stringify({...b,updatedAt:0});
 export function captureCampaign(){
     const get=key=>window.FitStore.get(key);
-    return {campaign_data:get('fitapp_campaign_data')||'',campaign_count:get('fitapp_campaign_count')||'0',blacklist:get('fitapp_blacklist')||'[]',main_method:get('fitapp_main_method')||'abc',profile:get('fitapp_profile')||'hipertrofia',level:get('fitapp_level')||'iniciante',custom_workouts:get('fitapp_custom_workouts')||'[]',deleted_templates:get('fitapp_deleted_templates')||'[]',updatedAt:Date.now()};
+    const main_method=get('fitapp_main_method')||'abc_tradicional';
+    return {campaign_data:get('fitapp_campaign_data')||'',campaign_count:get('fitapp_campaign_count')||'0',blacklist:get('fitapp_blacklist')||'[]',main_method,profile:get('fitapp_profile')||'hipertrofia',level:get('fitapp_level')||(['abc_tradicional','abc_sinergista'].includes(main_method)?'padrao':'iniciante'),custom_workouts:get('fitapp_custom_workouts')||'[]',deleted_templates:get('fitapp_deleted_templates')||'[]',updatedAt:Date.now()};
 }
 function applyCampaign(payload){
     for(const [field,key]of Object.entries({campaign_data:'campaign_data',campaign_count:'campaign_count',blacklist:'blacklist',main_method:'main_method',profile:'profile',level:'level',custom_workouts:'custom_workouts',deleted_templates:'deleted_templates'}))window.FitStore.set('fitapp_'+key,payload[field]??emptyCampaign()[field]);

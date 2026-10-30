@@ -17,7 +17,8 @@ service cloud.firestore {
     function shortString(value, max) { return value is string && value.size() <= max; }
     function validSession(d) {
       return d.keys().hasAll(['userId','date','tipo','method','duration_secs','data','timestamp','createdAt','complete','campaignId'])
-        && d.keys().hasOnly(['userId','date','tipo','method','duration_secs','data','timestamp','createdAt','complete','campaignId','workoutName'])
+        && d.keys().hasOnly(['userId','date','tipo','method','duration_secs','data','timestamp','createdAt','complete','campaignId','workoutName','trainingContext'])
+        && (!d.keys().hasAny(['trainingContext']) || shortString(d.trainingContext,90000))
         && (!d.keys().hasAny(['workoutName']) || shortString(d.workoutName,120))
         && shortString(d.userId,128) && shortString(d.tipo,160) && shortString(d.method,40)
         && d.date is string && d.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
@@ -41,9 +42,9 @@ service cloud.firestore {
         && (!c.keys().hasAny(['deleted_templates']) || shortString(c.deleted_templates,300000))
         && shortString(c.campaign_data,300000) && shortString(c.custom_workouts,300000)
         && shortString(c.blacklist,30000) && shortString(c.campaign_count,12)
-        && c.main_method in ['abc','ppl','abcd','biset_agonista','biset_antagonista','biset_sinergista','circuito','calistenia']
+        && c.main_method in ['abc','ppl','abcd','biset_agonista','biset_antagonista','biset_sinergista','circuito','calistenia','abc_tradicional','abc_sinergista']
         && c.profile in ['hipertrofia','definicao','feminino','tatico']
-        && c.level in ['iniciante','intermediario','avancado'] && c.updatedAt is number;
+        && (c.level in ['iniciante','intermediario','avancado'] || (c.level == 'padrao' && c.main_method in ['abc_tradicional','abc_sinergista'])) && c.updatedAt is number;
     }
     function validUser(d) { return d.keys().hasAll(['campanha']) && validCampaign(d.campanha); }
     function versionedUser(uid) {

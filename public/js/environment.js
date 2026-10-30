@@ -1,5 +1,6 @@
 import {readJSON} from './domain.js';
 import {equipmentForEnvironment,equipmentNames} from './equipment-settings.js';
+import {roleCandidates} from './workout-models.js';
 
 const normalize=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 const outdoor=environment=>['praia','parque','parque/praia'].includes(environment);
@@ -61,7 +62,7 @@ export function adaptRoutineToEnvironment(routine,catalogue,options){
     const missing=[],used=new Set();
     const result=routine.map(block=>{
         const pairUsed=new Set();
-        const blockOptions={...options,equipmentPolicy:block.equipmentPolicy||options.equipmentPolicy};
+        const blockOptions={...options,level:block.modelVersion?'padrao':options.level,equipmentPolicy:block.equipmentPolicy||options.equipmentPolicy};
         return {...block,exercises:block.exercises.map(exercise=>{
         const original=exercise._environmentOriginal||{name:exercise.name,target:exercise.target};
         const current=findMovement(catalogue,original.name);
@@ -76,9 +77,9 @@ export function adaptRoutineToEnvironment(routine,catalogue,options){
             return next;
         }
         next._environmentOriginal=original;
-        if(availableInEnvironment(current,blockOptions)&&(options.level!=='iniciante'||current.nivel!==3)&&!pairUsed.has(current.name)){used.add(current.name);if(block.type==='superset')pairUsed.add(current.name);return next;}
+        if(availableInEnvironment(current,blockOptions)&&(blockOptions.level!=='iniciante'||current.nivel!==3)&&!pairUsed.has(current.name)){used.add(current.name);if(block.type==='superset')pairUsed.add(current.name);return next;}
         const compatibility=movementCompatibility(current,catalogue,blockOptions);
-        const candidates=compatibility.candidates.filter(item=>!pairUsed.has(item.name));
+        const candidates=(roleCandidates(exercise,catalogue,blockOptions)||compatibility.candidates).filter(item=>!pairUsed.has(item.name));
         // Reuse across blocks is allowed; the two sides of a pair must remain distinct.
         candidates.sort((a,b)=>Number(used.has(a.name))-Number(used.has(b.name))||(b.environmentPreference?.[options.environment]||0)-(a.environmentPreference?.[options.environment]||0)||Math.abs((a.nivel||1)-(current?.nivel||1))-Math.abs((b.nivel||1)-(current?.nivel||1)));
         const candidate=candidates[0];

@@ -38,14 +38,17 @@ const fake=require('./fixtures/firebase.cjs');
   assert.ok(await page.locator('.environment-warning').count());await page.click('#btnStartWorkout');
   assert.equal(await page.evaluate(async()=>(await import('/js/state.js')).state.isWorkoutActive),false);
   await page.click('#btnEnvToggle');await page.locator('[data-environment-resource="pullup-bar"]').check();await page.locator('#environmentDialog').getByRole('button',{name:'Concluir',exact:true}).click();
-  assert.equal(await compatible(),false);
-  assert.match(await page.locator('.environment-warning').textContent(),/complexidade alta/);
+  // Manual routines do not inherit numeric difficulty or the model's former experience filter.
+  assert.equal(await compatible(),true);
+  assert.equal(await page.locator('.environment-warning').count(),0);
   await page.click('#btnEnvToggle');await page.locator('[data-environment-resource="bench"]').check();await page.locator('#environmentDialog').getByRole('button',{name:'Concluir',exact:true}).click();
   assert.equal(await compatible(),true);assert.equal(await page.locator('.environment-warning').count(),0);
   // Switching back and forth retains the per-environment choices.
   await page.evaluate(()=>FitApp.toggleGlobalEnv());assert.equal(await page.locator('[data-environment-resource="pullup-bar"]').isChecked(),false);
   await page.evaluate(()=>FitApp.toggleGlobalEnv());await page.evaluate(()=>FitApp.toggleGlobalEnv());assert.equal(await page.locator('[data-environment-resource="pullup-bar"]').isChecked(),true);
-  await page.evaluate(()=>{FitApp.cancelWorkoutPreview();FitApp.setEnvironmentResources([]);FitApp.lockCampaign();FitApp.startWorkout('A');});
+  await page.evaluate(()=>{FitApp.cancelWorkoutPreview();FitApp.toggleGlobalEnv();FitApp.toggleGlobalEnv();FitApp.openForgeModal();FitApp.generateForgedWorkout();});
+  await page.click('#saveTemplateButton');
+  await page.evaluate(()=>{FitApp.toggleGlobalEnv();FitApp.setEnvironmentResources([]);FitApp.startWorkout('A');});
   const honestPlan=await page.evaluate(async()=>{
    const {state}=await import('/js/state.js'),env=await import('/js/environment.js');
    return state.currentRoutine.flatMap(b=>b.exercises).every(ex=>ex.needsReview||env.availableInEnvironment(dictionaryData.find(d=>d.name===ex.name),env.environmentOptions()));

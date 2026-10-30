@@ -1,4 +1,18 @@
 export const newId = () => crypto.randomUUID();
+export const blockEnabled=block=>!block.optional||block.enabled===true;
+export const setsForDisplay=ex=>Number(ex.sets)/(ex.sideMode==='alternating'?2:1);
+// Whitelisted versioned metadata survives template copies; execution data does not.
+export function blockMetadata(block){
+    const result={};
+    for(const key of ['id','modelId','roleId'])if(typeof block[key]==='string')result[key]=block[key];
+    if(block.modelVersion===1)result.modelVersion=1;
+    if(block.restSeconds!=null)result.restSeconds=Number(block.restSeconds);
+    if(block.optional===true){result.optional=true;result.enabled=block.enabled===true;}
+    return result;
+}
+export function exerciseMetadata(ex){
+    return {...(typeof ex.slotId==='string'?{slotId:ex.slotId}:{}),...(ex.sideMode==='alternating'?{sideMode:'alternating'}:{})};
+}
 export const measurementForTarget=target=>/(?:^|[\s\d.,–-])(?:seg(?:undo)?s?|s|min(?:uto)?s?)\b/i.test(String(target||''))?'duration':'reps';
 export function newExerciseSet(exercise){
     const measurementType=exercise.measurementType||measurementForTarget(exercise.target);
@@ -26,6 +40,11 @@ export function normalizeDictionary(entries) {
 }
 export function normalizeRoutine(routine) {
     if (!Array.isArray(routine)) throw new Error('Rotina inválida.');
+    for(const block of routine)if(block.modelVersion){
+        if(block.modelVersion!==1)throw new Error('Esta versão de modelo não é reconhecida. Os dados salvos foram preservados.');
+        if(!Number.isInteger(block.restSeconds)||block.restSeconds<15||block.restSeconds>600)throw new Error('Revise o descanso definido para cada bloco do modelo.');
+        if(block.exercises?.some(ex=>typeof ex.target!=='string'||!ex.target.trim()))throw new Error('Revise as metas do modelo; nenhuma meta padrão foi acrescentada.');
+    }
     const blocks = routine.map(block => ({
         ...block,
         type: ['traditional', 'superset', 'circuit'].includes(block.type) ? block.type : 'traditional',
@@ -43,12 +62,12 @@ export function normalizeRoutine(routine) {
     return blocks;
 }
 export function completedSets(routine) {
-    return routine.flatMap((block, bi) => block.exercises.flatMap((ex, ei) => (ex.setsData || []).slice(0, ex.sets).flatMap((set, i) => set?.checked ? [{
+    return routine.flatMap((block, bi) => !blockEnabled(block)?[]:block.exercises.flatMap((ex, ei) => (ex.setsData || []).slice(0, ex.sets).flatMap((set, i) => set?.checked ? [{
         exercise: ex.name, exerciseId: ex.id || `${bi}-${ei}`, set: i + 1,
         kg: Math.max(0, Number(String(set.kg || 0).replace(',', '.')) || 0),
         reps: set.measurementType === 'duration' ? 0 : Math.max(0, Number(set.reps) || 0),
         ...(set.measurementType === 'duration' ? {measurementType:'duration', durationSecs:Math.max(0, Number(set.durationSecs) || 0)} : {}),
-        notes: String(ex.notes || '').slice(0, 1000)
+        notes: String((ex.sideMode==='alternating'?(i%2?'Lado direito. ':'Lado esquerdo. '):'')+(ex.notes || '')).slice(0, 1000)
     }] : [])));
 }
 export function mergeHistory(local, cloud, pending = []) {
