@@ -1,5 +1,9 @@
 # FitApp
 
+## Catálogo e execução revisados — implementação local
+
+122 movimentos com orientações específicas; condicionamento/mobilidade retirados das novas escolhas, preservando registros antigos. Novas execuções identificam variante, recursos, repetições por lado e convenção de carga; trocas e histórico conservam essas informações sem converter dados antigos. Escopo, versões e verificações: [docs/CATALOGO-E-EXECUCAO-REVISADOS.md](docs/CATALOGO-E-EXECUCAO-REVISADOS.md). Sem publicação nesta etapa.
+
 ## Fluxo simplificado — publicado em 30/10/2026
 
 Modelo pronto como caminho principal: escolher um dos dois ABCs, conferir e salvar uma vez; depois, iniciar o próximo treino em um toque. Revisão, trocas e cadastro manual ficam sob demanda. Meus treinos prioriza o plano atual, e Perfil deixa de configurar prescrição. Abrir um dia salvo não regenera nem sobrescreve seu conteúdo. Sessões, histórico, receitas e sincronização continuam preservados. Decisões, testes e limites: [docs/SIMPLIFICACAO-DO-FLUXO-2026-10-30.md](docs/SIMPLIFICACAO-DO-FLUXO-2026-10-30.md). Teste específico: `npm run test:simple-flow`. Versão `8025f00c044b5983` publicada às 09h57 no [FitApp](https://fitapp-operacional.web.app), somente Hosting. Os 70 arquivos, login nos dois temas e offline foram conferidos sem gravar dados reais; regras permaneceram iguais. Release e recuperação: [docs/PUBLICACAO-SIMPLIFICACAO-2026-10-30.md](docs/PUBLICACAO-SIMPLIFICACAO-2026-10-30.md).

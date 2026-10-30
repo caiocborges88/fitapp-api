@@ -1,0 +1,19 @@
+{
+  "status": "ok",
+  "environment": "local; Firebase simulated",
+  "checks": [
+    "revisão não altera prévia",
+    "cobertura ausente visível",
+    "salvamento e execução bloqueados durante revisão",
+    "cancelamento sem aplicar",
+    "aplicação explícita somente na sessão",
+    "restauração da ficha",
+    "proposta obsoleta rejeitada",
+    "mudança de recursos recalcula ficha completa",
+    "grupo inteiro ausente bloqueado",
+    "volta à academia restaura extensora",
+    "início separado da aplicação",
+    "largura móvel"
+  ],
+  "pageErrors": []
+}

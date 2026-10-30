@@ -1,8 +1,9 @@
 import {blockEnabled,readJSON,measurementForTarget} from './domain.js';
 import {findMovement} from './environment.js';
 import {movementEmphases} from './movement-requirements.js';
+import {executionMetadata,validExecution} from './execution-contract.js';
 
-export const trackingVersion=1;
+export const trackingVersion=2;
 export const contextLimit=90000;
 const text=(value,max=120)=>String(value||'').slice(0,max);
 const positive=value=>Number.isInteger(value)&&value>=1&&value<=10;
@@ -14,7 +15,7 @@ export function snapshotRoutine(routine,catalogue,overrides={},defaultRest=null)
         restSeconds:rest(overrides[block.id]??block.restSeconds??defaultRest),
         exercises:block.exercises.map((ex,ei)=>{
             const movement=findMovement(catalogue,ex.name);
-            return {id:String(ex.id||`${bi}-${ei}`),name:text(ex.name),sets:Number(ex.sets),target:text(ex.target,50),
+            return {...executionMetadata(ex),id:String(ex.id||`${bi}-${ei}`),name:text(ex.name),sets:Number(ex.sets),target:text(ex.target,50),
                 measurementType:ex.measurementType||measurementForTarget(ex.target),sideMode:ex.sideMode==='alternating'?'alternating':null,
                 group:movement?text(movement.agonist||movement.group):null,
                 emphases:movement?movementEmphases(movement).map(value=>text(value)):[]};
@@ -25,7 +26,8 @@ const validBlocks=blocks=>Array.isArray(blocks)&&blocks.length<=200&&blocks.ever
 export function readTrainingContext(value){
     if(typeof value!=='string'||value.length>contextLimit)return null;
     const context=readJSON(value,null);
-    return context?.version===trackingVersion&&(context.planned===null||validBlocks(context.planned))&&validBlocks(context.execution)?context:null;
+    const semantics=blocks=>blocks.every(b=>b.exercises.every(ex=>!ex.execution||validExecution(ex.execution)));
+    return [1,trackingVersion].includes(context?.version)&&(context.planned===null||(validBlocks(context.planned)&&semantics(context.planned)))&&validBlocks(context.execution)&&semantics(context.execution)?context:null;
 }
 export function encodeTrainingContext(planned,routine,catalogue,overrides={},origin=null,defaultRest=null){
     const execution=snapshotRoutine(routine,catalogue,overrides,defaultRest);
@@ -44,10 +46,10 @@ export function compareSession(log){
         const current=execution.find(item=>item.ex.id===ex.id);
         const records=(log.data||[]).filter(item=>item.exerciseId===ex.id);
         return {id:ex.id,name:ex.name,performedName:current?.ex.name||ex.name,
-            planned:ex.sets,done:records.length,remaining:Math.max(0,ex.sets-records.length),
+            target:current?.ex.target||ex.target,plannedTarget:ex.target,planned:ex.sets,done:records.length,remaining:Math.max(0,ex.sets-records.length),
             optional:block.optional,sideMode:ex.sideMode,blockType:current?.block.type||block.type,
             restSeconds:current?.block.restSeconds??block.restSeconds,
-            changed:!current||current.ex.name!==ex.name||current.ex.sets!==ex.sets||current.ex.target!==ex.target||current.ex.measurementType!==ex.measurementType||current.block.type!==block.type||current.block.restSeconds!==block.restSeconds};
+            changed:!current||current.ex.name!==ex.name||JSON.stringify(current.ex.execution)!==JSON.stringify(ex.execution)||current.ex.sets!==ex.sets||current.ex.target!==ex.target||current.ex.measurementType!==ex.measurementType||current.block.type!==block.type||current.block.restSeconds!==block.restSeconds};
     });
     for(const {block,ex} of execution.filter(item=>!planned.some(p=>p.ex.id===item.ex.id))){
         const records=(log.data||[]).filter(item=>item.exerciseId===ex.id);

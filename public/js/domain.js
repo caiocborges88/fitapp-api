@@ -1,3 +1,4 @@
+import {executionMetadata,referenceKey,validExecution} from './execution-contract.js';
 export const newId = () => crypto.randomUUID();
 export const blockEnabled=block=>!block.optional||block.enabled===true;
 export const setsForDisplay=ex=>Number(ex.sets)/(ex.sideMode==='alternating'?2:1);
@@ -5,13 +6,13 @@ export const setsForDisplay=ex=>Number(ex.sets)/(ex.sideMode==='alternating'?2:1
 export function blockMetadata(block){
     const result={};
     for(const key of ['id','modelId','roleId'])if(typeof block[key]==='string')result[key]=block[key];
-    if(block.modelVersion===1)result.modelVersion=1;
+    if(block.modelVersion!=null)result.modelVersion=block.modelVersion;
     if(block.restSeconds!=null)result.restSeconds=Number(block.restSeconds);
     if(block.optional===true){result.optional=true;result.enabled=block.enabled===true;}
     return result;
 }
 export function exerciseMetadata(ex){
-    return {...(typeof ex.slotId==='string'?{slotId:ex.slotId}:{}),...(ex.sideMode==='alternating'?{sideMode:'alternating'}:{})};
+    return {...executionMetadata(ex),...(typeof ex.slotId==='string'?{slotId:ex.slotId}:{}),...(ex.sideMode==='alternating'?{sideMode:'alternating'}:{})};
 }
 export const measurementForTarget=target=>/(?:^|[\s\d.,–-])(?:seg(?:undo)?s?|s|min(?:uto)?s?)\b/i.test(String(target||''))?'duration':'reps';
 export function newExerciseSet(exercise){
@@ -41,7 +42,7 @@ export function normalizeDictionary(entries) {
 export function normalizeRoutine(routine) {
     if (!Array.isArray(routine)) throw new Error('Rotina inválida.');
     for(const block of routine)if(block.modelVersion){
-        if(block.modelVersion!==1)throw new Error('Esta versão de modelo não é reconhecida. Os dados salvos foram preservados.');
+        if(![1,2].includes(block.modelVersion))throw new Error('Esta versão de modelo não é reconhecida. Os dados salvos foram preservados.');
         if(!Number.isInteger(block.restSeconds)||block.restSeconds<15||block.restSeconds>600)throw new Error('Revise o descanso definido para cada bloco do modelo.');
         if(block.exercises?.some(ex=>typeof ex.target!=='string'||!ex.target.trim()))throw new Error('Revise as metas do modelo; nenhuma meta padrão foi acrescentada.');
     }
@@ -50,13 +51,14 @@ export function normalizeRoutine(routine) {
         type: ['traditional', 'superset', 'circuit'].includes(block.type) ? block.type : 'traditional',
         title: String(block.title || 'Treino').slice(0, 120),
         exercises: (Array.isArray(block.exercises) ? block.exercises : []).map(ex => ({
-            ...ex, id: ex.id || newId(), name: (globalThis.window?.dictionaryData?.find(item=>item.aliases?.includes(ex.name))?.name || String(ex.name || '').trim()).slice(0, 120),
+            ...ex, id: ex.id || newId(), name: String(ex.name || '').trim().slice(0, 120),
             sets: Number(ex.sets), target: String(ex.target || '10-12 rep').slice(0, 50),
             ...(['duration','reps'].includes(ex.measurementType)?{measurementType:ex.measurementType}:measurementForTarget(ex.target)==='duration'?{measurementType:'duration'}:{})
         }))
     }));
     if (!blocks.some(b => b.exercises.length)) throw new Error('Não há exercícios disponíveis para os filtros selecionados.');
     for (const block of blocks) for (const ex of block.exercises) {
+        if(ex.execution&&!validExecution(ex.execution))throw new Error('Esta versão de execução não é reconhecida. Os dados foram preservados.');
         if (!ex.name || !Number.isInteger(ex.sets) || ex.sets < 1 || ex.sets > 10) throw new Error('Revise os exercícios e o número de séries (1 a 10).');
     }
     return blocks;
@@ -67,7 +69,8 @@ export function completedSets(routine) {
         kg: Math.max(0, Number(String(set.kg || 0).replace(',', '.')) || 0),
         reps: set.measurementType === 'duration' ? 0 : Math.max(0, Number(set.reps) || 0),
         ...(set.measurementType === 'duration' ? {measurementType:'duration', durationSecs:Math.max(0, Number(set.durationSecs) || 0)} : {}),
-        notes: String((ex.sideMode==='alternating'?(i%2?'Lado direito. ':'Lado esquerdo. '):'')+(ex.notes || '')).slice(0, 1000)
+        ...(referenceKey({...ex,measurementType:set.measurementType})?{executionKey:referenceKey({...ex,measurementType:set.measurementType})}:{}),
+        notes: String((ex.sideMode==='alternating'?(i%2?'Lado direito. ':'Lado esquerdo. '):'')+(set.sideDifference?'Diferença entre os lados: '+(set.notes||'')+'. ':'')+(ex.notes || '')).slice(0, 1000)
     }] : [])));
 }
 export function mergeHistory(local, cloud, pending = []) {

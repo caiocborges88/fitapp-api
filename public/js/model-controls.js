@@ -6,6 +6,8 @@ import {reviewRoutine} from './routine-review.js';
 import {routineForTemplate} from './editor-domain.js';
 import {persistDraft} from './drafts.js';
 import {saveCampaignToCloud} from './sync.js';
+import {prepareSwap,missingExecutionResources,withExecution,executionHint} from './execution-contract.js';
+import {resourceLabels} from './equipment-settings.js';
 
 const app=()=>window.FitApp;
 const el=(tag,text,className)=>{const node=document.createElement(tag);if(text)node.textContent=text;if(className)node.className=className;return node;};
@@ -16,6 +18,40 @@ function persist(){
 function render(){if(state.isWorkoutActive)app().renderCurrentRoutine();else app().renderPreviewList();}
 function button(text,fn){const b=el('button',text,'button secondary');b.type='button';b.addEventListener('click',fn);return b;}
 function registered(block){return block.exercises.some(ex=>ex.setsData?.some(set=>set.checked));}
+const resourceLabel=key=>resourceLabels.find(([id])=>id===key)?.[1]||window.dictionaryData.find(m=>m.executionProfile?.resources.includes(key))?.displayName||key;
+export function confirmExecutionResources(routine,{ask=true}={}){
+    const options=environmentOptions(),missing=missingExecutionResources(routine,options);
+    if(!missing.length)return true;
+    if(ask&&!confirm('Você conferiu a disponibilidade destes recursos?\n'+missing.map(resourceLabel).join('\n')))return false;
+    if(!app().safeSet('fitapp_resources_academia',JSON.stringify([...new Set([...options.resources,...missing])])) )return false;
+    window.dispatchEvent(new Event('fitapp:environmentchange'));return true;
+}
+export function appendResourceReview(container){
+    for(const block of state.currentRoutine.filter(enabledBlock))for(const ex of block.exercises){
+        const choices=ex.execution?.choices;if(!choices)continue;
+        const label=el('label',(ex.execution.label||ex.name)+' · barra/acessório','field'),select=el('select');
+        select.append(el('option','Escolha a variante'));select.firstChild.value='';
+        for(const choice of choices){const option=el('option',choice);option.value=choice;select.append(option);}
+        select.value=ex.execution.choice||'';select.disabled=Boolean(ex.setsData?.some(s=>s.checked));
+        select.addEventListener('change',()=>{const previous=ex.execution.choice;ex.execution.choice=select.value;if(!persist()){ex.execution.choice=previous;select.value=previous||'';return;}render();});
+        label.append(select);container.append(label);
+    }
+    const missing=missingExecutionResources(state.currentRoutine,environmentOptions());
+    if(!missing.length)return;
+    const panel=el('section',null,'panel'),text=el('p','Confira os recursos específicos desta ficha: '+missing.map(resourceLabel).join(', ')+'.');
+    panel.id='executionResourcesReview';panel.append(text,button('Conferi os equipamentos desta ficha',()=>{if(confirmExecutionResources(state.currentRoutine,{ask:false})){render();}}));
+    container.append(panel);
+}
+export function appendExecutionControl(container,ex){
+    if(ex.execution)return;
+    const movement=window.dictionaryData.find(m=>m.name===ex.name);
+    if(!movement?.executionProfile||movement.selectable===false||ex.setsData?.some(s=>s.checked))return;
+    container.append(button('Revisar execução e convenção de carga',()=>{
+        if(!confirm(movement.displayName+'\n'+movement.desc+'\n'+executionHint(withExecution(ex,movement))+'\nAplicar somente a esta sessão/edição? Os dados antigos permanecem preservados.'))return;
+        const previous=structuredClone(ex),next=prepareSwap(ex,movement);for(const key of Object.keys(ex))delete ex[key];Object.assign(ex,next);
+        if(!persist()){for(const key of Object.keys(ex))delete ex[key];Object.assign(ex,previous);return;}render();
+    }));
+}
 
 export function appendBlockControls(container,block,index){
     if(!block.modelVersion)return;
@@ -67,7 +103,9 @@ function choosePair(index){
         if(names.some(name=>!name)||new Set(names).size!==2){app().showToast('Escolha dois movimentos distintos e disponíveis.');return;}
         if(names.some((name,i)=>!(roleCandidates(block.exercises[i],window.dictionaryData,environmentOptions())||[]).some(m=>m.name===name))){app().showToast('Os recursos ou as exclusões mudaram. Reabra a escolha do par.');return;}
         const previous=structuredClone(block.exercises);
-        block.exercises.forEach((ex,i)=>{if(ex.name!==names[i]){ex.name=names[i];delete ex.setsData;delete ex._environmentOriginal;}});
+        let next;try{next=block.exercises.map((ex,i)=>ex.name===names[i]?ex:prepareSwap(ex,window.dictionaryData.find(m=>m.name===names[i])));}catch(error){app().showToast(error.message);return;}
+        if(!confirmExecutionResources([{...block,exercises:next}]))return;
+        block.exercises=next;
         if(!persist()){block.exercises=previous;return;}dialog.close();render();document.getElementById('model-tools-'+block.id)?.querySelector('summary')?.focus();
     }),button('Cancelar',()=>dialog.close()));
     dialog.addEventListener('close',()=>dialog.remove());document.body.append(dialog);dialog.showModal();

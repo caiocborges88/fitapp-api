@@ -13,7 +13,7 @@ export function createSessionComparison(log){
         for(const row of comparison.rows){
             const name=row.name===row.performedName?row.name:`${row.name} → ${row.performedName}`;
             const count=row.planned===null?`${row.done} registros · ${comparison.known?'incluído durante a sessão':'sem previsão inicial disponível'}`:`${row.done} de ${row.planned} registros previstos${row.remaining?` · ${row.remaining} não realizados`:''}`;
-            const item=node('li');item.append(node('strong',name),node('p',`${row.optional?'Complemento':'Principal'} · ${count}${row.sideMode==='alternating'?' · lados separados':''}.`));
+            const item=node('li');item.append(node('strong',name),...(row.target?[node('p','Meta nesta sessão: '+row.target)]:[]),node('p',`${row.optional?'Complemento':'Principal'} · ${count}${row.sideMode==='alternating'?' · lados separados':''}.`));
             item.append(node('p',`${typeLabel(row.blockType)}${row.restSeconds!==null?` · descanso configurado: ${row.restSeconds} s`:''}${row.changed&&row.planned!==null?' · configuração alterada durante a sessão':''}.`));
             list.append(item);
         }

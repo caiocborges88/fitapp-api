@@ -8,7 +8,7 @@ const draft=()=>({version:1,userId:'one',id:'draft-one',updatedAt:1,type:'Livre'
 test('rascunho permite montagem incompleta, mas rejeita conta ou versão diferentes e estruturas inválidas',()=>{
     assert.equal(validDraft(draft(),'one'),true);
     assert.equal(validDraft(draft(),'two'),false);
-    assert.equal(validDraft({...draft(),version:2},'one'),false);
+    assert.equal(validDraft({...draft(),version:99},'one'),false);
     assert.equal(validDraft({...draft(),routine:[{title:'X',exercises:[{name:'X',sets:3}]}]},'one'),false);
     assert.equal(validDraft({...draft(),id:'../other'},'one'),false);
     assert.equal(validDraft({...draft(),coverage:[{}]},'one'),false);
