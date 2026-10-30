@@ -4,6 +4,7 @@ const fs=require('node:fs'),crypto=require('node:crypto'),assert=require('node:a
 const {chromium,devices}=require('playwright');
 const origin='https://fitapp-operacional.web.app';
 const prefix=process.env.FITAPP_RELEASE_PREFIX||'abc';
+const releaseScope=process.env.FITAPP_RELEASE_SCOPE||'Hosting e regras Firestore; API e índices não publicados';
 if(!/^[a-z][a-z0-9-]*$/.test(prefix))throw Error('Prefixo de release inválido.');
 const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 (async()=>{
@@ -27,10 +28,17 @@ const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
         assert.equal(await page.locator('#loginOverlay').isVisible(),true);
         assert.equal(await page.evaluate(()=>firebase.app().options.projectId),'fitapp-operacional');
         assert.equal(await page.locator('#forgeMethod option:not([hidden])').count(),2);
+        if(process.env.FITAPP_RELEASE_EXPECT_SIMPLE_FLOW==='1'){
+            assert.equal(await page.locator('#chooseInitialModel').count(),1);
+            assert.equal(await page.locator('#workoutAddButton').count(),1);
+            assert.equal(await page.locator('#addWorkoutDialog').count(),1);
+            assert.equal(await page.locator('#biomechanicsPanel').evaluate(el=>el.hidden&&el.inert),true);
+            assert.equal(await page.locator('#tab-perfil #profileSelector').count(),0);
+        }
         await page.evaluate(()=>navigator.serviceWorker.ready);await page.waitForFunction(()=>navigator.serviceWorker.controller);
         cached=await page.evaluate(async()=>{
             const cache=await caches.open((await caches.keys()).find(k=>k.startsWith('fitapp-')));
-            return Promise.all(['/js/workout-models.js','/js/model-controls.js','/js/editor-domain.js','/css/energy.css','/js/model-coverage.js','/js/model-coverage-view.js','/js/training-tracking.js','/js/training-tracking-view.js'].map(async path=>({path,cached:Boolean(await cache.match(path))})));
+            return Promise.all(['/index.html','/js/app.js','/js/mobile-flow.js','/js/forge.js','/js/ui.js','/js/environment-controls.js','/js/workout-models.js','/js/model-controls.js','/js/editor-domain.js','/css/energy.css','/js/model-coverage.js','/js/model-coverage-view.js','/js/training-tracking.js','/js/training-tracking-view.js'].map(async path=>({path,cached:Boolean(await cache.match(path))})));
         });assert.ok(cached.every(item=>item.cached));
         for(const theme of ['light','dark']){
             await page.emulateMedia({colorScheme:theme});await page.waitForFunction(theme=>document.documentElement.dataset.theme===theme,theme);
@@ -41,6 +49,6 @@ const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
         assert.equal(await page.locator('#loginOverlay').isVisible(),true);assert.deepEqual(errors,[]);
     }finally{await browser.close();}
     const report={status:'passed',url:origin,version:expected,checkedAt:new Date().toISOString(),matchingPublicFiles:files.length,api,cached,offlineReload:true,browserErrors:errors,
-        authenticatedProductionFlow:false,productionUserDataWrites:false,physicalDevices:false,scope:'Hosting e regras Firestore; API e índices não publicados'};
+        authenticatedProductionFlow:false,productionUserDataWrites:false,physicalDevices:false,scope:releaseScope};
     fs.writeFileSync(`audit/${prefix}-production-validation.json`,JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));
 })().catch(error=>{console.error(error);process.exitCode=1;});
