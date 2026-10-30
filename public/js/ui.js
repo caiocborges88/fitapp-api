@@ -1,3 +1,4 @@
+import {withExecution,executionHint,referenceCompatible,recordUnit,classificationLabel} from './execution-contract.js';
 import {effectsReduced} from './appearance.js';
 import {availableInEnvironment,environmentOptions} from './environment.js';
 import {reviewRoutine} from './routine-review.js';
@@ -9,9 +10,9 @@ import {decoratePreview} from './mobile-flow.js';
 import {icon} from './icons.js';
 import {retiredMethod} from './workout-methods.js';
 import {isWorkoutModel,modelLabel} from './workout-models.js';
-import {appendBlockControls,appendOptionalControls,appendSaveSessionChanges} from './model-controls.js';
+import {appendBlockControls,appendOptionalControls,appendSaveSessionChanges,appendExecutionControl,appendResourceReview} from './model-controls.js';
 import {createSessionComparison,renderTrainingTracking} from './training-tracking-view.js';
-import {sideLabel} from './training-tracking.js';
+import {sideLabel,readTrainingContext} from './training-tracking.js';
 const cssColor = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 import { state } from './state.js';
 import { completedSets, readJSON , sessionLabel,newExerciseSet,measurementForTarget,blockEnabled,setsForDisplay} from './domain.js';
@@ -27,7 +28,7 @@ let isolationChartInstance = null;
 
         // 1. O Funil Absoluto: Força a categorização em apenas 8 gavetas limpas
         const categorize = (item) => {
-            const searchStr = ((item.group || '') + ' ' + (item.focus || '')).toLowerCase();
+            const searchStr = (item.classification?.region || ((item.group || '') + ' ' + (item.focus || ''))).toLowerCase();
             if (searchStr.includes('peito') || searchStr.includes('peitoral')) return 'peito';
             if (searchStr.includes('costa') || searchStr.includes('dorsal') || searchStr.includes('trapézio') || searchStr.includes('trapezio') || searchStr.includes('lombar') || searchStr.includes('romboide')) return 'costas';
             if (searchStr.includes('perna') || searchStr.includes('quadríceps') || searchStr.includes('quadriceps') || searchStr.includes('glúteo') || searchStr.includes('gluteo') || searchStr.includes('isquiotibial') || searchStr.includes('panturrilha')) return 'pernas';
@@ -42,6 +43,7 @@ let isolationChartInstance = null;
 
         // Distribui o arsenal massivo nas gavetas corretas
         window.dictionaryData.forEach(item => {
+            if(item.selectable===false)return;
             const key = categorize(item);
             groups[key].push(item);
         });
@@ -102,7 +104,7 @@ let isolationChartInstance = null;
                 const card = document.createElement('div');
                 card.className = 'library-card';
 
-                const safeName = escapeHTML(item.name || 'Exercício');
+                const safeName = escapeHTML(item.displayName || item.name || 'Exercício');
                 const ytQuery = encodeURIComponent(`Como executar o exercício ${safeName}`);
                 const equipStr = item.equip ? item.equip.replace(/_/g, ' ') : 'N/A';
 
@@ -112,11 +114,12 @@ let isolationChartInstance = null;
                         <div class="lib-name" style="flex: 1; font-size: 15px;">${safeName}</div>
                         <a href="https://www.youtube.com/results?search_query=${ytQuery}" target="_blank" style="text-decoration: none; font-size: 18px; margin-left: 10px; background: var(--line); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--line);" title="Ver Execução no YouTube">${icon('video')}</a>
                     </div>
-                    <div class="lib-focus" style="margin-top: 5px; font-size: 11px;">Alvo: ${escapeHTML(item.group || 'Geral')}</div>
+                    <div class="lib-focus" style="margin-top: 5px; font-size: 11px;">${escapeHTML(classificationLabel(item))}</div>
                     <div style="font-size: 11px; color: var(--subtle); margin-top: 8px; background: var(--surface); padding: 4px 8px; border-radius: 4px; display: inline-block; border: 1px dashed var(--line);">
                         🛠️ Munição: ${escapeHTML(equipStr)}
                     </div>
                 `;
+                const guidance=document.createElement('details');guidance.innerHTML='<summary>Orientações</summary>';const paragraph=document.createElement('p');paragraph.textContent=item.desc;guidance.append(paragraph);card.append(guidance);
                 cardContainer.appendChild(card);
             });
 
@@ -136,7 +139,7 @@ let isolationChartInstance = null;
 
         // 1. O Funil Absoluto Mapeador
         const categorize = (item) => {
-            const searchStr = ((item.group || '') + ' ' + (item.focus || '')).toLowerCase();
+            const searchStr = (item.classification?.region || ((item.group || '') + ' ' + (item.focus || ''))).toLowerCase();
             if (searchStr.includes('peito') || searchStr.includes('peitoral')) return 'peito';
             if (searchStr.includes('costa') || searchStr.includes('dorsal') || searchStr.includes('trapézio') || searchStr.includes('trapezio') || searchStr.includes('lombar') || searchStr.includes('romboide')) return 'costas';
             if (searchStr.includes('perna') || searchStr.includes('quadríceps') || searchStr.includes('quadriceps') || searchStr.includes('glúteo') || searchStr.includes('gluteo') || searchStr.includes('isquiotibial') || searchStr.includes('panturrilha')) return 'pernas';
@@ -151,7 +154,8 @@ let isolationChartInstance = null;
         const activeMuscles = new Set();
 
         window.dictionaryData.forEach(ex => {
-            const exName = ex.name || 'Exercício Desconhecido';
+            if(ex.selectable===false)return;
+            const exName = [ex.name,ex.displayName,...(ex.aliases||[])].filter(Boolean).join(' ');
             const exGroup = ex.group || 'Outros';
             const exFocus = ex.focus || 'Geral';
             const exEquip = ex.equip || '';
@@ -257,7 +261,7 @@ let isolationChartInstance = null;
                 card.style.border = '1px solid var(--surface-soft)';
                 card.style.borderLeft = '4px solid var(--secondary)';
 
-                const safeName = escapeHTML(item.name || 'Exercício');
+                const safeName = escapeHTML(item.displayName || item.name || 'Exercício');
                 const ytQuery = encodeURIComponent(`Como executar o exercício ${safeName}`);
                 const equipStr = item.equip ? item.equip.replace(/_/g, ' ') : 'N/A';
 
@@ -266,11 +270,12 @@ let isolationChartInstance = null;
                         <div class="lib-name" style="flex: 1; font-size: 15px; color: var(--ink); font-weight: bold;">${safeName}</div>
                         <a href="https://www.youtube.com/results?search_query=${ytQuery}" target="_blank" style="text-decoration: none; font-size: 18px; margin-left: 10px; background: var(--secondary-soft); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--secondary);" title="Ver Execução no YouTube">${icon('video')}</a>
                     </div>
-                    <div class="lib-focus" style="margin-top: 8px; font-size: 11px; color: var(--muted);">🎯 Alvo: ${escapeHTML(item.group || 'Geral')} (${escapeHTML(item.focus || '')})</div>
+                    <div class="lib-focus" style="margin-top: 8px; font-size: 11px; color: var(--muted);">${escapeHTML(classificationLabel(item))}</div>
                     <div style="font-size: 11px; color: var(--accent); margin-top: 8px; background: var(--accent-soft); padding: 4px 8px; border-radius: 4px; display: inline-block; border: 1px dashed var(--accent-soft);">
                         🎒 Requer: ${escapeHTML(equipStr)}
                     </div>
                 `;
+                const guidance=document.createElement('details');guidance.innerHTML='<summary>Orientações</summary>';const paragraph=document.createElement('p');paragraph.textContent=item.desc;guidance.append(paragraph);card.append(guidance);
                 cardContainer.appendChild(card);
             });
 
@@ -380,6 +385,7 @@ let isolationChartInstance = null;
             });
 
             appendBlockControls(card,bloco,bIndex);
+            if(bIndex===0)appendResourceReview(card);
             bloco.exercises.forEach((ex, eIndex) => {
                 const blockDiv = document.createElement('div'); blockDiv.className = 'exercise-block';
 
@@ -388,7 +394,7 @@ let isolationChartInstance = null;
                     linkIcon = ' <span style="color:var(--accent);" title="Par de exercícios">🔗</span>';
                 }
 
-                const safeName = escapeHTML(ex.name);
+                const safeName = escapeHTML(ex.execution?.label||ex.name);
                 const safeTarget = escapeHTML(ex.target);
                 const ytQuery = encodeURIComponent(`Como executar o exercício ${safeName}`);
                 const ytLink = `https://www.youtube.com/results?search_query=${ytQuery}`;
@@ -396,11 +402,11 @@ let isolationChartInstance = null;
 
                 let aiSuggestionHTML = '';
                 const lastWorkoutMatch = historyLog.slice().reverse().find(log =>
-                    log.data && log.data.some(d => d.exercise === ex.name)
+                    log.data && log.data.some(d => d.exercise === ex.name&&referenceCompatible(ex,d))
                 );
 
                 if (lastWorkoutMatch) {
-                    const lastSets = lastWorkoutMatch.data.filter(d => d.exercise === ex.name);
+                    const lastSets = lastWorkoutMatch.data.filter(d => d.exercise === ex.name&&referenceCompatible(ex,d));
                     if (lastSets.length > 0) {
                             const finalSet = lastSets[lastSets.length - 1];
                             let suggestedKg = parseFloat(finalSet.kg) || 0;
@@ -458,6 +464,8 @@ let isolationChartInstance = null;
                         <textarea id="notes_input_${bIndex}_${eIndex}" class="ex-notes-input" placeholder="Suas observações sobre este exercício…" style="width: 100%; background: transparent; border: none; color: var(--muted); font-size: 12px; resize: vertical; min-height: 45px; outline: none;">${savedNotes}</textarea>
                     </div>`;
 
+                if(ex.execution){const hint=document.createElement('p');hint.className='execution-hint';hint.textContent=executionHint(ex);blockDiv.append(hint);}
+                appendExecutionControl(blockDiv,ex);
                 const btnNotes = blockDiv.querySelector('.btn-notes');
                 const notesContainer = blockDiv.querySelector('.notes-container');
                 const notesInput = blockDiv.querySelector('.ex-notes-input');
@@ -497,7 +505,7 @@ let isolationChartInstance = null;
                     let ghostKg = '';
                     let ghostReps = '';
                     if (lastWorkoutMatch) {
-                        const lastSets = lastWorkoutMatch.data.filter(d => d.exercise === ex.name);
+                        const lastSets = lastWorkoutMatch.data.filter(d => d.exercise === ex.name&&referenceCompatible(ex,d));
                         const pastSet = lastSets.find(d => parseInt(d.set) === s) || lastSets[lastSets.length - 1];
                         if (pastSet) {
                             if (pastSet.kg) ghostKg = pastSet.kg;
@@ -513,7 +521,7 @@ let isolationChartInstance = null;
                     const placeholderReps = data.measurementType === 'duration' ? 'Seg' : ghostReps !== '' ? ghostReps : 'Reps';
 
                     const sideLabel=ex.sideMode==='alternating'?(s%2?'E':'D')+Math.ceil(s/2):'S'+s;
-                    row.innerHTML = `<div class="set-label">${sideLabel}</div><input type="number" min="0" step="0.5" aria-label="Carga em kg, série ${s}" id="${kgId}" class="kg-val" placeholder="${placeholderKg}" value="${escapeHTML(displayKg)}"><input type="number" min="0" aria-label="Quantidade, série ${s}" id="${rpId}" class="rp-val" placeholder="${placeholderReps}" value="${escapeHTML(displayReps ?? '')}"><select class="set-measure" aria-label="Unidade, série ${s}" ${ex.sideMode?'disabled':''}><option value="reps" ${data.measurementType !== 'duration' ? 'selected' : ''}>rep</option><option value="duration" ${data.measurementType === 'duration' ? 'selected' : ''}>seg</option></select><button class="btn-iso" title="Cronômetro para série por tempo" aria-label="Iniciar ou pausar cronômetro da série ${s}" ${data.measurementType !== 'duration' ? 'disabled' : ''}>⏱</button><input type="checkbox" aria-label="${ex.sideMode==='alternating'?'Série '+Math.ceil(s/2)+', lado '+(s%2?'esquerdo':'direito'):'Série '+s} realizada" id="${chkId}" class="chk-set" ${data.checked ? 'checked' : ''}>`;
+                    row.innerHTML = `<div class="set-label">${sideLabel}</div><input type="number" min="0" step="0.5" aria-label="Carga em kg, série ${s}" id="${kgId}" class="kg-val" placeholder="${placeholderKg}" value="${escapeHTML(displayKg)}"><input type="number" min="0" aria-label="Quantidade, série ${s}" id="${rpId}" class="rp-val" placeholder="${placeholderReps}" value="${escapeHTML(displayReps ?? '')}"><select class="set-measure" aria-label="Unidade, série ${s}" ${ex.sideMode||ex.execution?'disabled':''}><option value="reps" ${data.measurementType !== 'duration' ? 'selected' : ''}>rep</option><option value="duration" ${data.measurementType === 'duration' ? 'selected' : ''}>seg</option></select><button class="btn-iso" title="Cronômetro para série por tempo" aria-label="Iniciar ou pausar cronômetro da série ${s}" ${data.measurementType !== 'duration' ? 'disabled' : ''}>⏱</button><input type="checkbox" aria-label="${ex.sideMode==='alternating'?'Série '+Math.ceil(s/2)+', lado '+(s%2?'esquerdo':'direito'):'Série '+s} realizada" id="${chkId}" class="chk-set" ${data.checked ? 'checked' : ''}>`;
 
                     row.classList.toggle('set-confirmed',Boolean(data.checked));
                     const chk = row.querySelector('.chk-set');
@@ -521,16 +529,29 @@ let isolationChartInstance = null;
                     const rpInp = row.querySelector('.rp-val');
                     const btnIso = row.querySelector('.btn-iso');
                     const measure = row.querySelector('.set-measure');
-                    const labelMeasurement=()=>rpInp.setAttribute('aria-label',(measure.value==='duration'?'Duração em segundos':'Repetições')+', série '+s);
+                    if(ex.execution?.count==='per-side')chk.setAttribute('aria-label','Série '+s+' realizada em ambos os lados');
+                    if(ex.execution?.load==='dumbbells-total')kgInp.setAttribute('aria-label','Soma dos halteres utilizados em kg, série '+s);
+                    if(ex.execution?.load==='bar-total')kgInp.setAttribute('aria-label','Barra e anilhas em kg, série '+s);
+                    const labelMeasurement=()=>rpInp.setAttribute('aria-label',(measure.value==='duration'?'Duração em segundos':ex.execution?.count==='per-side'?'Repetições por lado':'Repetições')+', série '+s);
                     labelMeasurement();
 
                     const updateState = () => {
                         ex.setsData[s-1] = { ...ex.setsData[s-1], kg: kgInp.value, measurementType:measure.value, checked:chk.checked,
                             ...(measure.value === 'duration' ? {durationSecs:rpInp.value} : {reps:rpInp.value}) };
                         state.todayLog = completedSets(state.currentRoutine);
-                        window.FitApp.saveWorkoutState();
+                        return window.FitApp.saveWorkoutState();
                     };
 
+                    let differenceDetails=null;
+                    if(ex.execution?.count==='per-side'){
+                        const extra=document.createElement('details');extra.className='set-difference';
+                        const summary=document.createElement('summary');summary.textContent='Diferença entre os lados';
+                        const label=document.createElement('label'),different=document.createElement('input');different.type='checkbox';different.checked=Boolean(data.sideDifference);
+                        label.append(different,document.createTextNode('Os resultados foram diferentes'));
+                        const note=document.createElement('textarea');note.maxLength=400;note.setAttribute('aria-label','Diferenças entre os lados, série '+s);note.placeholder='Ex.: esquerdo 10; direito 8. Informe também se a carga mudou.';note.value=data.notes||'';
+                        const save=()=>{ex.setsData[s-1].sideDifference=different.checked;ex.setsData[s-1].notes=note.value;updateState();};
+                        different.addEventListener('change',save);note.addEventListener('input',save);extra.append(summary,label,note);differenceDetails=extra;
+                    }
                     let localIsoTimer = null;
                     const stopIso = () => { if(localIsoTimer){clearInterval(localIsoTimer);state.exerciseTimers.delete(localIsoTimer);}localIsoTimer=null;btnIso.textContent='⏱'; };
                     measure.addEventListener('change',()=>{
@@ -560,8 +581,12 @@ let isolationChartInstance = null;
 
                     chk.addEventListener('change', () => {
                         stopIso();
-
+                        const previousChecked=Boolean(ex.setsData[s-1]?.checked);
+                        if(chk.checked&&(rpInp.value===''||Number(rpInp.value)<=0)){chk.checked=previousChecked;window.FitApp.showToast('Informe as repetições ou os segundos realizados.');return;}
+                        if(chk.checked&&ex.setsData[s-1]?.sideDifference&&!ex.setsData[s-1]?.notes?.trim()){chk.checked=previousChecked;window.FitApp.showToast('Descreva os resultados de cada lado na observação desta série.');return;}
+                        if(!updateState()){chk.checked=previousChecked;ex.setsData[s-1].checked=previousChecked;state.todayLog=completedSets(state.currentRoutine);return;}
                         if (chk.checked) {
+                            if(ex.setsData[s-1]?.sideDifference&&!ex.setsData[s-1]?.notes?.trim()){chk.checked=false;window.FitApp.showToast('Descreva os resultados de cada lado na observação desta série.');return;}
                             // TRANSIÇÃO DE FANTASMA PARA MATERIAL: Se o campo estava vazio, herda o fantasma antes de registrar o PR
                             if (rpInp.value === '' || Number(rpInp.value) <= 0) {
                                 chk.checked=false;window.FitApp.showToast('Informe as repetições ou os segundos realizados.');rpInp.focus();return;
@@ -574,7 +599,7 @@ let isolationChartInstance = null;
                             const pReps = parseInt(ghostReps) || 0;
 
                             let isPR = false;
-                            if (measure.value !== 'duration' && (ghostKg !== '' || ghostReps !== '')) {
+                            if (!ex.setsData[s-1].sideDifference && measure.value !== 'duration' && (ghostKg !== '' || ghostReps !== '')) {
                                 if (currentKg > pKg) {
                                     isPR = true;
                                 } else if (currentKg === pKg && currentReps > pReps) {
@@ -631,6 +656,7 @@ let isolationChartInstance = null;
                         else card.classList.remove('collapsed-block');
                     });
                     blockDiv.appendChild(row);
+                    if(differenceDetails)blockDiv.append(differenceDetails);
                 }
                 blockDiv.querySelector('[data-open-dict]')?.addEventListener('click', () => window.FitApp.openDict(ex.name));
                 card.appendChild(blockDiv);
@@ -943,14 +969,17 @@ let isolationChartInstance = null;
             if (log.data && log.data.length > 0) {
                 const exMap = Object.create(null);
                 log.data.forEach(item => {
-                    if (!exMap[item.exercise]) exMap[item.exercise] = [];
-                    exMap[item.exercise].push(item);
+                    const key=item.exerciseId?JSON.stringify([item.exercise,item.exerciseId]):item.exercise;
+                    if (!exMap[key]) exMap[key] = [];
+                    exMap[key].push(item);
                 });
 
-                for (const [exName, sets] of Object.entries(exMap)) {
+                for (const sets of Object.values(exMap)) {
+                    const exName=sets[0].exercise,profile=readTrainingContext(log.trainingContext)?.execution.flatMap(b=>b.exercises).find(ex=>ex.id===sets[0].exerciseId)?.execution;
+                    const displayName=profile?.label?profile.label+(profile.choice?' · '+profile.choice:''):exName;
                     const exDiv = document.createElement('div');
                     exDiv.style.marginBottom = '8px';
-                    exDiv.innerHTML = `<div style="color: var(--secondary); font-size: 13px; font-weight: bold;">${escapeHTML(exName)}</div>`;
+                    exDiv.innerHTML = `<div style="color: var(--secondary); font-size: 13px; font-weight: bold;">${escapeHTML(displayName)}</div>`;
 
                     if (exName === 'Cardio') {
                         const c = sets[0];
@@ -960,8 +989,9 @@ let isolationChartInstance = null;
                         const timeStr = c.tempo_segundos > 0 ? `<span style="background: var(--surface); padding: 2px 6px; border-radius: 4px; margin-right: 4px; border: 1px solid var(--line); color: var(--muted);">⏱️ ${Math.floor(c.tempo_segundos/60)} min</span>` : '';
                         exDiv.innerHTML += `<div style="margin-top: 6px;">${distStr}${kcalStr}${bpmStr}${timeStr}</div>`;
                     } else {
-                        const setStr = sets.map(s => `<span class="history-set">${sideLabel(s)}: ${Number(s.kg)||0} kg · ${s.measurementType === 'duration' ? (Number(s.durationSecs)||0)+' s' : (Number(s.reps)||0)+' rep'}</span>`).join('');
+                        const setStr = sets.map(s => `<span class="history-set">${sideLabel(s)}: ${Number(s.kg)||0} kg · ${s.measurementType === 'duration' ? (Number(s.durationSecs)||0)+' s' : (Number(s.reps)||0)+' '+recordUnit(s)}</span>`).join('');
                         exDiv.innerHTML += `<div style="margin-top: 4px; line-height: 1.8;">${setStr}</div>`;
+                        for(const set of sets)if(set.notes){const note=document.createElement('p');note.textContent=sideLabel(set)+': '+set.notes;exDiv.append(note);}
                     }
                     body.appendChild(exDiv);
                 }
@@ -1014,7 +1044,7 @@ let isolationChartInstance = null;
 
             if (log.data && log.data.length > 0) {
                 log.data.forEach(set => {
-                    if(set.measurementType !== 'duration' && Number(set.kg)>0)allExecutedExercises.add(set.exercise); // Adiciona ao arsenal usado
+                    if(set.executionKey&&set.measurementType !== 'duration' && Number(set.kg)>0)allExecutedExercises.add(set.exercise); // Adiciona ao arsenal usado
 
                     if (isRecent) {
                         const dictItem = typeof window.dictionaryData !== 'undefined' ? window.dictionaryData.find(d => d.name === set.exercise) : null;
@@ -1090,11 +1120,12 @@ let isolationChartInstance = null;
         }
 
         const targetExercise = select.value;
+        const reference=history.flatMap(log=>log.data||[]).filter(set=>set.exercise===targetExercise&&set.executionKey&&!set.notes?.includes('Diferença entre os lados:')).at(-1)?.executionKey;
         const chartDataMap = {}; // Agrupar por data para achar a Carga Máxima do dia
 
         history.forEach(log => {
             if (log.data) {
-                const setsOfExercise = log.data.filter(set => set.exercise === targetExercise && set.measurementType !== 'duration');
+                const setsOfExercise = log.data.filter(set => reference&&set.executionKey===reference&&!set.notes?.includes('Diferença entre os lados:')&&set.exercise === targetExercise && set.measurementType !== 'duration');
                 if (setsOfExercise.length > 0) {
                     const dateStr = log.date;
                     // Encontra a maior carga levantada naquele dia específico para este exercício
@@ -1236,7 +1267,7 @@ let isolationChartInstance = null;
                 const item = document.createElement('div');
                 item.className = 'preview-item';
 
-                const safeName = escapeHTML(ex.name);
+                const safeName = escapeHTML(ex.execution?.label||ex.name);
                 const safeTarget = escapeHTML(ex.target);
                 const ytQuery = encodeURIComponent(`Como executar o exercício ${safeName}`);
                 const ytLink = `https://www.youtube.com/results?search_query=${ytQuery}`;
@@ -1362,7 +1393,8 @@ let isolationChartInstance = null;
         list.innerHTML = '';
 
         const filtered = window.dictionaryData.filter(d => {
-            const matchesText = d.name.toLowerCase().includes(query) || String(d.focus || d.subLevel || '').toLowerCase().includes(query);
+            if(d.selectable===false)return false;
+            const matchesText = [d.name,d.displayName,...(d.aliases||[]),d.focus,d.subLevel].filter(Boolean).join(' ').toLowerCase().includes(query);
             const muscleGroup = getMuscleGroup(d);
             const matchesCategory = currentCategoryFilter === 'todos' || muscleGroup === currentCategoryFilter;
             return matchesText && matchesCategory && availableInEnvironment(d,addEnvironmentOptions());
@@ -1371,9 +1403,12 @@ let isolationChartInstance = null;
         filtered.forEach(item => {
             const div = document.createElement('div');
             div.className = 'swap-item';
-            div.innerHTML = `<div class="swap-item-name">${escapeHTML(item.name)}</div><div class="swap-item-focus">${escapeHTML(item.focus)}</div>`;
+            div.innerHTML = `<div class="swap-item-name">${escapeHTML(item.displayName||item.name)}</div><div class="swap-item-focus">${escapeHTML(item.focus)}</div>`;
             div.onclick = () => {
                 document.getElementById('selectedExerciseName').textContent = item.name;
+                const targetInput=document.getElementById('customReps');
+                if(item.executionProfile?.count.startsWith('duration')&&measurementForTarget(targetInput.value)!=='duration')targetInput.value='';
+                targetInput.placeholder=item.executionProfile?.count.startsWith('duration')?'Ex.: 20–30 seg':item.executionProfile?.count==='per-side'?'Ex.: 10–15 rep por lado':'Ex.: 10–15 rep';
                 document.getElementById('addExerciseConfig').style.display = 'block';
                 document.getElementById('addExerciseModal').querySelector('.swap-modal-content').scrollTop = 1000;
             };
@@ -1393,7 +1428,9 @@ let isolationChartInstance = null;
         }
 
         const blockIndex=Number(document.getElementById('addBlockTarget').value)||0;
-        state.currentRoutine[blockIndex].exercises.push({ name, sets: parseInt(sets), target });
+        const movement=window.dictionaryData.find(m=>m.name===name),ex={ name, sets: parseInt(sets), target };
+        if(!String(target).trim()||(movement.executionProfile?.count.startsWith('duration')&&measurementForTarget(target)!=='duration')){window.FitApp.showToast('Informe a meta na unidade desta execução; repetições não são convertidas em segundos.');return;}
+        state.currentRoutine[blockIndex].exercises.push(movement.executionProfile?withExecution(ex,movement):ex);
 
         document.getElementById('addExerciseModal').style.display = 'none';
         renderPreviewList();

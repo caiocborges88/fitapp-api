@@ -1,0 +1,3 @@
+npm notice run fitapp@1.0.0 test:environment-proposal
+npm notice run node tests/environment-proposal-browser.cjs
+Propostas por ambiente: revisão, cobertura explícita, aplicação, execução e restauração aprovadas.

@@ -1,10 +1,10 @@
-export const draftVersion=1;
+export const draftVersion=2;
 export const draftPrefix='fitapp_workout_draft:';
 const kinds=new Set(['new','session','template','plan','cycle']);
 const routineShape=routine=>Array.isArray(routine)&&routine.length>0&&routine.length<=100&&routine.every(block=>block&&typeof block.title==='string'&&['traditional','superset','circuit',undefined].includes(block.type)&&Array.isArray(block.exercises)&&block.exercises.length<=100&&block.exercises.every(ex=>ex&&typeof ex.name==='string'&&ex.name.length<=300&&typeof ex.target==='string'&&ex.target.length<=50&&Number.isFinite(Number(ex.sets))));
 // Drafts may be unfinished: do not normalize or silently fill missing exercises.
 export function validDraft(value,userId){
-    if(!value||value.version!==draftVersion||!userId||value.userId!==userId||typeof value.id!=='string'||!/^[-\w]{1,80}$/.test(value.id))return false;
+    if(!value||![1,draftVersion].includes(value.version)||!userId||value.userId!==userId||typeof value.id!=='string'||!/^[-\w]{1,80}$/.test(value.id))return false;
     if(!kinds.has(value.context?.kind)||typeof value.type!=='string'||typeof value.name!=='string'||value.name.length>120)return false;
     if(!Number.isFinite(value.updatedAt)||!routineShape(value.routine))return false;
     if(value.coverage!=null&&!routineShape(value.coverage))return false;

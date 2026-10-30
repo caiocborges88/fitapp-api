@@ -1,0 +1,41 @@
+{
+  "status": "ok",
+  "environment": "local Edge; Firebase simulated; no physical device",
+  "checks": [
+    "acesso rápido em dois toques sem rolagem; revisão compacta e ficha original preservada",
+    "rascunho de sessão sobrevive à recarga e é removido após início durável",
+    "montagem manual, recuperação e salvar para iniciar sem retornar à lista",
+    "ambiente e recursos compartilhados; academia bloqueia equipamento desmarcado",
+    "ciclo completo salvo e início do dia escolhido",
+    "rascunho de revisão antiga recuperado como cópia sem sobrescrever ficha atual",
+    "falha ao guardar rascunho mantém edição aberta",
+    "falha ao gravar sessão impede início e preserva revisão",
+    "edição offline e recuperação em outra aba conservam rascunhos independentes",
+    "formato futuro de rascunho não é executado nem apagado",
+    "rascunhos isolados por conta"
+  ],
+  "metrics": [
+    {
+      "width": 390,
+      "height": 844,
+      "scheme": "light",
+      "touchesToStart": 2,
+      "requiredScrollToStart": 0
+    },
+    {
+      "width": 360,
+      "height": 740,
+      "scheme": "dark",
+      "touchesToStart": 2,
+      "requiredScrollToStart": 0
+    },
+    {
+      "width": 1280,
+      "height": 900,
+      "scheme": "light",
+      "touchesToStart": 2,
+      "requiredScrollToStart": 0
+    }
+  ],
+  "originalDraft": "fitapp_workout_draft:355c86f2-2bae-40ae-a973-932488e9a5de"
+}

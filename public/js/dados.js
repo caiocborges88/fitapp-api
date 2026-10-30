@@ -17,12 +17,35 @@ window.dictionaryData = [
         ],
         "movementPattern": "agachar",
         "id": "agachamento-com-peso-corporal",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Com os pés inteiros apoiados, flexione joelhos e quadril para agachar. Mantenha o tronco controlado e os joelhos acompanhando os pés; retorne sem saltar.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Agachamento com peso corporal",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "agachar",
+            "grip": null,
+            "emphasis": [
+                "quadriceps-vastos"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "agachamento-com-peso-corporal",
+            "variant": "agachamento-com-peso-corporal:review-2",
+            "label": "Agachamento com peso corporal",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -40,12 +63,35 @@ window.dictionaryData = [
         ],
         "movementPattern": "extensao-quadril",
         "id": "ponte-de-gluteos-no-solo",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite de costas, com joelhos flexionados e pés apoiados. Eleve e abaixe o quadril com controle, sem arquear excessivamente a lombar ou apoiar o peso no pescoço.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Ponte de glúteos no solo",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "extensao-quadril",
+            "grip": null,
+            "emphasis": [
+                "gluteo-maximo"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "ponte-de-gluteos-no-solo",
+            "variant": "ponte-de-gluteos-no-solo:review-2",
+            "label": "Ponte de glúteos no solo",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -63,12 +109,35 @@ window.dictionaryData = [
         ],
         "movementPattern": "extensao-quadril",
         "id": "ponte-de-quadril-com-apoio-dos-calcanhares",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite de costas, com calcanhares afastados do quadril, joelhos parcialmente flexionados e pontas dos pés elevadas. Pressione os calcanhares no chão para elevar o quadril; retorne sem deslizar os pés.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Ponte de Quadril no Solo — Calcanhares Afastados",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "extensao-quadril",
+            "grip": null,
+            "emphasis": [
+                "isquiotibiais"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "ponte-de-quadril-com-apoio-dos-calcanhares",
+            "variant": "ponte-de-quadril-com-apoio-dos-calcanhares:review-2",
+            "label": "Ponte de Quadril no Solo — Calcanhares Afastados",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -86,12 +155,35 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-plantar",
         "id": "elevacao-de-panturrilhas-em-pe-sem-carga",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Em pé, com joelhos estendidos sem forçá-los para trás, eleve os dois calcanhares juntos e abaixe com controle. Evite saltar ou usar os joelhos para impulsionar.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Elevação de panturrilhas em pé sem carga",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "flexao-plantar",
+            "grip": null,
+            "emphasis": [
+                "gastrocnemios"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "elevacao-de-panturrilhas-em-pe-sem-carga",
+            "variant": "elevacao-de-panturrilhas-em-pe-sem-carga:review-2",
+            "label": "Elevação de panturrilhas em pé sem carga",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -109,12 +201,35 @@ window.dictionaryData = [
         ],
         "movementPattern": "empurrar-vertical",
         "id": "flexao-pike-no-solo",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Apoie mãos e pés no chão e eleve o quadril em V invertido. Flexione os cotovelos aproximando a cabeça do solo à frente das mãos; empurre para retornar, sem apoiar peso na cabeça.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Flexão Pike no solo",
+        "classification": {
+            "version": 1,
+            "region": "Ombros",
+            "action": "empurrar-vertical",
+            "grip": null,
+            "emphasis": [
+                "deltoide-anterior"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "flexao-pike-no-solo",
+            "variant": "flexao-pike-no-solo:review-2",
+            "label": "Flexão Pike no solo",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -132,12 +247,35 @@ window.dictionaryData = [
         ],
         "movementPattern": "empurrar-horizontal",
         "id": "flexao-com-maos-proximas",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Apoie as mãos mais próximas que na flexão padrão, em posição confortável para os punhos. Desça e suba com o corpo alinhado e os cotovelos próximos ao tronco.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Flexão com mãos próximas",
+        "classification": {
+            "version": 1,
+            "region": "Tríceps",
+            "action": "empurrar-horizontal",
+            "grip": null,
+            "emphasis": [
+                "triceps-lateral-medial"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "flexao-com-maos-proximas",
+            "variant": "flexao-com-maos-proximas:review-2",
+            "label": "Flexão com mãos próximas",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -158,12 +296,35 @@ window.dictionaryData = [
         ],
         "movementPattern": "empurrar-horizontal",
         "id": "flexao-de-braco-padrao",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Apoie mãos e pontas dos pés no chão. Flexione os cotovelos aproximando o peito do solo e empurre para retornar, mantendo cabeça, tronco e quadril alinhados.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Flexão de Braço (Padrão)",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "empurrar-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-esternocostal"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "flexao-de-braco-padrao",
+            "variant": "flexao-de-braco-padrao:review-2",
+            "label": "Flexão de Braço (Padrão)",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -186,12 +347,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "empurrar-horizontal",
         "id": "flexao-inclinada-maos-no-banco",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Apoie as mãos em um banco firme e os pés no chão. Aproxime o peito do banco e empurre para retornar, movimentando o corpo alinhado como uma unidade.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Flexão Inclinada (Mãos no banco)",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "empurrar-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-inferior"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "flexao-inclinada-maos-no-banco",
+            "variant": "flexao-inclinada-maos-no-banco:review-2",
+            "label": "Flexão Inclinada (Mãos no banco)",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": [
+                "bench"
+            ]
         }
     },
     {
@@ -214,12 +400,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "empurrar-horizontal",
         "id": "flexao-declinada-pes-no-banco",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Apoie os pés em um banco firme e as mãos no chão. Desça e suba mantendo cabeça, tronco e quadril alinhados, sem deixar a lombar ceder.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Flexão Declinada (Pés no banco)",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "empurrar-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-clavicular"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "flexao-declinada-pes-no-banco",
+            "variant": "flexao-declinada-pes-no-banco:review-2",
+            "label": "Flexão Declinada (Pés no banco)",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": [
+                "bench"
+            ]
         }
     },
     {
@@ -244,12 +455,39 @@ window.dictionaryData = [
         ],
         "movementPattern": "empurrar-horizontal",
         "id": "supino-reto-com-barra",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite no banco reto com pés firmes e cabeça, costas e quadril apoiados. Desça a barra em direção ao peito e empurre com controle, sem quicar no corpo; mantenha punhos alinhados.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Supino Reto com Barra",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "empurrar-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-esternocostal"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "supino-reto-com-barra",
+            "variant": "supino-reto-com-barra:review-2",
+            "label": "Supino Reto com Barra",
+            "count": "total",
+            "load": "bar-total",
+            "weights": 0,
+            "resources": [
+                "barbell",
+                "plates",
+                "bench"
+            ]
         }
     },
     {
@@ -273,12 +511,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "empurrar-horizontal",
         "id": "supino-reto-com-halteres",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite no banco reto com pés firmes. Baixe os halteres ao lado do peito e empurre os dois juntos, preservando os apoios e sem bater os pesos no alto.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Supino Reto com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "empurrar-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-esternocostal"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "supino-reto-com-halteres",
+            "variant": "supino-reto-com-halteres:review-2",
+            "label": "Supino Reto com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells",
+                "bench"
+            ]
         }
     },
     {
@@ -301,12 +565,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "empurrar-horizontal",
         "id": "supino-reto-na-maquina",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste o assento e as empunhaduras para o peito conforme a máquina. Com pés firmes e costas apoiadas, empurre e retorne seguindo a trajetória, sem projetar o tronco.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Supino Reto na Máquina",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "empurrar-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-esternocostal"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "supino-reto-na-maquina",
+            "variant": "supino-reto-na-maquina:review-2",
+            "label": "Supino Reto na Máquina",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:supino-reto-na-maquina"
+            ]
         }
     },
     {
@@ -331,12 +621,39 @@ window.dictionaryData = [
         ],
         "movementPattern": "empurrar-horizontal",
         "id": "supino-inclinado-com-barra",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite no banco inclinado com pés firmes e corpo apoiado. Desça a barra em direção à parte superior do peito e empurre com controle, mantendo punhos alinhados aos antebraços.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Supino Inclinado com Barra",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "empurrar-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-clavicular"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "supino-inclinado-com-barra",
+            "variant": "supino-inclinado-com-barra:review-2",
+            "label": "Supino Inclinado com Barra",
+            "count": "total",
+            "load": "bar-total",
+            "weights": 0,
+            "resources": [
+                "barbell",
+                "plates",
+                "incline-bench"
+            ]
         }
     },
     {
@@ -360,12 +677,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "empurrar-horizontal",
         "id": "supino-inclinado-com-halteres",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite no banco inclinado, com pés firmes e cabeça, costas e quadril apoiados. Baixe os halteres ao lado da parte superior do peito e empurre os dois juntos com controle.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Supino Inclinado com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "empurrar-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-clavicular"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "supino-inclinado-com-halteres",
+            "variant": "supino-inclinado-com-halteres:review-2",
+            "label": "Supino Inclinado com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells",
+                "incline-bench"
+            ]
         }
     },
     {
@@ -388,12 +731,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "empurrar-horizontal",
         "id": "supino-inclinado-na-maquina",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste o assento para as empunhaduras indicadas para supino inclinado. Mantenha pés firmes e costas apoiadas; empurre e retorne sem perder o apoio do tronco.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Supino Inclinado na Máquina",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "empurrar-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-clavicular"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "supino-inclinado-na-maquina",
+            "variant": "supino-inclinado-na-maquina:review-2",
+            "label": "Supino Inclinado na Máquina",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:supino-inclinado-na-maquina"
+            ]
         }
     },
     {
@@ -418,12 +787,39 @@ window.dictionaryData = [
         ],
         "movementPattern": "empurrar-horizontal",
         "id": "supino-declinado-com-barra",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Use banco próprio para supino declinado, estabilizando as pernas nos apoios. Com o corpo apoiado, desça a barra em direção ao peito e empurre sem quicar.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Supino Declinado com Barra",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "empurrar-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-inferior"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "supino-declinado-com-barra",
+            "variant": "supino-declinado-com-barra:review-2",
+            "label": "Supino Declinado com Barra",
+            "count": "total",
+            "load": "bar-total",
+            "weights": 0,
+            "resources": [
+                "barbell",
+                "plates",
+                "decline-bench"
+            ]
         }
     },
     {
@@ -447,12 +843,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "empurrar-horizontal",
         "id": "supino-declinado-com-halteres",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "No banco declinado, estabilize as pernas nos apoios próprios. Baixe os halteres ao lado do peito e empurre os dois juntos, mantendo cabeça, costas e quadril apoiados.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Supino Declinado com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "empurrar-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-inferior"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "supino-declinado-com-halteres",
+            "variant": "supino-declinado-com-halteres:review-2",
+            "label": "Supino Declinado com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells",
+                "decline-bench"
+            ]
         }
     },
     {
@@ -475,12 +897,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "aducao-horizontal",
         "id": "crucifixo-reto-com-halteres",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite no banco reto com halteres acima do peito e palmas frente a frente. Abra e feche os braços em arco, mantendo cotovelos levemente flexionados, sem transformar em supino.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Crucifixo Reto com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "aducao-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-esternocostal"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "crucifixo-reto-com-halteres",
+            "variant": "crucifixo-reto-com-halteres:review-2",
+            "label": "Crucifixo Reto com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells",
+                "bench"
+            ]
         }
     },
     {
@@ -503,12 +951,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "aducao-horizontal",
         "id": "crucifixo-inclinado-com-halteres",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite no banco inclinado com halteres acima do peito e palmas frente a frente. Abra os braços em arco até onde controlar e retorne preservando a leve flexão dos cotovelos.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Crucifixo Inclinado com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "aducao-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-clavicular"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "crucifixo-inclinado-com-halteres",
+            "variant": "crucifixo-inclinado-com-halteres:review-2",
+            "label": "Crucifixo Inclinado com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells",
+                "incline-bench"
+            ]
         }
     },
     {
@@ -530,12 +1004,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "aducao-horizontal",
         "id": "voador-peck-deck",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste banco e apoios conforme o equipamento. Com costas apoiadas, aproxime os braços à frente do peito e retorne de forma controlada, sem projetar o tronco.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Voador (Peck Deck)",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "aducao-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-esternocostal"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "voador-peck-deck",
+            "variant": "voador-peck-deck:review-2",
+            "label": "Voador (Peck Deck)",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:voador-peck-deck"
+            ]
         }
     },
     {
@@ -558,12 +1058,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "aducao-horizontal",
         "id": "crossover-polia-alta",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Use duas polias altas e uma alça em cada mão. Com base firme e cotovelos levemente flexionados, aproxime as mãos em arco diagonal para baixo; retorne sem embalar o tronco.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Crossover Polia Alta",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "aducao-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-inferior"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "crossover-polia-alta",
+            "variant": "crossover-polia-alta:review-2",
+            "label": "Crossover Polia Alta",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "dual-cable",
+                "cable-handles"
+            ]
         }
     },
     {
@@ -586,12 +1112,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "aducao-horizontal",
         "id": "crossover-polia-media",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Use duas polias aproximadamente na altura dos ombros. Com base firme e cotovelos levemente flexionados, aproxime as mãos à frente do peito em arco horizontal e retorne com controle.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Crossover Polia Média",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "aducao-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-esternocostal"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "crossover-polia-media",
+            "variant": "crossover-polia-media:review-2",
+            "label": "Crossover Polia Média",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "dual-cable",
+                "cable-handles"
+            ]
         }
     },
     {
@@ -614,12 +1166,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "aducao-horizontal",
         "id": "crossover-polia-baixa",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Use duas polias baixas e uma alça em cada mão. Conduza os braços em arco para cima e à frente da parte superior do peito; retorne sem elevar os ombros ou embalar.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Crossover Polia Baixa",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "aducao-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-clavicular"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "crossover-polia-baixa",
+            "variant": "crossover-polia-baixa:review-2",
+            "label": "Crossover Polia Baixa",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "dual-cable",
+                "cable-handles"
+            ]
         }
     },
     {
@@ -646,12 +1224,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "puxar-vertical",
         "id": "barra-fixa-pull-up-chin-up-",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Segure a barra com palmas para a frente e pés suspensos. Eleve o corpo conduzindo cotovelos para baixo e desça com controle, sem balançar as pernas ou projetar a cabeça.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Barra Fixa Pronada (Pull-up)",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "puxar-vertical",
+            "grip": "pronada",
+            "emphasis": [
+                "costas-latissimo"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "barra-fixa-pull-up-chin-up-",
+            "variant": "barra-fixa-pull-up-chin-up-:review-2",
+            "label": "Barra Fixa Pronada (Pull-up)",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": [
+                "pullup-bar"
+            ]
         }
     },
     {
@@ -675,12 +1278,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "puxar-vertical",
         "id": "puxada-alta-pegada-aberta",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste o apoio das coxas e use pegada pronada mais aberta que os ombros, confortável. Puxe pela frente em direção ao peito e retorne sem embalar o tronco.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Puxada Alta (Pegada Aberta)",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "puxar-vertical",
+            "grip": null,
+            "emphasis": [
+                "costas-latissimo"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "puxada-alta-pegada-aberta",
+            "variant": "puxada-alta-pegada-aberta:review-2",
+            "label": "Puxada Alta (Pegada Aberta)",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "cable"
+            ]
         }
     },
     {
@@ -707,12 +1335,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "puxar-vertical",
         "id": "puxada-alta-supinada-neutra",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste o apoio das coxas e segure a barra com palmas voltadas para você. Puxe pela frente em direção ao peito e retorne com controle, mantendo o tronco estável.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Puxada Alta Supinada",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "puxar-vertical",
+            "grip": "supinada",
+            "emphasis": [
+                "costas-latissimo"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "puxada-alta-supinada-neutra",
+            "variant": "puxada-alta-supinada-neutra:review-2",
+            "label": "Puxada Alta Supinada",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "cable"
+            ]
         }
     },
     {
@@ -735,12 +1388,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "puxar-vertical",
         "id": "puxada-alta-na-maquina",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste assento e apoios conforme a máquina. Conduza os cotovelos para baixo para puxar e retorne com controle, mantendo o tronco estável e sem usar balanço.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Puxada Alta na Máquina",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "puxar-vertical",
+            "grip": null,
+            "emphasis": [
+                "costas-latissimo"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "puxada-alta-na-maquina",
+            "variant": "puxada-alta-na-maquina:review-2",
+            "label": "Puxada Alta na Máquina",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:puxada-alta-na-maquina"
+            ]
         }
     },
     {
@@ -765,12 +1444,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "puxar-horizontal",
         "id": "remada-curvada-com-barra",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Com pegada pronada, joelhos levemente flexionados e tronco inclinado pelo quadril, puxe a barra ao abdômen. Retorne sem levantar o tronco para impulsionar a carga.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Remada Curvada com Barra",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "puxar-horizontal",
+            "grip": "pronada",
+            "emphasis": [],
+            "functionFocus": [
+                "costas-remada"
+            ]
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "remada-curvada-com-barra",
+            "variant": "remada-curvada-com-barra:review-2",
+            "label": "Remada Curvada com Barra",
+            "count": "total",
+            "load": "bar-total",
+            "weights": 0,
+            "resources": [
+                "barbell",
+                "plates"
+            ]
         }
     },
     {
@@ -795,12 +1500,40 @@ window.dictionaryData = [
         ],
         "movementPattern": "puxar-horizontal",
         "id": "remada-unilateral-serrote",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Apoie uma mão e o joelho do mesmo lado no banco, com o outro pé no chão. Puxe o halter à lateral do tronco e desça sem girar o corpo. Meta por braço.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Remada Unilateral (Serrote)",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "puxar-horizontal",
+            "grip": null,
+            "emphasis": [
+                "costas-latissimo"
+            ],
+            "functionFocus": [
+                "costas-remada"
+            ]
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "remada-unilateral-serrote",
+            "variant": "remada-unilateral-serrote:review-2",
+            "label": "Remada Unilateral (Serrote)",
+            "count": "per-side",
+            "load": "dumbbells-total",
+            "weights": 1,
+            "resources": [
+                "dumbbells",
+                "bench"
+            ]
         }
     },
     {
@@ -824,12 +1557,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "puxar-horizontal",
         "id": "remada-baixa-no-cabo-triangulo",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Sente com pés nos apoios e joelhos levemente flexionados. Com palmas frente a frente no triângulo, puxe ao abdômen e retorne sem embalar o tronco.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Remada Baixa no Cabo (Triângulo)",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "puxar-horizontal",
+            "grip": "neutra",
+            "emphasis": [],
+            "functionFocus": [
+                "costas-remada"
+            ]
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "remada-baixa-no-cabo-triangulo",
+            "variant": "remada-baixa-no-cabo-triangulo:review-2",
+            "label": "Remada Baixa no Cabo (Triângulo)",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "cable"
+            ]
         }
     },
     {
@@ -852,12 +1610,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "puxar-horizontal",
         "id": "remada-maquina-apoiada-no-peito",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste assento e apoio do peito. Com pés firmes e peito apoiado, puxe as empunhaduras conduzindo cotovelos para trás e retorne com controle. Confira a trajetória própria da máquina.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Remada Máquina Apoiada no Peito",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "puxar-horizontal",
+            "grip": null,
+            "emphasis": [],
+            "functionFocus": [
+                "costas-remada"
+            ]
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "remada-maquina-apoiada-no-peito",
+            "variant": "remada-maquina-apoiada-no-peito:review-2",
+            "label": "Remada Máquina Apoiada no Peito",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:remada-maquina-apoiada-no-peito"
+            ]
         }
     },
     {
@@ -883,12 +1667,40 @@ window.dictionaryData = [
         ],
         "movementPattern": "puxar-horizontal",
         "id": "remada-cavalinho-t-bar",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Use barra fixada em landmine e empunhadura compatível. Incline o tronco pelo quadril, puxe em direção ao abdômen e retorne sem levantar o corpo para impulsionar.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Remada Cavalinho (T-Bar)",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "puxar-horizontal",
+            "grip": null,
+            "emphasis": [],
+            "functionFocus": [
+                "costas-remada"
+            ]
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "remada-cavalinho-t-bar",
+            "variant": "remada-cavalinho-t-bar:review-2",
+            "label": "Remada Cavalinho (T-Bar)",
+            "count": "total",
+            "load": "bar-total",
+            "weights": 0,
+            "resources": [
+                "barbell",
+                "plates",
+                "landmine",
+                "row-handle"
+            ]
         }
     },
     {
@@ -911,12 +1723,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "extensao-ombro",
         "id": "pulldown-no-cabo-bracos-estendidos",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "De frente para a polia alta, segure a barra pronada. Com cotovelos levemente flexionados, conduza-a em arco até as coxas e retorne sem transformar em extensão de tríceps.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Pulldown no Cabo (Braços Estendidos)",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "extensao-ombro",
+            "grip": null,
+            "emphasis": [
+                "costas-latissimo"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "pulldown-no-cabo-bracos-estendidos",
+            "variant": "pulldown-no-cabo-bracos-estendidos:review-2",
+            "label": "Pulldown no Cabo (Braços Estendidos)",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "cable"
+            ]
         }
     },
     {
@@ -942,12 +1779,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "dobrar-quadril",
         "id": "levantamento-terra-convencional",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Comece com barra no chão próxima às canelas e mãos por fora das pernas. Estabilize o tronco e levante estendendo joelhos e quadril; devolva a barra com controle, sem quicar.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Levantamento Terra (Convencional)",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "dobrar-quadril",
+            "grip": null,
+            "emphasis": [],
+            "functionFocus": [
+                "cadeia-posterior"
+            ]
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "levantamento-terra-convencional",
+            "variant": "levantamento-terra-convencional:review-2",
+            "label": "Levantamento Terra (Convencional)",
+            "count": "total",
+            "load": "bar-total",
+            "weights": 0,
+            "resources": [
+                "barbell",
+                "plates"
+            ]
         }
     },
     {
@@ -970,12 +1833,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "extensao-tronco",
         "id": "extensao-lombar-banco-romano",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste o apoio para permitir movimento pelo quadril e fixe os pés nos suportes próprios. Incline pelo quadril com coluna estável e retorne alinhando tronco e pernas, sem arquear as costas.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Extensão de Quadril no Banco Romano",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "extensao-quadril",
+            "grip": null,
+            "emphasis": [
+                "gluteo-maximo",
+                "isquiotibiais"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "extensao-lombar-banco-romano",
+            "variant": "extensao-lombar-banco-romano:review-2",
+            "label": "Extensão de Quadril no Banco Romano",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": [
+                "roman-bench"
+            ]
         }
     },
     {
@@ -1004,12 +1893,39 @@ window.dictionaryData = [
         ],
         "movementPattern": "agachar",
         "id": "agachamento-livre-back-front-squat-",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste suportes e segurança do rack. Apoie a barra na musculatura superior das costas, estabilize os pés e agache flexionando joelhos e quadril. Retorne mantendo barra estável e pés apoiados.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Agachamento com Barra nas Costas",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "agachar",
+            "grip": null,
+            "emphasis": [
+                "quadriceps-vastos"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "agachamento-livre-back-front-squat-",
+            "variant": "agachamento-livre-back-front-squat-:review-2",
+            "label": "Agachamento com Barra nas Costas",
+            "count": "total",
+            "load": "bar-total",
+            "weights": 0,
+            "resources": [
+                "barbell",
+                "plates",
+                "rack"
+            ]
         }
     },
     {
@@ -1032,12 +1948,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "agachar",
         "id": "agachamento-goblet-com-halter",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Segure um halter com ambas as mãos junto ao peito. Flexione joelhos e quadril para agachar e retorne com controle, mantendo a carga próxima ao corpo e os pés apoiados.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Agachamento Goblet com Halter",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "agachar",
+            "grip": null,
+            "emphasis": [
+                "quadriceps-vastos"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "agachamento-goblet-com-halter",
+            "variant": "agachamento-goblet-com-halter:review-2",
+            "label": "Agachamento Goblet com Halter",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 1,
+            "resources": [
+                "dumbbells"
+            ]
         }
     },
     {
@@ -1059,12 +2000,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "agachar",
         "id": "agachamento-no-smith",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste barra sobre a musculatura das costas e travas de segurança. Posicione os pés conforme a trajetória do equipamento; agache e retorne com controle, sem impulso.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Agachamento no Smith",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "agachar",
+            "grip": null,
+            "emphasis": [
+                "quadriceps-vastos"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "agachamento-no-smith",
+            "variant": "agachamento-no-smith:review-2",
+            "label": "Agachamento no Smith",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:agachamento-no-smith"
+            ]
         }
     },
     {
@@ -1089,12 +2056,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "agachar",
         "id": "leg-press-45-horizontal",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste o leg press 45º conforme o equipamento. Com pés inteiros na plataforma e costas e quadril apoiados, flexione os joelhos e empurre com controle, acompanhando a direção dos pés.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Leg Press 45º",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "agachar",
+            "grip": null,
+            "emphasis": [
+                "quadriceps-vastos"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "leg-press-45-horizontal",
+            "variant": "leg-press-45-horizontal:review-2",
+            "label": "Leg Press 45º",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:leg-press-45-horizontal"
+            ]
         }
     },
     {
@@ -1116,12 +2109,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "agachar",
         "id": "hack-machine",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Apoie costas e ombros na máquina e pés inteiros na plataforma. Libere o mecanismo conforme o equipamento; desça e suba flexionando joelhos e quadril, preservando os apoios.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Hack Machine",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "agachar",
+            "grip": null,
+            "emphasis": [
+                "quadriceps-vastos"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "hack-machine",
+            "variant": "hack-machine:review-2",
+            "label": "Hack Machine",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:hack-machine"
+            ]
         }
     },
     {
@@ -1141,12 +2160,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "extensao-joelho",
         "id": "cadeira-extensora",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste assento, eixo dos joelhos e rolo próximo aos tornozelos conforme a máquina. Estenda os joelhos e retorne com controle, mantendo costas e quadril apoiados, sem impulsionar o tronco.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Cadeira Extensora",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "extensao-joelho",
+            "grip": null,
+            "emphasis": [
+                "quadriceps-reto"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "cadeira-extensora",
+            "variant": "cadeira-extensora:review-2",
+            "label": "Cadeira Extensora",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:cadeira-extensora"
+            ]
         }
     },
     {
@@ -1167,12 +2212,35 @@ window.dictionaryData = [
         ],
         "movementPattern": "agachar",
         "id": "afundo-avanco",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Mantenha um pé à frente e outro atrás, com apoio traseiro no antepé. Desça e suba sem mudar os pés. Complete as repetições de uma perna antes de trocar. Meta por perna.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Afundo Parado sem Carga",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "agachar",
+            "grip": null,
+            "emphasis": [
+                "quadriceps-vastos"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "afundo-avanco",
+            "variant": "afundo-avanco:review-2",
+            "label": "Afundo Parado sem Carga",
+            "count": "per-side",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -1195,12 +2263,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "agachar",
         "id": "afundo-com-halteres",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Segure um halter em cada mão e mantenha base alternada. Desça e suba sem dar passos, completando um lado antes de trocar. Meta por perna da frente.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Afundo Parado com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "agachar",
+            "grip": null,
+            "emphasis": [
+                "quadriceps-vastos"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "afundo-com-halteres",
+            "variant": "afundo-com-halteres:review-2",
+            "label": "Afundo Parado com Halteres",
+            "count": "per-side",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells"
+            ]
         }
     },
     {
@@ -1227,12 +2320,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "agachar",
         "id": "agachamento-bulgaro",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Segure um halter em cada mão e apoie o pé traseiro em banco firme. Com pé da frente inteiro no chão, desça e retorne com controle. Complete um lado antes de trocar. Meta por perna.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Agachamento Búlgaro com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "agachar",
+            "grip": null,
+            "emphasis": [
+                "quadriceps-vastos"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "agachamento-bulgaro",
+            "variant": "agachamento-bulgaro:review-2",
+            "label": "Agachamento Búlgaro com Halteres",
+            "count": "per-side",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells",
+                "bench"
+            ]
         }
     },
     {
@@ -1259,12 +2378,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "dobrar-quadril",
         "id": "stiff-rdl-com-barra",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Em pé com barra próxima às pernas e joelhos levemente flexionados, leve o quadril para trás para inclinar o tronco. Retorne estendendo o quadril sem arquear a lombar; alcançar o chão não é a meta.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "RDL com Barra",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "dobrar-quadril",
+            "grip": null,
+            "emphasis": [
+                "isquiotibiais"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "stiff-rdl-com-barra",
+            "variant": "stiff-rdl-com-barra:review-2",
+            "label": "RDL com Barra",
+            "count": "total",
+            "load": "bar-total",
+            "weights": 0,
+            "resources": [
+                "barbell",
+                "plates"
+            ]
         }
     },
     {
@@ -1290,12 +2435,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "dobrar-quadril",
         "id": "stiff-rdl-com-halteres",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Mantenha halteres próximos às pernas e joelhos levemente flexionados. Leve o quadril para trás e incline o tronco com controle; retorne pela extensão do quadril sem buscar o chão.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "RDL com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "dobrar-quadril",
+            "grip": null,
+            "emphasis": [
+                "isquiotibiais"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "stiff-rdl-com-halteres",
+            "variant": "stiff-rdl-com-halteres:review-2",
+            "label": "RDL com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells"
+            ]
         }
     },
     {
@@ -1317,12 +2487,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-joelho",
         "id": "mesa-flexora-deitado",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite de barriga para baixo e ajuste o rolo próximo aos tornozelos. Flexione os joelhos e retorne com controle, sem levantar o quadril ou arquear as costas.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Mesa Flexora (Deitado)",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "flexao-joelho",
+            "grip": null,
+            "emphasis": [
+                "isquiotibiais"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "mesa-flexora-deitado",
+            "variant": "mesa-flexora-deitado:review-2",
+            "label": "Mesa Flexora (Deitado)",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:mesa-flexora-deitado"
+            ]
         }
     },
     {
@@ -1344,12 +2540,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-joelho",
         "id": "cadeira-flexora-sentado",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste assento, eixo dos joelhos e apoios das coxas e tornozelos. Flexione os joelhos e retorne com controle, mantendo costas e quadril apoiados.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Cadeira Flexora (Sentado)",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "flexao-joelho",
+            "grip": null,
+            "emphasis": [
+                "isquiotibiais"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "cadeira-flexora-sentado",
+            "variant": "cadeira-flexora-sentado:review-2",
+            "label": "Cadeira Flexora (Sentado)",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:cadeira-flexora-sentado"
+            ]
         }
     },
     {
@@ -1375,12 +2597,39 @@ window.dictionaryData = [
         ],
         "movementPattern": "extensao-quadril",
         "id": "elevacao-pelvica-com-barra",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Apoie a parte superior das costas em banco firme e a barra sobre a dobra do quadril, com proteção adequada. Eleve e abaixe o quadril com pés firmes, sem terminar arqueando a lombar.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Elevação Pélvica com Barra",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "extensao-quadril",
+            "grip": null,
+            "emphasis": [
+                "gluteo-maximo"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "elevacao-pelvica-com-barra",
+            "variant": "elevacao-pelvica-com-barra:review-2",
+            "label": "Elevação Pélvica com Barra",
+            "count": "total",
+            "load": "bar-total",
+            "weights": 0,
+            "resources": [
+                "barbell",
+                "plates",
+                "bench"
+            ]
         }
     },
     {
@@ -1402,12 +2651,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "extensao-quadril",
         "id": "elevacao-pelvica-na-maquina",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste apoios e proteção do quadril conforme a máquina. Com pés firmes, eleve o quadril e retorne com controle, sem finalizar a subida arqueando a lombar.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Elevação Pélvica na Máquina",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "extensao-quadril",
+            "grip": null,
+            "emphasis": [
+                "gluteo-maximo"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "elevacao-pelvica-na-maquina",
+            "variant": "elevacao-pelvica-na-maquina:review-2",
+            "label": "Elevação Pélvica na Máquina",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:elevacao-pelvica-na-maquina"
+            ]
         }
     },
     {
@@ -1427,12 +2702,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "abducao-quadril",
         "id": "cadeira-abdutora",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste assento e apoios externos das coxas conforme a máquina. Afaste as pernas e retorne com controle, mantendo o tronco estável e sem usar impulso.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Cadeira Abdutora",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "abducao-quadril",
+            "grip": null,
+            "emphasis": [
+                "gluteos-abdutores"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "cadeira-abdutora",
+            "variant": "cadeira-abdutora:review-2",
+            "label": "Cadeira Abdutora",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:cadeira-abdutora"
+            ]
         }
     },
     {
@@ -1452,12 +2753,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "aducao-quadril",
         "id": "cadeira-adutora",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste assento e apoios internos das coxas conforme a máquina. Aproxime as pernas e retorne com controle, mantendo o tronco estável e sem usar impulso.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Cadeira Adutora",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "aducao-quadril",
+            "grip": null,
+            "emphasis": [
+                "adutores"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "cadeira-adutora",
+            "variant": "cadeira-adutora:review-2",
+            "label": "Cadeira Adutora",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:cadeira-adutora"
+            ]
         }
     },
     {
@@ -1480,12 +2807,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-plantar",
         "id": "panturrilha-em-pe-maquina-smith-",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste os apoios da máquina e mantenha antepés firmes. Eleve e abaixe os calcanhares juntos com controle, mantendo joelhos estáveis e sem saltar.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Panturrilha em Pé na Máquina",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "flexao-plantar",
+            "grip": null,
+            "emphasis": [
+                "gastrocnemios"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "panturrilha-em-pe-maquina-smith-",
+            "variant": "panturrilha-em-pe-maquina-smith-:review-2",
+            "label": "Panturrilha em Pé na Máquina",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:panturrilha-em-pe-maquina-smith-"
+            ]
         }
     },
     {
@@ -1505,12 +2858,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-plantar-joelho-flexionado",
         "id": "panturrilha-sentado-maquina",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste o apoio das coxas com joelhos flexionados e antepés firmes na base. Eleve e abaixe os dois calcanhares juntos, sem impulsionar os joelhos.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Panturrilha Sentado (Máquina)",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "flexao-plantar",
+            "grip": null,
+            "emphasis": [
+                "soleo"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "panturrilha-sentado-maquina",
+            "variant": "panturrilha-sentado-maquina:review-2",
+            "label": "Panturrilha Sentado (Máquina)",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:panturrilha-sentado-maquina"
+            ]
         }
     },
     {
@@ -1530,12 +2909,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-plantar",
         "id": "panturrilha-no-leg-press",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Use leg press 45º com cabeça, costas e quadril apoiados. Mantenha antepés firmes na plataforma e movimente os tornozelos para elevar e abaixar os calcanhares, com joelhos estáveis.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Panturrilha no Leg Press 45º",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "flexao-plantar",
+            "grip": null,
+            "emphasis": [
+                "gastrocnemios"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "panturrilha-no-leg-press",
+            "variant": "panturrilha-no-leg-press:review-2",
+            "label": "Panturrilha no Leg Press 45º",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:panturrilha-no-leg-press"
+            ]
         }
     },
     {
@@ -1560,12 +2965,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "empurrar-vertical",
         "id": "desenvolvimento-militar-com-barra",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Em pé, mantenha barra à frente dos ombros e pés firmes. Empurre acima da cabeça e retorne com controle, sem impulso das pernas ou inclinação excessiva das costas.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Desenvolvimento Militar com Barra",
+        "classification": {
+            "version": 1,
+            "region": "Ombros",
+            "action": "empurrar-vertical",
+            "grip": null,
+            "emphasis": [
+                "deltoide-anterior"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "desenvolvimento-militar-com-barra",
+            "variant": "desenvolvimento-militar-com-barra:review-2",
+            "label": "Desenvolvimento Militar com Barra",
+            "count": "total",
+            "load": "bar-total",
+            "weights": 0,
+            "resources": [
+                "barbell",
+                "plates"
+            ]
         }
     },
     {
@@ -1588,12 +3019,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "empurrar-vertical",
         "id": "desenvolvimento-com-halteres",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Sente em banco com encosto, mantendo costas apoiadas e pés firmes. Com halteres ao lado dos ombros, empurre acima da cabeça e retorne com controle, sem arquear excessivamente as costas.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Desenvolvimento Sentado com Halteres e Encosto",
+        "classification": {
+            "version": 1,
+            "region": "Ombros",
+            "action": "empurrar-vertical",
+            "grip": null,
+            "emphasis": [
+                "deltoide-anterior"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "desenvolvimento-com-halteres",
+            "variant": "desenvolvimento-com-halteres:review-2",
+            "label": "Desenvolvimento Sentado com Halteres e Encosto",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells",
+                "backrest-bench"
+            ]
         }
     },
     {
@@ -1616,12 +3073,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "empurrar-vertical",
         "id": "desenvolvimento-na-maquina",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste banco e empunhaduras conforme a máquina. Com pés firmes e costas apoiadas, empurre para cima e retorne com controle, sem levantar o quadril.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Desenvolvimento na Máquina",
+        "classification": {
+            "version": 1,
+            "region": "Ombros",
+            "action": "empurrar-vertical",
+            "grip": null,
+            "emphasis": [
+                "deltoide-anterior"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "desenvolvimento-na-maquina",
+            "variant": "desenvolvimento-na-maquina:review-2",
+            "label": "Desenvolvimento na Máquina",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:desenvolvimento-na-maquina"
+            ]
         }
     },
     {
@@ -1643,12 +3126,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "abducao-ombro",
         "id": "elevacao-lateral-com-halteres",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Em pé, mantenha tronco estável e cotovelos levemente flexionados. Eleve os dois braços lateralmente até aproximadamente a altura dos ombros e retorne sem impulso.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Elevação Lateral com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Ombros",
+            "action": "abducao-ombro",
+            "grip": null,
+            "emphasis": [
+                "deltoide-lateral"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "elevacao-lateral-com-halteres",
+            "variant": "elevacao-lateral-com-halteres:review-2",
+            "label": "Elevação Lateral com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells"
+            ]
         }
     },
     {
@@ -1670,12 +3178,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "abducao-ombro",
         "id": "elevacao-lateral-no-cabo",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Use polia baixa e fique de lado, segurando a alça com o braço mais afastado. Eleve lateralmente com cotovelo levemente flexionado e retorne sem embalar. Meta por braço.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Elevação Lateral no Cabo",
+        "classification": {
+            "version": 1,
+            "region": "Ombros",
+            "action": "abducao-ombro",
+            "grip": null,
+            "emphasis": [
+                "deltoide-lateral"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "elevacao-lateral-no-cabo",
+            "variant": "elevacao-lateral-no-cabo:review-2",
+            "label": "Elevação Lateral no Cabo",
+            "count": "per-side",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "cable"
+            ]
         }
     },
     {
@@ -1697,12 +3230,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-ombro",
         "id": "elevacao-frontal-com-halteres",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Em pé, com palmas voltadas ao corpo, eleve os dois halteres à frente até aproximadamente os ombros. Desça sem embalar o tronco. Uma subida e descida de ambos conta uma repetição.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Elevação Frontal com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Ombros",
+            "action": "flexao-ombro",
+            "grip": null,
+            "emphasis": [
+                "deltoide-anterior"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "elevacao-frontal-com-halteres",
+            "variant": "elevacao-frontal-com-halteres:review-2",
+            "label": "Elevação Frontal com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells"
+            ]
         }
     },
     {
@@ -1726,12 +3284,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "abducao-horizontal",
         "id": "crucifixo-invertido-com-halteres",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Sente no banco com pés firmes e tronco inclinado à frente. Abra os braços com cotovelos levemente flexionados e retorne sem levantar o tronco ou transformar em remada.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Crucifixo Invertido Sentado com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Ombros",
+            "action": "abducao-horizontal",
+            "grip": null,
+            "emphasis": [
+                "deltoide-posterior"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "crucifixo-invertido-com-halteres",
+            "variant": "crucifixo-invertido-com-halteres:review-2",
+            "label": "Crucifixo Invertido Sentado com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells",
+                "bench"
+            ]
         }
     },
     {
@@ -1754,12 +3338,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "abducao-horizontal",
         "id": "crucifixo-invertido-na-maquina-peck-deck",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste banco e empunhaduras para crucifixo invertido. Com o peito apoiado, abra os braços e retorne com controle, sem projetar o tronco ou encolher os ombros.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Crucifixo Invertido na Máquina (Peck Deck)",
+        "classification": {
+            "version": 1,
+            "region": "Ombros",
+            "action": "abducao-horizontal",
+            "grip": null,
+            "emphasis": [
+                "deltoide-posterior"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "crucifixo-invertido-na-maquina-peck-deck",
+            "variant": "crucifixo-invertido-na-maquina-peck-deck:review-2",
+            "label": "Crucifixo Invertido na Máquina (Peck Deck)",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:crucifixo-invertido-na-maquina-peck-deck"
+            ]
         }
     },
     {
@@ -1783,12 +3393,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "abducao-horizontal-rotacao-externa",
         "id": "face-pull-no-cabo",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Use acessório de corda na polia e base firme. Puxe em direção ao rosto, separando as pontas e conduzindo cotovelos para os lados. Retorne sem jogar o corpo para trás.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Face Pull no Cabo",
+        "classification": {
+            "version": 1,
+            "region": "Ombros",
+            "action": "abducao-horizontal-rotacao-externa",
+            "grip": null,
+            "emphasis": [
+                "deltoide-posterior"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "face-pull-no-cabo",
+            "variant": "face-pull-no-cabo:review-2",
+            "label": "Face Pull no Cabo",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "cable",
+                "cable-rope"
+            ]
         }
     },
     {
@@ -1815,12 +3451,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "abducao-ombro",
         "id": "remada-alta-barra-cabo-",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Use barra reta na polia baixa e pegada pronada. Eleve próxima ao corpo conduzindo cotovelos para os lados, até a altura dos ombros, e retorne sem embalar.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Remada Alta no Cabo",
+        "classification": {
+            "version": 1,
+            "region": "Ombros",
+            "action": "abducao-ombro",
+            "grip": "pronada",
+            "emphasis": [
+                "deltoide-lateral"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "remada-alta-barra-cabo-",
+            "variant": "remada-alta-barra-cabo-:review-2",
+            "label": "Remada Alta no Cabo",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "cable"
+            ]
         }
     },
     {
@@ -1844,12 +3505,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-cotovelo-supinada",
         "id": "rosca-direta-com-barra",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Em pé, segure a barra com palmas para cima e braços próximos ao corpo. Flexione os cotovelos e retorne com controle, sem projetá-los à frente ou embalar o tronco.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Rosca Direta com Barra",
+        "classification": {
+            "version": 1,
+            "region": "Bíceps",
+            "action": "flexao-cotovelo",
+            "grip": "supinada",
+            "emphasis": [
+                "biceps"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "rosca-direta-com-barra",
+            "variant": "rosca-direta-com-barra:review-2",
+            "label": "Rosca Direta com Barra",
+            "count": "total",
+            "load": "bar-total",
+            "weights": 0,
+            "resources": [
+                "barbell",
+                "plates"
+            ]
         }
     },
     {
@@ -1872,12 +3559,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-cotovelo-supinada",
         "id": "rosca-alternada-com-halteres",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Em pé, flexione um cotovelo por vez, deixando a palma para cima durante a subida. Desça com controle e mantenha tronco estável. Meta por braço: 10 significa 10 em cada.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Rosca Alternada com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Bíceps",
+            "action": "flexao-cotovelo",
+            "grip": "supinada",
+            "emphasis": [
+                "biceps"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "rosca-alternada-com-halteres",
+            "variant": "rosca-alternada-com-halteres:review-2",
+            "label": "Rosca Alternada com Halteres",
+            "count": "per-side",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells"
+            ]
         }
     },
     {
@@ -1900,12 +3612,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-cotovelo-supinada",
         "id": "rosca-no-cabo-polia-baixa",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Segure a barra na polia baixa com palmas para cima. Flexione os cotovelos e retorne com braços próximos ao corpo, sem inclinar o tronco ou projetar cotovelos à frente.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Rosca no Cabo (Polia Baixa)",
+        "classification": {
+            "version": 1,
+            "region": "Bíceps",
+            "action": "flexao-cotovelo",
+            "grip": "supinada",
+            "emphasis": [
+                "biceps"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "rosca-no-cabo-polia-baixa",
+            "variant": "rosca-no-cabo-polia-baixa:review-2",
+            "label": "Rosca no Cabo (Polia Baixa)",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "cable"
+            ]
         }
     },
     {
@@ -1931,12 +3668,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-cotovelo-supinada",
         "id": "rosca-scott-maquina-barra-",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste o banco para apoiar a parte posterior dos braços e alinhar cotovelos conforme a máquina. Flexione e estenda os cotovelos com controle, sem levantar o tronco.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Rosca Scott na Máquina",
+        "classification": {
+            "version": 1,
+            "region": "Bíceps",
+            "action": "flexao-cotovelo",
+            "grip": "supinada",
+            "emphasis": [
+                "biceps"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "rosca-scott-maquina-barra-",
+            "variant": "rosca-scott-maquina-barra-:review-2",
+            "label": "Rosca Scott na Máquina",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:rosca-scott-maquina-barra-"
+            ]
         }
     },
     {
@@ -1958,12 +3721,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-cotovelo-neutra-pronada",
         "id": "rosca-martelo-com-halteres",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Em pé, mantenha palmas voltadas uma para a outra e punhos alinhados. Flexione os dois cotovelos e retorne sem girar as mãos, projetar os braços ou embalar o corpo.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Rosca Martelo com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Bíceps",
+            "action": "flexao-cotovelo",
+            "grip": "neutra",
+            "emphasis": [
+                "braquial-antebraco"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "rosca-martelo-com-halteres",
+            "variant": "rosca-martelo-com-halteres:review-2",
+            "label": "Rosca Martelo com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells"
+            ]
         }
     },
     {
@@ -1988,12 +3776,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-cotovelo-neutra-pronada",
         "id": "rosca-inversa-com-barra-cabo",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Use barra reta na polia baixa com pegada pronada. Flexione e estenda os cotovelos com braços próximos ao corpo e punhos alinhados, sem impulsionar o tronco.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Rosca Inversa no Cabo",
+        "classification": {
+            "version": 1,
+            "region": "Bíceps",
+            "action": "flexao-cotovelo",
+            "grip": "pronada",
+            "emphasis": [
+                "braquial-antebraco"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "rosca-inversa-com-barra-cabo",
+            "variant": "rosca-inversa-com-barra-cabo:review-2",
+            "label": "Rosca Inversa no Cabo",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "cable"
+            ]
         }
     },
     {
@@ -2020,12 +3833,39 @@ window.dictionaryData = [
         ],
         "movementPattern": "extensao-cotovelo-acima",
         "id": "triceps-testa-barra-w-ou-halteres-",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite no banco reto com a barra W acima do peito. Mantendo braços apontados para cima, flexione cotovelos aproximando a barra da testa sem tocar; estenda para retornar com controle.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Tríceps Testa com Barra W",
+        "classification": {
+            "version": 1,
+            "region": "Tríceps",
+            "action": "extensao-cotovelo",
+            "grip": null,
+            "emphasis": [
+                "triceps-longa"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "triceps-testa-barra-w-ou-halteres-",
+            "variant": "triceps-testa-barra-w-ou-halteres-:review-2",
+            "label": "Tríceps Testa com Barra W",
+            "count": "total",
+            "load": "bar-total",
+            "weights": 0,
+            "resources": [
+                "barbell",
+                "plates",
+                "bench"
+            ]
         }
     },
     {
@@ -2047,13 +3887,46 @@ window.dictionaryData = [
         ],
         "movementPattern": "extensao-cotovelo",
         "id": "triceps-pulley-barra-reta-v",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Use barra reta ou V na polia alta, identificando o acessório. Com cotovelos próximos ao corpo, estenda para baixo e retorne sem usar o peso do corpo.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
-        }
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Tríceps Pulley (Barra Reta/V)",
+        "classification": {
+            "version": 1,
+            "region": "Tríceps",
+            "action": "extensao-cotovelo",
+            "grip": null,
+            "emphasis": [
+                "triceps-lateral-medial"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "triceps-pulley-barra-reta-v",
+            "variant": "triceps-pulley-barra-reta-v:review-2",
+            "label": "Tríceps Pulley (Barra Reta/V)",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "cable"
+            ],
+            "choices": [
+                "Barra reta",
+                "Barra V"
+            ]
+        },
+        "executionVariants": [
+            "Barra reta",
+            "Barra V"
+        ]
     },
     {
         "name": "Tríceps Corda no Cabo",
@@ -2074,12 +3947,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "extensao-cotovelo",
         "id": "triceps-corda-no-cabo",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Use acessório de corda na polia alta. Com cotovelos próximos ao corpo, estenda para baixo e retorne com controle, sem deslocar braços à frente ou empurrar com o corpo.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Tríceps Corda no Cabo",
+        "classification": {
+            "version": 1,
+            "region": "Tríceps",
+            "action": "extensao-cotovelo",
+            "grip": null,
+            "emphasis": [
+                "triceps-lateral-medial"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "triceps-corda-no-cabo",
+            "variant": "triceps-corda-no-cabo:review-2",
+            "label": "Tríceps Corda no Cabo",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "cable",
+                "cable-rope"
+            ]
         }
     },
     {
@@ -2104,12 +4003,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "extensao-cotovelo-acima",
         "id": "triceps-frances-halter-cabo-",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Em pé, posicione um halter em uma mão acima da cabeça. Flexione o cotovelo levando-o atrás da cabeça e estenda sem arquear o tronco. Um braço por vez; meta por braço.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Tríceps Francês Unilateral em Pé com Halter",
+        "classification": {
+            "version": 1,
+            "region": "Tríceps",
+            "action": "extensao-cotovelo",
+            "grip": null,
+            "emphasis": [
+                "triceps-longa"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "triceps-frances-halter-cabo-",
+            "variant": "triceps-frances-halter-cabo-:review-2",
+            "label": "Tríceps Francês Unilateral em Pé com Halter",
+            "count": "per-side",
+            "load": "dumbbells-total",
+            "weights": 1,
+            "resources": [
+                "dumbbells"
+            ]
         }
     },
     {
@@ -2132,12 +4056,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "extensao-cotovelo",
         "id": "triceps-coice-kickback",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Incline o tronco em base alternada e apoie a mão livre na própria coxa. Com braço de trabalho junto ao tronco, estenda e flexione o cotovelo sem balançar. Meta por braço.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Tríceps Coice (Kickback)",
+        "classification": {
+            "version": 1,
+            "region": "Tríceps",
+            "action": "extensao-cotovelo",
+            "grip": null,
+            "emphasis": [
+                "triceps-lateral-medial"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "triceps-coice-kickback",
+            "variant": "triceps-coice-kickback:review-2",
+            "label": "Tríceps Coice (Kickback)",
+            "count": "per-side",
+            "load": "dumbbells-total",
+            "weights": 1,
+            "resources": [
+                "dumbbells"
+            ]
         }
     },
     {
@@ -2163,12 +4112,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "mergulho",
         "id": "mergulho-nas-paralelas-banco",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Apoie mãos na borda do banco e pés no chão, com joelhos flexionados. Mantenha quadril próximo ao banco; desça e suba pelos cotovelos com amplitude controlada.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Mergulho no Banco",
+        "classification": {
+            "version": 1,
+            "region": "Tríceps",
+            "action": "mergulho",
+            "grip": null,
+            "emphasis": [
+                "triceps-lateral-medial"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "mergulho-nas-paralelas-banco",
+            "variant": "mergulho-nas-paralelas-banco:review-2",
+            "label": "Mergulho no Banco",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": [
+                "bench"
+            ]
         }
     },
     {
@@ -2191,12 +4165,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "mergulho",
         "id": "triceps-maquina-dip-machine",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Na máquina sentada, ajuste assento e apoios. Com pés firmes e tronco estável, empurre as alavancas para baixo estendendo os cotovelos e retorne sem levantar o corpo.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Tríceps na Máquina Sentada — Dip",
+        "classification": {
+            "version": 1,
+            "region": "Tríceps",
+            "action": "mergulho",
+            "grip": null,
+            "emphasis": [
+                "triceps-lateral-medial"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "triceps-maquina-dip-machine",
+            "variant": "triceps-maquina-dip-machine:review-2",
+            "label": "Tríceps na Máquina Sentada — Dip",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:triceps-maquina-dip-machine"
+            ]
         }
     },
     {
@@ -2220,12 +4220,35 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-tronco",
         "id": "abdominal-supra-solo-carga-",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite de costas com joelhos flexionados e pés apoiados. Eleve ombros e parte superior das costas pela flexão do tronco e retorne, sem sentar ou puxar a cabeça.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Abdominal Supra no Solo",
+        "classification": {
+            "version": 1,
+            "region": "Core",
+            "action": "flexao-tronco",
+            "grip": null,
+            "emphasis": [],
+            "functionFocus": [
+                "core-flexao"
+            ]
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "abdominal-supra-solo-carga-",
+            "variant": "abdominal-supra-solo-carga-:review-2",
+            "label": "Abdominal Supra no Solo",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -2245,12 +4268,35 @@ window.dictionaryData = [
         ],
         "movementPattern": "retroversao-pelvica",
         "id": "abdominal-infra-no-solo",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite de costas com joelhos flexionados e pés elevados. Enrole o quadril em direção ao tronco, retirando-o ligeiramente do chão, e retorne sem balançar as pernas.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Abdominal Reverso no Solo",
+        "classification": {
+            "version": 1,
+            "region": "Core",
+            "action": "retroversao-pelvica",
+            "grip": null,
+            "emphasis": [],
+            "functionFocus": [
+                "core-retroversao"
+            ]
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "abdominal-infra-no-solo",
+            "variant": "abdominal-infra-no-solo:review-2",
+            "label": "Abdominal Reverso no Solo",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -2272,12 +4318,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-tronco",
         "id": "abdominal-na-maquina",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste assento e apoios conforme a máquina. Flexione o tronco aproximando tórax e pelve e retorne com controle, sem movimentar a carga apenas pelos braços.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Abdominal na Máquina",
+        "classification": {
+            "version": 1,
+            "region": "Core",
+            "action": "flexao-tronco",
+            "grip": null,
+            "emphasis": [],
+            "functionFocus": [
+                "core-flexao"
+            ]
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "abdominal-na-maquina",
+            "variant": "abdominal-na-maquina:review-2",
+            "label": "Abdominal na Máquina",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:abdominal-na-maquina"
+            ]
         }
     },
     {
@@ -2302,12 +4374,35 @@ window.dictionaryData = [
         ],
         "movementPattern": "anti-extensao",
         "id": "prancha-isometrica-frontal-lateral-",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Apoie antebraços e pontas dos pés no chão, com cotovelos abaixo dos ombros. Sustente cabeça, tronco e quadril alinhados, respirando sem deixar a lombar ceder. Meta em segundos.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Prancha Frontal sobre os Antebraços",
+        "classification": {
+            "version": 1,
+            "region": "Core",
+            "action": "anti-extensao",
+            "grip": null,
+            "emphasis": [],
+            "functionFocus": [
+                "core-estabilidade"
+            ]
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "prancha-isometrica-frontal-lateral-",
+            "variant": "prancha-isometrica-frontal-lateral-:review-2",
+            "label": "Prancha Frontal sobre os Antebraços",
+            "count": "duration",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -2328,12 +4423,35 @@ window.dictionaryData = [
         ],
         "movementPattern": "rotacao-tronco",
         "id": "abdominal-bicicleta",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite de costas e mantenha mãos junto à cabeça sem puxá-la. Alterne a aproximação de um joelho com a rotação do tronco em sua direção, estendendo a outra perna. Meta por lado.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Abdominal Bicicleta",
+        "classification": {
+            "version": 1,
+            "region": "Core",
+            "action": "rotacao-tronco",
+            "grip": null,
+            "emphasis": [
+                "core-obliquos"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "abdominal-bicicleta",
+            "variant": "abdominal-bicicleta:review-2",
+            "label": "Abdominal Bicicleta",
+            "count": "per-side",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -2359,12 +4477,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "rotacao-tronco",
         "id": "russian-twist-livre-ou-carga-",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Sente com joelhos flexionados e pés apoiados. Segure um halter com ambas as mãos junto ao peito, incline levemente o tronco e gire alternadamente, sem mover apenas os braços. Meta por lado.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Russian Twist com Halter",
+        "classification": {
+            "version": 1,
+            "region": "Core",
+            "action": "rotacao-tronco",
+            "grip": null,
+            "emphasis": [
+                "core-obliquos"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "russian-twist-livre-ou-carga-",
+            "variant": "russian-twist-livre-ou-carga-:review-2",
+            "label": "Russian Twist com Halter",
+            "count": "per-side",
+            "load": "dumbbells-total",
+            "weights": 1,
+            "resources": [
+                "dumbbells"
+            ]
         }
     },
     {
@@ -2391,7 +4534,9 @@ window.dictionaryData = [
             "academia": 1,
             "casa": 1,
             "praia": 1
-        }
+        },
+        "catalogueRevision": 2,
+        "selectable": false
     },
     {
         "name": "Burpees",
@@ -2418,7 +4563,9 @@ window.dictionaryData = [
             "academia": 1,
             "casa": 1,
             "praia": 1
-        }
+        },
+        "catalogueRevision": 2,
+        "selectable": false
     },
     {
         "name": "Escalador (Mountain Climber)",
@@ -2445,7 +4592,9 @@ window.dictionaryData = [
             "academia": 1,
             "casa": 1,
             "praia": 1
-        }
+        },
+        "catalogueRevision": 2,
+        "selectable": false
     },
     {
         "name": "Pular Corda",
@@ -2473,7 +4622,9 @@ window.dictionaryData = [
             "academia": 1,
             "casa": 1,
             "praia": 1
-        }
+        },
+        "catalogueRevision": 2,
+        "selectable": false
     },
     {
         "name": "Maior Alongamento do Mundo",
@@ -2496,7 +4647,9 @@ window.dictionaryData = [
             "academia": 1,
             "casa": 1,
             "praia": 1
-        }
+        },
+        "catalogueRevision": 2,
+        "selectable": false
     },
     {
         "name": "Gato-Vaca (Cat-Cow)",
@@ -2519,7 +4672,9 @@ window.dictionaryData = [
             "academia": 1,
             "casa": 1,
             "praia": 1
-        }
+        },
+        "catalogueRevision": 2,
+        "selectable": false
     },
     {
         "name": "Rotação Torácica",
@@ -2542,7 +4697,9 @@ window.dictionaryData = [
             "academia": 1,
             "casa": 1,
             "praia": 1
-        }
+        },
+        "catalogueRevision": 2,
+        "selectable": false
     },
     {
         "name": "Tríceps Testa com Halteres",
@@ -2564,12 +4721,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "extensao-cotovelo-acima",
         "id": "triceps-testa-com-halteres",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite no banco reto com palmas frente a frente e halteres acima do peito. Flexione cotovelos baixando-os ao lado da cabeça e estenda; execute os dois braços juntos, estáveis.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Tríceps Testa com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Tríceps",
+            "action": "extensao-cotovelo",
+            "grip": null,
+            "emphasis": [
+                "triceps-longa"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "triceps-testa-com-halteres",
+            "variant": "triceps-testa-com-halteres:review-2",
+            "label": "Tríceps Testa com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells",
+                "bench"
+            ]
         }
     },
     {
@@ -2591,12 +4774,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "extensao-cotovelo-acima",
         "id": "triceps-frances-no-cabo",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Use acessório de corda e posicione os braços acima da cabeça, com base firme. Flexione e estenda os cotovelos com ambos os braços, mantendo tronco estável e sem arquear excessivamente a lombar.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Tríceps Francês no Cabo",
+        "classification": {
+            "version": 1,
+            "region": "Tríceps",
+            "action": "extensao-cotovelo",
+            "grip": null,
+            "emphasis": [
+                "triceps-longa"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "triceps-frances-no-cabo",
+            "variant": "triceps-frances-no-cabo:review-2",
+            "label": "Tríceps Francês no Cabo",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "cable",
+                "cable-rope"
+            ]
         }
     },
     {
@@ -2621,13 +4830,48 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-cotovelo-supinada",
         "id": "rosca-scott-com-barra",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Apoie a parte posterior dos braços no banco Scott. Use barra reta ou W, identificando qual. Flexione e estenda cotovelos com controle, sem tirar os braços do apoio ou impulsionar o tronco.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
-        }
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Rosca Scott com Barra",
+        "classification": {
+            "version": 1,
+            "region": "Bíceps",
+            "action": "flexao-cotovelo",
+            "grip": "supinada",
+            "emphasis": [
+                "biceps"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "rosca-scott-com-barra",
+            "variant": "rosca-scott-com-barra:review-2",
+            "label": "Rosca Scott com Barra",
+            "count": "total",
+            "load": "bar-total",
+            "weights": 0,
+            "resources": [
+                "barbell",
+                "plates",
+                "preacher-bench"
+            ],
+            "choices": [
+                "Barra reta",
+                "Barra W"
+            ]
+        },
+        "executionVariants": [
+            "Barra reta",
+            "Barra W"
+        ]
     },
     {
         "name": "Remada Alta com Barra",
@@ -2651,12 +4895,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "abducao-ombro",
         "id": "remada-alta-com-barra",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Em pé, segure a barra pronada aproximadamente na largura dos ombros. Eleve próxima ao corpo conduzindo cotovelos aos lados, sem ultrapassar os ombros; retorne sem embalar.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Remada Alta com Barra",
+        "classification": {
+            "version": 1,
+            "region": "Ombros",
+            "action": "abducao-ombro",
+            "grip": "pronada",
+            "emphasis": [
+                "deltoide-lateral"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "remada-alta-com-barra",
+            "variant": "remada-alta-com-barra:review-2",
+            "label": "Remada Alta com Barra",
+            "count": "total",
+            "load": "bar-total",
+            "weights": 0,
+            "resources": [
+                "barbell",
+                "plates"
+            ]
         }
     },
     {
@@ -2679,12 +4949,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-cotovelo-neutra-pronada",
         "id": "rosca-inversa-com-barra",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Segure a barra pronada e mantenha braços próximos ao corpo. Flexione e estenda cotovelos com punhos alinhados, preservando a pegada e sem inclinar o tronco para ajudar.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Rosca Inversa com Barra",
+        "classification": {
+            "version": 1,
+            "region": "Bíceps",
+            "action": "flexao-cotovelo",
+            "grip": "pronada",
+            "emphasis": [
+                "braquial-antebraco"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "rosca-inversa-com-barra",
+            "variant": "rosca-inversa-com-barra:review-2",
+            "label": "Rosca Inversa com Barra",
+            "count": "total",
+            "load": "bar-total",
+            "weights": 0,
+            "resources": [
+                "barbell",
+                "plates"
+            ]
         }
     },
     {
@@ -2707,12 +5003,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "mergulho",
         "id": "mergulho-nas-paralelas",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Segure as barras próprias e sustente o corpo com pés suspensos. Flexione e estenda cotovelos com controle dos ombros e tronco, sem balançar as pernas ou usar impulso.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Mergulho nas Paralelas",
+        "classification": {
+            "version": 1,
+            "region": "Tríceps",
+            "action": "mergulho",
+            "grip": null,
+            "emphasis": [
+                "triceps-lateral-medial"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "mergulho-nas-paralelas",
+            "variant": "mergulho-nas-paralelas:review-2",
+            "label": "Mergulho nas Paralelas",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": [
+                "parallel-bars"
+            ]
         }
     },
     {
@@ -2733,12 +5054,35 @@ window.dictionaryData = [
         ],
         "movementPattern": "rotacao-tronco",
         "id": "russian-twist-sem-carga",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Sente com joelhos flexionados e pés apoiados. Incline levemente o tronco, mantenha mãos à frente do peito e gire alternadamente com controle, sem levantar os pés. Meta por lado.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Russian Twist sem Carga",
+        "classification": {
+            "version": 1,
+            "region": "Core",
+            "action": "rotacao-tronco",
+            "grip": null,
+            "emphasis": [
+                "core-obliquos"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "russian-twist-sem-carga",
+            "variant": "russian-twist-sem-carga:review-2",
+            "label": "Russian Twist sem Carga",
+            "count": "per-side",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -2761,12 +5105,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-tronco",
         "id": "abdominal-supra-com-halter",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite com joelhos flexionados e pés apoiados, segurando um halter junto ao peito com as duas mãos. Eleve ombros e parte superior das costas e retorne sem impulsionar a carga.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Abdominal Supra com Halter",
+        "classification": {
+            "version": 1,
+            "region": "Core",
+            "action": "flexao-tronco",
+            "grip": null,
+            "emphasis": [],
+            "functionFocus": [
+                "core-flexao"
+            ]
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "abdominal-supra-com-halter",
+            "variant": "abdominal-supra-com-halter:review-2",
+            "label": "Abdominal Supra com Halter",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 1,
+            "resources": [
+                "dumbbells"
+            ]
         }
     },
     {
@@ -2788,12 +5157,35 @@ window.dictionaryData = [
         ],
         "movementPattern": "anti-flexao-lateral",
         "id": "prancha-isometrica-lateral",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Apoie um antebraço, com cotovelo abaixo do ombro, e a lateral dos pés. Eleve e sustente o quadril alinhado ao tronco, sem girar o corpo. Registre a duração real de cada lado separadamente.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Prancha Isométrica Lateral",
+        "classification": {
+            "version": 1,
+            "region": "Core",
+            "action": "anti-flexao-lateral",
+            "grip": null,
+            "emphasis": [
+                "core-obliquos"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "prancha-isometrica-lateral",
+            "variant": "prancha-isometrica-lateral:review-2",
+            "label": "Prancha Isométrica Lateral",
+            "count": "duration-side",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -2817,12 +5209,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "puxar-vertical",
         "id": "barra-fixa-supinada-chin-up",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Com palmas voltadas para você e pés suspensos, eleve o corpo e retorne controlando a descida. Evite impulsionar as pernas ou esticar o pescoço para alcançar a barra.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Barra Fixa Supinada (Chin-up)",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "puxar-vertical",
+            "grip": "supinada",
+            "emphasis": [
+                "costas-latissimo"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "barra-fixa-supinada-chin-up",
+            "variant": "barra-fixa-supinada-chin-up:review-2",
+            "label": "Barra Fixa Supinada (Chin-up)",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": [
+                "pullup-bar"
+            ]
         }
     },
     {
@@ -2842,7 +5259,7 @@ window.dictionaryData = [
             "Ombro Posterior",
             "Braquial"
         ],
-        "desc": "Use uma barra em altura compatível e um apoio firme para auxiliar a subida com os pés; não improvise ancoragens.",
+        "desc": "Use pegada supinada e banco firme para os pés, em altura compatível com a barra. Puxe com assistência das pernas e desça com controle, sem saltar para iniciar.",
         "muscleFocus": [
             "costas-latissimo"
         ],
@@ -2853,6 +5270,32 @@ window.dictionaryData = [
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Barra Fixa Supinada com Apoio dos Pés",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "puxar-vertical",
+            "grip": "supinada",
+            "emphasis": [
+                "costas-latissimo"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "barra-fixa-com-apoio-dos-pes",
+            "variant": "barra-fixa-com-apoio-dos-pes:review-2",
+            "label": "Barra Fixa Supinada com Apoio dos Pés",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": [
+                "pullup-bar",
+                "bench"
+            ]
         }
     },
     {
@@ -2878,12 +5321,39 @@ window.dictionaryData = [
         ],
         "movementPattern": "agachar",
         "id": "agachamento-frontal-com-barra",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "No rack, apoie a barra na parte anterior dos ombros e estabilize-a com mãos e cotovelos elevados à frente. Agache e retorne com controle, preservando o apoio nos ombros.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Agachamento Frontal com Barra",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "agachar",
+            "grip": null,
+            "emphasis": [
+                "quadriceps-vastos"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "agachamento-frontal-com-barra",
+            "variant": "agachamento-frontal-com-barra:review-2",
+            "label": "Agachamento Frontal com Barra",
+            "count": "total",
+            "load": "bar-total",
+            "weights": 0,
+            "resources": [
+                "barbell",
+                "plates",
+                "rack"
+            ]
         }
     },
     {
@@ -2905,12 +5375,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "agachar",
         "id": "leg-press-horizontal",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste assento e apoie os pés inteiros na plataforma. Empurre e retorne com costas e quadril encostados, joelhos acompanhando os pés e sem solavancos.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Leg Press Horizontal",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "agachar",
+            "grip": null,
+            "emphasis": [
+                "quadriceps-vastos"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "leg-press-horizontal",
+            "variant": "leg-press-horizontal:review-2",
+            "label": "Leg Press Horizontal",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:leg-press-horizontal"
+            ]
         }
     },
     {
@@ -2930,12 +5426,38 @@ window.dictionaryData = [
         ],
         "movementPattern": "flexao-plantar",
         "id": "panturrilha-em-pe-no-smith",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste barra sobre a musculatura superior das costas e travas conforme o Smith. Com pés firmes e joelhos estáveis, eleve e abaixe os calcanhares juntos sem saltar.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Panturrilha em Pé no Smith",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "flexao-plantar",
+            "grip": null,
+            "emphasis": [
+                "gastrocnemios"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "panturrilha-em-pe-no-smith",
+            "variant": "panturrilha-em-pe-no-smith:review-2",
+            "label": "Panturrilha em Pé no Smith",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "machine",
+                "apparatus:panturrilha-em-pe-no-smith"
+            ]
         }
     },
     {
@@ -2959,12 +5481,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "puxar-vertical",
         "id": "puxada-alta-neutra",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Ajuste o apoio das coxas e use empunhaduras com palmas frente a frente. Puxe pela frente em direção ao peito e retorne, mantendo tronco estável e sem balanço.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Puxada Alta Neutra",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "puxar-vertical",
+            "grip": "neutra",
+            "emphasis": [
+                "costas-latissimo"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "puxada-alta-neutra",
+            "variant": "puxada-alta-neutra:review-2",
+            "label": "Puxada Alta Neutra",
+            "count": "total",
+            "load": "machine",
+            "weights": 0,
+            "resources": [
+                "cable"
+            ]
         }
     },
     {
@@ -2987,12 +5534,37 @@ window.dictionaryData = [
         ],
         "movementPattern": "agachar",
         "id": "agachamento-bulgaro-sem-carga",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Apoie um pé atrás em banco firme e mantenha o pé da frente inteiro no chão. Desça e suba com controle; complete um lado antes de trocar. Meta por perna.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Agachamento Búlgaro sem Carga",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "agachar",
+            "grip": null,
+            "emphasis": [
+                "quadriceps-vastos"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "agachamento-bulgaro-sem-carga",
+            "variant": "agachamento-bulgaro-sem-carga:review-2",
+            "label": "Agachamento Búlgaro sem Carga",
+            "count": "per-side",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": [
+                "bench"
+            ]
         }
     },
     {
@@ -3008,7 +5580,7 @@ window.dictionaryData = [
         "muscleFocus": [
             "peitoral-esternocostal"
         ],
-        "desc": "Execute no solo. A amplitude é limitada pelo apoio dos braços e difere do supino no banco.",
+        "desc": "Deite com joelhos flexionados e pés apoiados. Baixe os halteres até os braços encostarem suavemente no solo e empurre, sem usar o chão para ganhar impulso.",
         "resources": [
             "dumbbells"
         ],
@@ -3018,6 +5590,31 @@ window.dictionaryData = [
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Supino no Solo com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "empurrar-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-esternocostal"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "supino-no-solo-com-halteres",
+            "variant": "supino-no-solo-com-halteres:review-2",
+            "label": "Supino no Solo com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells"
+            ]
         }
     },
     {
@@ -3035,12 +5632,35 @@ window.dictionaryData = [
         ],
         "resources": [],
         "id": "ponte-de-quadril-unilateral-no-solo",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite com um pé apoiado e a outra perna suspensa, com joelho flexionado. Eleve e abaixe o quadril sem girar a pelve; complete um lado antes de trocar. Meta por perna apoiada.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Ponte de Quadril Unilateral no Solo",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "extensao-quadril",
+            "grip": null,
+            "emphasis": [
+                "gluteo-maximo"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "ponte-de-quadril-unilateral-no-solo",
+            "variant": "ponte-de-quadril-unilateral-no-solo:review-2",
+            "label": "Ponte de Quadril Unilateral no Solo",
+            "count": "per-side",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -3056,7 +5676,7 @@ window.dictionaryData = [
         "muscleFocus": [
             "isquiotibiais"
         ],
-        "desc": "Partindo da ponte no solo, afaste e aproxime os calcanhares com passos curtos e quadril controlado. Regrida reduzindo o percurso.",
+        "desc": "Eleve o quadril em ponte no solo. Afaste e aproxime os calcanhares em pequenos passos alternados, mantendo o quadril controlado. Uma ida e volta completa conta uma repetição.",
         "resources": [],
         "id": "flexao-de-joelhos-com-caminhada-dos-calcanhares",
         "levelMeaning": "complexidade",
@@ -3064,6 +5684,29 @@ window.dictionaryData = [
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Ponte com Caminhada dos Calcanhares",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "flexao-joelho",
+            "grip": null,
+            "emphasis": [
+                "isquiotibiais"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "flexao-de-joelhos-com-caminhada-dos-calcanhares",
+            "variant": "flexao-de-joelhos-com-caminhada-dos-calcanhares:review-2",
+            "label": "Ponte com Caminhada dos Calcanhares",
+            "count": "cycle",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -3081,12 +5724,35 @@ window.dictionaryData = [
         ],
         "resources": [],
         "id": "rdl-unilateral-sem-carga",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Apoie o peso em uma perna com joelho levemente flexionado. Leve o quadril para trás inclinando o tronco e a outra perna para trás; retorne sem girar. Meta por perna apoiada.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "RDL Unilateral sem Carga",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "dobrar-quadril",
+            "grip": null,
+            "emphasis": [
+                "isquiotibiais"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "rdl-unilateral-sem-carga",
+            "variant": "rdl-unilateral-sem-carga:review-2",
+            "label": "RDL Unilateral sem Carga",
+            "count": "per-side",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -3104,12 +5770,35 @@ window.dictionaryData = [
         ],
         "resources": [],
         "id": "abducao-de-quadril-deitado-de-lado",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite de lado com perna inferior flexionada para apoio e superior estendida. Eleve a perna de cima e retorne sem girar quadril ou tronco. Meta por perna.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Abdução de Quadril Deitado de Lado",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "abducao-quadril",
+            "grip": null,
+            "emphasis": [
+                "gluteos-abdutores"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "abducao-de-quadril-deitado-de-lado",
+            "variant": "abducao-de-quadril-deitado-de-lado:review-2",
+            "label": "Abdução de Quadril Deitado de Lado",
+            "count": "per-side",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -3127,12 +5816,35 @@ window.dictionaryData = [
         ],
         "resources": [],
         "id": "aducao-de-quadril-deitado-de-lado",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite de lado com perna inferior estendida e superior cruzada à frente, pé no chão. Eleve a perna de baixo e retorne sem girar o quadril. Meta por perna.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Adução de Quadril Deitado de Lado",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "aducao-quadril",
+            "grip": null,
+            "emphasis": [
+                "adutores"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "aducao-de-quadril-deitado-de-lado",
+            "variant": "aducao-de-quadril-deitado-de-lado:review-2",
+            "label": "Adução de Quadril Deitado de Lado",
+            "count": "per-side",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -3152,12 +5864,37 @@ window.dictionaryData = [
             "bench"
         ],
         "id": "elevacao-de-panturrilhas-sentado-sem-carga",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Sente em banco firme com joelhos flexionados. Eleve os dois calcanhares juntos e abaixe com antepés no chão e coxas estáveis, sem impulsionar os joelhos.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Elevação de Panturrilhas Sentado sem Carga",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "flexao-plantar",
+            "grip": null,
+            "emphasis": [
+                "soleo"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "elevacao-de-panturrilhas-sentado-sem-carga",
+            "variant": "elevacao-de-panturrilhas-sentado-sem-carga:review-2",
+            "label": "Elevação de Panturrilhas Sentado sem Carga",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": [
+                "bench"
+            ]
         }
     },
     {
@@ -3178,12 +5915,38 @@ window.dictionaryData = [
             "bench"
         ],
         "id": "elevacao-de-panturrilhas-sentado-com-halteres",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Sente em banco firme, com joelhos flexionados e um halter em cada coxa próximo aos joelhos, estabilizado pelas mãos. Eleve e abaixe os dois calcanhares juntos: um ciclo conta uma repetição.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Elevação de Panturrilhas Sentado com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "flexao-plantar",
+            "grip": null,
+            "emphasis": [
+                "soleo"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "elevacao-de-panturrilhas-sentado-com-halteres",
+            "variant": "elevacao-de-panturrilhas-sentado-com-halteres:review-2",
+            "label": "Elevação de Panturrilhas Sentado com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells",
+                "bench"
+            ]
         }
     },
     {
@@ -3199,7 +5962,7 @@ window.dictionaryData = [
         "muscleFocus": [
             "eretores"
         ],
-        "desc": "No solo, eleve o tronco em pequena amplitude controlada. Não force a hiperextensão.",
+        "desc": "Deite de barriga para baixo com braços ao lado do corpo e pernas apoiadas. Eleve ligeiramente a parte superior do tronco e retorne, olhando para o chão e mantendo quadril apoiado.",
         "resources": [],
         "id": "extensao-lombar-no-solo",
         "levelMeaning": "complexidade",
@@ -3207,6 +5970,29 @@ window.dictionaryData = [
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Extensão Lombar no Solo",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "extensao-tronco",
+            "grip": null,
+            "emphasis": [
+                "eretores"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "extensao-lombar-no-solo",
+            "variant": "extensao-lombar-no-solo:review-2",
+            "label": "Extensão Lombar no Solo",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -3225,13 +6011,38 @@ window.dictionaryData = [
         "resources": [
             "low-bar"
         ],
-        "desc": "Exige barra baixa fixa própria para suportar o corpo. Uma barra alta de puxadas não atende este requisito.",
+        "desc": "Segure uma barra baixa fixa com pegada pronada. Com pés apoiados e corpo alinhado, puxe o peito em direção à barra e retorne, sem deixar o quadril cair ou impulsioná-lo.",
         "id": "remada-invertida-em-barra-baixa",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Remada Invertida Pronada em Barra Baixa",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "puxar-horizontal",
+            "grip": "pronada",
+            "emphasis": [],
+            "functionFocus": [
+                "costas-remada"
+            ]
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "remada-invertida-em-barra-baixa",
+            "variant": "remada-invertida-em-barra-baixa:review-2",
+            "label": "Remada Invertida Pronada em Barra Baixa",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": [
+                "low-bar"
+            ]
         }
     },
     {
@@ -3251,12 +6062,37 @@ window.dictionaryData = [
             "dumbbells"
         ],
         "id": "rosca-com-halteres-em-supinacao",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Em pé, com palmas para a frente, flexione os dois cotovelos juntos e retorne com braços próximos ao corpo e punhos alinhados. Uma subida e descida de ambos conta uma repetição.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Rosca Direta com Halteres — Pegada Supinada",
+        "classification": {
+            "version": 1,
+            "region": "Bíceps",
+            "action": "flexao-cotovelo",
+            "grip": "supinada",
+            "emphasis": [
+                "biceps"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "rosca-com-halteres-em-supinacao",
+            "variant": "rosca-com-halteres-em-supinacao:review-2",
+            "label": "Rosca Direta com Halteres — Pegada Supinada",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells"
+            ]
         }
     },
     {
@@ -3276,12 +6112,37 @@ window.dictionaryData = [
             "dumbbells"
         ],
         "id": "triceps-testa-no-solo-com-halteres",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Deite no chão com joelhos flexionados e pés apoiados. Com halteres acima do peito e palmas frente a frente, flexione e estenda cotovelos com braços estáveis, sem bater os pesos no solo.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Tríceps Testa no Solo com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Tríceps",
+            "action": "extensao-cotovelo",
+            "grip": null,
+            "emphasis": [
+                "triceps-longa"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "triceps-testa-no-solo-com-halteres",
+            "variant": "triceps-testa-no-solo-com-halteres:review-2",
+            "label": "Tríceps Testa no Solo com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells"
+            ]
         }
     },
     {
@@ -3297,7 +6158,7 @@ window.dictionaryData = [
         "muscleFocus": [
             "triceps-longa"
         ],
-        "desc": "Apoie as mãos em uma parede firme, flexione os cotovelos aproximando a testa e estenda-os sem mover o tronco; ajuste a distância para controlar a dificuldade.",
+        "desc": "Apoie mãos em parede firme acima dos ombros e afaste os pés. Flexione cotovelos aproximando a testa da parede e estenda para retornar, com corpo alinhado e mãos apoiadas.",
         "resources": [],
         "id": "extensao-de-triceps-com-peso-corporal-na-parede",
         "levelMeaning": "complexidade",
@@ -3305,6 +6166,31 @@ window.dictionaryData = [
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Extensão de Tríceps com Peso Corporal na Parede",
+        "classification": {
+            "version": 1,
+            "region": "Tríceps",
+            "action": "extensao-cotovelo",
+            "grip": null,
+            "emphasis": [
+                "triceps-longa"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "extensao-de-triceps-com-peso-corporal-na-parede",
+            "variant": "extensao-de-triceps-com-peso-corporal-na-parede:review-2",
+            "label": "Extensão de Tríceps com Peso Corporal na Parede",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": [
+                "wall"
+            ]
         }
     },
     {
@@ -3322,12 +6208,35 @@ window.dictionaryData = [
         ],
         "resources": [],
         "id": "flexao-com-joelhos-apoiados",
-        "desc": "Execute a variante indicada com controle e amplitude confortável. O foco muscular indica ênfase, não isolamento nem equivalência de carga entre ambientes.",
+        "desc": "Apoie mãos e joelhos no chão, alinhando o corpo dos joelhos à cabeça. Aproxime o peito do solo e empurre para retornar, sem deixar o quadril para trás ou a lombar ceder.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 1,
             "casa": 1,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Flexão com Joelhos Apoiados",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "empurrar-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-esternocostal"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "flexao-com-joelhos-apoiados",
+            "variant": "flexao-com-joelhos-apoiados:review-2",
+            "label": "Flexão com Joelhos Apoiados",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": []
         }
     },
     {
@@ -3351,12 +6260,39 @@ window.dictionaryData = [
         ],
         "movementPattern": "puxar-horizontal",
         "id": "remada-unilateral-em-pe-com-halter",
-        "desc": "Em base alternada, incline o tronco e apoie a mão livre na própria coxa. Esta variante não exige banco.",
+        "desc": "Em base alternada, incline o tronco e apoie a mão livre na própria coxa. Puxe o halter à lateral do tronco e desça sem girar os ombros. Meta por braço.",
         "levelMeaning": "complexidade",
         "environmentPreference": {
             "academia": 2,
             "casa": 2,
             "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Remada Unilateral em Pé com Halter",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "puxar-horizontal",
+            "grip": null,
+            "emphasis": [
+                "costas-latissimo"
+            ],
+            "functionFocus": [
+                "costas-remada"
+            ]
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "remada-unilateral-em-pe-com-halter",
+            "variant": "remada-unilateral-em-pe-com-halter:review-2",
+            "label": "Remada Unilateral em Pé com Halter",
+            "count": "per-side",
+            "load": "dumbbells-total",
+            "weights": 1,
+            "resources": [
+                "dumbbells"
+            ]
         }
     },
     {
@@ -3368,86 +6304,370 @@ window.dictionaryData = [
         "equip": "Peso Corporal",
         "nivel": 2,
         "levelMeaning": "complexidade",
-        "resources": ["low-bar"],
-        "muscleFocus": ["biceps"],
+        "resources": [
+            "low-bar"
+        ],
+        "muscleFocus": [
+            "biceps"
+        ],
         "movementPattern": "flexao-cotovelo-supinada",
         "antagonist": "Tríceps",
-        "synergist": ["Antebraço", "Core"],
-        "desc": "Use uma barra baixa fixa própria para suportar o corpo, com pegada supinada e pés no chão. Flexione os cotovelos aproximando a testa das mãos, mantendo os braços elevados; não transforme o movimento em remada. Ajuste a inclinação e mantenha controle.",
+        "synergist": [
+            "Antebraço",
+            "Core"
+        ],
+        "desc": "Segure barra baixa fixa com pegada supinada e pés apoiados. Com braços elevados, flexione cotovelos aproximando a testa das mãos e retorne com corpo alinhado, sem transformar em remada.",
         "referenceUrl": "https://calisthenics.com/exercise/bodyweight-biceps-curl/",
-        "environmentPreference": {"academia": 1, "casa": 1, "praia": 1}
+        "environmentPreference": {
+            "academia": 1,
+            "casa": 1,
+            "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Rosca Corporal em Barra Baixa",
+        "classification": {
+            "version": 1,
+            "region": "Bíceps",
+            "action": "flexao-cotovelo",
+            "grip": "supinada",
+            "emphasis": [
+                "biceps"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "rosca-corporal-em-barra-baixa",
+            "variant": "rosca-corporal-em-barra-baixa:review-2",
+            "label": "Rosca Corporal em Barra Baixa",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": [
+                "low-bar"
+            ]
+        }
     },
     {
         "id": "crucifixo-no-solo-com-halteres",
         "name": "Crucifixo no Solo com Halteres",
-        "group": "Peitoral", "agonist": "Peitoral",
-        "subLevel": "Esternocostal", "equip": "Halter", "nivel": 1,
-        "levelMeaning": "complexidade", "resources": ["dumbbells"],
-        "muscleFocus": ["peitoral-esternocostal"], "movementPattern": "aducao-horizontal",
-        "antagonist": "Costas", "synergist": ["Deltoide Anterior"],
-        "desc": "Deite no solo com os joelhos dobrados e um halter em cada mão. Com os cotovelos levemente flexionados, abra os braços até o limite confortável do chão e volte em arco. Não transforme em supino nem force amplitude abaixo do solo. Ajuste a carga para esta variante.",
+        "group": "Peitoral",
+        "agonist": "Peitoral",
+        "subLevel": "Esternocostal",
+        "equip": "Halter",
+        "nivel": 1,
+        "levelMeaning": "complexidade",
+        "resources": [
+            "dumbbells"
+        ],
+        "muscleFocus": [
+            "peitoral-esternocostal"
+        ],
+        "movementPattern": "aducao-horizontal",
+        "antagonist": "Costas",
+        "synergist": [
+            "Deltoide Anterior"
+        ],
+        "desc": "Deite com joelhos flexionados, pés apoiados e halteres acima do peito, palmas frente a frente. Abra em arco com cotovelos levemente flexionados até o limite do solo e retorne sem bater os braços.",
         "referenceUrl": "https://www.puregym.com/exercises/chest/chest-fly/dumbbell-floor-fly/",
-        "environmentPreference": {"academia": 1, "casa": 2, "praia": 1}
+        "environmentPreference": {
+            "academia": 1,
+            "casa": 2,
+            "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Crucifixo no Solo com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Peitoral",
+            "action": "aducao-horizontal",
+            "grip": null,
+            "emphasis": [
+                "peitoral-esternocostal"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "crucifixo-no-solo-com-halteres",
+            "variant": "crucifixo-no-solo-com-halteres:review-2",
+            "label": "Crucifixo no Solo com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells"
+            ]
+        }
     },
     {
         "id": "crucifixo-invertido-curvado-em-pe-com-halteres",
         "name": "Crucifixo Invertido Curvado em Pé com Halteres",
-        "group": "Ombros", "agonist": "Ombros",
-        "subLevel": "Deltoide Posterior", "equip": "Halter", "nivel": 2,
-        "levelMeaning": "complexidade", "resources": ["dumbbells"],
-        "muscleFocus": ["deltoide-posterior"], "movementPattern": "abducao-horizontal",
-        "antagonist": "Peitoral", "synergist": ["Romboides", "Trapézio"],
-        "desc": "Em pé, dobre levemente os joelhos e incline o tronco pelo quadril, mantendo-o estável. Abra os braços com os cotovelos levemente flexionados e retorne com controle, sem fazer remada ou usar impulso. Esta execução não usa banco; ajuste a carga ao controle do tronco.",
+        "group": "Ombros",
+        "agonist": "Ombros",
+        "subLevel": "Deltoide Posterior",
+        "equip": "Halter",
+        "nivel": 2,
+        "levelMeaning": "complexidade",
+        "resources": [
+            "dumbbells"
+        ],
+        "muscleFocus": [
+            "deltoide-posterior"
+        ],
+        "movementPattern": "abducao-horizontal",
+        "antagonist": "Peitoral",
+        "synergist": [
+            "Romboides",
+            "Trapézio"
+        ],
+        "desc": "Em pé com joelhos levemente flexionados, incline o tronco pelo quadril. Abra os braços lateralmente e retorne com cotovelos levemente flexionados, sem levantar o tronco ou fazer remada.",
         "referenceUrl": "https://www.puregym.com/blog/upper-body-workout-for-females/",
-        "environmentPreference": {"academia": 1, "casa": 2, "praia": 1}
+        "environmentPreference": {
+            "academia": 1,
+            "casa": 2,
+            "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Crucifixo Invertido Curvado em Pé com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Ombros",
+            "action": "abducao-horizontal",
+            "grip": null,
+            "emphasis": [
+                "deltoide-posterior"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "crucifixo-invertido-curvado-em-pe-com-halteres",
+            "variant": "crucifixo-invertido-curvado-em-pe-com-halteres:review-2",
+            "label": "Crucifixo Invertido Curvado em Pé com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells"
+            ]
+        }
     },
     {
         "id": "rosca-inversa-com-halteres",
         "name": "Rosca Inversa com Halteres",
-        "group": "Bíceps", "agonist": "Bíceps",
-        "subLevel": "Braquial / Antebraço", "equip": "Halter", "nivel": 1,
-        "levelMeaning": "complexidade", "resources": ["dumbbells"],
-        "muscleFocus": ["braquial-antebraco"], "movementPattern": "flexao-cotovelo-neutra-pronada",
-        "antagonist": "Tríceps", "synergist": ["Bíceps"],
-        "desc": "Em pé, segure os halteres com as palmas voltadas para trás e mantenha os punhos alinhados. Flexione os cotovelos sem mover os braços junto ao tronco e retorne devagar, mantendo a pegada pronada. Ajuste a carga para não compensar com o tronco.",
+        "group": "Bíceps",
+        "agonist": "Bíceps",
+        "subLevel": "Braquial / Antebraço",
+        "equip": "Halter",
+        "nivel": 1,
+        "levelMeaning": "complexidade",
+        "resources": [
+            "dumbbells"
+        ],
+        "muscleFocus": [
+            "braquial-antebraco"
+        ],
+        "movementPattern": "flexao-cotovelo-neutra-pronada",
+        "antagonist": "Tríceps",
+        "synergist": [
+            "Bíceps"
+        ],
+        "desc": "Com palmas para trás, flexione os dois cotovelos juntos mantendo pegada pronada e punhos alinhados. Desça com controle, preservando os braços próximos ao corpo e sem girar as mãos.",
         "referenceUrl": "https://musclewiki.com/pt-br/exercise/dumbbell-reverse-curl",
-        "environmentPreference": {"academia": 1, "casa": 2, "praia": 1}
+        "environmentPreference": {
+            "academia": 1,
+            "casa": 2,
+            "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Rosca Inversa com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Bíceps",
+            "action": "flexao-cotovelo",
+            "grip": "pronada",
+            "emphasis": [
+                "braquial-antebraco"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "rosca-inversa-com-halteres",
+            "variant": "rosca-inversa-com-halteres:review-2",
+            "label": "Rosca Inversa com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells"
+            ]
+        }
     },
     {
         "id": "remada-bilateral-curvada-com-halteres",
         "name": "Remada Bilateral Curvada com Halteres",
-        "group": "Costas", "agonist": "Costas",
-        "subLevel": "Espessura (Romboides)", "equip": "Halter", "nivel": 2,
-        "levelMeaning": "complexidade", "resources": ["dumbbells"],
-        "muscleFocus": ["costas-remada"], "movementPattern": "puxar-horizontal",
-        "antagonist": "Peitoral", "synergist": ["Bíceps", "Deltoide Posterior"],
-        "desc": "Com um halter em cada mão, incline o tronco pelo quadril e mantenha os joelhos levemente dobrados. Puxe os dois cotovelos para trás, levando os halteres em direção ao tronco, e desça com controle. Mantenha o tronco estável. Não exige banco e não substitui uma puxada vertical.",
+        "group": "Costas",
+        "agonist": "Costas",
+        "subLevel": "Espessura (Romboides)",
+        "equip": "Halter",
+        "nivel": 2,
+        "levelMeaning": "complexidade",
+        "resources": [
+            "dumbbells"
+        ],
+        "muscleFocus": [
+            "costas-remada"
+        ],
+        "movementPattern": "puxar-horizontal",
+        "antagonist": "Peitoral",
+        "synergist": [
+            "Bíceps",
+            "Deltoide Posterior"
+        ],
+        "desc": "Com um halter em cada mão, incline o tronco pelo quadril e flexione levemente os joelhos. Puxe ambos ao tronco e retorne, preservando a inclinação sem impulso.",
         "referenceUrl": "https://www.cityofmadison.com/fire/documents/frf-intro-to-firefighter-fitness.pdf",
-        "environmentPreference": {"academia": 1, "casa": 2, "praia": 1}
+        "environmentPreference": {
+            "academia": 1,
+            "casa": 2,
+            "praia": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Remada Bilateral Curvada com Halteres",
+        "classification": {
+            "version": 1,
+            "region": "Costas",
+            "action": "puxar-horizontal",
+            "grip": null,
+            "emphasis": [],
+            "functionFocus": [
+                "costas-remada"
+            ]
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "remada-bilateral-curvada-com-halteres",
+            "variant": "remada-bilateral-curvada-com-halteres:review-2",
+            "label": "Remada Bilateral Curvada com Halteres",
+            "count": "total",
+            "load": "dumbbells-total",
+            "weights": 2,
+            "resources": [
+                "dumbbells"
+            ]
+        }
     },
     {
         "id": "panturrilha-em-pe-joelhos-flexionados-com-apoio",
         "name": "Panturrilha em Pé com Joelhos Flexionados e Apoio",
-        "group": "Pernas", "agonist": "Panturrilhas",
-        "subLevel": "Sóleo", "equip": "Peso Corporal", "nivel": 1,
-        "levelMeaning": "complexidade", "resources": ["balance-support"],
-        "muscleFocus": ["soleo"], "movementPattern": "flexao-plantar-joelho-flexionado",
-        "antagonist": "Tibial Anterior", "synergist": [],
-        "desc": "Em pé, use uma parede ou apoio firme para o equilíbrio e mantenha os joelhos flexionados. Eleve os calcanhares e abaixe com controle, sem estender os joelhos durante as repetições. O apoio precisa estar disponível no local. A ênfase no sóleo não implica isolamento nem a mesma resistência da máquina sentada.",
+        "group": "Pernas",
+        "agonist": "Panturrilhas",
+        "subLevel": "Sóleo",
+        "equip": "Peso Corporal",
+        "nivel": 1,
+        "levelMeaning": "complexidade",
+        "resources": [
+            "balance-support"
+        ],
+        "muscleFocus": [
+            "soleo"
+        ],
+        "movementPattern": "flexao-plantar-joelho-flexionado",
+        "antagonist": "Tibial Anterior",
+        "synergist": [],
+        "desc": "Segure parede ou apoio firme para equilíbrio e mantenha joelhos flexionados. Eleve e abaixe os dois calcanhares juntos, preservando a flexão dos joelhos sem puxar o corpo pelo apoio.",
         "referenceUrl": "https://elht.nhs.uk/download_file/view/18069/4570",
-        "environmentPreference": {"academia": 1, "casa": 1, "praia": 1, "parque": 1}
+        "environmentPreference": {
+            "academia": 1,
+            "casa": 1,
+            "praia": 1,
+            "parque": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Panturrilha em Pé com Joelhos Flexionados e Apoio",
+        "classification": {
+            "version": 1,
+            "region": "Pernas",
+            "action": "flexao-plantar",
+            "grip": null,
+            "emphasis": [
+                "soleo"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "panturrilha-em-pe-joelhos-flexionados-com-apoio",
+            "variant": "panturrilha-em-pe-joelhos-flexionados-com-apoio:review-2",
+            "label": "Panturrilha em Pé com Joelhos Flexionados e Apoio",
+            "count": "total",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": [
+                "balance-support"
+            ]
+        }
     },
     {
         "id": "rosca-corporal-sentada-resistencia-da-perna",
         "name": "Rosca Corporal Sentada com Resistência da Perna",
-        "group": "Bíceps", "agonist": "Bíceps",
-        "subLevel": "Bíceps Braquial", "equip": "Peso Corporal", "nivel": 2,
-        "levelMeaning": "complexidade", "resources": ["bench"],
-        "muscleFocus": ["biceps"], "movementPattern": "flexao-cotovelo-supinada",
-        "antagonist": "Tríceps", "synergist": ["Antebraço"],
-        "desc": "Sente em um banco firme. Apoie o cotovelo em um joelho e coloque a mão com a palma para cima sob a outra perna estendida. Flexione o cotovelo usando essa perna como resistência e retorne com controle; repita do outro lado. Regule a resistência sem impulsionar a perna. Não há equivalência de carga em quilos com uma rosca com halteres.",
+        "group": "Bíceps",
+        "agonist": "Bíceps",
+        "subLevel": "Bíceps Braquial",
+        "equip": "Peso Corporal",
+        "nivel": 2,
+        "levelMeaning": "complexidade",
+        "resources": [
+            "bench"
+        ],
+        "muscleFocus": [
+            "biceps"
+        ],
+        "movementPattern": "flexao-cotovelo-supinada",
+        "antagonist": "Tríceps",
+        "synergist": [
+            "Antebraço"
+        ],
+        "desc": "Sente em banco firme, apoie o cotovelo em um joelho e a mão supinada sob a outra perna estendida. Flexione contra a resistência da perna e retorne sem impulsioná-la. Meta por braço.",
         "referenceUrl": "https://musclewiki.com/de-de/exercise/bodyweight-concentration-curl",
-        "environmentPreference": {"academia": 1, "casa": 1, "praia": 1, "parque": 1}
+        "environmentPreference": {
+            "academia": 1,
+            "casa": 1,
+            "praia": 1,
+            "parque": 1
+        },
+        "catalogueRevision": 2,
+        "selectable": true,
+        "displayName": "Rosca Corporal Sentada com Resistência da Perna",
+        "classification": {
+            "version": 1,
+            "region": "Bíceps",
+            "action": "flexao-cotovelo",
+            "grip": "supinada",
+            "emphasis": [
+                "biceps"
+            ],
+            "functionFocus": []
+        },
+        "executionProfile": {
+            "version": 1,
+            "movementId": "rosca-corporal-sentada-resistencia-da-perna",
+            "variant": "rosca-corporal-sentada-resistencia-da-perna:review-2",
+            "label": "Rosca Corporal Sentada com Resistência da Perna",
+            "count": "per-side",
+            "load": "bodyweight",
+            "weights": 0,
+            "resources": [
+                "bench"
+            ]
+        }
     }
 ];
 

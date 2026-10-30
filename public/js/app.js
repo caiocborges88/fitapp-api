@@ -11,7 +11,9 @@ import {refreshCoverage} from './ui.js';
 import {persistDraft,finishDraft} from './drafts.js';
 import {equipmentGroups} from './equipment-settings.js';
 import {isWorkoutModel,modelLabel,principalComplete,nextModelDay} from './workout-models.js';
+import {prepareSwap,recordVolume,executionHint,withExecution,classificationLabel} from './execution-contract.js';
 import {roleCandidates} from './workout-models.js';
+import {confirmExecutionResources} from './model-controls.js';
 import {snapshotRoutine,encodeTrainingContext} from './training-tracking.js';
 'use strict';
 
@@ -69,7 +71,7 @@ async function exportStravaCard(historyIndex = -1) {
         let totalVolume = 0;
         if (log.data) {
             log.data.forEach(s => {
-                if (s.measurementType !== 'duration') totalVolume += (parseFloat(s.kg) || 0) * (parseInt(s.reps) || 0);
+                totalVolume += recordVolume(s) || 0;
             });
         }
         
@@ -118,7 +120,7 @@ async function exportStravaCard(historyIndex = -1) {
     function openSwapModal(bIndex, eIndex) {
         const ex = state.currentRoutine[bIndex].exercises[eIndex];
         const currentName = ex.name;
-        const currentDict = window.dictionaryData.find(d => d.name === currentName);
+        const currentDict = findMovement(window.dictionaryData,currentName);
         
         // CÉREBRO DE SUBSTITUIÇÃO CORRIGIDO: Chama a função local diretamente
         const broadGroup = currentDict ? getMuscleGroup(currentDict.group) : getMuscleGroup(currentName);
@@ -129,7 +131,7 @@ async function exportStravaCard(historyIndex = -1) {
         const currentEnv = safeGet('fitapp_global_env') || 'academia';
 
         // 1. Busca todos os exercícios da mesma gaveta muscular
-        let pool = roleCandidates(ex,window.dictionaryData,environmentOptions())||window.dictionaryData.filter(d =>
+        let pool = roleCandidates(ex,window.dictionaryData,environmentOptions())||window.dictionaryData.filter(d => d.selectable!==false &&
             getMuscleGroup(d.group) === broadGroup && d.name !== currentName && (!currentDict || sameMuscleFocus(currentDict,d)) && (level!=='iniciante'||d.nivel!==3)
         );
         pool=pool.filter(item=>item.name!==currentName&&!state.currentRoutine[bIndex].exercises.some((other,i)=>i!==eIndex&&other.name===item.name));
@@ -199,9 +201,9 @@ async function exportStravaCard(historyIndex = -1) {
             pool.forEach(item => {
                 html += `
                     <div class="swap-item" data-swap-index="${pool.indexOf(item)}">
-                        <div class="swap-item-name">${escapeHTML(item.name)}</div>
-                        <div class="swap-item-focus">🎯 Foco: ${escapeHTML(item.focus)}</div>
-                        <div class="swap-item-focus" style="color: var(--accent); margin-top: 4px;">🎒 Requer: ${escapeHTML(item.equip ? item.equip.replace(/_/g, ' ') : 'N/A')}</div>
+                        <div class="swap-item-name">${escapeHTML(item.displayName||item.name)}</div>
+                        <div class="swap-item-focus">${escapeHTML(classificationLabel(item))}</div>
+                        <div class="swap-item-focus" style="color: var(--accent); margin-top: 4px;">${item.executionProfile?escapeHTML(executionHint(withExecution(ex,item))):''} · Requer: ${escapeHTML(item.equip ? item.equip.replace(/_/g, ' ') : 'N/A')}</div>
                     </div>
                 `;
             });
@@ -232,11 +234,12 @@ async function exportStravaCard(historyIndex = -1) {
         if(!approved&&candidate?.nivel===3&&state.els.levelSelector?.value==='iniciante'){showToast('Escolha uma alternativa de complexidade básica ou moderada para esta troca.');return;}
         if(state.currentRoutine[bIndex].type==='superset'&&state.currentRoutine[bIndex].exercises.some((other,i)=>i!==eIndex&&other.name===newName)){showToast('Use dois movimentos distintos no par.');return;}
         if(!availableInEnvironment(candidate,{...environmentOptions(),equipmentPolicy:state.currentRoutine[bIndex].equipmentPolicy})){showToast('Este movimento não atende aos recursos ou ao tipo de equipamento deste bloco.');return;}
-        delete state.currentRoutine[bIndex].exercises[eIndex]._environmentOriginal;
-        delete state.currentRoutine[bIndex].exercises[eIndex].setsData;
-        if(state.currentRoutine[bIndex].exercises[eIndex].reviewCode!=='target-review')delete state.currentRoutine[bIndex].exercises[eIndex].needsReview;
-        state.currentRoutine[bIndex].exercises[eIndex].name = newName;
-        document.getElementById('swapModal').style.display = 'none';
+        let next;try{next=prepareSwap(exercise,candidate);}catch(error){showToast(error.message);return;}
+        if(!confirmExecutionResources([{...state.currentRoutine[bIndex],exercises:[next]}]))return;
+        const previous=state.currentRoutine[bIndex].exercises[eIndex];
+        state.currentRoutine[bIndex].exercises[eIndex]=next;
+        if(!(state.isWorkoutActive?saveWorkoutState():persistDraft())){state.currentRoutine[bIndex].exercises[eIndex]=previous;return;}
+        document.getElementById('swapModal')?.style.setProperty('display','none');
         
         if (state.isWorkoutActive) {
             renderCurrentRoutine();
@@ -278,7 +281,7 @@ async function exportStravaCard(historyIndex = -1) {
         if(state.isWorkoutActive){showToast('Conclua ou descarte a sessão atual antes de abrir outra ficha.');return;}
         const chosen=document.getElementById('mainMethodSelector')?.value;
         const saved=readJSON(safeGet('fitapp_campaign_data'),null);
-        if(/^[A-D]$/.test(type)&&saved&&((saved.schemaVersion!=null&&![1,2].includes(saved.schemaVersion))||(saved.modelVersion!=null&&saved.modelVersion!==1))){showToast('Este plano precisa de uma versão mais recente do aplicativo. Seus dados foram preservados.');return false;}
+        if(/^[A-D]$/.test(type)&&saved&&((saved.schemaVersion!=null&&![1,2,3].includes(saved.schemaVersion))||(saved.modelVersion!=null&&![1,2].includes(saved.modelVersion)))){showToast('Este plano precisa de uma versão mais recente do aplicativo. Seus dados foram preservados.');return false;}
         if(/^[A-C]$/.test(type)&&isWorkoutModel(chosen)&&!saved?.workouts?.[type]?.length){openForgeModal({fromPreferences:true});showToast('Revise e salve o ciclo completo antes de escolher o dia.');return;}
         if(!persistDraft())return;
         const tabTreino = document.getElementById('nav-treino');
@@ -314,66 +317,7 @@ async function exportStravaCard(historyIndex = -1) {
     let cardioPausedTime = 0;
     let isCardioRunning = false;
 
-    function startCardio() {
-        const tabTreino = document.getElementById('nav-treino');
-        if (tabTreino) tabTreino.click();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        state.currentWorkoutType = 'Cardio';
-        state.isWorkoutActive = true;
-        state.sessionId = newId();
-        const finishButton = document.getElementById('btnFinishAction');
-        if (finishButton) { finishButton.disabled = false; finishButton.style.opacity = '1'; }
-        state.currentRoutine = [];
-        // Esconde painéis principais
-        document.getElementById('workoutCards').style.display = 'none';
-        const header = document.querySelector('.dashboard-header');
-        if (header) header.style.display = 'none';
-        const mainSelector = document.getElementById('mainMethodSelector');
-        const bioPanel = mainSelector ? mainSelector.closest('div') : null;
-        if (bioPanel) bioPanel.style.display = 'none';
-        const templatesFront = document.getElementById('templatesFrontline');
-        if (templatesFront) templatesFront.style.display = 'none';
-        const navBar = document.querySelector('nav');
-        if(navBar) navBar.style.display = 'none';
-
-        // Esconde HUD de hipertrofia
-        document.getElementById('workoutHud').style.display = 'none';
-        document.getElementById('exerciseList').style.display = 'none';
-        
-        // Mostra HUD de Cardio
-        state.els.workoutArea.style.display = 'block';
-        document.getElementById('cardioArea').style.display = 'block';
-        state.els.btnFinishArea.style.display = 'flex';
-        
-        // Ajusta botão de finalizar para ficar padrão
-        const btnFinish = document.getElementById('btnFinishAction');
-        if (btnFinish) {
-            btnFinish.className = 'btn-action btn-success'; 
-            btnFinish.textContent = '🏆 Salvar Aeróbico';
-        }
-
-        // Reseta variáveis e inputs
-        cardioElapsedSeconds = 0;
-        cardioPausedTime = 0;
-        isCardioRunning = false;
-        clearInterval(cardioTimerInterval);
-        document.getElementById('cardioTimerDisplay').textContent = "00:00:00";
-        
-        const btnToggle = document.getElementById('btnToggleCardioTimer');
-        if(btnToggle) {
-            btnToggle.innerHTML = "▶ Iniciar Relógio";
-            btnToggle.style.color = 'var(--secondary)'; btnToggle.style.borderColor = 'var(--secondary)'; btnToggle.style.background = 'rgba(77, 163, 255, 0.2)';
-        }
-        
-        document.getElementById('cardioDist').value = '';
-        document.getElementById('cardioKcal').value = '';
-        document.getElementById('cardioBpm').value = '';
-        
-        state.workoutStartTime = Date.now();
-        saveWorkoutState();
-        if(state.audioEnabled) speak("Motor aeróbico ativado.");
-    }
+    function startCardio() {showToast('Novas atividades de condicionamento foram retiradas. Seu histórico foi preservado.');}
 
     function toggleCardioTimer() {
         const btn = document.getElementById('btnToggleCardioTimer');
@@ -415,7 +359,7 @@ async function exportStravaCard(historyIndex = -1) {
 function saveWorkoutState() {
         if (!state.isWorkoutActive) return;
         const activeState = { 
-            version: 4, userId: window.FitStore.uid, sessionId: state.sessionId,
+            version: 5, userId: window.FitStore.uid, sessionId: state.sessionId,
             sessionPlanned:state.sessionPlanned,
             sessionOrigin:state.sessionOrigin,blockRestOverrides:state.blockRestOverrides,activeRestBlockId:state.activeRestBlockId,
             currentRoutine: state.currentRoutine, 
@@ -817,38 +761,9 @@ function saveWorkoutState() {
         const prepList = document.getElementById('prepList');
         prepList.innerHTML = '';
         
-        // Puxa exercícios de mobilidade do Dicionário (Com Contingência)
-        let mobilityPool = dictionaryData.filter(d => 
-            (d.group || '').toLowerCase().includes('mobilidade') || 
-            (d.focus || '').toLowerCase().includes('mobilidade') || 
-            (d.group || '').toLowerCase().includes('alongamento')
-        );
-        
-        // FALLBACK TÁTICO: Se o Dicionário falhar, injeta o protocolo raiz.
-        if(mobilityPool.length < 3) {
-            mobilityPool = [
-                {name: "Rotação Articular (Ombros e Punhos)", desc: "Gire os braços lentamente. 20s cada lado.", equip: "Peso Corporal"},
-                {name: "Mobilidade de Tornozelo e Quadril", desc: "Agachamento profundo segurando a posição por 30s.", equip: "Peso Corporal"},
-                {name: "Ativação de Core (Prancha Curta)", desc: "Acorde os estabilizadores sem fatigar. 30s.", equip: "Peso Corporal"},
-                {name: "Gato-Vaca (Mobilidade Torácica)", desc: "Flexão e extensão da coluna no chão. 10 repetições.", equip: "Peso Corporal"}
-            ];
+        for(const message of ['Confira os equipamentos e os apoios da execução escolhida.','Revise a meta e a convenção de carga antes de registrar.']){
+            const item=document.createElement('p');item.textContent=message;prepList.append(item);
         }
-
-        // Embaralha e pesca 3
-        let selectedPrep = mobilityPool.sort(() => 0.5 - Math.random()).slice(0, 3);
-        
-        selectedPrep.forEach(ex => {
-            prepList.innerHTML += `
-                <div style="background: var(--surface); padding: 15px; border-radius: 8px; border-left: 3px solid var(--secondary); display: flex; align-items: center; gap: 10px;">
-                    <div style="font-size: 24px;">🔄</div>
-                    <div>
-                        <div style="font-weight: bold; color: var(--ink); font-size: 14px;">${escapeHTML(ex.name)}</div>
-                        <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">${ex.desc || 'Realize movimentos controlados.'}</div>
-                    </div>
-                </div>
-            `;
-        });
-        if(state.audioEnabled) speak("Fase de preparação iniciada. Prepare as articulações.");
     }
 
 // ==========================================
@@ -1221,7 +1136,7 @@ window.encerrarSessao = function() {
         if (savedState) {
             const restored = readJSON(savedState, null);
             if (!restored || (restored.userId && restored.userId !== window.FitStore.uid)) return;
-            if(restored.version&&![1,2,3,4].includes(restored.version)){showToast('Esta versão de sessão não é reconhecida. O registro salvo foi preservado.');return;}
+            if(restored.version&&![1,2,3,4,5].includes(restored.version)){showToast('Esta versão de sessão não é reconhecida. O registro salvo foi preservado.');return;}
             if (state.isWorkoutActive) return;
             if (restored.currentWorkoutType === 'Cardio') {
                 startCardio();

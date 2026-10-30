@@ -1,0 +1,51 @@
+{
+  "simulation": true,
+  "physicalDevices": false,
+  "results": [
+    {
+      "suite": "execution-contract-browser",
+      "status": 0,
+      "log": "audit/catalogo-execution-contract-browser.log"
+    },
+    {
+      "suite": "workout-models-browser",
+      "status": 0,
+      "log": "audit/catalogo-workout-models-browser.log"
+    },
+    {
+      "suite": "training-tracking-browser",
+      "status": 0,
+      "log": "audit/catalogo-training-tracking-browser.log"
+    },
+    {
+      "suite": "editor-browser",
+      "status": 0,
+      "log": "audit/catalogo-editor-browser.log"
+    },
+    {
+      "suite": "environment-browser",
+      "status": 0,
+      "log": "audit/catalogo-environment-browser.log"
+    },
+    {
+      "suite": "workout-priorities-browser",
+      "status": 0,
+      "log": "audit/catalogo-workout-priorities-browser.log"
+    },
+    {
+      "suite": "coverage-browser",
+      "status": 0,
+      "log": "audit/catalogo-coverage-browser.log"
+    },
+    {
+      "suite": "simple-flow-browser",
+      "status": 0,
+      "log": "audit/catalogo-simple-flow-browser.log"
+    },
+    {
+      "suite": "mobile-flow-browser",
+      "status": 0,
+      "log": "audit/catalogo-mobile-flow-browser.log"
+    }
+  ]
+}

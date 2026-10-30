@@ -20,7 +20,8 @@ test('adaptação é reversível, mantém séries e não altera a ficha original
     const snapshot=JSON.stringify(source),adapted=adaptRoutineToEnvironment(source,catalogue,{environment:'casa',resources:[]});
     assert.equal(JSON.stringify(source),snapshot);assert.equal(adapted.routine[0].exercises[0].sets,3);
     assert.equal(adapted.routine[0].exercises[0].setsData,undefined);
-    for(const ex of adapted.routine[0].exercises)assert.ok(availableInEnvironment(exercise(ex.name),{environment:'casa',resources:[]}));
+    assert.ok(availableInEnvironment(exercise(adapted.routine[0].exercises[0].name),{environment:'casa',resources:[]}));
+    assert.equal(adapted.routine[0].exercises[1].needsReview,true); // Retirados não ganham substitutos novos.
     const restored=adaptRoutineToEnvironment(adapted.routine,catalogue,{environment:'academia'});
     assert.deepEqual(restored.routine[0].exercises.map(ex=>ex.name),source[0].exercises.map(ex=>ex.name));
 });
@@ -111,7 +112,8 @@ test('nomes antigos continuam resolvíveis na adaptação',()=>{
     const home=adaptRoutineToEnvironment(source,catalogue,{environment:'casa',resources:['dumbbells']});
     assert.equal(home.missing.length,0);assert.equal(exercise(home.routine[0].exercises[0].name).muscleFocus[0],'triceps-longa');
     const gym=adaptRoutineToEnvironment(home.routine,catalogue,{environment:'academia'});
-    assert.equal(gym.routine[0].exercises[0].name,'Tríceps Testa com Barra W');
+    assert.equal(gym.routine[0].exercises[0].name,source[0].exercises[0].name);
+    assert.equal(gym.routine[0].exercises[0].execution,undefined);
 });
 
 test('halteres atendem remadas horizontais sem se passarem por puxada vertical',()=>{

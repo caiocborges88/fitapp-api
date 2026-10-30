@@ -28,7 +28,7 @@ test('novos ABCs são fixos e independem de nível, foco e sorteio; C inclui adu
             assert.ok(base.C.some(b=>b.exercises.some(e=>e.name==='Cadeira Abdutora')&&!b.optional));
             assert.ok(base.C.some(b=>b.exercises.some(e=>e.name==='Cadeira Extensora')));
             assert.equal(base.C.some(b=>b.exercises.some(e=>e.slotId==='flexion'||e.slotId==='side')),false);
-            assert.ok(base.A.every(b=>b.restSeconds&&b.modelVersion===1));
+            assert.ok(base.A.every(b=>b.restSeconds&&b.modelVersion===2));
         }
     }finally{Math.random=random;}
 });

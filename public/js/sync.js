@@ -139,7 +139,7 @@ export async function syncTacticalDictionary() {
             const data = doc.data();
             const name = data.nome || data.name;
             const existing = window.dictionaryData.find(item => item.name.toLowerCase() === name?.toLowerCase());
-            if (existing && typeof data.dica === 'string') existing.desc = data.dica;
+            if (existing && !existing.catalogueRevision && typeof data.dica === 'string') existing.desc = data.dica;
         });
         window.dictionaryData = normalizeDictionary(window.dictionaryData);
         if (typeof window.FitApp.filterLibrary === 'function') window.FitApp.filterLibrary();

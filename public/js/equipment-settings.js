@@ -11,8 +11,9 @@ export const resourceLabels = [
     ['bench','Banco firme'],['balance-support','Apoio para equilíbrio'],
     ['pullup-bar','Barra fixa'],['low-bar','Barra baixa'],['dumbbells','Halteres'],
     ['incline-bench','Banco inclinado'],['decline-bench','Banco declinado'],
-    ['parallel-bars','Barras paralelas'],['rope','Corda']
+    ['parallel-bars','Barras paralelas'],['backrest-bench','Banco com encosto'],['dual-cable','Duas polias'],['cable-handles','Alças de polia'],['cable-rope','Acessório de corda para polia'],['wall','Parede firme'],['barbell','Barra'],['plates','Anilhas'],['machine','Máquinas'],['cable','Polia'],['rack','Rack com suportes'],['roman-bench','Banco romano'],['preacher-bench','Banco Scott'],['landmine','Suporte landmine'],['row-handle','Empunhadura para remada']
 ];
+for(const item of globalThis.window?.dictionaryData||[]){for(const resource of item.executionProfile?.resources||[])if(resource.startsWith('apparatus:')&&!resourceLabels.some(([id])=>id===resource))resourceLabels.push([resource,item.displayName||item.name]);}
 export function equipmentForEnvironment(store,environment,resources=[]){
     if(environment==='academia'){
         const saved=readJSON(store?.get('fitapp_equipment_academia'),null);
