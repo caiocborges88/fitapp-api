@@ -13,6 +13,19 @@
 - Separe todos os dados locais por conta usando `FitStore`. Rascunhos locais não fazem parte da sincronização de planos.
 - Preserve IDs, revisões, conflitos, dados antigos, fila offline e sessões em andamento. Mudanças de formato exigem versão e testes de compatibilidade.
 
+## Fluxo simplificado de treino — 30/10/2026
+- O caminho principal entrega um modelo pronto; cadastro de ficha própria é secundário. A referência desta etapa é `docs/SIMPLIFICACAO-DO-FLUXO-2026-10-30.md`.
+- Sem treino salvo, Treinar oferece escolher ABC tradicional/sinergista e a alternativa discreta “Já tenho uma ficha”. Escolher, conferir os três dias e salvar acontece uma vez; não recrie o plano nos acessos seguintes.
+- Com treino salvo, Treinar destaca o próximo dia e “Começar treino”. O início direto reutiliza preparação, validação e gravação durável da sessão; ajustes e conferência continuam acessíveis em “Ver exercícios e ajustar”. Pendências ou propostas de adaptação abrem a conferência, sem aplicação silenciosa.
+- Abrir um dia salvo não chama o gerador nem grava a prescrição, mesmo se preferências antigas estiverem ausentes ou diferentes. Não acrescente dias ausentes; respeite versões desconhecidas de plano, blocos e sessão.
+- A sequência A → B → C continua baseada em registros duráveis do mesmo plano e fila offline. Trocar o dia é opcional; uma escolha temporária não deve prevalecer após novo registro durável.
+- Meus treinos mostra primeiro o plano atual e os dias existentes, depois fichas próprias. “Adicionar treino” reúne modelo e cadastro manual. Edição e troca de modelo ficam sob demanda junto do treino.
+- Perfil concentra conta, aparência e dados. Foco global, experiência declarada, aplicação/reinício de plano e modelos retirados não são novas escolhas de interface. Seletores antigos permanecem ocultos/inertes apenas para compatibilidade do transporte e testes de legados; não os reexponha.
+- Ambiente/equipamentos têm um único controle compartilhado no cabeçalho, também acessível ao escolher modelo. A preferência é lembrada; aeróbico fica em “Outras atividades”. Importação de texto/IA continua adiada.
+- Preserve a recuperação de sessão em andamento, o editor manual, rascunhos por conta, cópias, exclusões, sincronização, histórico e receitas ABC. Esta etapa não muda formatos, regras Firestore ou API.
+- Valide com `npm run test:simple-flow`, além das regressões obrigatórias. Use `FITAPP_AUDIT_PREFIX=simplificacao` para separar novas evidências; aparência/design/fluxo móvel acrescentam sufixos próprios ao prefixo. Testes usam Firebase simulado ou `demo-fitapp`; aparelhos físicos e produção não são inferidos dessas evidências.
+- Registre a mudança no GitHub em branch/PR, distinguindo os pré-requisitos anteriores que ainda estavam sem commit. Não confunda envio de código ao GitHub com autorização para publicar em produção.
+
 ## Modelos ABC com regras próprias
 - A referência vigente é `docs/NOVOS-MODELOS-ABC.md`. Novas escolhas oferecem `abc_tradicional` e `abc_sinergista`, com exercícios fixos e receitas versionadas em `public/js/workout-models.js`.
 - Cada bloco define ordem, execução, séries, metas e descanso. Não aplique séries/pausas globais, nível numérico, experiência declarada ou foco global aos novos modelos. `level: 'padrao'` existe apenas para compatibilidade de transporte; não representa dificuldade. Campos antigos continuam legíveis para fichas anteriores.

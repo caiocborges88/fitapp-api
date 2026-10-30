@@ -1,5 +1,9 @@
 # Sistema visual do FitApp
 
+## Prioridade de navegação — 30/10/2026
+
+O fluxo simplificado em [SIMPLIFICACAO-DO-FLUXO-2026-10-30.md](SIMPLIFICACAO-DO-FLUXO-2026-10-30.md) prioriza modelo pronto e início direto do próximo treino. Conferência/edição são secundárias; o plano atual vem antes da criação em Meus treinos. Perfil não oferece configuração de prescrição. Identidade, tokens, temas, movimento e acessibilidade abaixo continuam válidos.
+
 ## Direção — Energia, alegria e foco
 
 A identidade local de 28/10/2026 usa ciano e violeta, contornos luminosos, cartões geométricos e ilustrações esportivas próprias. Claro e escuro têm a mesma hierarquia. A ficha disponível e a ação de treinar são prioritárias; a sessão mantém números e fundos estáveis. Decisões, evidências e limites: [IDENTIDADE-ENERGIA.md](IDENTIDADE-ENERGIA.md).

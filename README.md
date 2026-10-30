@@ -1,5 +1,9 @@
 # FitApp
 
+## Fluxo simplificado — versão local de 30/10/2026
+
+Modelo pronto como caminho principal: escolher um dos dois ABCs, conferir e salvar uma vez; depois, iniciar o próximo treino em um toque. Revisão, trocas e cadastro manual ficam sob demanda. Meus treinos prioriza o plano atual, e Perfil deixa de configurar prescrição. Abrir um dia salvo não regenera nem sobrescreve seu conteúdo. Sessões, histórico, receitas e sincronização continuam preservados. Decisões, testes e limites: [docs/SIMPLIFICACAO-DO-FLUXO-2026-10-30.md](docs/SIMPLIFICACAO-DO-FLUXO-2026-10-30.md). Teste específico: `npm run test:simple-flow`. Sem publicação em produção nesta etapa.
+
 ## Cobertura e acompanhamento — publicados em 29/10/2026
 
 Os ABCs agora explicitam sua proposta de cobertura, distinguindo principais, complementos e funções que precisam de revisão. Novas sessões preservam o planejamento preparado no início e o contexto final; histórico mostra completo/parcial, lados e comparação do previsto com o realizado. Histórico e evolução apresenta a última passagem ABC e os últimos 30 dias, incluindo parciais, alterações, principais incompletos e duração registrada. Registros antigos não recebem planejamento reconstruído. Receitas e fichas salvas permanecem preservadas. Versão `d2f51cd46fa4626c` publicada em 29/10/2026 às 20h06 no [FitApp](https://fitapp-operacional.web.app), com regras antes do Hosting. Os 70 arquivos, regras e recarga offline foram conferidos sem autenticar ou gravar dados reais. Release e recuperação: [docs/PUBLICACAO-ACOMPANHAMENTO-2026-10-29.md](docs/PUBLICACAO-ACOMPANHAMENTO-2026-10-29.md). Contratos e limites: [docs/COBERTURA-E-ACOMPANHAMENTO.md](docs/COBERTURA-E-ACOMPANHAMENTO.md). Teste específico: `npm run test:tracking`.

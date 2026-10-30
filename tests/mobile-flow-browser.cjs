@@ -3,7 +3,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const server=require('../scripts/serve.cjs');
 const fake=require('./fixtures/firebase.cjs');
-const auditPrefix=process.env.FITAPP_AUDIT_PREFIX||'mobile-flow';
+const auditPrefix=process.env.FITAPP_AUDIT_PREFIX?process.env.FITAPP_AUDIT_PREFIX+'-mobile-flow':'mobile-flow';
 
 (async()=>{
     await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
@@ -26,7 +26,7 @@ const auditPrefix=process.env.FITAPP_AUDIT_PREFIX||'mobile-flow';
         await page.evaluate(()=>document.getElementById('forgeModal').style.display='none');
         for(const [scheme,width,height]of [['light',390,844],['dark',360,740],['light',1280,900]]){
             await page.emulateMedia({colorScheme:scheme});await page.setViewportSize({width,height});
-            await page.click('#quickWorkoutOpen');
+            await page.click('#quickWorkoutReview');
             await page.waitForFunction(()=>document.body.classList.contains('preview-active'));
             assert.equal(await page.locator('.exercise-settings[open]').count(),0);
             assert.equal(await page.locator('#customWorkoutName').isVisible(),false);
@@ -42,7 +42,7 @@ const auditPrefix=process.env.FITAPP_AUDIT_PREFIX||'mobile-flow';
         }
         checks.push('acesso rápido em dois toques sem rolagem; revisão compacta e ficha original preservada');
         await page.setViewportSize({width:390,height:844});
-        await page.click('#quickWorkoutOpen');await page.locator('.exercise-settings').first().locator('summary').click();
+        await page.click('#quickWorkoutReview');await page.locator('.exercise-settings').first().locator('summary').click();
         await page.locator('.editor-sets').first().fill('5');await page.locator('.editor-sets').first().dispatchEvent('change');
         await page.waitForFunction(()=>FitStore.keys().some(key=>key.startsWith('fitapp_workout_draft:')));
         const draftKey=await page.evaluate(()=>FitStore.keys().find(key=>key.startsWith('fitapp_workout_draft:')));
@@ -54,7 +54,7 @@ const auditPrefix=process.env.FITAPP_AUDIT_PREFIX||'mobile-flow';
         assert.equal(await page.evaluate(()=>FitStore.keys().some(key=>key.startsWith('fitapp_workout_draft:'))),false);
         await page.evaluate(()=>window.abortarMissao());checks.push('rascunho de sessão sobrevive à recarga e é removido após início durável');
 
-        await page.click('#nav-workouts');await page.getByRole('button',{name:/Cadastrar minha ficha/}).click();
+        await page.click('#nav-workouts');await page.click('#workoutAddButton');await page.getByRole('button',{name:/Cadastrar minha ficha/}).click();
         await page.fill('#customWorkoutName','Nova ficha móvel');await page.getByRole('button',{name:'Exercício',exact:true}).click();
         await page.fill('#searchAddInput','Supino Reto com Barra');await page.locator('#addExerciseList .swap-item').first().click();
         await page.getByRole('button',{name:'Adicionar à ficha',exact:true}).click();

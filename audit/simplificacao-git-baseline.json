@@ -1,0 +1,21 @@
+{
+  "branch": "codex/simplificar-fluxo-treino",
+  "previousGitHead": "a8151917909ffa30fee85312dd97f0bd66e72ca2",
+  "prerequisiteCommit": "5824b845b5858e9c8022168d1512c4f3c56aced5",
+  "publishedSourceArchive": "release-tracking-d2f51cd46fa4626c.zip",
+  "publishedSourceArchiveSha256": "3064fae2371e9cfb8b4c3a61dc6cba265e9d5e5d33ca1144463325394b919a64",
+  "recoveryArchive": "simplificacao-baseline-source-v2.zip",
+  "recoveryArchiveSha256": "68cc13b45d0cb9f4300bd38ba29e679d0f3a928586a3b5ee9137b4d4a0975806",
+  "sourceFiles": 171,
+  "productionDeployment": false,
+  "secretsIncluded": false,
+  "note": "Pré-requisitos anteriores recuperados de snapshot publicado; arquivos de trabalho não foram restaurados ou apagados. Auditorias e extração de chat anteriores permanecem fora do commit.",
+  "generatedIgnoredFilesExcluded": [
+    "functions/functions.yaml",
+    "public/vendor/chart.js",
+    "public/vendor/firebase-app.js",
+    "public/vendor/firebase-auth.js",
+    "public/vendor/firebase-firestore.js",
+    "public/vendor/html2canvas.js"
+  ]
+}

@@ -54,6 +54,27 @@ nav>button.active::after { content:''; position:absolute; right:12px; width:5px;
 .quick-workout-choice { margin-top:16px; }
 .quick-workout-choice>summary { color:var(--muted); }
 .quick-workout>.text-button { font-size:13px; }
+.legacy-training,.legacy-settings { display:none!important; }
+.home-overview { grid-template-columns:1fr; }
+.home-overview .hero-panel { min-height:240px; }
+.home-overview .hero-panel>.text-button { display:block; margin-top:12px; }
+.quick-secondary-actions { display:flex; align-items:flex-start; flex-wrap:wrap; gap:8px 24px; margin-top:12px; }
+.quick-secondary-actions .quick-workout-choice { margin:0; min-width:min(240px,100%); }
+.quick-secondary-actions>button,.quick-workout-choice>summary,.plan-options>summary,.plan-day-options>summary,.other-activities>summary { min-height:44px; cursor:pointer; padding:12px 0; }
+.other-activities { border:0; margin-top:24px; padding:0; }
+.other-activities>.card-treino { min-height:100px; width:100%; margin:8px 0; }
+body.preview-active #otherActivities,body.session-active #otherActivities { display:none; }
+#addWorkoutDialog .creation-grid { grid-template-columns:1fr; margin:24px 0 0; gap:16px; }
+#addWorkoutDialog .creation-card { min-height:100px; padding:20px; }
+#workoutAddButton { margin-top:24px; }
+.plan-days-list { display:grid; }
+.plan-day-row { display:flex; align-items:center; flex-wrap:wrap; gap:12px 20px; padding:20px 0; border-top:1px solid var(--line); }
+.plan-day-row>div { flex:1; min-width:140px; }
+.plan-day-row h3,.plan-day-row p { margin:0; }
+.plan-day-row p,.saved-workouts-empty { font-size:14px; color:var(--muted); }
+.plan-day-options,.plan-options { border:0; margin:0; padding:0; }
+.plan-day-options>button,.plan-options>button { display:block; min-height:44px; }
+.model-description { padding:12px 16px; background:var(--accent-soft); border-radius:var(--radius-control); color:var(--ink); }
 .plan-card-heading { border-bottom:2px solid var(--secondary); }
 .plan-card-days { gap:12px; margin-top:16px; }
 .plan-card-days .card-treino { border:1px solid var(--line); border-top:3px solid var(--accent); border-radius:12px; min-height:132px; }

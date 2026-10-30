@@ -1,0 +1,74 @@
+{
+  "checkedAt": "2026-10-30T12:35:54.813Z",
+  "environment": "local; Firebase simulated",
+  "evidence": [
+    {
+      "device": "mobile",
+      "scheme": "light",
+      "status": "ok",
+      "checks": [
+        "navigation",
+        "account identity",
+        "manual template",
+        "direct start",
+        "timed set",
+        "short session saved",
+        "optional reward",
+        "history units",
+        "no horizontal overflow"
+      ],
+      "pageErrors": []
+    },
+    {
+      "device": "desktop",
+      "scheme": "light",
+      "status": "ok",
+      "checks": [
+        "navigation",
+        "account identity",
+        "manual template",
+        "direct start",
+        "timed set",
+        "short session saved",
+        "optional reward",
+        "history units",
+        "no horizontal overflow"
+      ],
+      "pageErrors": []
+    },
+    {
+      "device": "mobile",
+      "scheme": "dark",
+      "status": "ok",
+      "checks": [
+        "navigation",
+        "account identity",
+        "manual template",
+        "direct start",
+        "timed set",
+        "short session saved",
+        "optional reward",
+        "history units",
+        "no horizontal overflow"
+      ],
+      "pageErrors": []
+    },
+    {
+      "device": "desktop",
+      "scheme": "dark",
+      "status": "ok",
+      "checks": [
+        "navigation",
+        "account identity",
+        "manual template",
+        "direct start",
+        "timed set",
+        "short session saved",
+        "optional reward",
+        "history units",
+        "no horizontal overflow"
+      ],
+      "pageErrors": []
+    }
+  ]
+}

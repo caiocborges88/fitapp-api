@@ -12,7 +12,7 @@ export function syncEquipmentChips(){
     }
 }
 function setup(){
-    const panel=document.createElement('section');panel.className='environment-summary';panel.id='environmentResources';
+    const panel=document.createElement('section');panel.className='environment-summary';panel.id='environmentResources';panel.hidden=true;
     const open=document.createElement('button');open.className='text-button';open.type='button';open.setAttribute('aria-haspopup','dialog');
     panel.append(open);document.querySelector('#tab-treino .page-heading')?.after(panel);
     const dialog=document.createElement('dialog');dialog.id='environmentDialog';dialog.className='environment-dialog';dialog.setAttribute('aria-label','Ambiente e equipamentos do treino');
@@ -35,6 +35,7 @@ function setup(){
     window.FitEnvironment={open:show,refresh};
     function refresh(){
         const options=environmentOptions();open.textContent=environmentSummary(options)+' · Alterar';
+        header.setAttribute('aria-label',environmentSummary(options)+' · Alterar ambiente e equipamentos');
         dialog.querySelector('select').value=['parque','parque/praia'].includes(options.environment)?'praia':options.environment;
         dialog.querySelector('.environment-equipment').hidden=options.environment!=='academia';
         dialog.querySelector('.environment-resources').hidden=options.environment==='academia';

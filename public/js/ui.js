@@ -280,7 +280,8 @@ let isolationChartInstance = null;
     }
 
     export function updateDynamicCards() {
-        const method = document.getElementById('mainMethodSelector')?.value || 'abc';
+        const savedPlan=readJSON(window.FitApp.safeGet('fitapp_campaign_data'),null);
+        const method = savedPlan?.method || document.getElementById('mainMethodSelector')?.value || 'abc';
         for(const id of ['profileSelector','levelSelector'])document.getElementById(id)?.closest('label')?.toggleAttribute('hidden',isWorkoutModel(method));
         const lowerFocus = document.getElementById('profileSelector')?.value === 'feminino';
         const parameters=document.getElementById('modelPreferencesDescription');
@@ -293,7 +294,6 @@ let isolationChartInstance = null;
             biset_sinergista: [['Peito + Tríceps','Pares complementares'],['Costas + Bíceps','Pares complementares'],['Pernas + Ombros','Pares complementares']],
             circuito: [['Circuito 1','FullBody'],['Circuito 2','FullBody'],['Circuito 3','FullBody']]
         };
-        const savedPlan=readJSON(window.FitApp.safeGet('fitapp_campaign_data'),null);
         const plan = retiredMethod(method)?['A','B','C','D'].map(day=>savedPlan?.workouts?.[day]?.length?['Personalizado','Sua ficha salva; edição manual disponível']:null):labels[method === 'ppl' ? 'abc' : method] || labels.abc;
         const planTitle = document.getElementById('planCardTitle');
         if (planTitle) planTitle.textContent = {
@@ -310,10 +310,22 @@ let isolationChartInstance = null;
             card.querySelector('h3').textContent = `Treino ${day} — ${plan[index][0]}`;
             if(savedPlan?.workoutNames?.[day]&&savedPlan.method===method)card.querySelector('h3').textContent=savedPlan.workoutNames[day];
             card.querySelector('p').textContent = plan[index][1];
-            if(daysList){
-                const button=document.createElement('button');button.className='button secondary';button.textContent='Editar '+card.querySelector('h3').textContent;button.addEventListener('click',()=>window.FitEditor.editPlanDay(day));daysList.appendChild(button);
-            }
         });
+        const availableDays=Object.entries(savedPlan?.workouts||{}).filter(([,routine])=>Array.isArray(routine)&&routine.length);
+        const panel=document.getElementById('currentPlanPanel');if(panel)panel.hidden=!availableDays.length;
+        const title=document.getElementById('currentPlanName');if(title)title.textContent=savedPlan?.name||(isWorkoutModel(method)?modelLabel(method):'Meu plano');
+        for(const [day,routine]of availableDays){
+            const row=document.createElement('article');row.className='plan-day-row';
+            const name=savedPlan.workoutNames?.[day]||'Treino '+day;
+            const heading=document.createElement('h3');heading.textContent=name;
+            const count=document.createElement('p');count.textContent=routine.filter(blockEnabled).reduce((sum,block)=>sum+block.exercises.length,0)+' exercícios';
+            const info=document.createElement('div');info.append(heading,count);
+            const view=document.createElement('button');view.type='button';view.className='button secondary';view.textContent='Ver exercícios';view.setAttribute('aria-label','Ver exercícios de '+name);view.onclick=()=>window.FitApp.startWorkout(day);
+            const options=document.createElement('details');options.className='plan-day-options';
+            const summary=document.createElement('summary');summary.textContent='Opções';summary.setAttribute('aria-label','Opções de '+name);
+            const edit=document.createElement('button');edit.type='button';edit.className='text-button';edit.textContent='Editar '+name;edit.onclick=()=>window.FitEditor.editPlanDay(day);
+            options.append(summary,edit);row.append(info,view,options);daysList?.append(row);
+        }
         window.FitApp.checkCompletedCards();
     }
 
@@ -837,7 +849,7 @@ let isolationChartInstance = null;
         const savedCustoms = readJSON(window.FitApp.safeGet('fitapp_custom_workouts'), []);
 
         if (savedCustoms.length === 0) {
-            listEl.innerHTML = '<div class="empty-state"><img class="empty-illustration" src="illustrations/preparation.svg" alt="" width="160" height="120"><h3>Sua próxima sessão começa aqui.</h3><p>Suas fichas vão aparecer aqui.</p></div>';
+            listEl.innerHTML = '<p class="saved-workouts-empty">Nenhuma ficha adicional. Use Adicionar treino se já tiver uma ficha própria.</p>';
             return;
         }
 

@@ -114,18 +114,24 @@ function refreshHome(){
     if(!panel){
         panel=element('section','quick-workout panel');panel.id='quickWorkout';
         const art=element('img','quick-illustration');art.src='illustrations/preparation.svg';art.alt='';art.width=80;art.height=60;panel.append(art);
-        panel.append(element('span','eyebrow','TREINAR HOJE'),element('h2','','Sua ficha, à mão.'));
+        const title=element('h2');title.id='quickWorkoutTitle';
+        panel.append(element('span','eyebrow','PRÓXIMO TREINO'),title);
         const name=element('p');name.id='quickWorkoutName';panel.append(name);
-        const button=element('button','button primary','Conferir e começar');button.id='quickWorkoutOpen';button.type='button';panel.append(button);
-        const change=disclosure('Escolher outra ficha','quick-workout-choice'),label=element('label','field','Ficha para acesso rápido'),select=element('select');select.id='quickWorkoutSelect';label.append(select);change.append(label);panel.append(change);
-        const manage=element('button','text-button','Criar ou organizar fichas');manage.type='button';manage.onclick=()=>document.getElementById('nav-workouts').click();panel.append(manage);
+        const button=element('button','button primary','Começar treino');button.id='quickWorkoutOpen';button.type='button';panel.append(button);
+        const actions=element('div','quick-secondary-actions');
+        const review=element('button','text-button','Ver exercícios e ajustar');review.id='quickWorkoutReview';review.type='button';actions.append(review);panel.append(actions);
+        const change=disclosure('Trocar dia ou ficha','quick-workout-choice'),label=element('label','field','Treino para hoje'),select=element('select');select.id='quickWorkoutSelect';label.append(select);change.append(label);actions.append(change);
         document.querySelector('.home-overview').before(panel);
     }
     panel.hidden=!choices.length;
     if(!choices.length)return;
     const preferred=window.FitStore.get('fitapp_quick_workout')||window.FitStore.get('fitapp_last_workout');
-    if(state.quickPlanId!==plan?.id){state.quickPlanId=plan?.id;state.quickDayOverride=null;}
-    const next=isWorkoutModel(plan?.method)?nextModelDay(plan,readJSON(window.FitStore.get('fitapp_week_log'),[]),readJSON(window.FitStore.get('fitapp_sync_queue'),[])):null;
+    const owner=window.FitStore.uid;
+    const history=readJSON(window.FitStore.get('fitapp_week_log'),[]),pending=readJSON(window.FitStore.get('fitapp_sync_queue'),[]);
+    const durableRecords=[...new Set([...history,...pending.filter(item=>item._action!=='delete')].filter(item=>item.campaignId===plan?.id).map(item=>JSON.stringify([item._id,item.tipo,item.createdAt,item.date])))].sort();
+    const sequence=JSON.stringify([owner,plan?.id,durableRecords]);
+    if(state.quickSequence!==sequence){state.quickSequence=sequence;state.quickDayOverride=null;}
+    const next=isWorkoutModel(plan?.method)?nextModelDay(plan,history,pending):null;
     const pinned=window.FitStore.get('fitapp_quick_workout');
     const current=choices.find(item=>item.type===(state.quickDayOverride||(next&&!pinned?.startsWith('custom_')?next:preferred)))||choices[0];
     const select=document.getElementById('quickWorkoutSelect');
@@ -135,13 +141,15 @@ function refreshHome(){
     }
     select.value=current.type;
     select.onchange=()=>{state.quickDayOverride=select.value;window.FitApp.safeSet('fitapp_quick_workout',select.value);refreshHome();};
+    document.getElementById('quickWorkoutTitle').textContent=current.type.startsWith('custom_')?'Sua ficha para hoje':'Próximo treino: '+current.type;
     document.getElementById('quickWorkoutName').textContent=current.name+' · '+current.routine.filter(blockEnabled).reduce((total,block)=>total+block.exercises.length,0)+' exercícios';
-    document.getElementById('quickWorkoutOpen').onclick=()=>window.FitApp.startWorkout(select.value);
+    document.getElementById('quickWorkoutOpen').onclick=()=>window.FitApp.startSavedWorkout(select.value);
+    document.getElementById('quickWorkoutReview').onclick=()=>window.FitApp.startWorkout(select.value);
 }
 
 function refreshDrafts(){
     let panel=document.getElementById('draftsPanel');
-    if(!panel){panel=element('section','panel');panel.id='draftsPanel';document.querySelector('#tab-workouts .creation-grid').before(panel);}
+    if(!panel){panel=element('section','panel');panel.id='draftsPanel';document.getElementById('workoutAddButton').before(panel);}
     const drafts=listDrafts();panel.hidden=!drafts.length;panel.replaceChildren(element('h2','','Continuar um rascunho'),element('p','','Salvo apenas neste dispositivo. Sua ficha original permanece preservada.'));
     for(const {key,value}of drafts){
         const valid=validDraft(value,window.FitStore?.uid),row=element('article','draft-row');
@@ -161,7 +169,7 @@ export function setupMobileFlow(){
     let scheduled=false;
     const refresh=()=>{scheduled=false;refreshHome();refreshDrafts();};
     const schedule=()=>{if(!scheduled){scheduled=true;requestAnimationFrame(refresh);}};
-    for(const name of ['fitapp:datachange','fitapp:cloudchange','fitapp:draftschange','storage'])window.addEventListener(name,schedule);
+    for(const name of ['fitapp:datachange','fitapp:cloudchange','fitapp:draftschange','fitapp:accountchange','storage'])window.addEventListener(name,schedule);
     document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')schedule();});
     for(const name of ['input','change'])document.getElementById('workoutPreview').addEventListener(name,()=>{persistDraft();const status=document.getElementById('previewDraftStatus');if(status)status.textContent=state.draftId?'Rascunho salvo neste dispositivo':'';});
     window.addEventListener('pagehide',persistDraft);

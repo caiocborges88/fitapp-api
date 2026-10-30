@@ -1,3 +1,4 @@
+const auditPath=name=>'audit/'+(process.env.FITAPP_AUDIT_PREFIX?process.env.FITAPP_AUDIT_PREFIX+'-':'')+name;
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
@@ -42,7 +43,7 @@ const fake=require('./fixtures/firebase.cjs');
         await page.evaluate(()=>FitApp.openHistoryModal());
         assert.equal(await page.locator('#historyListView .history-completion').first().textContent(),'Parcial');
         await page.evaluate(()=>document.getElementById('historyModal').style.display='none');
-        await page.click('#nav-treino');await page.click('#quickWorkoutOpen');await page.click('#btnStartWorkout');
+        await page.click('#nav-treino');await page.click('#quickWorkoutOpen');
         const side=await page.evaluate(async()=>{const {state}=await import('/js/state.js');return state.currentRoutine.findIndex(block=>block.exercises.some(ex=>ex.sideMode==='alternating'));});
         await page.locator(`#rp_set_${side}_0_1`).fill('21');await page.locator(`#chk_set_${side}_0_1`).check();
         await page.locator(`#rp_set_${side}_0_2`).fill('27');await page.locator(`#chk_set_${side}_0_2`).check();
@@ -82,7 +83,7 @@ const fake=require('./fixtures/firebase.cjs');
         assert.doesNotMatch(await page.locator('#trainingTracking').textContent(),/1 de 3 registros|Supino Inclinado/);
         checks.push('temas, celular sem transbordamento, legado sem inferência e separação entre contas');
         assert.deepEqual(errors,[]);
-        fs.writeFileSync('audit/training-tracking-browser-validation.json',JSON.stringify({date:new Date().toISOString(),mode:'Firebase simulado; dados de teste locais',physicalDevices:false,checks,errors},null,2)+'\n');
+        fs.writeFileSync(auditPath('training-tracking-browser-validation.json'),JSON.stringify({date:new Date().toISOString(),mode:'Firebase simulado; dados de teste locais',physicalDevices:false,checks,errors},null,2)+'\n');
         console.log(JSON.stringify({passed:checks.length,checks,errors}));
     }finally{if(browser)await browser.close();server.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

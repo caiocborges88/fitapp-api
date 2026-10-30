@@ -1,5 +1,7 @@
 # Experiência móvel: criar, revisar e iniciar treinos
 
+Atualização de 30/10/2026: [SIMPLIFICACAO-DO-FLUXO-2026-10-30.md](SIMPLIFICACAO-DO-FLUXO-2026-10-30.md) substitui o acesso cotidiano em dois toques pelo início direto de uma ficha compatível e prioriza os dois ABCs prontos. As descrições abaixo registram a entrega de 28/10; não reintroduza foco/experiência, ABCD ou opções antigas nas novas escolhas.
+
 28/10/2026. Implementação publicada no endereço oficial com autorização do usuário. Guia de desenvolvimento: [AGENTS.md](../AGENTS.md). Release e instruções para Android: [PUBLICACAO-2026-10-28.md](PUBLICACAO-2026-10-28.md).
 
 ## Fase 1 — Documentação e limites

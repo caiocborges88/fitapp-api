@@ -1,3 +1,4 @@
+const auditPath=name=>'audit/'+(process.env.FITAPP_AUDIT_PREFIX?process.env.FITAPP_AUDIT_PREFIX+'-':'')+name;
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
@@ -22,7 +23,7 @@ const fake=require('./fixtures/firebase.cjs');
         await page.getByRole('tab',{name:/Treino A/}).click();
         assert.match(await page.locator('#cycle-day-panel').textContent(),/120|Descanso/);
         await page.waitForFunction(()=>!document.getElementById('toast').classList.contains('show'));
-        await page.screenshot({path:'audit/workout-models-cycle-light.png'});
+        await page.screenshot({path:auditPath('workout-models-cycle-light.png')});
         await page.click('#saveAndTrainButton');
         await page.waitForFunction(async()=>(await import('/js/state.js')).state.isWorkoutActive);
         const plan=await page.evaluate(()=>JSON.parse(FitStore.get('fitapp_campaign_data')));
@@ -49,7 +50,7 @@ const fake=require('./fixtures/firebase.cjs');
         await page.click('#nav-treino');await page.waitForFunction(()=>document.getElementById('quickWorkoutName')?.textContent.startsWith('Treino B'));
         checks.push('falha de salvamento mantém sessão; parcial confirmado avança de A para B');
 
-        await page.click('#quickWorkoutOpen');await page.click('#btnStartWorkout');
+        await page.click('#quickWorkoutOpen');
         const side=await page.evaluate(async()=>{const {state}=await import('/js/state.js');return state.currentRoutine.findIndex(b=>b.exercises.some(e=>e.sideMode==='alternating'));});
         assert.equal(await page.locator(`#chk_set_${side}_0_1`).getAttribute('aria-label'),'Série 1, lado esquerdo realizada');
         await page.locator(`#rp_set_${side}_0_1`).fill('21');await page.locator(`#chk_set_${side}_0_1`).check();
@@ -85,7 +86,7 @@ const fake=require('./fixtures/firebase.cjs');
             await page.waitForFunction(()=>!document.getElementById('toast').classList.contains('show'));
             await page.emulateMedia({colorScheme:scheme});await page.setViewportSize({width,height});
             await page.evaluate(()=>{document.querySelectorAll('#exerciseList .model-block-tools').forEach(d=>d.open=false);scrollTo(0,0);});
-            await page.screenshot({path:'audit/workout-models-session-'+scheme+'.png'});
+            await page.screenshot({path:auditPath('workout-models-session-')+scheme+'.png'});
             assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);
         }
         await page.setViewportSize({width:390,height:844});
@@ -139,7 +140,7 @@ const fake=require('./fixtures/firebase.cjs');
         assert.equal(await offline.evaluate(()=>JSON.parse(FitStore.get('fitapp_campaign_data')).method),'abc_sinergista');
         await offlineContext.close();checks.push('modelo novo, scripts e sessão autenticada recuperados offline; parcial permanece na fila local');
         assert.deepEqual(errors,[]);
-        fs.writeFileSync('audit/workout-models-browser-validation.json',JSON.stringify({date:'2026-10-29',browser:'Edge headless',services:'Firebase simulado',physicalDevices:false,checks,errors},null,2));
+        fs.writeFileSync(auditPath('workout-models-browser-validation.json'),JSON.stringify({date:'2026-10-29',browser:'Edge headless',services:'Firebase simulado',physicalDevices:false,checks,errors},null,2));
         console.log('Novos modelos:',checks.length,'cenários aprovados');
     }catch(error){console.error(error);if(page)console.log(await page.evaluate(async()=>({toast:document.getElementById('toast')?.textContent,optional:(await import('/js/state.js')).state.currentRoutine.filter(b=>b.optional).map(b=>({enabled:b.enabled,checked:b.exercises.map(e=>e.setsData?.map(s=>s.checked))}))})));process.exitCode=1;}
     finally{await browser?.close();server.close();}

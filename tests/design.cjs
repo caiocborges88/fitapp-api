@@ -3,7 +3,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const server=require('../scripts/serve.cjs');
 const fakeFirebase=require('./fixtures/firebase.cjs');
-const auditPrefix=process.env.FITAPP_AUDIT_PREFIX||'energy-design';
+const auditPrefix=process.env.FITAPP_AUDIT_PREFIX?process.env.FITAPP_AUDIT_PREFIX+'-design':'energy-design';
 (async()=>{
     await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
     const origin=`http://127.0.0.1:${server.address().port}`;
@@ -41,7 +41,7 @@ const auditPrefix=process.env.FITAPP_AUDIT_PREFIX||'energy-design';
                 assert.equal(await page.locator('#snapModal').count(),0);
                 await capture('home');
                 for(const id of ['workouts','evolucao','perfil']){await page.click('#nav-'+id);await capture(id);}
-                await page.click('#nav-workouts');await page.getByRole('button',{name:/Cadastrar minha ficha/}).click();
+                await page.click('#nav-workouts');await page.click('#workoutAddButton');await page.getByRole('button',{name:/Cadastrar minha ficha/}).click();
                 await page.fill('#customWorkoutName','Minha ficha de teste');
                 await page.getByRole('button',{name:'Exercício',exact:true}).click();
                 await page.fill('#searchAddInput','Prancha');await page.locator('#addExerciseList .swap-item').first().click();

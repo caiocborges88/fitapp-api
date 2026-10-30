@@ -1,3 +1,4 @@
+const auditPath=name=>'audit/'+(process.env.FITAPP_AUDIT_PREFIX?process.env.FITAPP_AUDIT_PREFIX+'-':'')+name;
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
@@ -67,7 +68,7 @@ const fake=require('./fixtures/firebase.cjs');
   await page.getByRole('button',{name:'Revisar versão para este ambiente',exact:true}).click();
   assert.match(await page.locator('#environmentProposalReview').textContent(),/Reto Femoral/);
   await page.getByRole('button',{name:'Usar versão reduzida nesta sessão',exact:true}).click();
-  await page.screenshot({path:'audit/environment-proposal-mobile.png',fullPage:true,animations:'disabled'});
+  await page.screenshot({path:auditPath('environment-proposal-mobile.png'),fullPage:true,animations:'disabled'});
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
   await page.evaluate(()=>FitApp.toggleGlobalEnv());
   assert.equal((await read()).status,undefined);
@@ -81,7 +82,7 @@ const fake=require('./fixtures/firebase.cjs');
   await page.evaluate(()=>FitApp.beginWorkoutExecution());assert.equal((await read()).active,true);
   assert.equal(await page.evaluate(()=>FitStore.get('fitapp_custom_workouts')),savedC);
   assert.deepEqual(errors,[]);
-  fs.writeFileSync('audit/environment-proposal-validation.json',JSON.stringify({status:'ok',environment:'local; Firebase simulated',checks:['revisão não altera prévia','cobertura ausente visível','salvamento e execução bloqueados durante revisão','cancelamento sem aplicar','aplicação explícita somente na sessão','restauração da ficha','proposta obsoleta rejeitada','mudança de recursos recalcula ficha completa','grupo inteiro ausente bloqueado','volta à academia restaura extensora','início separado da aplicação','largura móvel'],pageErrors:errors},null,2)+'\n');
+  fs.writeFileSync(auditPath('environment-proposal-validation.json'),JSON.stringify({status:'ok',environment:'local; Firebase simulated',checks:['revisão não altera prévia','cobertura ausente visível','salvamento e execução bloqueados durante revisão','cancelamento sem aplicar','aplicação explícita somente na sessão','restauração da ficha','proposta obsoleta rejeitada','mudança de recursos recalcula ficha completa','grupo inteiro ausente bloqueado','volta à academia restaura extensora','início separado da aplicação','largura móvel'],pageErrors:errors},null,2)+'\n');
   console.log('Propostas por ambiente: revisão, cobertura explícita, aplicação, execução e restauração aprovadas.');
  }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});

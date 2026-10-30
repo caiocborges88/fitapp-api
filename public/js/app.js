@@ -278,7 +278,8 @@ async function exportStravaCard(historyIndex = -1) {
         if(state.isWorkoutActive){showToast('Conclua ou descarte a sessão atual antes de abrir outra ficha.');return;}
         const chosen=document.getElementById('mainMethodSelector')?.value;
         const saved=readJSON(safeGet('fitapp_campaign_data'),null);
-        if(/^[A-C]$/.test(type)&&isWorkoutModel(chosen)&&saved?.method!==chosen){openForgeModal({fromPreferences:true});showToast('Revise e salve o ciclo completo antes de escolher o dia.');return;}
+        if(/^[A-D]$/.test(type)&&saved&&((saved.schemaVersion!=null&&![1,2].includes(saved.schemaVersion))||(saved.modelVersion!=null&&saved.modelVersion!==1))){showToast('Este plano precisa de uma versão mais recente do aplicativo. Seus dados foram preservados.');return false;}
+        if(/^[A-C]$/.test(type)&&isWorkoutModel(chosen)&&!saved?.workouts?.[type]?.length){openForgeModal({fromPreferences:true});showToast('Revise e salve o ciclo completo antes de escolher o dia.');return;}
         if(!persistDraft())return;
         const tabTreino = document.getElementById('nav-treino');
         if (tabTreino) {
@@ -288,7 +289,22 @@ async function exportStravaCard(historyIndex = -1) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
         state.currentWorkoutType = type;
-        loadWorkout();
+        return loadWorkout();
+    }
+
+    function startSavedWorkout(type) {
+        if(state.isWorkoutActive){switchTab('tab-treino','nav-treino');return false;}
+        const stored=safeGet('fitapp_active_state');
+        if(stored){showToast('Há uma sessão guardada neste dispositivo. Reabra o aplicativo para recuperá-la antes de iniciar outra.');return false;}
+        const plan=readJSON(safeGet('fitapp_campaign_data'),null);
+        const template=type?.startsWith('custom_')?readJSON(safeGet('fitapp_custom_workouts'),[]).find(item=>String(item.id)===type.slice(7)):null;
+        if(!template&&!plan?.workouts?.[type]?.length){showToast('Este treino não está mais disponível. Escolha outro em Meus treinos.');return false;}
+        if(!startWorkout(type))return false;
+        // The same preparation, validation and durable save apply to both entry points.
+        // Adaptations require review, even when the adapted exercises would be valid.
+        if(state.environmentProposal||reviewRoutine(state.currentRoutine,window.dictionaryData,environmentOptions()).length)return false;
+        executeWorkoutStart();
+        return state.isWorkoutActive;
     }
 
     // --- NOVO MOTOR DE AERÓBICO (Imune à Hibernação Mobile) ---
@@ -485,31 +501,11 @@ function saveWorkoutState() {
                     if(nameContainer) nameContainer.style.display = 'block';
                     if(nameInput) nameInput.value = customWorkout.name;
                 }
-            }
+            }else{showToast('Esta ficha não está mais disponível.');cancelWorkoutPreview();return false;}
         } else if (type === 'A' || type === 'B' || type === 'C' || type === 'D') {
-            const method = document.getElementById('mainMethodSelector') ? document.getElementById('mainMethodSelector').value : 'ppl';
-            
-            // TRAVA DE MESOCICLO: Congela o treino para garantir a Sobrecarga Progressiva
-            const campaignKey = 'fitapp_campaign_data';
-            const savedCampaignStr = safeGet(campaignKey);
-            let campaignData = readJSON(savedCampaignStr, null) || { method: method, level: level, workouts: {}, startDate: new Date().toISOString() };
-
-            // Se o usuário alterou o método ou nível manualmente na tela, quebra a campanha atual
-            const replacing=!retiredMethod(method)&&(campaignData.method !== method || campaignData.level !== level || campaignData.profile !== profile);
-            if (replacing) {
-                campaignData = { method: method, level: level, workouts: {}, startDate: new Date().toISOString() };
-            }
-
-            try {
-                campaignData.workouts = executeForgePlan(method, readJSON(safeGet('fitapp_blacklist'), []),
-                    {environment:'academia', allEquipment:true}, campaignData.workouts);
-            } catch (error) { showToast(error.message); cancelWorkoutPreview(); return; }
-            if(!campaignData.workouts[type]?.length){showToast('Este dia não está presente na ficha salva. Revise o plano; nenhum dia foi acrescentado.');cancelWorkoutPreview();return;}
-            campaignData.id = campaignData.id || newId();
-            if(!retiredMethod(method))campaignData.profile = profile;
-            if(replacing){try{commitWorkoutPlan(window.FitStore,campaignData,{resetCount:true});}catch(error){showToast('Não foi possível gravar o novo plano. O plano anterior foi mantido.');cancelWorkoutPreview();return;}}
-            else if(!safeSet(campaignKey, JSON.stringify(campaignData))){cancelWorkoutPreview();return;}
-            saveCampaignToCloud();
+            const campaignData=readJSON(safeGet('fitapp_campaign_data'),null);
+            if(!campaignData?.workouts?.[type]?.length){showToast('Este dia não está presente na ficha salva. Revise o plano; nenhum dia foi acrescentado.');cancelWorkoutPreview();return false;}
+            // Opening a saved day never regenerates or writes its prescription.
             state.currentRoutine = JSON.parse(JSON.stringify(campaignData.workouts[type]));
             state.sessionOrigin={userId:window.FitStore.uid,planId:campaignData.id,revision:campaignData.revision||0,day:type,method:campaignData.method};
             state.activeRestBlockId=state.currentRoutine.find(block=>!block.optional)?.id||null;
@@ -534,6 +530,7 @@ function saveWorkoutState() {
             renderPreviewList();
             if(!nameInput.value.trim())nameInput.value=document.getElementById('previewTitle').textContent;
         }
+        return true;
     }
 
     function cancelWorkoutPreview() {
@@ -1589,7 +1586,7 @@ function lockCampaign() {
         }
     }
     return { 
-        init, createManualWorkout, loadWorkout, syncOfflineWorkouts, filterLibrary, openSwapModal, confirmSwap, startWorkout, startCardio, toggleCardioTimer, updateDynamicCards,
+        init, createManualWorkout, loadWorkout, syncOfflineWorkouts, filterLibrary, openSwapModal, confirmSwap, startWorkout, startSavedWorkout, startCardio, toggleCardioTimer, updateDynamicCards,
         beginWorkoutExecution, acceptSnap, declineSnap, cancelWorkoutPreview,
         toggleGlobalEnv, updateEnvUI, adaptCurrentEnvironment, setEnvironmentResources, reviewEnvironmentProposal, acceptEnvironmentProposal, cancelEnvironmentProposal, updateCampaignDashboard, resetCampaign, lockCampaign,
         openAddExerciseModal, filterAddModal, confirmAddExercise, removeExercise, setCategoryFilter,

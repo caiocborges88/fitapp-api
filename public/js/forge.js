@@ -40,7 +40,8 @@ export function openForgeModal({fromPreferences=false}={}) {
     for(const [target,source]of [['forgeProfile','profileSelector'],['forgeLevel','levelSelector']]){
         const field=document.getElementById(target);if(field)field.value=document.getElementById(source).value;
     }
-    if(fromPreferences){const method=document.getElementById('mainMethodSelector').value;document.getElementById('forgeMethod').value=isWorkoutModel(method)?method:'abc_tradicional';}
+    const method=fromPreferences?document.getElementById('mainMethodSelector').value:readJSON(window.FitStore?.get('fitapp_campaign_data'),null)?.method;
+    document.getElementById('forgeMethod').value=isWorkoutModel(method)?method:'abc_tradicional';
     window.FitEnvironment?.refresh();
     document.getElementById('forgeModal').style.display = 'flex';
     updateForgeOptions();
@@ -49,6 +50,8 @@ export function openForgeModal({fromPreferences=false}={}) {
 
 export function updateForgeOptions() {
     const fixed=isWorkoutModel(document.getElementById('forgeMethod').value);
+    const explanation=document.getElementById('forgeModelDescription');
+    if(explanation)explanation.textContent=document.getElementById('forgeMethod').value==='abc_sinergista'?'ABC sinergista: alguns exercícios são feitos em pares, seguidos pelo descanso da volta. Os demais são feitos em séries convencionais.':'ABC tradicional: faça as séries de um exercício antes de passar ao próximo. O descanso já está definido em cada bloco.';
     for(const id of ['forgeProfile','forgeLevel'])document.getElementById(id)?.closest('label')?.toggleAttribute('hidden',fixed);
     const box = document.getElementById('forgeSubOptionsBox');
     if (box) box.hidden = true;

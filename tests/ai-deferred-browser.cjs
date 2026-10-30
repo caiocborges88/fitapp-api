@@ -1,3 +1,4 @@
+const auditPath=name=>'audit/'+(process.env.FITAPP_AUDIT_PREFIX?process.env.FITAPP_AUDIT_PREFIX+'-':'')+name;
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
@@ -18,12 +19,12 @@ const fake=require('./fixtures/firebase.cjs');
   await page.evaluate(()=>FitApp.switchTab('tab-workouts','nav-workouts'));
   assert.equal(await page.locator('[onclick*="openImportAiModal"]').count(),0);
   assert.equal(await page.locator('#importAiModal').count(),0);
-  assert.match(await page.locator('#tab-workouts').textContent(),/Cadastrar minha ficha/);
+  await page.click('#workoutAddButton');assert.equal(await page.getByRole('button',{name:'Cadastrar minha ficha',exact:false}).isVisible(),true);await page.keyboard.press('Escape');
   assert.equal(await page.locator('.creation-card').count(),2);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
-  await page.screenshot({path:'audit/ai-deferred-mobile.png',fullPage:true,animations:'disabled'});
+  await page.screenshot({path:auditPath('ai-deferred-mobile.png'),fullPage:true,animations:'disabled'});
   await page.setViewportSize({width:1440,height:1000});
-  await page.screenshot({path:'audit/ai-deferred-desktop.png',fullPage:true,animations:'disabled'});
+  await page.screenshot({path:auditPath('ai-deferred-desktop.png'),fullPage:true,animations:'disabled'});
   await page.setViewportSize({width:390,height:844});
   const queue=await page.evaluate(()=>{
    const text=JSON.stringify([{nome_treino:'Rascunho anterior',exercicios:[{nome:'Flexão de Braço (Padrão)',series:3,repeticoes:'10 rep'}]}]);
@@ -52,7 +53,7 @@ const fake=require('./fixtures/firebase.cjs');
   assert.equal(await page.getByRole('tab').locator('strong').count(),3);
   assert.equal(await page.evaluate(()=>FitStore.get('fitapp_fila_ia')),queue);
   assert.equal(requests.length,0);assert.deepEqual(errors,[]);
-  fs.writeFileSync('audit/ai-deferred-validation.json',JSON.stringify({status:'ok',environment:'local; Firebase simulated; no AI provider calls',checks:['entradas de IA removidas','chamadas legadas locais bloqueadas','cliente não envia requisições de IA','fila antiga preservada sem restauração automática','cadastro manual disponível','modelo validado gera ciclo'],aiRequests:requests,pageErrors:errors},null,2)+'\n');
+  fs.writeFileSync(auditPath('ai-deferred-validation.json'),JSON.stringify({status:'ok',environment:'local; Firebase simulated; no AI provider calls',checks:['entradas de IA removidas','chamadas legadas locais bloqueadas','cliente não envia requisições de IA','fila antiga preservada sem restauração automática','cadastro manual disponível','modelo validado gera ciclo'],aiRequests:requests,pageErrors:errors},null,2)+'\n');
   console.log('IA adiada: interface, bloqueios, rascunhos preservados e montagem sem IA aprovados.');
  }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});

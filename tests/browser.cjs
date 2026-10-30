@@ -1,3 +1,4 @@
+const auditPath=name=>'audit/'+(process.env.FITAPP_AUDIT_PREFIX?process.env.FITAPP_AUDIT_PREFIX+'-':'')+name;
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
@@ -57,9 +58,9 @@ const fakeFirebase=require('./fixtures/firebase.cjs');
     await page.evaluate(()=>window.abortarMissao());
     const {active}=await page.evaluate(async()=>({active:(await import('/js/state.js')).state.isWorkoutActive}));assert.equal(active,false);
     await page.evaluate(()=>{FitApp.switchTab('tab-biblioteca','nav-biblioteca');FitApp.openAddExerciseModal();document.getElementById('searchAddInput').value='zzzz';FitApp.filterAddModal();});
-    await page.screenshot({path:path.join(__dirname,'../audit/fitapp-validacao.png'),fullPage:true});
+    await page.screenshot({path:path.join(__dirname,'../',auditPath('fitapp-validacao.png')),fullPage:true});
     assert.deepEqual(errors,[]);
-    fs.writeFileSync(path.join(__dirname,'../audit/browser-validation.json'),JSON.stringify({viewport:'390x844',methods:6,checks:['inicialização','forja','templates','registro','edição','restauração','histórico','IA adiada; duplicação de ficha','nova sessão','abortamento','busca'],pageErrors:errors,cloud:'Firebase e respostas de IA simulados; testes de autorização separados.'},null,2));
+    fs.writeFileSync(path.join(__dirname,'../',auditPath('browser-validation.json')),JSON.stringify({viewport:'390x844',methods:6,checks:['inicialização','forja','templates','registro','edição','restauração','histórico','IA adiada; duplicação de ficha','nova sessão','abortamento','busca'],pageErrors:errors,cloud:'Firebase e respostas de IA simulados; testes de autorização separados.'},null,2));
     console.log('Navegador: fluxos principais aprovados, sem exceções.');
   }finally{await context.close();await browser.close();await new Promise(r=>server.close(r));}
 })().catch(error=>{console.error(error);server.close();process.exitCode=1;});

@@ -1,0 +1,10 @@
+{
+  "status": "ok",
+  "environment": "local Edge; Firebase simulated",
+  "checks": [
+    "título abdominal não promete core; duplicatas e séries editadas são refletidas sem reescrever legado",
+    "jornada completa: Casa, lacuna, edição da sessão, ficha nova, execução, recarga e registro",
+    "ciclo mostra core real por dia e mantém ficha manual sem impor cobertura automática",
+    "Parque não conta puxada indisponível e recalcula quando barra alta e banco são declarados"
+  ]
+}

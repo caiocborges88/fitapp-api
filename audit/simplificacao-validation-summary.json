@@ -1,0 +1,57 @@
+{
+  "checkedAt": "2026-10-30T12:45:20.186595+00:00",
+  "status": "passed",
+  "scope": "Fluxo simplificado: modelos prontos como principal; cadastro manual secundário",
+  "version": "8025f00c044b5983",
+  "productionDeployment": false,
+  "productionWrites": false,
+  "physicalDevices": false,
+  "environment": "Edge automatizado; Firebase simulado e emuladores Auth/Firestore/Hosting demo-fitapp",
+  "build": "passed",
+  "check": "passed",
+  "gitDiffWhitespace": "passed",
+  "unitTests": {
+    "total": 121,
+    "passed": 121,
+    "skipped": 0,
+    "emulated": true,
+    "command": "firebase emulators:exec --only auth,firestore,hosting --project demo-fitapp \"npm run test:models:emulated\"",
+    "includes": "regras, recompensas, sincronização entre dois navegadores e exportação trainingContext"
+  },
+  "initialSandboxAttempt": {
+    "npmTest": "localhost EACCES; resolvido executando a suíte completa emulada fora do sandbox",
+    "edge": "restrição do sandbox; verificações aprovadas fora do sandbox"
+  },
+  "browserRegressions": [
+    "simple-flow",
+    "models",
+    "tracking",
+    "editor",
+    "environment",
+    "environment-proposal",
+    "workout-priorities",
+    "coverage",
+    "model-settings",
+    "ai-deferred",
+    "mobile-flow",
+    "appearance: 16 combinações",
+    "design: 4 combinações",
+    "offline: 65 recursos",
+    "browser",
+    "complete-plan"
+  ],
+  "contracts": [
+    "abrir dia salvo não regenera nem grava plano",
+    "validação antes de iniciar e salvar sessão durável",
+    "conferência obrigatória de pendências e adaptações",
+    "alterações de sessão isoladas",
+    "sequência por registros duráveis; ack não desfaz troca manual",
+    "formatos e versões desconhecidas preservados",
+    "receitas, API e regras não alteradas pela simplificação"
+  ],
+  "github": {
+    "branch": "codex/simplificar-fluxo-treino",
+    "prerequisiteCommit": "5824b845b5858e9c8022168d1512c4f3c56aced5",
+    "deploymentAuthorized": false
+  }
+}

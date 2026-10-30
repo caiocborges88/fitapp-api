@@ -1,3 +1,4 @@
+const auditPath=name=>'audit/'+(process.env.FITAPP_AUDIT_PREFIX?process.env.FITAPP_AUDIT_PREFIX+'-':'')+name;
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
@@ -116,7 +117,7 @@ const path=require('node:path');
   const contextBackup=JSON.parse(fs.readFileSync(await(await contextDownload).path(),'utf8'));
   assert.equal(contextBackup.history.find(item=>item._id===trackingId).trainingContext,trackingSource);
   assert.deepEqual(errors,[]);
-  fs.writeFileSync(path.resolve(__dirname,'../audit/sync-browser-validation.json'),JSON.stringify({status:'ok',project:'demo-fitapp',productionWrites:false,checks:['dois dispositivos concorrentes','cópia de conflito independente','resposta perdida após commit seguida de nova edição sem duplicar progresso','exclusão não reaparece','115 sessões paginadas sem lacunas','cursor de exportação independente','exclusão permanente de sessão','exclusão offline e retomada','exportação completa recusada offline','exportação JSON com 113 sessões','escolha explícita do plano preservado'],pageErrors:errors},null,2)+'\n');
+  fs.writeFileSync(path.resolve(__dirname,'../',auditPath('sync-browser-validation.json')),JSON.stringify({status:'ok',project:'demo-fitapp',productionWrites:false,checks:['dois dispositivos concorrentes','cópia de conflito independente','resposta perdida após commit seguida de nova edição sem duplicar progresso','exclusão não reaparece','115 sessões paginadas sem lacunas','cursor de exportação independente','exclusão permanente de sessão','exclusão offline e retomada','exportação completa recusada offline','exportação JSON com 113 sessões','escolha explícita do plano preservado'],pageErrors:errors},null,2)+'\n');
   console.log('Sincronização, paginação e exportação validadas em dois dispositivos com emuladores.');
  }finally{await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

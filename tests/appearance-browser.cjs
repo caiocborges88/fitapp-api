@@ -3,7 +3,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const server=require('../scripts/serve.cjs');
 const fake=require('./fixtures/firebase.cjs').replace("uid:'browser-test'","uid:sessionStorage.getItem('appearance-test-uid')||'browser-test'");
-const auditPrefix=process.env.FITAPP_AUDIT_PREFIX||'energy';
+const auditPrefix=process.env.FITAPP_AUDIT_PREFIX?process.env.FITAPP_AUDIT_PREFIX+'-appearance':'energy';
 (async()=>{
     await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
     const browser=await chromium.launch({...(process.platform==='win32'?{channel:'msedge'}:{}),headless:true});
@@ -90,7 +90,7 @@ const auditPrefix=process.env.FITAPP_AUDIT_PREFIX||'energy';
         await capture('profile-text-200');
         assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),JSON.stringify(await page.evaluate(()=>[...document.querySelectorAll('#tab-perfil *')].filter(el=>el.getBoundingClientRect().right>innerWidth+1).map(el=>({tag:el.tagName,id:el.id,cl:el.className})))));
         await page.reload();await ready(page);
-        await page.click('#nav-treino');await page.click('#quickWorkoutOpen');await page.click('#btnStartWorkout');
+        await page.click('#nav-treino');await page.click('#quickWorkoutOpen');
         await page.locator('.rp-val').first().fill('10');await page.locator('.kg-val').first().fill('20');
         await page.locator('.chk-set').first().check();
         assert.equal(await page.locator('.set-confirmed').count(),1);

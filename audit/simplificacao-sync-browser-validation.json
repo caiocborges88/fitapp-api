@@ -1,0 +1,19 @@
+{
+  "status": "ok",
+  "project": "demo-fitapp",
+  "productionWrites": false,
+  "checks": [
+    "dois dispositivos concorrentes",
+    "cópia de conflito independente",
+    "resposta perdida após commit seguida de nova edição sem duplicar progresso",
+    "exclusão não reaparece",
+    "115 sessões paginadas sem lacunas",
+    "cursor de exportação independente",
+    "exclusão permanente de sessão",
+    "exclusão offline e retomada",
+    "exportação completa recusada offline",
+    "exportação JSON com 113 sessões",
+    "escolha explícita do plano preservado"
+  ],
+  "pageErrors": []
+}

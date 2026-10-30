@@ -1,3 +1,4 @@
+const auditPath=name=>'audit/'+(process.env.FITAPP_AUDIT_PREFIX?process.env.FITAPP_AUDIT_PREFIX+'-':'')+name;
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
@@ -53,11 +54,11 @@ const fakeFirebase=require('./fixtures/firebase.cjs');
         assert.equal(await page.evaluate(()=>FitApp.safeGet('fitapp_week_log')),snapshot);
         await page.evaluate(()=>{FitApp.cancelWorkoutPreview();document.getElementById('nav-workouts').click();});
         assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
-        await page.screenshot({path:'audit/editor-workouts-mobile.png',fullPage:true,animations:'disabled'});
+        await page.screenshot({path:auditPath('editor-workouts-mobile.png'),fullPage:true,animations:'disabled'});
         await page.evaluate(()=>FitEditor.editTemplate('original'));
-        await page.screenshot({path:'audit/editor-preview-mobile.png',fullPage:true,animations:'disabled'});
+        await page.screenshot({path:auditPath('editor-preview-mobile.png'),fullPage:true,animations:'disabled'});
         assert.deepEqual(errors,[]);
-        fs.writeFileSync('audit/editor-validation.json',JSON.stringify({status:'ok',environment:'local; Firebase simulated',checks:['session changes isolated','no copied completion flags','explicit permanent editing','exercise order','duplicate with independent IDs','template ordering','plan day isolated','campaign count preserved','local stale edit rejected','history unchanged','mobile width'],pageErrors:errors},null,2)+'\n');
+        fs.writeFileSync(auditPath('editor-validation.json'),JSON.stringify({status:'ok',environment:'local; Firebase simulated',checks:['session changes isolated','no copied completion flags','explicit permanent editing','exercise order','duplicate with independent IDs','template ordering','plan day isolated','campaign count preserved','local stale edit rejected','history unchanged','mobile width'],pageErrors:errors},null,2)+'\n');
         console.log('Editor: isolamento, cópia, ordenação, plano e histórico preservados.');
     }finally{await context.close();await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);server.close();process.exitCode=1;});
