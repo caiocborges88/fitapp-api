@@ -42,7 +42,11 @@ Evidências principais:
 - `audit/simplificacao-workout-models-browser-validation.json`, `audit/simplificacao-training-tracking-browser-validation.json`, `audit/simplificacao-offline-validation.json` e `audit/simplificacao-sync-browser-validation.json`.
 - `audit/simplificacao-validation-summary.json`, consolidando escopo e comandos, e `audit/simplificacao-git-baseline.json`, identificando os pré-requisitos e seu snapshot recuperável.
 
-O GitHub recebe a branch `codex/simplificar-fluxo-treino`. O commit `5824b845b5858e9c8022168d1512c4f3c56aced5` registra separadamente os pré-requisitos ABC/acompanhamento anteriores, recuperados do snapshot publicado `d2f51cd46fa4626c` e da documentação local já existente. O commit seguinte contém esta simplificação. Auditorias anteriores e a extração de chat não foram incluídas indiscriminadamente; as novas evidências usam dados de teste.
+Registro no GitHub concluído em 30/10/2026, após autorização explícita para o repositório público `caiocborges88/fitapp-api`, os fontes, a documentação e as evidências de teste. Branch `codex/simplificar-fluxo-treino`; [PR #1 — Simplificar escolha do modelo ABC e início do treino](https://github.com/caiocborges88/fitapp-api/pull/1), aberto e sem merge.
+
+O commit `5824b845b5858e9c8022168d1512c4f3c56aced5` registra separadamente os pré-requisitos ABC/acompanhamento anteriores, recuperados do snapshot publicado `d2f51cd46fa4626c` e da documentação local já existente. O commit `3034f363e98bbea4f7b3cc6f4071690ef38bfcb7` contém esta simplificação. Auditorias anteriores e a extração de chat não foram incluídas indiscriminadamente; as novas evidências usam dados de teste. Um commit documental posterior registra o envio e o PR.
+
+A primeira tentativa de push foi recusada pela revisão automática por exigir autorização específica do destino público e do conteúdo. Após a confirmação explícita do usuário, o mesmo push foi aceito. Não houve envio alternativo durante o bloqueio, publicação em produção ou inclusão de credenciais/dados reais de treino.
 
 ## Publicação e recuperação
 

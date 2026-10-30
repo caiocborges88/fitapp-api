@@ -52,6 +52,21 @@
   "github": {
     "branch": "codex/simplificar-fluxo-treino",
     "prerequisiteCommit": "5824b845b5858e9c8022168d1512c4f3c56aced5",
-    "deploymentAuthorized": false
+    "deploymentAuthorized": false,
+    "status": "pull_request_open",
+    "repository": "caiocborges88/fitapp-api",
+    "visibility": "public",
+    "simplificationCommit": "3034f363e98bbea4f7b3cc6f4071690ef38bfcb7",
+    "pushed": true,
+    "pullRequestCreated": true,
+    "pullRequestUrl": "https://github.com/caiocborges88/fitapp-api/pull/1",
+    "pullRequestNumber": 1,
+    "merged": false,
+    "authorization": "Usuário autorizou explicitamente os commits, fontes, documentação e evidências no repositório público e a abertura de PR em 30/10/2026.",
+    "initialAutoReviewRejection": {
+      "reason": "Exigiu autorização explícita do destino público e do conteúdo.",
+      "resolvedAfterUserConfirmation": true,
+      "alternativeUploadAttempted": false
+    }
   }
 }
