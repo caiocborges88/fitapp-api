@@ -1,3 +1,4 @@
+const auditPath=name=>'audit/'+(process.env.FITAPP_AUDIT_PREFIX?process.env.FITAPP_AUDIT_PREFIX+'-':'')+name;
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
@@ -83,8 +84,40 @@ const path=require('node:path');
   });
   await a.getByRole('button',{name:'Usar minha versão preservada'}).click();
   await a.waitForFunction(()=>JSON.parse(FitStore.get('fitapp_campaign_data')||'null')?.id==='restored-plan');
+  // New recipes round-trip through real emulated rules without flattening per-block metadata.
+  await a.evaluate(async()=>{
+   const {executeForgePlan}=await import('/js/forge.js');
+   const workouts=executeForgePlan('abc_sinergista',[],{environment:'academia',allEquipment:true});
+   const plan={id:'models-sync',schemaVersion:2,modelVersion:1,method:'abc_sinergista',level:'padrao',profile:'hipertrofia',workouts,revision:1,startDate:new Date().toISOString()};
+   FitStore.setMany({fitapp_campaign_data:JSON.stringify(plan),fitapp_main_method:plan.method,fitapp_level:'padrao',fitapp_profile:'hipertrofia'});
+   await(await import('/js/sync.js')).saveCampaignToCloud();
+  });
+  const modelCopy=await b.evaluate(async()=>{await(await import('/js/sync.js')).loadCampaignFromCloud();return JSON.parse(FitStore.get('fitapp_campaign_data'));});
+  assert.equal(modelCopy.id,'models-sync');assert.equal(modelCopy.modelVersion,1);assert.equal(modelCopy.workouts.A[0].restSeconds,120);
+  assert.equal(modelCopy.workouts.B.at(-1).exercises[0].sideMode,'alternating');
+  // The immutable session context also survives real rules, another device and export.
+  const trackingId='tracking-context-'+Date.now();
+  const trackingSource=await a.evaluate(async id=>{
+   const {snapshotRoutine,encodeTrainingContext}=await import('/js/training-tracking.js');
+   const {completedSets}=await import('/js/domain.js');
+   const plan=JSON.parse(FitStore.get('fitapp_campaign_data')),routine=structuredClone(plan.workouts.A);
+   const planned=snapshotRoutine(routine,window.dictionaryData);
+   routine[0].exercises[0].setsData=[{checked:true,kg:20,reps:10}];
+   const trainingContext=encodeTrainingContext(planned,routine,window.dictionaryData,{[routine[0].id]:150});
+   await FitAPI.salvarTreino({_id:id,userId:FitStore.uid,date:'2026-10-29',tipo:'A',method:plan.method,duration_secs:180,data:completedSets(routine),complete:false,campaignId:plan.id,trainingContext});
+   return trainingContext;
+  },trackingId);
+  const tracked=await b.evaluate(async id=>{
+   const logs=await FitAPI.carregarHistoricoNuvem(),log=logs.find(item=>item._id===id);
+   return {context:log.trainingContext,comparison:(await import('/js/training-tracking.js')).compareSession(log)};
+  },trackingId);
+  assert.equal(tracked.context,trackingSource);assert.equal(tracked.comparison.rows[0].done,1);assert.equal(tracked.comparison.rows[0].planned,3);assert.equal(tracked.comparison.rows[0].restSeconds,150);
+  await a.evaluate(()=>FitApp.switchTab('tab-perfil','nav-perfil'));
+  const contextDownload=a.waitForEvent('download');await a.click('#exportTrainingData');
+  const contextBackup=JSON.parse(fs.readFileSync(await(await contextDownload).path(),'utf8'));
+  assert.equal(contextBackup.history.find(item=>item._id===trackingId).trainingContext,trackingSource);
   assert.deepEqual(errors,[]);
-  fs.writeFileSync(path.resolve(__dirname,'../audit/sync-browser-validation.json'),JSON.stringify({status:'ok',project:'demo-fitapp',productionWrites:false,checks:['dois dispositivos concorrentes','cópia de conflito independente','resposta perdida após commit seguida de nova edição sem duplicar progresso','exclusão não reaparece','115 sessões paginadas sem lacunas','cursor de exportação independente','exclusão permanente de sessão','exclusão offline e retomada','exportação completa recusada offline','exportação JSON com 113 sessões','escolha explícita do plano preservado'],pageErrors:errors},null,2)+'\n');
+  fs.writeFileSync(path.resolve(__dirname,'../',auditPath('sync-browser-validation.json')),JSON.stringify({status:'ok',project:'demo-fitapp',productionWrites:false,checks:['dois dispositivos concorrentes','cópia de conflito independente','resposta perdida após commit seguida de nova edição sem duplicar progresso','exclusão não reaparece','115 sessões paginadas sem lacunas','cursor de exportação independente','exclusão permanente de sessão','exclusão offline e retomada','exportação completa recusada offline','exportação JSON com 113 sessões','escolha explícita do plano preservado'],pageErrors:errors},null,2)+'\n');
   console.log('Sincronização, paginação e exportação validadas em dois dispositivos com emuladores.');
  }finally{await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

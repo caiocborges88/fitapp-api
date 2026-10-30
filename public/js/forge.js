@@ -6,8 +6,13 @@ import {modelSettings} from './model-settings.js';
 import { state } from './state.js';
 import { normalizeRoutine,readJSON } from './domain.js';
 import {persistDraft} from './drafts.js';
+import {isWorkoutModel,createModelDay} from './workout-models.js';
 
 export function executeForgePlan(method, avoidNames = [], options = environmentOptions(), existingWorkouts = {}) {
+    if(isWorkoutModel(method)){
+        if(Object.keys(existingWorkouts).length)return structuredClone(existingWorkouts);
+        return Object.fromEntries(['A','B','C'].map(day=>[day,createModelDay(method,day,window.dictionaryData,{...options,blacklist:[...(options.blacklist||[]),...avoidNames]})]));
+    }
     if(retiredMethod(method)){
         if(!Object.values(existingWorkouts).some(routine=>Array.isArray(routine)&&routine.length))throw new Error(retiredMethodMessage);
         const saved=structuredClone(existingWorkouts);
@@ -35,7 +40,8 @@ export function openForgeModal({fromPreferences=false}={}) {
     for(const [target,source]of [['forgeProfile','profileSelector'],['forgeLevel','levelSelector']]){
         const field=document.getElementById(target);if(field)field.value=document.getElementById(source).value;
     }
-    if(fromPreferences){const method=document.getElementById('mainMethodSelector').value;document.getElementById('forgeMethod').value=method==='abc'?'ppl':method;}
+    const method=fromPreferences?document.getElementById('mainMethodSelector').value:readJSON(window.FitStore?.get('fitapp_campaign_data'),null)?.method;
+    document.getElementById('forgeMethod').value=isWorkoutModel(method)?method:'abc_tradicional';
     window.FitEnvironment?.refresh();
     document.getElementById('forgeModal').style.display = 'flex';
     updateForgeOptions();
@@ -43,6 +49,10 @@ export function openForgeModal({fromPreferences=false}={}) {
 }
 
 export function updateForgeOptions() {
+    const fixed=isWorkoutModel(document.getElementById('forgeMethod').value);
+    const explanation=document.getElementById('forgeModelDescription');
+    if(explanation)explanation.textContent=document.getElementById('forgeMethod').value==='abc_sinergista'?'ABC sinergista: alguns exercícios são feitos em pares, seguidos pelo descanso da volta. Os demais são feitos em séries convencionais.':'ABC tradicional: faça as séries de um exercício antes de passar ao próximo. O descanso já está definido em cada bloco.';
+    for(const id of ['forgeProfile','forgeLevel'])document.getElementById(id)?.closest('label')?.toggleAttribute('hidden',fixed);
     const box = document.getElementById('forgeSubOptionsBox');
     if (box) box.hidden = true;
     const description=document.getElementById('forgeParameters');
@@ -55,9 +65,9 @@ export function generateForgedWorkout() {
         return;
     }
     if(!persistDraft())return;
-    const profile=document.getElementById('forgeProfile')?.value||document.getElementById('profileSelector').value;
-    const level=document.getElementById('forgeLevel')?.value||state.els.levelSelector.value;
     const method = document.getElementById('forgeMethod').value;
+    const profile=isWorkoutModel(method)?'hipertrofia':document.getElementById('forgeProfile')?.value||document.getElementById('profileSelector').value;
+    const level=isWorkoutModel(method)?'padrao':document.getElementById('forgeLevel')?.value||state.els.levelSelector.value;
     if (!document.querySelectorAll('.forge-equip-chip.active').length) {
         window.FitApp.showToast('Selecione pelo menos um equipamento disponível.');
         return;
@@ -88,6 +98,7 @@ export function generateForgedWorkout() {
 }
 
 export function executeForgeLogic(method, subOpt, avoidNamesGlobal = [], options = environmentOptions()) {
+    if(isWorkoutModel(method))return createModelDay(method,({push:'A',pull:'B',legs:'C'})[subOpt]||subOpt,window.dictionaryData,{...options,blacklist:[...(options.blacklist||[]),...avoidNamesGlobal]});
     if(retiredMethod(method))throw new Error(retiredMethodMessage);
     if(method==='casa')options={...options,environment:'casa',resources:[],allEquipment:true};
     const bodyweightOnly=method==='casa';

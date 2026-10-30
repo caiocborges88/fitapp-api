@@ -25,8 +25,12 @@
     "test:circuit-calisthenics": "node tests/circuit-calisthenics-browser.cjs",
     "test:ai-deferred": "node tests/ai-deferred-browser.cjs",
     "test:mobile-flow": "node tests/mobile-flow-browser.cjs",
+    "test:simple-flow": "node tests/simple-flow-browser.cjs",
     "build:icons": "node scripts/build-icons.cjs",
-    "test:appearance": "node tests/appearance-browser.cjs"
+    "test:appearance": "node tests/appearance-browser.cjs",
+    "test:models": "node tests/workout-models-browser.cjs",
+    "test:tracking": "node tests/training-tracking-browser.cjs",
+    "test:models:emulated": "node scripts/verify-models-emulated.cjs"
   },
   "dependencies": {
     "chart.js": "^4.5.1",

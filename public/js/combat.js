@@ -1,5 +1,6 @@
 import { state } from './state.js';
 import {validRestSeconds} from './model-settings.js';
+import {newExerciseSet} from './domain.js';
 
 // 🛡️ DECLARAÇÃO ÚNICA DAS VARIÁVEIS DE ESTADO DO COMBATE
 let currentTimerEl = null;
@@ -17,8 +18,12 @@ let autoTimeout = null;
 let isAutoActive = false;
 
 // 🛡️ FUNÇÃO CENTRAL DO CRONÓMETRO (Restaurada)
-export function startRestTimer(targetEl, exerciseName = "", isAdjust = false) {
+export function startRestTimer(targetEl, exerciseName = "", isAdjust = false, block = null) {
     stopRestTimer();
+    if(block?.restSeconds&&!isAdjust){
+        state.activeRestBlockId=block.id;
+        adjustRestTime(state.blockRestOverrides?.[block.id]??block.restSeconds,true);
+    }
     isRestTimerRunning = true;
     currentTimerTarget = targetEl;
     currentTimerExercise = exerciseName;
@@ -72,8 +77,11 @@ export function startRestTimer(targetEl, exerciseName = "", isAdjust = false) {
     rafTimerId = requestAnimationFrame(updateTimer);
 }
 
-export function adjustRestTime(newTime) {
+export function adjustRestTime(newTime,fromBlock=false) {
     state.currentRestTime = validRestSeconds(newTime);
+    if(!fromBlock&&state.isWorkoutActive&&state.activeRestBlockId){
+        state.blockRestOverrides={...state.blockRestOverrides,[state.activeRestBlockId]:state.currentRestTime};
+    }
     const display=document.getElementById('timerDisplay');
     if(display)display.textContent=String(Math.floor(state.currentRestTime/60)).padStart(2,'0')+':'+String(state.currentRestTime%60).padStart(2,'0');
     document.querySelectorAll('.time-btn[data-time]').forEach(button=>{
@@ -98,17 +106,30 @@ export function stopRestTimer() {
 
 export function changeSets(bIndex, eIndex, delta) {
     const ex = state.currentRoutine[bIndex].exercises[eIndex];
+    const block=state.currentRoutine[bIndex];
+    if(block.modelVersion){
+        const step=ex.sideMode==='alternating'?delta*2:delta;
+        const members=block.type==='superset'?block.exercises:[ex];
+        if(members.some(item=>item.sets+step<(item.sideMode?2:1)||item.sets+step>10))return;
+        if(step<0&&members.some(item=>item.setsData?.slice(item.sets+step).some(set=>set.checked))){window.FitApp.showToast('Preserve as séries já registradas. Só podem ser removidas séries ainda não realizadas.');return;}
+        const previous=structuredClone(block.exercises);
+        for(const member of members){member.sets+=step;member.setsData=Array.from({length:member.sets},(_,i)=>member.setsData?.[i]||newExerciseSet(member));}
+        if(!window.FitApp.saveWorkoutState()){block.exercises=previous;return;}
+        window.FitApp.renderCurrentRoutine();return;
+    }
+    if(ex.sideMode==='alternating')delta*=2;
     
     if (delta > 0 && ex.sets < 10) {
-        ex.sets++;
+        ex.sets+=delta;
         if(!ex.setsData) ex.setsData = [];
-        ex.setsData.push({ kg: '', reps: '', checked: false });
+        for(let i=0;i<delta;i++)ex.setsData.push({ kg: '', reps: '', checked: false,measurementType:ex.measurementType||'reps' });
     } else if (delta < 0 && ex.sets > 1) {
-        ex.sets--;
-        const removedSet = ex.setsData.pop();
+        ex.sets+=delta;
+        const removed=ex.setsData.splice(ex.sets);
+        const removedSet=removed.find(set=>set.checked);
         // Desfaz a contabilidade se a série removida já estava marcada como concluída
         if (removedSet && removedSet.checked) {
-            state.checkedSets--;
+            state.checkedSets-=removed.filter(set=>set.checked).length;
             state.todayLog = state.todayLog.filter(log => !(log.exercise === ex.name && log.set === (ex.sets + 1)));
         }
     }

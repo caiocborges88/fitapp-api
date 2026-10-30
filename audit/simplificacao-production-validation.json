@@ -1,0 +1,85 @@
+{
+  "status": "passed",
+  "url": "https://fitapp-operacional.web.app",
+  "version": "8025f00c044b5983",
+  "checkedAt": "2026-10-30T12:59:06.241Z",
+  "matchingPublicFiles": 70,
+  "api": [
+    {
+      "route": "coach",
+      "status": 401
+    },
+    {
+      "route": "importar-treino-ia",
+      "status": 401
+    },
+    {
+      "route": "recompensas",
+      "status": 401
+    }
+  ],
+  "cached": [
+    {
+      "path": "/index.html",
+      "cached": true
+    },
+    {
+      "path": "/js/app.js",
+      "cached": true
+    },
+    {
+      "path": "/js/mobile-flow.js",
+      "cached": true
+    },
+    {
+      "path": "/js/forge.js",
+      "cached": true
+    },
+    {
+      "path": "/js/ui.js",
+      "cached": true
+    },
+    {
+      "path": "/js/environment-controls.js",
+      "cached": true
+    },
+    {
+      "path": "/js/workout-models.js",
+      "cached": true
+    },
+    {
+      "path": "/js/model-controls.js",
+      "cached": true
+    },
+    {
+      "path": "/js/editor-domain.js",
+      "cached": true
+    },
+    {
+      "path": "/css/energy.css",
+      "cached": true
+    },
+    {
+      "path": "/js/model-coverage.js",
+      "cached": true
+    },
+    {
+      "path": "/js/model-coverage-view.js",
+      "cached": true
+    },
+    {
+      "path": "/js/training-tracking.js",
+      "cached": true
+    },
+    {
+      "path": "/js/training-tracking-view.js",
+      "cached": true
+    }
+  ],
+  "offlineReload": true,
+  "browserErrors": [],
+  "authenticatedProductionFlow": false,
+  "productionUserDataWrites": false,
+  "physicalDevices": false,
+  "scope": "Somente Hosting; regras Firestore conferidas e preservadas; API e indices nao publicados"
+}

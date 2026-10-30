@@ -5,6 +5,9 @@ import {environmentOptions} from './environment.js';
 import {analyzeCoverage,isCoreMovement} from './routine-coverage.js';
 import {createCoverageView} from './coverage-view.js';
 import {findMovement} from './environment.js';
+import {blockEnabled,setsForDisplay} from './domain.js';
+import {appendBlockControls} from './model-controls.js';
+import {createModelCoverageView} from './model-coverage-view.js';
 
 const typeLabel = type => type === 'superset' ? 'Bi-set' : type === 'circuit' ? 'Circuito' : 'Tradicional';
 
@@ -15,12 +18,14 @@ export function renderCycleReview(container) {
     if (!days.includes(context.activeDay)) context.activeDay = days[0];
     const activeDay = context.activeDay;
     const coverage=analyzeCoverage(state.currentRoutine,window.dictionaryData,{...environmentOptions(),days});
-    const entries = state.currentRoutine.map((block, index) => ({block, index}));
+    const entries = state.currentRoutine.map((block, index) => ({block, index})).filter(({block})=>blockEnabled(block));
     const exerciseCount = blocks => blocks.reduce((total, {block}) => total + block.exercises.length, 0);
     const summary = document.createElement('div');
     summary.className = 'cycle-overview';
     summary.innerHTML = `<span><strong>${days.length}</strong> dias no ciclo</span><span><strong>${exerciseCount(entries)}</strong> posições de exercícios</span><span>Core sem pendência em ${coverage.filter(day=>day.hasCore).length}/${days.length} dias</span>`;
     container.append(summary);
+    const modelCoverage=createModelCoverageView(state.currentRoutine,window.dictionaryData,{...environmentOptions(),days});
+    if(modelCoverage)container.append(modelCoverage);
 
     const tabs = document.createElement('div');
     tabs.className = 'cycle-tabs';
@@ -82,7 +87,7 @@ export function renderCycleReview(container) {
         exerciseList.className = 'cycle-exercise-list';
         block.exercises.forEach((ex,exerciseIndex) => {
             const item = document.createElement('li');
-            item.innerHTML = `<span>${escapeHTML(ex.name)}</span><strong>${Number(ex.sets)} × ${escapeHTML(ex.target)}</strong>`;
+            item.innerHTML = `<span>${escapeHTML(ex.name)}</span><strong>${setsForDisplay(ex)} × ${escapeHTML(ex.target)}</strong>`;
             const issue=issues.find(entry=>entry.blockIndex===index&&entry.exerciseIndex===exerciseIndex);
             if (issue) {
                 const warning = document.createElement('p');
@@ -113,22 +118,24 @@ export function renderCycleReview(container) {
             header.querySelector('h4').textContent = block.title;
         });
         fields.querySelector('[data-block-type]').addEventListener('change', event => window.FitEditor.changeBlock(index, 'type', event.target.value));
+        appendBlockControls(fields,block,index);
         block.exercises.forEach((ex, exerciseIndex) => {
             const edit = document.createElement('div');
             edit.className = 'cycle-exercise-editor';
             edit.innerHTML = `<strong>${escapeHTML(ex.name)}</strong><div class="editor-exercise-fields"><label>Séries<input class="editor-sets" type="number" min="1" max="10" value="${Number(ex.sets)}"></label><label>Meta<input class="editor-target" maxlength="50" value="${escapeHTML(ex.target)}"></label></div><div class="cycle-edit-actions"><button type="button" class="text-button" data-swap>Trocar</button><button type="button" class="text-button" data-remove>Remover</button><button type="button" class="icon-button" data-up aria-label="Mover exercício para cima" ${exerciseIndex === 0 ? 'disabled' : ''}>↑</button><button type="button" class="icon-button" data-down aria-label="Mover exercício para baixo" ${exerciseIndex === block.exercises.length-1 ? 'disabled' : ''}>↓</button></div>`;
             const refreshSummary = () => {
-                exerciseList.children[exerciseIndex].querySelector('strong').textContent = `${ex.sets} × ${ex.target}`;
+                exerciseList.children[exerciseIndex].querySelector('strong').textContent = `${setsForDisplay(ex)} × ${ex.target}`;
             };
             edit.querySelector('.editor-sets').addEventListener('change', event => {
-                window.FitEditor.changeExercise(index, exerciseIndex, 'sets', event.target.value);
-                event.target.value = ex.sets;
+                window.FitEditor.changeExercise(index, exerciseIndex, 'sets', Number(event.target.value)*(ex.sideMode==='alternating'?2:1));
+                event.target.value = setsForDisplay(ex);
                 refreshSummary();
             });
             edit.querySelector('.editor-target').addEventListener('input', event => {
                 window.FitEditor.changeExercise(index, exerciseIndex, 'target', event.target.value);
                 refreshSummary();
             });
+            if(ex.sideMode==='alternating'){edit.querySelector('label').firstChild.nodeValue='Séries por lado';edit.querySelector('.editor-sets').value=setsForDisplay(ex);edit.querySelector('.editor-sets').max=5;}
             edit.querySelector('[data-swap]').addEventListener('click', () => window.FitApp.openSwapModal(index, exerciseIndex));
             edit.querySelector('[data-remove]').addEventListener('click', () => window.FitApp.removeExercise(index, exerciseIndex));
             edit.querySelector('[data-up]').addEventListener('click', () => window.FitEditor.moveExercise(index, exerciseIndex, -1));

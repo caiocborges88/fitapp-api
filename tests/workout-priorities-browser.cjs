@@ -1,3 +1,4 @@
+const auditPath=name=>'audit/'+(process.env.FITAPP_AUDIT_PREFIX?process.env.FITAPP_AUDIT_PREFIX+'-':'')+name;
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
@@ -58,7 +59,7 @@ const legacy=require('./fixtures/legacy-calisthenics.cjs');
    await row.locator('.rp-val').fill('25');await row.locator('.chk-set').check();
    const log=await page.evaluate(async()=>{const {state}=await import('/js/state.js');return (await import('/js/domain.js')).completedSets(state.currentRoutine);});
    assert.equal(log.length,1);assert.equal(log[0].durationSecs,25);assert.equal(log[0].measurementType,'duration');assert.equal(log[0].reps,0);
-   await page.screenshot({path:'audit/priorities-duration-mobile.png',fullPage:true});
+   await page.screenshot({path:auditPath('priorities-duration-mobile.png'),fullPage:true});
   });
   await run('barras desmarcadas bloqueiam circuito dependente e não geram sessão incompleta',async page=>{
    const result=await page.evaluate(async()=>{
@@ -136,7 +137,7 @@ const legacy=require('./fixtures/legacy-calisthenics.cjs');
    assert.equal(await page.evaluate(async()=>(await import('/js/state.js')).state.isWorkoutActive),false);
    assert.match(await page.locator('#routineReview').textContent(),/lista de exercícios excluídos/);
    await page.waitForFunction(()=>!document.getElementById('toast').classList.contains('show'));
-   await page.screenshot({path:'audit/saved-routine-review-mobile.png',fullPage:true});
+   await page.screenshot({path:auditPath('saved-routine-review-mobile.png'),fullPage:true});
    await page.evaluate(()=>FitApp.openSwapModal(0,0));
    assert.ok(!(await page.locator('#swapModal .swap-item-name').allTextContents()).includes('Supino Reto com Barra'));
    await page.evaluate(()=>FitApp.confirmSwap(0,0,'Supino Reto com Halteres'));
@@ -155,8 +156,8 @@ const legacy=require('./fixtures/legacy-calisthenics.cjs');
    const review=await page.locator('#routineReview').textContent();assert.match(review,/não encontrado no catálogo/);assert.match(review,/tipo de equipamento/);
    assert.equal(await page.locator('#routineReview li').count(),2);
    await page.waitForFunction(()=>!document.getElementById('toast').classList.contains('show'));
-   await page.screenshot({path:'audit/saved-routine-review-desktop.png',fullPage:true});
+   await page.screenshot({path:auditPath('saved-routine-review-desktop.png'),fullPage:true});
   });
-  fs.writeFileSync('audit/workout-priorities-validation.json',JSON.stringify({status:'ok',environment:'local Edge; Firebase simulated',checks},null,2)+'\n');
+  fs.writeFileSync(auditPath('workout-priorities-validation.json'),JSON.stringify({status:'ok',environment:'local Edge; Firebase simulated',checks},null,2)+'\n');
  }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});

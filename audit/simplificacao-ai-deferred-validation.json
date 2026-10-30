@@ -1,0 +1,14 @@
+{
+  "status": "ok",
+  "environment": "local; Firebase simulated; no AI provider calls",
+  "checks": [
+    "entradas de IA removidas",
+    "chamadas legadas locais bloqueadas",
+    "cliente não envia requisições de IA",
+    "fila antiga preservada sem restauração automática",
+    "cadastro manual disponível",
+    "modelo validado gera ciclo"
+  ],
+  "aiRequests": [],
+  "pageErrors": []
+}

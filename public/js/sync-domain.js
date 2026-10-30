@@ -1,5 +1,5 @@
 import {readJSON} from './domain.js';
-export const emptyCampaign=()=>({campaign_data:'',campaign_count:'0',blacklist:'[]',main_method:'abc',profile:'hipertrofia',level:'iniciante',custom_workouts:'[]',deleted_templates:'[]',updatedAt:0});
+export const emptyCampaign=()=>({campaign_data:'',campaign_count:'0',blacklist:'[]',main_method:'abc_tradicional',profile:'hipertrofia',level:'padrao',custom_workouts:'[]',deleted_templates:'[]',updatedAt:0});
 const equal=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 const hash=value=>{let n=2166136261;for(const c of JSON.stringify(value)){n^=c.charCodeAt(0);n=Math.imul(n,16777619);}return(n>>>0).toString(16);};
 const bundleKeys=['campaign_data','blacklist','main_method','profile','level'];

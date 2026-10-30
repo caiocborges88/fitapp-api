@@ -12,6 +12,10 @@ test('regras: isolamento, privilégio, imutabilidade e consultas reais',{skip:!e
     await assertSucceeds(getDoc(doc(a,'treinos_concluidos/new-id')));
     await assertSucceeds(setDoc(doc(a,'treinos_concluidos/session'),payload));
     await assertSucceeds(setDoc(doc(a,'treinos_concluidos/named'),{...payload,workoutName:'Ficha original'}));
+    await assertSucceeds(setDoc(doc(a,'treinos_concluidos/with-context'),{...payload,trainingContext:JSON.stringify({version:1,planned:[],execution:[]})}));
+    await assertFails(setDoc(doc(a,'treinos_concluidos/large-context'),{...payload,trainingContext:'x'.repeat(90001)}));
+    await assertFails(setDoc(doc(a,'treinos_concluidos/invalid-context'),{...payload,trainingContext:{version:1}}));
+    await assertFails(updateDoc(doc(a,'treinos_concluidos/with-context'),{trainingContext:'{}'}));
     await assertFails(setDoc(doc(a,'treinos_concluidos/long-name'),{...payload,workoutName:'x'.repeat(121)}));
     await assertFails(setDoc(doc(a,'treinos_concluidos/invalid-name'),{...payload,workoutName:12}));
     await assertSucceeds(getDoc(doc(a,'treinos_concluidos/session')));
@@ -27,6 +31,9 @@ test('regras: isolamento, privilégio, imutabilidade e consultas reais',{skip:!e
     await assertSucceeds(getDocs(query(collection(a,'rankings'),orderBy('poder_combate','desc'),limit(50))));
     await assertFails(getDocs(collection(a,'rankings')));
     const campanha={campaign_data:'',campaign_count:'0',blacklist:'[]',main_method:'abc',profile:'hipertrofia',level:'iniciante',custom_workouts:'[]',updatedAt:Date.now()};
+    await assertSucceeds(setDoc(doc(a,'usuarios/a'),{campanha}));
+    for(const method of ['abc_tradicional','abc_sinergista'])await assertSucceeds(setDoc(doc(a,'usuarios/a'),{campanha:{...campanha,main_method:method,level:'padrao',campaign_data:JSON.stringify({id:'new-model',schemaVersion:2,modelVersion:1,workouts:{}})}}));
+    await assertFails(setDoc(doc(a,'usuarios/a'),{campanha:{...campanha,main_method:'abc',level:'padrao'}}));
     await assertSucceeds(setDoc(doc(a,'usuarios/a'),{campanha}));
     await assertFails(updateDoc(doc(a,'usuarios/a'),{role:'admin'}));
     await assertFails(updateDoc(doc(a,'usuarios/a'),{'campanha.level':'super-admin'}));

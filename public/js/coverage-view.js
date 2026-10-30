@@ -1,4 +1,5 @@
 import {analyzeCoverage} from './routine-coverage.js';
+import {createModelCoverageView} from './model-coverage-view.js';
 
 const labels={'agachar':'Agachamento','extensao-joelho':'Extensão de joelho','flexao-joelho':'Flexão de joelho','extensao-quadril':'Extensão de quadril','dobrar-quadril':'Dobrar o quadril','puxar-vertical':'Puxada vertical','puxar-horizontal':'Puxada horizontal','empurrar-horizontal':'Empurrada horizontal','empurrar-vertical':'Empurrada vertical','aducao-horizontal':'Adução horizontal','abducao-horizontal':'Abdução horizontal','abducao-horizontal-rotacao-externa':'Abdução horizontal com rotação externa','flexao-ombro':'Flexão de ombro','abducao-ombro':'Abdução de ombro','flexao-cotovelo-supinada':'Flexão de cotovelo supinada','flexao-cotovelo-neutra-pronada':'Flexão de cotovelo neutra/pronada','extensao-cotovelo':'Extensão de cotovelo','extensao-cotovelo-acima':'Extensão de cotovelo acima da cabeça','flexao-plantar':'Flexão plantar','anti-extensao':'Anti-extensão','flexao-tronco':'Flexão de tronco'};
 const patternLabel=value=>labels[value]||value.replaceAll('-',' ');
@@ -8,6 +9,7 @@ export function createCoverageView(routine,catalogue,options={},sourceRoutine=ro
     const details=document.createElement('details');details.className='coverage-review panel';
     const summary=document.createElement('summary');summary.textContent='Cobertura muscular da ficha';details.append(summary);
     const caption=document.createElement('p');caption.textContent='Ênfases principais do catálogo. Subníveis indicam ênfase; não medem isolamento, esforço ou carga. Outros subníveis listados são uma referência, sem obrigação de incluir todos em cada treino.';details.append(caption);
+    const modelCoverage=createModelCoverageView(routine,catalogue,options);if(modelCoverage)details.append(modelCoverage);
     for(const day of report){
         const section=document.createElement('section');section.className='coverage-day';
         const heading=document.createElement('h4');heading.textContent=day.day==='Sessão'?'Sessão atual':'Treino '+day.day;

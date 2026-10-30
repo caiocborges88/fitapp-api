@@ -1,3 +1,4 @@
+const auditPath=name=>'audit/'+(process.env.FITAPP_AUDIT_PREFIX?process.env.FITAPP_AUDIT_PREFIX+'-':'')+name;
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
@@ -18,7 +19,7 @@ const fake=require('./fixtures/firebase.cjs');
   const original=await page.evaluate(()=>FitStore.get('fitapp_custom_workouts'));
   const names=()=>page.evaluate(async()=>(await import('/js/state.js')).state.currentRoutine.flatMap(b=>b.exercises).map(ex=>ex.name));
   const gym=await names();await page.evaluate(()=>FitApp.toggleGlobalEnv());assert.equal(await page.locator('#envText').textContent(),'Casa');
-  assert.ok(await page.locator('#environmentResources').isVisible());
+  assert.ok(await page.locator('#btnEnvToggle').isVisible());
   await page.click('#btnEnvToggle');await page.locator('[data-environment-resource="dumbbells"]').check();await page.locator('#environmentDialog').getByRole('button',{name:'Concluir',exact:true}).click();
   assert.equal(await page.evaluate(()=>JSON.parse(FitStore.get('fitapp_resources_casa')).includes('dumbbells')),true);
   await page.click('#btnEnvToggle');await page.locator('[data-environment-resource="dumbbells"]').uncheck();await page.locator('#environmentDialog').getByRole('button',{name:'Concluir',exact:true}).click();
@@ -29,7 +30,7 @@ const fake=require('./fixtures/firebase.cjs');
   assert.equal(await page.locator('[data-environment-resource="dumbbells"]').isVisible(),false);
   await page.click('#btnEnvToggle');await page.locator('[data-environment-resource="bench"]').check();await page.locator('#environmentDialog').getByRole('button',{name:'Concluir',exact:true}).click();
   await page.click('#btnEnvToggle');await page.locator('[data-environment-resource="bench"]').uncheck();await page.locator('#environmentDialog').getByRole('button',{name:'Concluir',exact:true}).click();
-  await page.evaluate(()=>FitApp.toggleGlobalEnv());assert.deepEqual(await names(),gym);assert.equal(await page.locator('#environmentResources').isVisible(),true);
+  await page.evaluate(()=>FitApp.toggleGlobalEnv());assert.deepEqual(await names(),gym);assert.equal(await page.locator('#btnEnvToggle').isVisible(),true);
   await page.evaluate(()=>FitApp.toggleGlobalEnv());await page.click('#btnStartWorkout');
   assert.equal(await page.evaluate(async()=>(await import('/js/state.js')).state.isWorkoutActive),true);
   assert.equal(await compatible(),true);assert.equal(await page.evaluate(()=>FitStore.get('fitapp_custom_workouts')),original);
@@ -38,14 +39,17 @@ const fake=require('./fixtures/firebase.cjs');
   assert.ok(await page.locator('.environment-warning').count());await page.click('#btnStartWorkout');
   assert.equal(await page.evaluate(async()=>(await import('/js/state.js')).state.isWorkoutActive),false);
   await page.click('#btnEnvToggle');await page.locator('[data-environment-resource="pullup-bar"]').check();await page.locator('#environmentDialog').getByRole('button',{name:'Concluir',exact:true}).click();
-  assert.equal(await compatible(),false);
-  assert.match(await page.locator('.environment-warning').textContent(),/complexidade alta/);
+  // Manual routines do not inherit numeric difficulty or the model's former experience filter.
+  assert.equal(await compatible(),true);
+  assert.equal(await page.locator('.environment-warning').count(),0);
   await page.click('#btnEnvToggle');await page.locator('[data-environment-resource="bench"]').check();await page.locator('#environmentDialog').getByRole('button',{name:'Concluir',exact:true}).click();
   assert.equal(await compatible(),true);assert.equal(await page.locator('.environment-warning').count(),0);
   // Switching back and forth retains the per-environment choices.
   await page.evaluate(()=>FitApp.toggleGlobalEnv());assert.equal(await page.locator('[data-environment-resource="pullup-bar"]').isChecked(),false);
   await page.evaluate(()=>FitApp.toggleGlobalEnv());await page.evaluate(()=>FitApp.toggleGlobalEnv());assert.equal(await page.locator('[data-environment-resource="pullup-bar"]').isChecked(),true);
-  await page.evaluate(()=>{FitApp.cancelWorkoutPreview();FitApp.setEnvironmentResources([]);FitApp.lockCampaign();FitApp.startWorkout('A');});
+  await page.evaluate(()=>{FitApp.cancelWorkoutPreview();FitApp.toggleGlobalEnv();FitApp.toggleGlobalEnv();FitApp.openForgeModal();FitApp.generateForgedWorkout();});
+  await page.click('#saveTemplateButton');
+  await page.evaluate(()=>{FitApp.toggleGlobalEnv();FitApp.setEnvironmentResources([]);FitApp.startWorkout('A');});
   const honestPlan=await page.evaluate(async()=>{
    const {state}=await import('/js/state.js'),env=await import('/js/environment.js');
    return state.currentRoutine.flatMap(b=>b.exercises).every(ex=>ex.needsReview||env.availableInEnvironment(dictionaryData.find(d=>d.name===ex.name),env.environmentOptions()));
@@ -54,10 +58,10 @@ const fake=require('./fixtures/firebase.cjs');
    const saved=JSON.parse(FitStore.get('fitapp_campaign_data')).workouts.A.flatMap(b=>b.exercises),env=await import('/js/environment.js');
    return saved.some(ex=>!env.availableInEnvironment(dictionaryData.find(item=>item.name===ex.name),env.environmentOptions()));
   });assert.equal(planUnchanged,true);
-  await page.screenshot({path:'audit/environment-mobile.png',fullPage:true});
+  await page.screenshot({path:auditPath('environment-mobile.png'),fullPage:true});
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
   assert.deepEqual(errors,[]);
-  fs.writeFileSync('audit/environment-validation.json',JSON.stringify({status:'ok',environment:'local; Firebase simulated',checks:['ficha pessoal adaptada em casa e parque','ficha original preservada','volta à academia reversível','execução sem equipamentos de academia','movimento sem alternativa bloqueado','barra apenas quando declarada','recursos independentes por ambiente','plano adaptado sem gravar substituições no original','largura móvel'],pageErrors:errors},null,2)+'\n');
+  fs.writeFileSync(auditPath('environment-validation.json'),JSON.stringify({status:'ok',environment:'local; Firebase simulated',checks:['ficha pessoal adaptada em casa e parque','ficha original preservada','volta à academia reversível','execução sem equipamentos de academia','movimento sem alternativa bloqueado','barra apenas quando declarada','recursos independentes por ambiente','plano adaptado sem gravar substituições no original','largura móvel'],pageErrors:errors},null,2)+'\n');
   console.log('Ambientes: adaptação, recursos declarados, reversão e execução aprovados.');
  }finally{await context.close();await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);server.close();process.exitCode=1;});

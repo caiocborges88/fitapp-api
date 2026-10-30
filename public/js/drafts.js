@@ -19,7 +19,7 @@ export function persistDraft(){
     if(!state.editorContext||state.isWorkoutActive||state.previewSaved||!state.currentRoutine.length)return true;
     // Account transitions must be allowed to reload; never write another owner's memory.
     if(!store()?.uid||state.previewOwner!==store().uid)return true;
-    const snapshot={version:draftVersion,userId:store().uid,name:document.getElementById('customWorkoutName').value.slice(0,120),title:document.getElementById('previewTitle').textContent,type:state.currentWorkoutType,context:{...state.editorContext,editingBlock:undefined},routine:state.currentRoutine,model:state.previewModel,coverage:state.coverageReference,proposal:state.environmentProposal,rest:state.currentRestTime,environment:environmentOptions()};
+    const snapshot={version:draftVersion,userId:store().uid,name:document.getElementById('customWorkoutName').value.slice(0,120),title:document.getElementById('previewTitle').textContent,type:state.currentWorkoutType,context:{...state.editorContext,editingBlock:undefined},routine:state.currentRoutine,model:state.previewModel,coverage:state.coverageReference,proposal:state.environmentProposal,rest:state.currentRestTime,environment:environmentOptions(),sessionOrigin:state.sessionOrigin};
     const signature=JSON.stringify(snapshot);
     if(signature===state.draftBaseline)return true;
     if(state.draftBaseline===null&&state.editorContext.kind==='session'){state.draftBaseline=signature;return true;}
@@ -65,7 +65,7 @@ export function restoreDraft(key){
     window.FitEditor.configureEditor(stale&&['template','plan'].includes(draft.context.kind)?'new':draft.context.kind,draft.context.id);
     if(!(stale&&['template','plan'].includes(draft.context.kind)))Object.assign(state.editorContext,draft.context);
     if(stale&&draft.context.kind==='cycle')Object.assign(state.editorContext,{planId:current?.id||null,revision:current?.revision||0});
-    state.previewModel=draft.model;state.coverageReference=draft.coverage;state.environmentProposal=draft.proposal;
+    state.previewModel=draft.model;state.coverageReference=draft.coverage;state.environmentProposal=draft.proposal;state.sessionOrigin=draft.sessionOrigin||null;
     if(state.environmentProposal&&proposalSignature(state.environmentProposal.source,{...environmentOptions(),level:state.els.levelSelector?.value})!==state.environmentProposal.signature){
         state.currentRoutine=structuredClone(state.environmentProposal.source);state.environmentProposal=null;
     }

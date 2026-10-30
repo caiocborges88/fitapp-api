@@ -1,0 +1,40 @@
+{
+  "status": "passed",
+  "project": "fitapp-operacional",
+  "url": "https://fitapp-operacional.web.app",
+  "appVersion": "8025f00c044b5983",
+  "release": "projects/fitapp-operacional/sites/fitapp-operacional/channels/live/releases/1793365047961000",
+  "hostingVersion": "projects/fitapp-operacional/sites/fitapp-operacional/versions/ee27c668d062eed5",
+  "releaseTime": "2026-10-30T12:57:27.961Z",
+  "releaseTimeAmericaSaoPaulo": "2026-10-30T09:57:27.961000-03:00",
+  "sourceRevision": "e63c8334d3c27fe3e927b899b6dba9f752b022e8",
+  "preparationCommit": "b4565777f03fbab355d759d08dff382edbaad15f",
+  "publishedServices": [
+    "hosting"
+  ],
+  "unchangedServices": [
+    "firestore:rules",
+    "firestore:indexes",
+    "functions"
+  ],
+  "rulesetUnchanged": true,
+  "rulesHashUnchanged": true,
+  "previousAppVersion": "d2f51cd46fa4626c",
+  "previousHostingVersion": "projects/fitapp-operacional/sites/fitapp-operacional/versions/c7432b28991a5c24",
+  "previousRelease": "projects/fitapp-operacional/sites/fitapp-operacional/channels/live/releases/1793315181716000",
+  "sourceArchive": "audit/release-simplificacao-8025f00c044b5983.zip",
+  "sourceArchiveSha256": "ca6b3c89f43b189002452498728ffbae62a7b0f0db1db275adbfaec41bdde627",
+  "previousSourceArchive": "audit/release-tracking-d2f51cd46fa4626c.zip",
+  "previousSourceArchiveSha256": "3064fae2371e9cfb8b4c3a61dc6cba265e9d5e5d33ca1144463325394b919a64",
+  "snapshotsVerified": true,
+  "matchingPublicFiles": 70,
+  "criticalCachedAssets": 14,
+  "offlineReload": true,
+  "productionUserDocumentsRead": false,
+  "productionUserDataWrites": false,
+  "authenticatedProductionFlow": false,
+  "physicalDevices": false,
+  "pullRequest": "https://github.com/caiocborges88/fitapp-api/pull/1",
+  "pullRequestMerged": false,
+  "browserErrors": []
+}

@@ -1,0 +1,944 @@
+{
+  "checkedAt": "2026-10-30T12:38:49.365Z",
+  "environment": "Local Edge automation; Firebase simulated; no physical devices",
+  "checks": [
+    "manual theme, persistence and live update between tabs",
+    "system theme and reduced motion override, including returning to full effects",
+    "storage failure preserves previous theme and reports failure",
+    "account isolation and unknown versions preserved",
+    "16 viewport/theme/effects combinations, reachable start and contrast",
+    "series feedback, existing rest clock, saved summary, reduced charts and keyboard reward opening",
+    "authenticated offline reload, preference changes and all illustrations cached; Firebase simulated"
+  ],
+  "matrix": [
+    {
+      "device": "small",
+      "width": 360,
+      "height": 740,
+      "theme": "light",
+      "effects": "full",
+      "status": "ok",
+      "contrast": [
+        {
+          "a": "--ink",
+          "b": "--bg",
+          "min": 4.5,
+          "ratio": 16.098801469996527
+        },
+        {
+          "a": "--muted",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 6.25995365631075
+        },
+        {
+          "a": "--accent",
+          "b": "--accent-soft",
+          "min": 4.5,
+          "ratio": 4.748207559093247
+        },
+        {
+          "a": "--secondary",
+          "b": "--secondary-soft",
+          "min": 4.5,
+          "ratio": 6.056849810756314
+        },
+        {
+          "a": "--on-action",
+          "b": "--action",
+          "min": 4.5,
+          "ratio": 10.466032044824193
+        },
+        {
+          "a": "--control-line",
+          "b": "--surface-soft",
+          "min": 3,
+          "ratio": 3.5273500607412225
+        },
+        {
+          "a": "--success",
+          "b": "--success-soft",
+          "min": 4.5,
+          "ratio": 6.365172601878798
+        },
+        {
+          "a": "--danger",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 6.285164560662439
+        }
+      ]
+    },
+    {
+      "device": "small",
+      "width": 360,
+      "height": 740,
+      "theme": "light",
+      "effects": "reduced",
+      "status": "ok",
+      "contrast": [
+        {
+          "a": "--ink",
+          "b": "--bg",
+          "min": 4.5,
+          "ratio": 16.098801469996527
+        },
+        {
+          "a": "--muted",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 6.25995365631075
+        },
+        {
+          "a": "--accent",
+          "b": "--accent-soft",
+          "min": 4.5,
+          "ratio": 4.748207559093247
+        },
+        {
+          "a": "--secondary",
+          "b": "--secondary-soft",
+          "min": 4.5,
+          "ratio": 6.056849810756314
+        },
+        {
+          "a": "--on-action",
+          "b": "--action",
+          "min": 4.5,
+          "ratio": 10.466032044824193
+        },
+        {
+          "a": "--control-line",
+          "b": "--surface-soft",
+          "min": 3,
+          "ratio": 3.5273500607412225
+        },
+        {
+          "a": "--success",
+          "b": "--success-soft",
+          "min": 4.5,
+          "ratio": 6.365172601878798
+        },
+        {
+          "a": "--danger",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 6.285164560662439
+        }
+      ]
+    },
+    {
+      "device": "small",
+      "width": 360,
+      "height": 740,
+      "theme": "dark",
+      "effects": "full",
+      "status": "ok",
+      "contrast": [
+        {
+          "a": "--ink",
+          "b": "--bg",
+          "min": 4.5,
+          "ratio": 18.114262422144545
+        },
+        {
+          "a": "--muted",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 9.047331170289032
+        },
+        {
+          "a": "--accent",
+          "b": "--accent-soft",
+          "min": 4.5,
+          "ratio": 7.7141858664647085
+        },
+        {
+          "a": "--secondary",
+          "b": "--secondary-soft",
+          "min": 4.5,
+          "ratio": 5.380710733603965
+        },
+        {
+          "a": "--on-action",
+          "b": "--action",
+          "min": 4.5,
+          "ratio": 10.466032044824193
+        },
+        {
+          "a": "--control-line",
+          "b": "--surface-soft",
+          "min": 3,
+          "ratio": 4.407314874225973
+        },
+        {
+          "a": "--success",
+          "b": "--success-soft",
+          "min": 4.5,
+          "ratio": 7.703218344845951
+        },
+        {
+          "a": "--danger",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 9.17039247882558
+        }
+      ]
+    },
+    {
+      "device": "small",
+      "width": 360,
+      "height": 740,
+      "theme": "dark",
+      "effects": "reduced",
+      "status": "ok",
+      "contrast": [
+        {
+          "a": "--ink",
+          "b": "--bg",
+          "min": 4.5,
+          "ratio": 18.114262422144545
+        },
+        {
+          "a": "--muted",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 9.047331170289032
+        },
+        {
+          "a": "--accent",
+          "b": "--accent-soft",
+          "min": 4.5,
+          "ratio": 7.7141858664647085
+        },
+        {
+          "a": "--secondary",
+          "b": "--secondary-soft",
+          "min": 4.5,
+          "ratio": 5.380710733603965
+        },
+        {
+          "a": "--on-action",
+          "b": "--action",
+          "min": 4.5,
+          "ratio": 10.466032044824193
+        },
+        {
+          "a": "--control-line",
+          "b": "--surface-soft",
+          "min": 3,
+          "ratio": 4.407314874225973
+        },
+        {
+          "a": "--success",
+          "b": "--success-soft",
+          "min": 4.5,
+          "ratio": 7.703218344845951
+        },
+        {
+          "a": "--danger",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 9.17039247882558
+        }
+      ]
+    },
+    {
+      "device": "mobile",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "effects": "full",
+      "status": "ok",
+      "contrast": [
+        {
+          "a": "--ink",
+          "b": "--bg",
+          "min": 4.5,
+          "ratio": 16.098801469996527
+        },
+        {
+          "a": "--muted",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 6.25995365631075
+        },
+        {
+          "a": "--accent",
+          "b": "--accent-soft",
+          "min": 4.5,
+          "ratio": 4.748207559093247
+        },
+        {
+          "a": "--secondary",
+          "b": "--secondary-soft",
+          "min": 4.5,
+          "ratio": 6.056849810756314
+        },
+        {
+          "a": "--on-action",
+          "b": "--action",
+          "min": 4.5,
+          "ratio": 10.466032044824193
+        },
+        {
+          "a": "--control-line",
+          "b": "--surface-soft",
+          "min": 3,
+          "ratio": 3.5273500607412225
+        },
+        {
+          "a": "--success",
+          "b": "--success-soft",
+          "min": 4.5,
+          "ratio": 6.365172601878798
+        },
+        {
+          "a": "--danger",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 6.285164560662439
+        }
+      ]
+    },
+    {
+      "device": "mobile",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "effects": "reduced",
+      "status": "ok",
+      "contrast": [
+        {
+          "a": "--ink",
+          "b": "--bg",
+          "min": 4.5,
+          "ratio": 16.098801469996527
+        },
+        {
+          "a": "--muted",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 6.25995365631075
+        },
+        {
+          "a": "--accent",
+          "b": "--accent-soft",
+          "min": 4.5,
+          "ratio": 4.748207559093247
+        },
+        {
+          "a": "--secondary",
+          "b": "--secondary-soft",
+          "min": 4.5,
+          "ratio": 6.056849810756314
+        },
+        {
+          "a": "--on-action",
+          "b": "--action",
+          "min": 4.5,
+          "ratio": 10.466032044824193
+        },
+        {
+          "a": "--control-line",
+          "b": "--surface-soft",
+          "min": 3,
+          "ratio": 3.5273500607412225
+        },
+        {
+          "a": "--success",
+          "b": "--success-soft",
+          "min": 4.5,
+          "ratio": 6.365172601878798
+        },
+        {
+          "a": "--danger",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 6.285164560662439
+        }
+      ]
+    },
+    {
+      "device": "mobile",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "effects": "full",
+      "status": "ok",
+      "contrast": [
+        {
+          "a": "--ink",
+          "b": "--bg",
+          "min": 4.5,
+          "ratio": 18.114262422144545
+        },
+        {
+          "a": "--muted",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 9.047331170289032
+        },
+        {
+          "a": "--accent",
+          "b": "--accent-soft",
+          "min": 4.5,
+          "ratio": 7.7141858664647085
+        },
+        {
+          "a": "--secondary",
+          "b": "--secondary-soft",
+          "min": 4.5,
+          "ratio": 5.380710733603965
+        },
+        {
+          "a": "--on-action",
+          "b": "--action",
+          "min": 4.5,
+          "ratio": 10.466032044824193
+        },
+        {
+          "a": "--control-line",
+          "b": "--surface-soft",
+          "min": 3,
+          "ratio": 4.407314874225973
+        },
+        {
+          "a": "--success",
+          "b": "--success-soft",
+          "min": 4.5,
+          "ratio": 7.703218344845951
+        },
+        {
+          "a": "--danger",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 9.17039247882558
+        }
+      ]
+    },
+    {
+      "device": "mobile",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "effects": "reduced",
+      "status": "ok",
+      "contrast": [
+        {
+          "a": "--ink",
+          "b": "--bg",
+          "min": 4.5,
+          "ratio": 18.114262422144545
+        },
+        {
+          "a": "--muted",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 9.047331170289032
+        },
+        {
+          "a": "--accent",
+          "b": "--accent-soft",
+          "min": 4.5,
+          "ratio": 7.7141858664647085
+        },
+        {
+          "a": "--secondary",
+          "b": "--secondary-soft",
+          "min": 4.5,
+          "ratio": 5.380710733603965
+        },
+        {
+          "a": "--on-action",
+          "b": "--action",
+          "min": 4.5,
+          "ratio": 10.466032044824193
+        },
+        {
+          "a": "--control-line",
+          "b": "--surface-soft",
+          "min": 3,
+          "ratio": 4.407314874225973
+        },
+        {
+          "a": "--success",
+          "b": "--success-soft",
+          "min": 4.5,
+          "ratio": 7.703218344845951
+        },
+        {
+          "a": "--danger",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 9.17039247882558
+        }
+      ]
+    },
+    {
+      "device": "tablet",
+      "width": 820,
+      "height": 1180,
+      "theme": "light",
+      "effects": "full",
+      "status": "ok",
+      "contrast": [
+        {
+          "a": "--ink",
+          "b": "--bg",
+          "min": 4.5,
+          "ratio": 16.098801469996527
+        },
+        {
+          "a": "--muted",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 6.25995365631075
+        },
+        {
+          "a": "--accent",
+          "b": "--accent-soft",
+          "min": 4.5,
+          "ratio": 4.748207559093247
+        },
+        {
+          "a": "--secondary",
+          "b": "--secondary-soft",
+          "min": 4.5,
+          "ratio": 6.056849810756314
+        },
+        {
+          "a": "--on-action",
+          "b": "--action",
+          "min": 4.5,
+          "ratio": 10.466032044824193
+        },
+        {
+          "a": "--control-line",
+          "b": "--surface-soft",
+          "min": 3,
+          "ratio": 3.5273500607412225
+        },
+        {
+          "a": "--success",
+          "b": "--success-soft",
+          "min": 4.5,
+          "ratio": 6.365172601878798
+        },
+        {
+          "a": "--danger",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 6.285164560662439
+        }
+      ]
+    },
+    {
+      "device": "tablet",
+      "width": 820,
+      "height": 1180,
+      "theme": "light",
+      "effects": "reduced",
+      "status": "ok",
+      "contrast": [
+        {
+          "a": "--ink",
+          "b": "--bg",
+          "min": 4.5,
+          "ratio": 16.098801469996527
+        },
+        {
+          "a": "--muted",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 6.25995365631075
+        },
+        {
+          "a": "--accent",
+          "b": "--accent-soft",
+          "min": 4.5,
+          "ratio": 4.748207559093247
+        },
+        {
+          "a": "--secondary",
+          "b": "--secondary-soft",
+          "min": 4.5,
+          "ratio": 6.056849810756314
+        },
+        {
+          "a": "--on-action",
+          "b": "--action",
+          "min": 4.5,
+          "ratio": 10.466032044824193
+        },
+        {
+          "a": "--control-line",
+          "b": "--surface-soft",
+          "min": 3,
+          "ratio": 3.5273500607412225
+        },
+        {
+          "a": "--success",
+          "b": "--success-soft",
+          "min": 4.5,
+          "ratio": 6.365172601878798
+        },
+        {
+          "a": "--danger",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 6.285164560662439
+        }
+      ]
+    },
+    {
+      "device": "tablet",
+      "width": 820,
+      "height": 1180,
+      "theme": "dark",
+      "effects": "full",
+      "status": "ok",
+      "contrast": [
+        {
+          "a": "--ink",
+          "b": "--bg",
+          "min": 4.5,
+          "ratio": 18.114262422144545
+        },
+        {
+          "a": "--muted",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 9.047331170289032
+        },
+        {
+          "a": "--accent",
+          "b": "--accent-soft",
+          "min": 4.5,
+          "ratio": 7.7141858664647085
+        },
+        {
+          "a": "--secondary",
+          "b": "--secondary-soft",
+          "min": 4.5,
+          "ratio": 5.380710733603965
+        },
+        {
+          "a": "--on-action",
+          "b": "--action",
+          "min": 4.5,
+          "ratio": 10.466032044824193
+        },
+        {
+          "a": "--control-line",
+          "b": "--surface-soft",
+          "min": 3,
+          "ratio": 4.407314874225973
+        },
+        {
+          "a": "--success",
+          "b": "--success-soft",
+          "min": 4.5,
+          "ratio": 7.703218344845951
+        },
+        {
+          "a": "--danger",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 9.17039247882558
+        }
+      ]
+    },
+    {
+      "device": "tablet",
+      "width": 820,
+      "height": 1180,
+      "theme": "dark",
+      "effects": "reduced",
+      "status": "ok",
+      "contrast": [
+        {
+          "a": "--ink",
+          "b": "--bg",
+          "min": 4.5,
+          "ratio": 18.114262422144545
+        },
+        {
+          "a": "--muted",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 9.047331170289032
+        },
+        {
+          "a": "--accent",
+          "b": "--accent-soft",
+          "min": 4.5,
+          "ratio": 7.7141858664647085
+        },
+        {
+          "a": "--secondary",
+          "b": "--secondary-soft",
+          "min": 4.5,
+          "ratio": 5.380710733603965
+        },
+        {
+          "a": "--on-action",
+          "b": "--action",
+          "min": 4.5,
+          "ratio": 10.466032044824193
+        },
+        {
+          "a": "--control-line",
+          "b": "--surface-soft",
+          "min": 3,
+          "ratio": 4.407314874225973
+        },
+        {
+          "a": "--success",
+          "b": "--success-soft",
+          "min": 4.5,
+          "ratio": 7.703218344845951
+        },
+        {
+          "a": "--danger",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 9.17039247882558
+        }
+      ]
+    },
+    {
+      "device": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "theme": "light",
+      "effects": "full",
+      "status": "ok",
+      "contrast": [
+        {
+          "a": "--ink",
+          "b": "--bg",
+          "min": 4.5,
+          "ratio": 16.098801469996527
+        },
+        {
+          "a": "--muted",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 6.25995365631075
+        },
+        {
+          "a": "--accent",
+          "b": "--accent-soft",
+          "min": 4.5,
+          "ratio": 4.748207559093247
+        },
+        {
+          "a": "--secondary",
+          "b": "--secondary-soft",
+          "min": 4.5,
+          "ratio": 6.056849810756314
+        },
+        {
+          "a": "--on-action",
+          "b": "--action",
+          "min": 4.5,
+          "ratio": 10.466032044824193
+        },
+        {
+          "a": "--control-line",
+          "b": "--surface-soft",
+          "min": 3,
+          "ratio": 3.5273500607412225
+        },
+        {
+          "a": "--success",
+          "b": "--success-soft",
+          "min": 4.5,
+          "ratio": 6.365172601878798
+        },
+        {
+          "a": "--danger",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 6.285164560662439
+        }
+      ]
+    },
+    {
+      "device": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "theme": "light",
+      "effects": "reduced",
+      "status": "ok",
+      "contrast": [
+        {
+          "a": "--ink",
+          "b": "--bg",
+          "min": 4.5,
+          "ratio": 16.098801469996527
+        },
+        {
+          "a": "--muted",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 6.25995365631075
+        },
+        {
+          "a": "--accent",
+          "b": "--accent-soft",
+          "min": 4.5,
+          "ratio": 4.748207559093247
+        },
+        {
+          "a": "--secondary",
+          "b": "--secondary-soft",
+          "min": 4.5,
+          "ratio": 6.056849810756314
+        },
+        {
+          "a": "--on-action",
+          "b": "--action",
+          "min": 4.5,
+          "ratio": 10.466032044824193
+        },
+        {
+          "a": "--control-line",
+          "b": "--surface-soft",
+          "min": 3,
+          "ratio": 3.5273500607412225
+        },
+        {
+          "a": "--success",
+          "b": "--success-soft",
+          "min": 4.5,
+          "ratio": 6.365172601878798
+        },
+        {
+          "a": "--danger",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 6.285164560662439
+        }
+      ]
+    },
+    {
+      "device": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "theme": "dark",
+      "effects": "full",
+      "status": "ok",
+      "contrast": [
+        {
+          "a": "--ink",
+          "b": "--bg",
+          "min": 4.5,
+          "ratio": 18.114262422144545
+        },
+        {
+          "a": "--muted",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 9.047331170289032
+        },
+        {
+          "a": "--accent",
+          "b": "--accent-soft",
+          "min": 4.5,
+          "ratio": 7.7141858664647085
+        },
+        {
+          "a": "--secondary",
+          "b": "--secondary-soft",
+          "min": 4.5,
+          "ratio": 5.380710733603965
+        },
+        {
+          "a": "--on-action",
+          "b": "--action",
+          "min": 4.5,
+          "ratio": 10.466032044824193
+        },
+        {
+          "a": "--control-line",
+          "b": "--surface-soft",
+          "min": 3,
+          "ratio": 4.407314874225973
+        },
+        {
+          "a": "--success",
+          "b": "--success-soft",
+          "min": 4.5,
+          "ratio": 7.703218344845951
+        },
+        {
+          "a": "--danger",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 9.17039247882558
+        }
+      ]
+    },
+    {
+      "device": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "theme": "dark",
+      "effects": "reduced",
+      "status": "ok",
+      "contrast": [
+        {
+          "a": "--ink",
+          "b": "--bg",
+          "min": 4.5,
+          "ratio": 18.114262422144545
+        },
+        {
+          "a": "--muted",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 9.047331170289032
+        },
+        {
+          "a": "--accent",
+          "b": "--accent-soft",
+          "min": 4.5,
+          "ratio": 7.7141858664647085
+        },
+        {
+          "a": "--secondary",
+          "b": "--secondary-soft",
+          "min": 4.5,
+          "ratio": 5.380710733603965
+        },
+        {
+          "a": "--on-action",
+          "b": "--action",
+          "min": 4.5,
+          "ratio": 10.466032044824193
+        },
+        {
+          "a": "--control-line",
+          "b": "--surface-soft",
+          "min": 3,
+          "ratio": 4.407314874225973
+        },
+        {
+          "a": "--success",
+          "b": "--success-soft",
+          "min": 4.5,
+          "ratio": 7.703218344845951
+        },
+        {
+          "a": "--danger",
+          "b": "--surface",
+          "min": 4.5,
+          "ratio": 9.17039247882558
+        }
+      ]
+    }
+  ],
+  "errors": []
+}
