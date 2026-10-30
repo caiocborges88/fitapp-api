@@ -3,6 +3,8 @@
   "finalBuild": "45c2998d354451c6",
   "baseCommit": "a222cffbedf2138c391234dc2be1180a11083034",
   "branch": "codex/catalogo-execucao-revisados",
+  "pullRequest": "https://github.com/caiocborges88/fitapp-api/pull/2",
+  "implementationCommit": "ace28344abd7405646e45c3f5d7ad6cd09593645",
   "prerequisiteBranch": "codex/simplificar-fluxo-treino",
   "prerequisitePullRequest": "https://github.com/caiocborges88/fitapp-api/pull/1",
   "previousUncommittedAuditsExcluded": true,

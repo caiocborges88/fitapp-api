@@ -38,6 +38,7 @@
 - Confirmar e lembrar recursos específicos da academia por conta/dispositivo, sem presumir aparelhos a partir de categoria. Preservar exclusões e as exigências do perfil também fora da academia. Seleção de barra/acessório identifica a variante e não muda após registros.
 - Novos planos usam schema 3/receita 2; ler schemas 1–2/receita 1. Estado ativo 5 lê 1–4; rascunho 2 lê 1; contexto 2 lê 1. Execução e `executionKey` sobrevivem a cópias, fila, sincronização e exportação; versões desconhecidas permanecem preservadas. Estas versões substituem os números da entrega histórica abaixo apenas para novas criações.
 - Rodar as regressões obrigatórias e `tests/execution-contract.test.mjs`, `node scripts/verify-execution-browser.cjs` e `node scripts/verify-execution-browser.cjs --visual`, além da suíte emulada `demo-fitapp`. Evidências novas: `audit/catalogo-*`; não restaurar nem incluir indiscriminadamente as evidências anteriores já sem commit. Não inferir dispositivos físicos ou produção.
+- Registro desta etapa: PR #2 (`https://github.com/caiocborges88/fitapp-api/pull/2`), empilhado sobre o PR #1; build local `45c2998d354451c6`. Relatório e limites em `audit/catalogo-validation-summary.json` e na documentação acima. Envio ao GitHub não constitui publicação online.
 
 ## Modelos ABC com regras próprias
 - A referência vigente é `docs/NOVOS-MODELOS-ABC.md`. Novas escolhas oferecem `abc_tradicional` e `abc_sinergista`, com exercícios fixos e receitas versionadas em `public/js/workout-models.js`.
