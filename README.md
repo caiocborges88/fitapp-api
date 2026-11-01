@@ -1,10 +1,10 @@
 # FitApp
 
-## Catálogo e execução revisados — implementação local
+## Catálogo e execução revisados — publicados em 01/11/2026
 
-122 movimentos com orientações específicas; condicionamento/mobilidade retirados das novas escolhas, preservando registros antigos. Novas execuções identificam variante, recursos, repetições por lado e convenção de carga; trocas e histórico conservam essas informações sem converter dados antigos. Escopo, versões e verificações: [docs/CATALOGO-E-EXECUCAO-REVISADOS.md](docs/CATALOGO-E-EXECUCAO-REVISADOS.md). Sem publicação nesta etapa.
+122 movimentos com orientações específicas; condicionamento/mobilidade retirados das novas escolhas, preservando registros antigos. Novas execuções identificam variante, recursos, repetições por lado e convenção de carga; trocas e histórico conservam essas informações sem converter dados antigos. Escopo, versões e verificações: [docs/CATALOGO-E-EXECUCAO-REVISADOS.md](docs/CATALOGO-E-EXECUCAO-REVISADOS.md).
 
-Publicação preparada em 01/11/2026, com pacote, versão anterior e regras preservados; envio à produção pendente de autorização explícita. Escopo e recuperação: [docs/PREPARACAO-PUBLICACAO-CATALOGO-2026-11-01.md](docs/PREPARACAO-PUBLICACAO-CATALOGO-2026-11-01.md).
+Versão `45c2998d354451c6` publicada às 17h22 no [FitApp](https://fitapp-operacional.web.app), somente Hosting, após autorização explícita. Os 71 arquivos, catálogo, login nos dois temas e offline foram conferidos; API, regras e índices preservados. Sem autenticação/gravação de teste em produção ou aparelhos físicos. Release, atualização e recuperação: [docs/PUBLICACAO-CATALOGO-2026-11-01.md](docs/PUBLICACAO-CATALOGO-2026-11-01.md).
 
 ## Fluxo simplificado — publicado em 30/10/2026
 

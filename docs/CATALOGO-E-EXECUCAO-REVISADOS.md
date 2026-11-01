@@ -1,6 +1,6 @@
 # Catálogo e execução revisados — 30/10/2026
 
-Implementação local autorizada após a revisão das descrições e dos contratos no chat. Sem autorização de publicação nesta etapa. As evidências anteriores, já sem commit na abertura, foram preservadas; novas evidências usam o prefixo `catalogo`.
+Implementação autorizada após a revisão das descrições e dos contratos no chat. Publicada posteriormente, após autorização explícita, em 01/11/2026, somente Hosting, versão `45c2998d354451c6`. Resultado e recuperação: [PUBLICACAO-CATALOGO-2026-11-01.md](PUBLICACAO-CATALOGO-2026-11-01.md). As evidências anteriores, já sem commit na abertura, foram preservadas; novas evidências usam o prefixo `catalogo`.
 
 ## Conteúdo e identidade
 
@@ -49,4 +49,4 @@ Evidências novas: `audit/catalogo-*`, com resumo em `audit/catalogo-validation-
 
 ## Registro no GitHub
 
-Branch `codex/catalogo-execucao-revisados`, baseada em `a222cffbedf2138c391234dc2be1180a11083034`. Implementação registrada no commit `ace28344abd7405646e45c3f5d7ad6cd09593645` e no [PR #2](https://github.com/caiocborges88/fitapp-api/pull/2), aberto como rascunho. A base é `codex/simplificar-fluxo-treino`, pois o [PR #1](https://github.com/caiocborges88/fitapp-api/pull/1) ainda contém cinco commits anteriores não incorporados à `main`. Assim a revisão desta etapa não reapresenta os pré-requisitos ABC/acompanhamento/simplificação. As auditorias antigas já alteradas e a extração de chat local ficaram fora do commit. Publicação online continua pendente de autorização específica desta etapa.
+Branch `codex/catalogo-execucao-revisados`, baseada em `a222cffbedf2138c391234dc2be1180a11083034`. Implementação registrada no commit `ace28344abd7405646e45c3f5d7ad6cd09593645` e no [PR #2](https://github.com/caiocborges88/fitapp-api/pull/2), aberto como rascunho. A base é `codex/simplificar-fluxo-treino`, pois o [PR #1](https://github.com/caiocborges88/fitapp-api/pull/1) ainda contém cinco commits anteriores não incorporados à `main`. Assim a revisão desta etapa não reapresenta os pré-requisitos ABC/acompanhamento/simplificação. As auditorias antigas já alteradas e a extração de chat local ficaram fora do commit. Publicação online autorizada posteriormente e concluída em 01/11/2026, conforme [PUBLICACAO-CATALOGO-2026-11-01.md](PUBLICACAO-CATALOGO-2026-11-01.md).

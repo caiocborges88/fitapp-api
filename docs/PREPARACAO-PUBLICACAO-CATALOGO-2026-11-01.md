@@ -2,6 +2,8 @@
 
 Preparação local após o pedido para avançar à próxima etapa. A publicação em produção depende de confirmação explícita desta revisão, conforme AGENTS.md. Este documento não registra um deploy concluído.
 
+Atualização posterior: o usuário autorizou expressamente e a publicação foi concluída em 01/11/2026. Este registro preserva a preparação anterior; resultado e evidências estão em [PUBLICACAO-CATALOGO-2026-11-01.md](PUBLICACAO-CATALOGO-2026-11-01.md).
+
 ## Pacote preparado
 
 - Destino proposto: https://fitapp-operacional.web.app, projeto/site `fitapp-operacional`.
