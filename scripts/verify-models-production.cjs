@@ -5,6 +5,7 @@ const {chromium,devices}=require('playwright');
 const origin='https://fitapp-operacional.web.app';
 const prefix=process.env.FITAPP_RELEASE_PREFIX||'abc';
 const releaseScope=process.env.FITAPP_RELEASE_SCOPE||'Hosting e regras Firestore; API e índices não publicados';
+const expectExecution=process.env.FITAPP_RELEASE_EXPECT_EXECUTION==='1';
 if(!/^[a-z][a-z0-9-]*$/.test(prefix))throw Error('Prefixo de release inválido.');
 const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 (async()=>{
@@ -20,7 +21,7 @@ const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
         const response=await fetch(origin+'/api/'+route,{method,headers:{'content-type':'application/json'},...(method==='POST'?{body:'{}'}:{})});
         assert.equal(response.status,401,route);api.push({route,status:response.status});
     }
-    const browser=await chromium.launch({channel:'msedge',headless:true}),errors=[];let cached;
+    const browser=await chromium.launch({channel:'msedge',headless:true}),errors=[];let cached,executionReview=null;
     try{
         const context=await browser.newContext({...devices['Pixel 7'],reducedMotion:'reduce'}),page=await context.newPage();
         page.on('pageerror',error=>errors.push(error.message));
@@ -35,11 +36,22 @@ const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
             assert.equal(await page.locator('#biomechanicsPanel').evaluate(el=>el.hidden&&el.inert),true);
             assert.equal(await page.locator('#tab-perfil #profileSelector').count(),0);
         }
+        if(expectExecution){
+            executionReview=await page.evaluate(()=>({
+                total:window.dictionaryData.length,
+                ids:new Set(window.dictionaryData.map(item=>item.id)).size,
+                active:window.dictionaryData.filter(item=>item.selectable===true).length,
+                retired:window.dictionaryData.filter(item=>item.selectable===false).length,
+                reviewed:window.dictionaryData.filter(item=>item.selectable===true&&item.catalogueRevision===2&&item.classification?.version===1&&item.executionProfile?.version===1&&item.desc?.length>80).length
+            }));
+            assert.deepEqual(executionReview,{total:129,ids:129,active:122,retired:7,reviewed:122});
+            assert.equal(await page.locator('#otherActivities').evaluate(el=>el.hidden&&el.inert),true);
+        }
         await page.evaluate(()=>navigator.serviceWorker.ready);await page.waitForFunction(()=>navigator.serviceWorker.controller);
-        cached=await page.evaluate(async()=>{
+        cached=await page.evaluate(async expectExecution=>{
             const cache=await caches.open((await caches.keys()).find(k=>k.startsWith('fitapp-')));
-            return Promise.all(['/index.html','/js/app.js','/js/mobile-flow.js','/js/forge.js','/js/ui.js','/js/environment-controls.js','/js/workout-models.js','/js/model-controls.js','/js/editor-domain.js','/css/energy.css','/js/model-coverage.js','/js/model-coverage-view.js','/js/training-tracking.js','/js/training-tracking-view.js'].map(async path=>({path,cached:Boolean(await cache.match(path))})));
-        });assert.ok(cached.every(item=>item.cached));
+            return Promise.all(['/index.html','/js/app.js','/js/mobile-flow.js','/js/forge.js','/js/ui.js','/js/environment-controls.js','/js/workout-models.js','/js/model-controls.js','/js/editor-domain.js','/css/energy.css','/js/model-coverage.js','/js/model-coverage-view.js','/js/training-tracking.js','/js/training-tracking-view.js',...(expectExecution?['/js/execution-contract.js']:[])].map(async path=>({path,cached:Boolean(await cache.match(path))})));
+        },expectExecution);assert.ok(cached.every(item=>item.cached));
         for(const theme of ['light','dark']){
             await page.emulateMedia({colorScheme:theme});await page.waitForFunction(theme=>document.documentElement.dataset.theme===theme,theme);
             assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
@@ -48,7 +60,7 @@ const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
         await context.setOffline(true);await page.reload();await page.waitForFunction(()=>window.FitApp&&window.dictionaryData?.length);
         assert.equal(await page.locator('#loginOverlay').isVisible(),true);assert.deepEqual(errors,[]);
     }finally{await browser.close();}
-    const report={status:'passed',url:origin,version:expected,checkedAt:new Date().toISOString(),matchingPublicFiles:files.length,api,cached,offlineReload:true,browserErrors:errors,
+    const report={status:'passed',url:origin,version:expected,checkedAt:new Date().toISOString(),matchingPublicFiles:files.length,api,cached,executionReview,offlineReload:true,browserErrors:errors,
         authenticatedProductionFlow:false,productionUserDataWrites:false,physicalDevices:false,scope:releaseScope};
     fs.writeFileSync(`audit/${prefix}-production-validation.json`,JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));
 })().catch(error=>{console.error(error);process.exitCode=1;});
