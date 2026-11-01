@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-29",
+  "browser": "Edge headless",
+  "services": "Firebase simulado",
+  "physicalDevices": false,
+  "checks": [
+    "ABC fixo, parâmetros por bloco, nível neutro, sessão e descanso recuperados sem sobrescrever ficha",
+    "falha de salvamento mantém sessão; parcial confirmado avança de A para B",
+    "lados têm campos e registros separados; descanso somente após ambos",
+    "par pode virar convencional ou trocar por candidatos revisados; salvar na ficha é separado e preserva registros",
+    "complemento pode ser ativado na sessão e não impede conclusão da parte principal",
+    "revisão trimestral só sugere ação e mantém a ficha",
+    "modelo novo, scripts e sessão autenticada recuperados offline; parcial permanece na fila local"
+  ],
+  "errors": []
+}

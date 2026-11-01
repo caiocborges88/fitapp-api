@@ -1,8 +1,9 @@
 import {newId,normalizeRoutine} from './domain.js';
 import {availableInEnvironment,findMovement} from './environment.js';
+import {withExecution} from './execution-contract.js';
 
 // Recipes are versioned prescriptions. Saved workouts are snapshots, never regenerated on open.
-export const modelVersion=1;
+export const modelVersion=2;
 export const isWorkoutModel=method=>['abc_tradicional','abc_sinergista'].includes(method);
 export const modelLabel=method=>method==='abc_sinergista'?'ABC sinergista':'ABC tradicional';
 export const enabledBlock=block=>!block.optional||block.enabled===true;
@@ -54,7 +55,7 @@ export function modelDescription(method){
 export function roleCandidates(exercise,catalogue,options={}){
     const names=roles[exercise.slotId];
     if(!names)return null;
-    return names.map(name=>findMovement(catalogue,name)).filter(item=>item&&availableInEnvironment(item,options));
+    return names.map(name=>findMovement(catalogue,name)).filter(item=>item&&item.selectable!==false&&availableInEnvironment(item,options));
 }
 export function createModelDay(method,day,catalogue,options={}){
     const recipe=recipes[method]?.[day];
@@ -64,8 +65,9 @@ export function createModelDay(method,day,catalogue,options={}){
         const exercises=block.items.map(item=>{
             const movement=findMovement(catalogue,roles[item.role][0]);
             if(!movement||(!block.optional&&!availableInEnvironment(movement,options)))missing.push(roles[item.role][0]);
-            return {id:newId(),slotId:item.role,name:movement?.name||roles[item.role][0],sets:item.sets,target:item.target,
+            const exercise={id:newId(),slotId:item.role,name:movement?.name||roles[item.role][0],sets:item.sets,target:item.target,
                 ...(item.role==='side'?{measurementType:'duration',sideMode:'alternating'}:{})};
+            return movement?.executionProfile?withExecution(exercise,movement):exercise;
         });
         return {id:newId(),modelId:method,modelVersion,roleId:`${day}-${index+1}`,title:block.title||exercises[0].name,type:block.type,restSeconds:block.restSeconds,
             ...(block.optional?{optional:true,enabled:false}:{}),exercises};

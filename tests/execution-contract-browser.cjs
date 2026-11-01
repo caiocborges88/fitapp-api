@@ -1,0 +1,56 @@
+const {chromium}=require('playwright');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const server=require('../scripts/serve.cjs');
+const fake=require('./fixtures/firebase.cjs');
+(async()=>{
+    await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+    let browser;const errors=[],checks=[];
+    try{
+        browser=await chromium.launch({channel:'msedge',headless:true});
+        const context=await browser.newContext({viewport:{width:390,height:844},serviceWorkers:'block',reducedMotion:'reduce'});
+        await context.route('**/vendor/firebase-*.js',route=>route.fulfill({contentType:'text/javascript',body:route.request().url().endsWith('firebase-app.js')?fake:''}));
+        const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));page.on('dialog',d=>d.accept());
+        await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>FitStore.get('fitapp_cloud_base'));
+        await page.evaluate(()=>{FitStore.set('fitapp_resources_academia','[]');FitApp.openForgeModal();document.getElementById('forgeMethod').value='abc_sinergista';FitApp.updateForgeOptions();FitApp.generateForgedWorkout();});
+        assert.equal(await page.locator('#executionResourcesReview').count(),1);
+        await page.click('#saveAndTrainButton');assert.equal(await page.evaluate(async()=>(await import('/js/state.js')).state.isWorkoutActive),false);
+        await page.getByRole('button',{name:'Conferi os equipamentos desta ficha'}).click();
+        await page.evaluate(()=>FitApp.confirmSwap(0,1,'Tríceps Francês com Halter'));
+        await page.evaluate(async()=>{
+            const {state}=await import('/js/state.js'),{referenceKey}=await import('/js/execution-contract.js'),ex=state.currentRoutine[0].exercises[1];
+            FitStore.set('fitapp_week_log',JSON.stringify([{date:'2026-10-29',tipo:'A',data:[{exercise:ex.name,set:1,kg:20,reps:12,executionKey:referenceKey(ex)},{exercise:ex.name,set:1,kg:999,reps:99}]}]));
+        });
+        await page.click('#saveAndTrainButton');await page.waitForFunction(async()=>(await import('/js/state.js')).state.isWorkoutActive);
+        assert.equal(await page.locator('[id^="chk_set_0_1_"]').count(),3);
+        assert.equal(await page.locator('#kg_set_0_1_1').getAttribute('placeholder'),'20');
+        checks.push('Referência por série ignora ocorrência homônima sem convenção, mesmo no mesmo registro');
+        assert.match(await page.locator('#exerciseList').textContent(),/por lado/);
+        const plan=await page.evaluate(()=>FitStore.get('fitapp_campaign_data'));
+        await page.fill('#kg_set_0_0_1','40');await page.fill('#rp_set_0_0_1','10');await page.check('#chk_set_0_0_1');
+        assert.equal(await page.locator('.rest-timer-active').count(),0);
+        await page.fill('#kg_set_0_1_1','20');await page.fill('#rp_set_0_1_1','12');await page.check('#chk_set_0_1_1');
+        assert.equal(await page.locator('.rest-timer-active').count(),1);checks.push('Recursos explícitos; unilateral com três linhas; descanso só após completar o par');
+        await page.reload();await page.waitForFunction(async()=>(await import('/js/state.js')).state.isWorkoutActive);
+        assert.equal(await page.locator('.chk-set:checked').count(),2);assert.equal(await page.inputValue('#kg_set_0_1_1'),'20');
+        assert.equal(await page.evaluate(()=>FitStore.get('fitapp_campaign_data')),plan);
+        assert.equal(await page.evaluate(()=>JSON.parse(FitStore.get('fitapp_active_state')).version),5);
+        checks.push('Recarga conserva valores, unidade e ficha original');
+        await page.screenshot({path:'audit/catalogo-execution-session-light.png'});
+        await page.evaluate(()=>FitStore.set('fitapp_appearance',JSON.stringify({version:1,theme:'dark',effects:'reduced'})));
+        await page.screenshot({path:'audit/catalogo-execution-session-dark.png'});
+        const before=await page.evaluate(async()=>JSON.stringify((await import('/js/state.js')).state.currentRoutine[3].exercises[0]));
+        await page.evaluate(()=>{window.realSet=FitStore.set;FitStore.set=(key,value)=>{if(key==='fitapp_active_state')throw Error('storage test');return window.realSet(key,value);};FitApp.confirmSwap(3,0,'Elevação Lateral no Cabo');FitStore.set=window.realSet;});
+        assert.equal(await page.evaluate(async()=>JSON.stringify((await import('/js/state.js')).state.currentRoutine[3].exercises[0])),before);
+        checks.push('Falha de gravação reverte troca sem apagar edição anterior');
+        await page.click('#btnFinishAction');await page.waitForFunction(()=>document.getElementById('sessionSummary').open);
+        const log=await page.evaluate(()=>JSON.parse(FitStore.get('fitapp_week_log')).at(-1));
+        assert.equal(log.complete,false);assert.equal(JSON.parse(log.trainingContext).version,2);
+        const french=log.data.find(r=>r.exercise==='Tríceps Francês com Halter');assert.equal(JSON.parse(french.executionKey)[3],'per-side');assert.equal(french.kg,20);assert.equal(french.reps,12);
+        checks.push('Histórico parcial preserva convenção e contexto, sem converter carga');
+        await page.screenshot({path:'audit/catalogo-execution-mobile.png'});
+        assert.deepEqual(errors,[]);
+        fs.writeFileSync('audit/catalogo-execution-browser.json',JSON.stringify({simulation:true,physicalDevices:false,checks,errors},null,2));
+        console.log('Execução revisada:',checks.length,'grupos de cenários aprovados');
+    }finally{await browser?.close();server.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

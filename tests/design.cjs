@@ -45,12 +45,12 @@ const auditPrefix=process.env.FITAPP_AUDIT_PREFIX?process.env.FITAPP_AUDIT_PREFI
                 await page.fill('#customWorkoutName','Minha ficha de teste');
                 await page.getByRole('button',{name:'Exercício',exact:true}).click();
                 await page.fill('#searchAddInput','Prancha');await page.locator('#addExerciseList .swap-item').first().click();
-                await page.fill('#customSets','1');await page.getByRole('button',{name:'Adicionar à ficha',exact:true}).click();
+                await page.fill('#customSets','1');await page.fill('#customReps','30–45 seg');await page.getByRole('button',{name:'Adicionar à ficha',exact:true}).click();
                 await page.getByRole('button',{name:'Salvar ficha',exact:true}).click();
                 const id=await page.evaluate(()=>JSON.parse(FitApp.safeGet('fitapp_custom_workouts'))[0].id);
                 await page.evaluate(id=>FitApp.startWorkout('custom_'+id),id);
                 await page.click('#btnStartWorkout');
-                await page.locator('.set-measure').first().selectOption('duration');
+                assert.equal(await page.locator('.set-measure').first().inputValue(),'duration');
                 await page.locator('.rp-val').first().fill('45');await page.locator('.kg-val').first().fill('0');
                 await capture('session');
                 await page.locator('.chk-set').first().check();

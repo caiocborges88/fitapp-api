@@ -82,7 +82,7 @@ export function saveEditor(){
             for(const day of context.days)workouts[day]=routineForTemplate(state.currentRoutine.filter(block=>block.day===day),{validatePairs:true});
         }catch(error){app().showToast(error.message);return false;}
         if(saved&&!confirm('Salvar este ciclo substituirá o plano atual e reiniciará seu contador. As fichas pessoais e o histórico serão preservados. Continuar?'))return false;
-        const next={id:newId(),name,method:context.method,level:context.level,profile:context.profile,workouts,startDate:new Date().toISOString(),revision:1,updatedAt:Date.now(),...(isWorkoutModel(context.method)?{schemaVersion:2,modelVersion}: {})};
+        const next={id:newId(),name,method:context.method,level:context.level,profile:context.profile,workouts,startDate:new Date().toISOString(),revision:1,updatedAt:Date.now(),...(isWorkoutModel(context.method)?{schemaVersion:3,modelVersion}: {})};
         try{commitWorkoutPlan(window.FitStore,next,{resetCount:true});}
         catch(error){app().showToast('Não foi possível gravar o novo plano. O plano anterior foi mantido.');return false;}
         document.getElementById('mainMethodSelector').value=context.method;

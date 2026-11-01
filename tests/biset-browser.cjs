@@ -106,11 +106,11 @@ const fake=require('./fixtures/firebase.cjs');
   }
   await page.evaluate(async()=>{FitApp.safeSet('fitapp_campaign_data','');await(await import('/js/sync.js')).saveCampaignToCloud();});
   await page.reload();await page.waitForFunction(()=>window.FitStore?.get('fitapp_cloud_base'));
-  assert.equal(await page.locator('#mainMethodSelector').inputValue(),'biset_sinergista');
-  checks.push('preferência antiga sem plano usa bi-set complementar');
+  assert.equal(await page.locator('#mainMethodSelector').inputValue(),'abc_tradicional');
+  checks.push('preferência antiga sem plano usa o ABC atual; planos antigos continuam preservados');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
   assert.deepEqual(errors,[]);
-  fs.writeFileSync('audit/biset-browser-validation.json',JSON.stringify({status:'ok',environment:'local; Firebase simulated',checks:[...checks,'execução de par repetido bloqueada','adaptação com alternativa única sinalizada','largura móvel'],pageErrors:errors},null,2)+'\n');
+  fs.writeFileSync('audit/'+(process.env.FITAPP_AUDIT_PREFIX?process.env.FITAPP_AUDIT_PREFIX+'-':'')+'biset-browser-validation.json',JSON.stringify({status:'ok',environment:'local; Firebase simulated',checks:[...checks,'execução de par repetido bloqueada','adaptação com alternativa única sinalizada','largura móvel'],pageErrors:errors},null,2)+'\n');
   console.log('Bi-sets: pares completos, divisões, bloqueios e preservação de plano aprovados.');
  }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});

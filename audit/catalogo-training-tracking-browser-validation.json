@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-30T19:28:23.353Z",
+  "mode": "Firebase simulado; dados de teste locais",
+  "physicalDevices": false,
+  "checks": [
+    "proposta por modelo, planejamento recuperado, parcial offline, falha durável e ficha preservada",
+    "histórico distingue parcial, segundos e os dois lados da prancha",
+    "sessão ativa antiga recuperada sem previsão inventada; versão futura preservada sem executar",
+    "temas, celular sem transbordamento, legado sem inferência e separação entre contas"
+  ],
+  "errors": []
+}

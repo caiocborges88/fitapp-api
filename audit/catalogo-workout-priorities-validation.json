@@ -1,0 +1,16 @@
+{
+  "status": "ok",
+  "environment": "local Edge; Firebase simulated",
+  "checks": [
+    "geração inválida preserva plano, contador e preferências",
+    "quota local preserva plano e reverte contador e preferências",
+    "modal respeita exclusão e mantém o plano quando o ciclo não pode fechar",
+    "série por tempo inicia em segundos e registra duração sem repetições fictícias",
+    "barras desmarcadas bloqueiam circuito dependente e não geram sessão incompleta",
+    "calistenia retirada; legado preservado e movimentos continuam nas trocas de Casa",
+    "trocas sugeridas ao iniciante respeitam complexidade e a ficha pessoal não herda método global",
+    "carga textual antiga exige revisão da meta e não impede restaurar o original",
+    "ficha salva mostra exclusão posterior, revalida ao iniciar e permite corrigir só a sessão",
+    "academia sinaliza cadastro desconhecido e bloco corporal inválido antes de começar"
+  ]
+}

@@ -1,7 +1,7 @@
 import {state} from './state.js';
 import {readJSON,blockEnabled} from './domain.js';
 import {isWorkoutModel,nextModelDay} from './workout-models.js';
-import {renderReviewReminder} from './model-controls.js';
+import {renderReviewReminder,appendResourceReview,appendExecutionControl} from './model-controls.js';
 import {persistDraft,listDrafts,restoreDraft,discardDraft} from './drafts.js';
 import {validDraft} from './draft-domain.js';
 
@@ -9,6 +9,7 @@ const element=(tag,className,text)=>{const node=document.createElement(tag);if(c
 function disclosure(label,className){const details=element('details',className);details.append(element('summary','',label));return details;}
 
 export function decoratePreview(list,issues){
+    appendResourceReview(list);
     const kind=state.editorContext?.kind||'session';
     const preview=document.getElementById('workoutPreview');
     preview.dataset.kind=kind;
@@ -44,6 +45,7 @@ export function decoratePreview(list,issues){
         item.querySelector('a')?.setAttribute('aria-label','Buscar demonstração de '+exercise.name);
         const wrapper=element('article','preview-exercise');item.before(wrapper);wrapper.append(item,settings);
         if(fields?.classList.contains('editor-exercise-fields'))settings.append(fields);
+        appendExecutionControl(settings,exercise);
         settings.open=['template','plan'].includes(kind)||Boolean(exercise.needsReview);
     }
     for(const [index,entry]of Array.from(list.querySelector('#routineReview ul')?.children||[]).entries()){

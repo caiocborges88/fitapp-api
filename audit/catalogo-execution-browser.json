@@ -1,0 +1,12 @@
+{
+  "simulation": true,
+  "physicalDevices": false,
+  "checks": [
+    "Referência por série ignora ocorrência homônima sem convenção, mesmo no mesmo registro",
+    "Recursos explícitos; unilateral com três linhas; descanso só após completar o par",
+    "Recarga conserva valores, unidade e ficha original",
+    "Falha de gravação reverte troca sem apagar edição anterior",
+    "Histórico parcial preserva convenção e contexto, sem converter carga"
+  ],
+  "errors": []
+}

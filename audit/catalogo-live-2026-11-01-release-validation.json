@@ -1,0 +1,56 @@
+{
+  "status": "passed",
+  "date": "2026-11-01",
+  "userAuthorizedProduction": true,
+  "project": "fitapp-operacional",
+  "url": "https://fitapp-operacional.web.app",
+  "version": "45c2998d354451c6",
+  "sourceRevision": "8b9a7a0d4c820a735065748a6069e340b53bdafb",
+  "sourceCI": {
+    "run": 41345407777,
+    "status": "success"
+  },
+  "command": "firebase deploy --only hosting --project fitapp-operacional --non-interactive",
+  "servicesDeployed": [
+    "hosting"
+  ],
+  "apiDeployed": false,
+  "firestoreRulesDeployed": false,
+  "indexesDeployed": false,
+  "releaseTime": "2026-11-01T20:22:37.396Z",
+  "releaseTimeSaoPaulo": "01/11/2026, 17:22:37",
+  "previousVersion": "8025f00c044b5983",
+  "previousHosting": "projects/fitapp-operacional/sites/fitapp-operacional/versions/ee27c668d062eed5",
+  "previousRelease": "projects/fitapp-operacional/sites/fitapp-operacional/channels/live/releases/1793365047961000",
+  "currentHosting": "projects/fitapp-operacional/sites/fitapp-operacional/versions/3fdc1e12f05913e9",
+  "currentRelease": "projects/fitapp-operacional/sites/fitapp-operacional/channels/live/releases/1793564557396000",
+  "ruleset": "projects/fitapp-operacional/rulesets/3e2e012b-664e-49c6-82e6-987f9808f77b",
+  "rulesHashUnchanged": true,
+  "sourceManifest": "audit/catalogo-2026-11-01-source-manifest.json",
+  "snapshot": "audit/release-catalogo-2026-11-01-45c2998d354451c6.zip",
+  "snapshotHash": "67c067862b7234c2bc78c19a4f5e9076ff01e50d848bb121be34382f83f1b137",
+  "previousSnapshot": "audit/release-simplificacao-8025f00c044b5983.zip",
+  "previousSnapshotHash": "ca6b3c89f43b189002452498728ffbae62a7b0f0db1db275adbfaec41bdde627",
+  "snapshotFilesVerified": 189,
+  "matchingPublicFiles": 71,
+  "criticalCachedFiles": 15,
+  "executionReview": {
+    "total": 129,
+    "ids": 129,
+    "active": 122,
+    "retired": 7,
+    "reviewed": 122
+  },
+  "offlineReload": true,
+  "loginThemes": [
+    "light",
+    "dark"
+  ],
+  "screenshotsVisuallyInspected": true,
+  "authenticatedProductionFlow": false,
+  "productionUserDocumentsRead": false,
+  "productionUserDataWrites": false,
+  "physicalDevices": false,
+  "publicVerification": "audit/catalogo-live-2026-11-01-production-validation.json",
+  "report": "docs/PUBLICACAO-CATALOGO-2026-11-01.md"
+}

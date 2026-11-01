@@ -1,0 +1,21 @@
+{
+  "simulation": true,
+  "physicalDevices": false,
+  "results": [
+    {
+      "suite": "appearance-browser",
+      "status": 0,
+      "log": "audit/catalogo-appearance-browser.log"
+    },
+    {
+      "suite": "design",
+      "status": 0,
+      "log": "audit/catalogo-design.log"
+    },
+    {
+      "suite": "offline",
+      "status": 0,
+      "log": "audit/catalogo-offline.log"
+    }
+  ]
+}

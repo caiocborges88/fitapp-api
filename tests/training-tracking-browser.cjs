@@ -21,7 +21,7 @@ const fake=require('./fixtures/firebase.cjs');
         await page.evaluate(()=>FitApp.adjustRestTime(150));
         const planBefore=await page.evaluate(()=>FitStore.get('fitapp_campaign_data'));
         await page.reload();await page.waitForFunction(async()=>(await import('/js/state.js')).state.isWorkoutActive);
-        assert.equal(await page.evaluate(()=>JSON.parse(FitStore.get('fitapp_active_state')).version),4);
+        assert.equal(await page.evaluate(()=>JSON.parse(FitStore.get('fitapp_active_state')).version),5);
         assert.equal(await page.evaluate(()=>JSON.parse(FitStore.get('fitapp_active_state')).sessionPlanned[0].exercises[0].sets),3);
         await page.evaluate(async()=>{const {state}=await import('/js/state.js');state.currentRoutine[0].exercises[0].sets=4;FitApp.renderCurrentRoutine();FitApp.saveWorkoutState();});
         await page.evaluate(()=>{window.originalQueue=FitStore.updateQueue;FitStore.updateQueue=async()=>{throw new Error('simulated failure');};});

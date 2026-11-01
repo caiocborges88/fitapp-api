@@ -265,3 +265,10 @@ body.preview-active #tab-treino,body.session-active #tab-treino { animation:none
 .tracking-comparison li p{margin-block:4px}
 .tracking-comparison ul,.model-coverage ul{padding-inline-start:20px}
 .history-completion{display:inline-block;margin-block-start:6px}
+/* Execution conventions stay readable while recording; no animated feedback. */
+.execution-hint { color: var(--muted); font-size: .82rem; line-height: 1.5; margin: .5rem 0; }
+.set-difference { grid-column: 1 / -1; min-width: 0; font-size: .8rem; color: var(--muted); }
+.set-difference label { display: flex; align-items: center; gap: .5rem; }
+.set-difference textarea { display: block; width: 100%; box-sizing: border-box; min-height: 4rem; color: var(--ink); background: var(--surface); border: 1px solid var(--control-line); border-radius: .5rem; padding: .5rem; }
+
+.set-difference input[type=checkbox] { margin-left: 0; flex-shrink: 0; }

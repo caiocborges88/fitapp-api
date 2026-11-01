@@ -38,9 +38,9 @@ function setup(){
         header.setAttribute('aria-label',environmentSummary(options)+' · Alterar ambiente e equipamentos');
         dialog.querySelector('select').value=['parque','parque/praia'].includes(options.environment)?'praia':options.environment;
         dialog.querySelector('.environment-equipment').hidden=options.environment!=='academia';
-        dialog.querySelector('.environment-resources').hidden=options.environment==='academia';
+        dialog.querySelector('.environment-resources').hidden=false;
         for(const input of dialog.querySelectorAll('[data-environment-resource]')){
-            input.closest('label').hidden=options.environment!=='casa'&&!outdoorResources.has(input.value);
+            input.closest('label').hidden=options.environment!=='academia'&&options.environment!=='casa'&&!outdoorResources.has(input.value);
             input.checked=options.resources.includes(input.value);input.disabled=state.isWorkoutActive;
         }
         for(const input of dialog.querySelectorAll('[data-environment-equipment]')){input.checked=options.equipment.includes(input.value);input.disabled=state.isWorkoutActive;}

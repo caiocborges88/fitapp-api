@@ -27,7 +27,7 @@ const fake=require('./fixtures/firebase.cjs');
         await page.click('#saveAndTrainButton');
         await page.waitForFunction(async()=>(await import('/js/state.js')).state.isWorkoutActive);
         const plan=await page.evaluate(()=>JSON.parse(FitStore.get('fitapp_campaign_data')));
-        assert.equal(plan.method,'abc_tradicional');assert.equal(plan.schemaVersion,2);assert.equal(plan.level,'padrao');
+        assert.equal(plan.method,'abc_tradicional');assert.equal(plan.schemaVersion,3);assert.equal(plan.level,'padrao');
         assert.equal(plan.workouts.A[0].restSeconds,120);
         assert.equal(await page.locator('.chk-set').count(),13);
         const original=JSON.stringify(plan.workouts.A);

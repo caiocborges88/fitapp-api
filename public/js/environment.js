@@ -1,5 +1,6 @@
 import {readJSON} from './domain.js';
 import {equipmentForEnvironment,equipmentNames} from './equipment-settings.js';
+import {withExecution} from './execution-contract.js';
 import {roleCandidates} from './workout-models.js';
 
 const normalize=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
@@ -38,6 +39,8 @@ export function findMovement(catalogue,name){
     return catalogue.find(item=>item.name===name)||catalogue.find(item=>item.aliases?.includes(name));
 }
 export function sameMuscleFocus(source,candidate){
+    if(source?.classification&&candidate?.classification&&source.classification.action!==candidate.classification.action)return false;
+    if(source?.classification?.action==='flexao-cotovelo'&&candidate?.classification&&source.classification.grip&&candidate.classification.grip&&source.classification.grip!==candidate.classification.grip)return false;
     if(!source||normalize(source.agonist||source.group)!==normalize(candidate.agonist||candidate.group))return false;
     if(source.movementPattern&&source.movementPattern!==candidate.movementPattern)return false;
     if(source.muscleFocus?.length)return source.muscleFocus.every(focus=>candidate.muscleFocus?.includes(focus));
@@ -45,7 +48,7 @@ export function sameMuscleFocus(source,candidate){
     return Boolean(source.subLevel)&&normalize(source.subLevel)===normalize(candidate.subLevel);
 }
 export function movementCompatibility(source,catalogue,options){
-    const equivalent=catalogue.filter(item=>sameMuscleFocus(source,item));
+    const equivalent=catalogue.filter(item=>item.selectable!==false&&sameMuscleFocus(source,item));
     const available=equivalent.filter(item=>availableInEnvironment(item,options));
     const candidates=available.filter(item=>options.level!=='iniciante'||item.nivel!==3);
     let code=null,reason=null;
@@ -64,9 +67,9 @@ export function adaptRoutineToEnvironment(routine,catalogue,options){
         const pairUsed=new Set();
         const blockOptions={...options,level:block.modelVersion?'padrao':options.level,equipmentPolicy:block.equipmentPolicy||options.equipmentPolicy};
         return {...block,exercises:block.exercises.map(exercise=>{
-        const original=exercise._environmentOriginal||{name:exercise.name,target:exercise.target};
+        const original=exercise._environmentOriginal||{name:exercise.name,target:exercise.target,...(exercise.execution?{execution:structuredClone(exercise.execution)}:{})};
         const current=findMovement(catalogue,original.name);
-        const next={...exercise,name:current?.name||original.name,target:original.target};
+        const next={...exercise,name:original.name,target:original.target,...(original.execution?{execution:structuredClone(original.execution)}:{})};
         delete next.needsReview;delete next.reviewReason;delete next.reviewCode;delete next._environmentOriginal;
         if(options.environment==='academia'){
             if(!availableInEnvironment(current,blockOptions)){
@@ -89,7 +92,7 @@ export function adaptRoutineToEnvironment(routine,catalogue,options){
             next.reviewCode=compatibility.candidates.length?'pair-variety':compatibility.code;
             delete next.setsData;missing.push(original.name);return next;
         }
-        next.name=candidate.name;delete next.setsData;used.add(candidate.name);if(block.type==='superset')pairUsed.add(candidate.name);
+        if(next.execution&&candidate.executionProfile)Object.assign(next,withExecution(next,candidate));else next.name=candidate.name;delete next.setsData;used.add(candidate.name);if(block.type==='superset')pairUsed.add(candidate.name);
         if(current?.equip!==candidate.equip&&/\d+(?:[.,]\d+)?\s*kg\b/i.test(original.target||'')){
             next.needsReview=true;next.reviewCode='target-review';
             next.reviewReason='A meta menciona uma carga do equipamento anterior. Edite a meta para esta variante antes de iniciar; nenhuma carga equivalente foi calculada.';

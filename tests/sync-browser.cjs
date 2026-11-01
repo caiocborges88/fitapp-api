@@ -88,13 +88,14 @@ const path=require('node:path');
   await a.evaluate(async()=>{
    const {executeForgePlan}=await import('/js/forge.js');
    const workouts=executeForgePlan('abc_sinergista',[],{environment:'academia',allEquipment:true});
-   const plan={id:'models-sync',schemaVersion:2,modelVersion:1,method:'abc_sinergista',level:'padrao',profile:'hipertrofia',workouts,revision:1,startDate:new Date().toISOString()};
+   const plan={id:'models-sync',schemaVersion:3,modelVersion:2,method:'abc_sinergista',level:'padrao',profile:'hipertrofia',workouts,revision:1,startDate:new Date().toISOString()};
    FitStore.setMany({fitapp_campaign_data:JSON.stringify(plan),fitapp_main_method:plan.method,fitapp_level:'padrao',fitapp_profile:'hipertrofia'});
    await(await import('/js/sync.js')).saveCampaignToCloud();
   });
   const modelCopy=await b.evaluate(async()=>{await(await import('/js/sync.js')).loadCampaignFromCloud();return JSON.parse(FitStore.get('fitapp_campaign_data'));});
-  assert.equal(modelCopy.id,'models-sync');assert.equal(modelCopy.modelVersion,1);assert.equal(modelCopy.workouts.A[0].restSeconds,120);
+  assert.equal(modelCopy.id,'models-sync');assert.equal(modelCopy.modelVersion,2);assert.equal(modelCopy.workouts.A[0].restSeconds,120);
   assert.equal(modelCopy.workouts.B.at(-1).exercises[0].sideMode,'alternating');
+  assert.equal(modelCopy.workouts.A[0].exercises[0].execution.load,'dumbbells-total');
   // The immutable session context also survives real rules, another device and export.
   const trackingId='tracking-context-'+Date.now();
   const trackingSource=await a.evaluate(async id=>{
@@ -109,9 +110,9 @@ const path=require('node:path');
   },trackingId);
   const tracked=await b.evaluate(async id=>{
    const logs=await FitAPI.carregarHistoricoNuvem(),log=logs.find(item=>item._id===id);
-   return {context:log.trainingContext,comparison:(await import('/js/training-tracking.js')).compareSession(log)};
+   return {recordKey:log.data[0].executionKey,context:log.trainingContext,comparison:(await import('/js/training-tracking.js')).compareSession(log)};
   },trackingId);
-  assert.equal(tracked.context,trackingSource);assert.equal(tracked.comparison.rows[0].done,1);assert.equal(tracked.comparison.rows[0].planned,3);assert.equal(tracked.comparison.rows[0].restSeconds,150);
+  assert.ok(tracked.recordKey);assert.equal(tracked.context,trackingSource);assert.equal(tracked.comparison.rows[0].done,1);assert.equal(tracked.comparison.rows[0].planned,3);assert.equal(tracked.comparison.rows[0].restSeconds,150);
   await a.evaluate(()=>FitApp.switchTab('tab-perfil','nav-perfil'));
   const contextDownload=a.waitForEvent('download');await a.click('#exportTrainingData');
   const contextBackup=JSON.parse(fs.readFileSync(await(await contextDownload).path(),'utf8'));

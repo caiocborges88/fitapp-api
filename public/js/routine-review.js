@@ -1,5 +1,6 @@
 import {availableInEnvironment,findMovement,movementExcluded} from './environment.js';
 import {blockEnabled} from './domain.js';
+import {validExecution,missingExecutionResources} from './execution-contract.js';
 
 // Inspect the actual session, without regenerating a saved or manually edited plan.
 export function reviewRoutine(routine,catalogue,options={}){
@@ -10,7 +11,7 @@ export function reviewRoutine(routine,catalogue,options={}){
         if(!blockEnabled(block))continue;
         const exercises=block.exercises||[];
         if(block.restSeconds!=null&&(!Number.isInteger(block.restSeconds)||block.restSeconds<15||block.restSeconds>600))add('rest','Informe um descanso de bloco entre 15 e 600 segundos.',bi);
-        if(block.modelVersion!=null&&block.modelVersion!==1)add('model-version','Esta versão de modelo precisa de uma versão mais recente do aplicativo.',bi);
+        if(block.modelVersion!=null&&![1,2].includes(block.modelVersion))add('model-version','Esta versão de modelo precisa de uma versão mais recente do aplicativo.',bi);
         if(!exercises.length)add('empty-block','Remova ou preencha o bloco vazio.',bi);
         if(block.type==='superset'){
             if(exercises.length!==2)add('pair-size','Cada par precisa de exatamente dois exercícios.',bi);
@@ -18,13 +19,18 @@ export function reviewRoutine(routine,catalogue,options={}){
             else if(block.modelVersion&&exercises[0].sets!==exercises[1].sets)add('pair-rounds','Mantenha o mesmo número de voltas no par ou separe as séries adicionais.',bi);
         }
         for(const [ei,ex] of exercises.entries()){
+            if(ex.execution&&!validExecution(ex.execution))add('execution-version','Esta execução precisa de uma versão mais recente do aplicativo.',bi,ei);
+            if(ex.execution?.choices&&!ex.execution.choices.includes(ex.execution.choice))add('execution-choice',ex.name+': identifique a barra ou o acessório utilizado.',bi,ei);
+            if(missingExecutionResources([{...block,exercises:[ex]}],options).length)add('execution-resources',ex.name+': confira os equipamentos específicos desta execução antes de iniciar.',bi,ei);
+            if(ex.execution?.count==='per-side'&&ex.measurementType!=='reps')add('execution-unit','Esta variante usa repetições por lado.',bi,ei);
+            if(ex.execution?.count?.startsWith('duration')&&!/\b(seg|segundos?|s|min|minutos?)\b/i.test(ex.target||''))add('execution-target','Informe a meta por tempo; repetições não foram convertidas em segundos.',bi,ei);
             if(ex.sideMode==='alternating'&&(ex.sets%2!==0||ex.measurementType!=='duration'))add('sides','Registre séries por tempo para os dois lados, em número par.',bi,ei);
             const movement=findMovement(catalogue,ex.name);
             const label=`${block.day?'Treino '+block.day+' · ':''}${ex.name}: `;
             if(!movement)add('missing-movement',label+'movimento não encontrado no catálogo. Troque ou remova.',bi,ei);
             else if(movementExcluded(movement,options.blacklist))add('excluded-movement',label+'está na sua lista de exercícios excluídos. Troque ou remova nesta sessão.',bi,ei);
             else if(ex.needsReview&&!['excluded-movement','missing-movement','equipment-policy'].includes(ex.reviewCode))add(ex.reviewCode||'needs-review',label+(ex.reviewReason||'revise o movimento antes de iniciar.'),bi,ei);
-            else if(!availableInEnvironment(movement,{...options,equipmentPolicy:block.equipmentPolicy||options.equipmentPolicy}))add('unavailable',label+'não atende aos recursos disponíveis ou ao tipo de equipamento do bloco. Troque ou revise os recursos.',bi,ei);
+            else if(!availableInEnvironment({...movement,resources:ex.execution?.resources||movement.resources},{...options,equipmentPolicy:block.equipmentPolicy||options.equipmentPolicy}))add('unavailable',label+'não atende aos recursos disponíveis ou ao tipo de equipamento do bloco. Troque ou revise os recursos.',bi,ei);
             if(!Number.isInteger(Number(ex.sets))||Number(ex.sets)<1||Number(ex.sets)>10)add('sets',label+'informe de 1 a 10 séries.',bi,ei);
         }
     }

@@ -1,0 +1,10 @@
+OK: geração inválida preserva plano, contador e preferências
+OK: quota local preserva plano e reverte contador e preferências
+OK: modal respeita exclusão e mantém o plano quando o ciclo não pode fechar
+OK: série por tempo inicia em segundos e registra duração sem repetições fictícias
+OK: barras desmarcadas bloqueiam circuito dependente e não geram sessão incompleta
+OK: calistenia retirada; legado preservado e movimentos continuam nas trocas de Casa
+OK: trocas sugeridas ao iniciante respeitam complexidade e a ficha pessoal não herda método global
+OK: carga textual antiga exige revisão da meta e não impede restaurar o original
+OK: ficha salva mostra exclusão posterior, revalida ao iniciar e permite corrigir só a sessão
+OK: academia sinaliza cadastro desconhecido e bloco corporal inválido antes de começar

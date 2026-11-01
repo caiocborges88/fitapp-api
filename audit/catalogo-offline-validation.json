@@ -1,0 +1,12 @@
+{
+  "status": "ok",
+  "cachedAssets": 66,
+  "checks": [
+    "instalação atômica do cache",
+    "SDKs locais",
+    "quatro módulos de cobertura e acompanhamento no cache",
+    "recarga offline",
+    "inicialização offline sem exceções"
+  ],
+  "authenticatedSync": "verificado separadamente pelos testes de fila; este teste não autentica em produção"
+}

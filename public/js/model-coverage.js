@@ -7,7 +7,7 @@ const main={A:['incline','chest','press','lateral','overhead','flexion'],B:['pul
 export const contractVersion=1;
 export function analyzeModelContract(routine,catalogue,options={}){
     const models=[...new Set(routine.map(block=>block.modelId).filter(Boolean))];
-    if(models.length!==1||!['abc_tradicional','abc_sinergista'].includes(models[0])||routine.some(block=>block.modelVersion&&block.modelVersion!==1))return null;
+    if(models.length!==1||!['abc_tradicional','abc_sinergista'].includes(models[0])||routine.some(block=>block.modelVersion&&![1,2].includes(block.modelVersion)))return null;
     const method=models[0],explicitDay=block=>block.day||(/^[ABC]-/.test(block.roleId||'')?block.roleId[0]:null);
     const scope=[...new Set([...(options.days||[]),...routine.map(explicitDay)].filter(Boolean))];
     const dayOf=block=>explicitDay(block)||(scope.length===1?scope[0]:null);
